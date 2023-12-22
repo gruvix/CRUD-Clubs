@@ -68,6 +68,7 @@
     "lodash.merge": "^4.6.2",
     "minimatch": "^3.1.2",
     "ms": "^2.1.2",
+    "multer": "^1.4.5-lts.1",
     "natural-compare": "^1.4.0",
     "once": "^1.4.0",
     "optionator": "^0.9.3",
