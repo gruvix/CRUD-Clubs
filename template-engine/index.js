@@ -23,11 +23,12 @@ app.get('/', (req, res) => {
   });
 });
 
-app.get('/user/:id/teams', (req, res) => {
+app.get('/user/:userName/teams', (req, res) => {
   res.render('teams', {
     layout: 'main',
     data: {
-
+      userName: req.params.userName,
+      capitalizedName: req.params.userName.charAt(0).toUpperCase() + req.params.userName.slice(1),
     },
   });
 });
