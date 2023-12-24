@@ -1,3 +1,4 @@
 document.querySelector('#enter-page-button').addEventListener('click', () => {
-  window.location.href = '/teams';
+  const userName = document.querySelector('#username').value;
+  window.location.href = `/user/${userName}/teams`;
 });

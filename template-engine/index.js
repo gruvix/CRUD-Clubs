@@ -23,7 +23,7 @@ app.get('/', (req, res) => {
   });
 });
 
-app.get('/teams', (req, res) => {
+app.get('/user/:id/teams', (req, res) => {
   res.render('teams', {
     layout: 'main',
     data: {
