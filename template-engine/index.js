@@ -23,5 +23,14 @@ app.get('/', (req, res) => {
   });
 });
 
+app.get('/teams', (req, res) => {
+  res.render('teams', {
+    layout: 'main',
+    data: {
+
+    },
+  });
+});
+
 app.listen(PORT);
 console.log(`Listening on port ${PORT}`);

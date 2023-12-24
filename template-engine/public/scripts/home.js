@@ -1,3 +1,3 @@
 document.querySelector('#enter-page-button').addEventListener('click', () => {
-  console.log('click');
+  window.location.href = '/teams';
 });
