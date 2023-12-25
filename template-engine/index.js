@@ -35,13 +35,44 @@ app.get('/user/:username/teams', (req, res) => {
   });
 });
 
+class Team {
+  constructor(data) {
+    this.name = data.name;
+    this.area = data.area.name;
+    this.adress = data.address;
+    this.phone = data.phone;
+    this.website = data.website;
+    this.email = data.email;
+    this.venue = data.venue;
+  }
+}
+
+class Player {
+  constructor(data) {
+    this.name = data.name;
+    this.position = data.position;
+    this.dateOfBirth = data.dateOfBirth;
+    this.countryOfBirth = data.countryOfBirth;
+    this.nationality = data.nationality;
+    this.shirtNumber = data.shirtNumber;
+    this.role = data.role;
+  }
+}
+
 app.get('/user/:username/teams/:team', (req, res) => {
   const team = JSON.parse(fs.readFileSync(`./private/data/teams/${req.params.team}.json`, 'utf-8'));
+  const players = [];
+  team.squad.forEach((player) => {
+    players.push(new Player(player));
+  });
+
   res.render('team', {
     layout: 'main',
     data: {
       username: req.params.username,
-      team,
+      team: new Team(team),
+      crest: team.crestUrl,
+      players,
     },
   });
 });

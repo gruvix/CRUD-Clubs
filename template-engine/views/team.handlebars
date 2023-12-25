@@ -10,7 +10,7 @@
     <div class="row">
         <div class="col">
             <div class="d-flex justify-content-center">
-                <img src="{{data.team.crestUrl}}" alt="Team crest">
+                <img src="{{data.crest}}" alt="Team crest">
             </div>
         </div>
     </div>
@@ -18,7 +18,7 @@
     <div class="row">
         <div class="col">
             <div class="d-flex justify-content-center">
-                TEAM
+                {{> team team=data.team }}
             </div>
         </div>
         <div class="col">
