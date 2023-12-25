@@ -23,12 +23,14 @@ app.get('/', (req, res) => {
   });
 });
 
-app.get('/user/:userName/teams', (req, res) => {
+app.get('/user/:username/teams', (req, res) => {
+  const teams = JSON.parse(fs.readFileSync('./private/data/teams.json', 'utf-8'));
   res.render('teams', {
     layout: 'main',
     data: {
-      userName: req.params.userName,
-      capitalizedName: req.params.userName.charAt(0).toUpperCase() + req.params.userName.slice(1),
+      username: req.params.username,
+      capitalizedName: req.params.username.charAt(0).toUpperCase() + req.params.username.slice(1),
+      teams,
     },
   });
 });

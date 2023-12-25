@@ -4,6 +4,7 @@
             <h1 class="text-center" style="margin-top: 20px; color: rgb(255, 187, 0);">Welcome {{data.capitalizedName}}</h1>
         </div>
     </div>
+
     <div class="row">
         <div class="col text-center">
             <button type="button" id="enter-page-button" class="btn btn-warning">
@@ -16,5 +17,14 @@
             </button>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col">
+            <table class="table">
+                {{> teams username=data.username items=data.teams }}
+            </table>
+        </div>
+    </div>
+
 </div>
 <script src="scripts/teams.js"></script>
