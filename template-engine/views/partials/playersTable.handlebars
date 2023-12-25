@@ -9,23 +9,14 @@
             <td></td>
         </tr>
         {{#each players}}
-        {{#if this.position}}
            <tr class="table-dark table-bordered">
                 <td>{{this.id}}</td>
                 <td>{{this.name}}</td>
+            {{#if this.position}}
                 <td>{{this.position}}</td>
-                <td>{{this.nationality}}</td>
-                <td>
-                    <button class="btn btn-outline-warning">
-                        edit
-                    </button>
-                </td>
-            </tr>
-        {{else}}
-            <tr class="table-dark table-bordered">
-                <td>{{this.id}}</td>
-                <td>{{this.name}}</td>
+            {{else}}
                 <td>{{this.role}}</td>
+            {{/if}}
                 <td>{{this.nationality}}</td>
                 <td>
                     <button class="btn btn-outline-warning">
@@ -33,7 +24,6 @@
                     </button>
                 </td>
             </tr>
-        {{/if}}
         {{/each}}
     </thead>
 </table>
