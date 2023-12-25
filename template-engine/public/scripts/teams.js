@@ -1,4 +1,6 @@
+import { clearUsername } from './localStorage.js';
+
 document.querySelector('#log-out-button').addEventListener('click', () => {
-  localStorage.removeItem('username');
+  clearUsername();
   window.location.href = '/';
 });

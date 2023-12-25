@@ -1,10 +1,4 @@
-function loadUsername() {
-  return localStorage.getItem('username');
-}
-
-function saveUsername(username) {
-  localStorage.setItem('username', username);
-}
+import { saveUsername, loadUsername } from './localStorage.js';
 
 function isLoggedIn() {
   return loadUsername() !== null;
