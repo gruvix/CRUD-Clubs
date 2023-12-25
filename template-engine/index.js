@@ -35,5 +35,16 @@ app.get('/user/:username/teams', (req, res) => {
   });
 });
 
+app.get('/user/:username/teams/:team', (req, res) => {
+  const team = JSON.parse(fs.readFileSync(`./private/data/teams/${req.params.team}.json`, 'utf-8'));
+  res.render('team', {
+    layout: 'main',
+    data: {
+      username: req.params.username,
+      team,
+    },
+  });
+});
+
 app.listen(PORT);
 console.log(`Listening on port ${PORT}`);
