@@ -1,12 +1,18 @@
-<table class="table">
+<table class="table" id="teamTable">
     <thead>
         {{#each team}}
            <tr class="table-dark table-bordered">
                 <td class="text-warning" style="text-transform: capitalize;">{{@key}}</td>
-                <td>{{this}}</td>
+                <td id="{{@key}}">
+                    <span>{{this}}</span>
+                    <input type="text" class="form-control" value="" style="display: none;">
+                </td>
                 <td>
                     <button class="btn btn-outline-warning">
                         edit
+                    </button>
+                    <button class="btn btn-outline-success" style="display: none;">
+                        apply
                     </button>
                 </td>
             </tr>
