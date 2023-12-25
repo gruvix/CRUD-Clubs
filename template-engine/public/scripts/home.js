@@ -15,8 +15,16 @@ restoreSession();
 
 document.querySelector('#enter-page-button').addEventListener('click', () => {
   const username = document.querySelector('#username').value.toLowerCase();
+  const regexDefault = /^(?!default$).*$/;
+  if(!regexDefault.test(username)) {
+    $('#username-error').text('Username must not be "default"');
+    $('#username-error').show();
+    $('#username-error').delay(1500).fadeOut();
+    return;
+  }
   const regex = /^[a-zA-Z]+$/;
   if (!regex.test(username)) {
+    $('#username-error').text('Username may only contain letters');
     $('#username-error').show();
     $('#username-error').delay(1500).fadeOut();
     return;
