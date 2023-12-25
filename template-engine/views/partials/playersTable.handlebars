@@ -1,0 +1,40 @@
+<div style="height: 470px; overflow: auto;">
+<table class="table" style="padding: 30px;">
+    <thead>
+        <tr class="table-secondary">
+            <td>Id</td>
+            <td>Name</td>
+            <td>Position</td>
+            <td>Nationality</td>
+            <td></td>
+        </tr>
+        {{#each players}}
+        {{#if this.position}}
+           <tr class="table-dark table-bordered">
+                <td>{{this.id}}</td>
+                <td>{{this.name}}</td>
+                <td>{{this.position}}</td>
+                <td>{{this.nationality}}</td>
+                <td>
+                    <button class="btn btn-outline-warning">
+                        edit
+                    </button>
+                </td>
+            </tr>
+        {{else}}
+            <tr class="table-dark table-bordered">
+                <td>{{this.id}}</td>
+                <td>{{this.name}}</td>
+                <td>{{this.role}}</td>
+                <td>{{this.nationality}}</td>
+                <td>
+                    <button class="btn btn-outline-warning">
+                        edit
+                    </button>
+                </td>
+            </tr>
+        {{/if}}
+        {{/each}}
+    </thead>
+</table>
+</div>
