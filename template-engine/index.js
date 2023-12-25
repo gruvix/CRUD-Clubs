@@ -2,8 +2,9 @@ const fs = require('fs');
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
-
 const expresshandlebars = require('express-handlebars');
+const Team = require('./private/models/team.js');
+const Player = require('./private/models/player.js');
 
 const PORT = 8000;
 const app = express();
@@ -34,30 +35,6 @@ app.get('/user/:username/teams', (req, res) => {
     },
   });
 });
-
-class Team {
-  constructor(data) {
-    this.name = data.name;
-    this.area = data.area.name;
-    this.address = data.address;
-    this.phone = data.phone;
-    this.website = data.website;
-    this.email = data.email;
-    this.venue = data.venue;
-  }
-}
-
-class Player {
-  constructor(data) {
-    this.id = data.id;
-    this.name = data.name;
-    this.position = data.position;
-    this.dateOfBirth = data.dateOfBirth;
-    this.countryOfBirth = data.countryOfBirth;
-    this.nationality = data.nationality;
-    this.role = data.role;
-  }
-}
 
 app.get('/user/:username/teams/:team', (req, res) => {
   const team = JSON.parse(fs.readFileSync(`./private/data/teams/${req.params.team}.json`, 'utf-8'));
