@@ -1,16 +1,14 @@
 <div class="container">
     <div class="row">
-        <div class="col">
+        <div class="col-2">
             <button type="button" class="btn btn-outline-warning" style="margin-top: 25px;" id="back-to-teams-button">
                 Go back
             </button>
         </div>
-    </div>
 
-    <div class="row">
-        <div class="col">
+        <div class="col-8">
             <div class="d-flex justify-content-center">
-                <img src="{{data.crest}}" alt="Team crest" style="padding-bottom: 15px;">
+                <img src="{{data.crest}}" alt="Team crest" style="padding-top: 25px;">
             </div>
         </div>
     </div>
@@ -20,21 +18,14 @@
             <strong class="d-flex justify-content-center text-warning table-title">
                 Team
             </strong>
-        </div>
-        <div class="col">
-            <strong class="d-flex justify-content-center text-warning table-title">
-                Players
-            </strong>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col">
             <div class="d-flex justify-content-center">
                 {{> teamTable team=data.team }}
             </div>
         </div>
         <div class="col">
+            <strong class="d-flex justify-content-center text-warning table-title">
+                Players
+            </strong>
             <div class="d-flex justify-content-center">
                 {{> playersTable players=data.players }}
             </div>
