@@ -11,22 +11,25 @@ function restoreSession() {
   }
 }
 
+function showUsernameError(error){
+  $('#username-error').text(error);
+  $('#username-error').show();
+  $('#username-error').delay(1500).fadeOut();
+}
+
 restoreSession();
 
 document.querySelector('#enter-page-button').addEventListener('click', () => {
   const username = document.querySelector('#username').value.toLowerCase();
+
   const regexDefault = /^(?!default$).*$/;
-  if(!regexDefault.test(username)) {
-    $('#username-error').text('Username must not be "default"');
-    $('#username-error').show();
-    $('#username-error').delay(1500).fadeOut();
+  if (!regexDefault.test(username)) {
+    showUsernameError('"Default" is not available');
     return;
   }
   const regex = /^[a-zA-Z]+$/;
   if (!regex.test(username)) {
-    $('#username-error').text('Username may only contain letters');
-    $('#username-error').show();
-    $('#username-error').delay(1500).fadeOut();
+    showUsernameError('Username may only contain letters');
     return;
   }
   saveUsername(username);
