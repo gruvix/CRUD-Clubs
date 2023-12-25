@@ -1,0 +1,15 @@
+<table class="table">
+    <thead>
+        {{#each team}}
+           <tr class="table-dark table-bordered">
+                <td>{{@key}}</td>
+                <td>{{this}}</td>
+                <td>
+                    <button class="btn btn-outline-warning">
+                        edit
+                    </button>
+                </td>
+            </tr>
+        {{/each}}
+    </thead>
+</table>
