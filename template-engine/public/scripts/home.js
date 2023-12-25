@@ -14,7 +14,13 @@ function restoreSession() {
 restoreSession();
 
 document.querySelector('#enter-page-button').addEventListener('click', () => {
-  const userName = document.querySelector('#username').value.toLowerCase();
-  saveUsername(userName);
-  window.location.href = `/user/${userName}/teams`;
+  const username = document.querySelector('#username').value.toLowerCase();
+  const regex = /^[a-zA-Z]+$/;
+  if (!regex.test(username)) {
+    $('#username-error').show();
+    $('#username-error').delay(1500).fadeOut();
+    return;
+  }
+  saveUsername(username);
+  window.location.href = `/user/${username}/teams`;
 });
