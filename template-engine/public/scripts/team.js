@@ -5,16 +5,16 @@ document.querySelector('#back-to-teams-button').addEventListener('click', () => 
   window.location.href = `/user/${userName}/teams`;
 });
 
-function prepareEditField(target) {
-  const text = $(target).children('span').text();
-  $(target).children('input').val(text).show();
-  $(target).children('span').hide();
+function prepareEditField(cell) {
+  const text = $(cell).children('span').text();
+  $(cell).children('input').val(text).show();
+  $(cell).children('span').hide();
 }
 
-function applyEditField(target) {
-  const input = $(target).children('input').val();
-  $(target).children('span').text(input).show();
-  $(target).children('input').hide();
+function applyEditField(cell) {
+  const text = $(cell).children('input').val();
+  $(cell).children('span').text(text).show();
+  $(cell).children('input').hide();
 }
 
 $('#teamTable').on('click', (event) => {
