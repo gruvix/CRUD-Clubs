@@ -49,6 +49,7 @@ app.get('/user/:username/teams/:team', (req, res) => {
       username: req.params.username,
       team: new Team(team),
       crest: team.crestUrl,
+      id: team.id,
       players,
     },
   });
