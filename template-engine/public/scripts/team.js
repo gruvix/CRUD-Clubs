@@ -45,9 +45,9 @@ $('#teamTable').on('click', (event) => {
  * @param {HTMLElement} - The row containing the parameter
  */
 function updateTeamParameter(tableRow) {
-  const cell = tableRow.children[1];
-  const parameter = cell.id;
-  const newValue = $(cell).children('input').val();
+  const parameterCell = tableRow.children[1];
+  const parameter = parameterCell.id;
+  const newValue = $(parameterCell).children('input').val();
   const username = loadUsername();
   const teamId = $('#team-id').val();
   const updatedData = {};
