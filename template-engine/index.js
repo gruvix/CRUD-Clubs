@@ -3,6 +3,7 @@ const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const expresshandlebars = require('express-handlebars');
+const bodyParser = require('body-parser');
 const Team = require('./private/models/team.js');
 const Player = require('./private/models/player.js');
 
@@ -36,8 +37,12 @@ app.get('/user/:username/teams', (req, res) => {
   });
 });
 
+function getTeamById(teamId) {
+  return JSON.parse(fs.readFileSync(`./private/data/teams/${teamId}.json`, 'utf-8'));
+}
+
 app.get('/user/:username/teams/:team', (req, res) => {
-  const team = JSON.parse(fs.readFileSync(`./private/data/teams/${req.params.team}.json`, 'utf-8'));
+  const team = getTeamById(req.params.team, req.params.username);
   const players = [];
   team.squad.forEach((player) => {
     players.push(new Player(player));
@@ -55,15 +60,28 @@ app.get('/user/:username/teams/:team', (req, res) => {
   });
 });
 
+function updateTeam(team) {
+  fs.writeFileSync(`./private/data/teams/${team.id}.json`, JSON.stringify(team));
+}
+
 app.use(bodyParser.json());
 
 app.patch('/user/:username/teams/:teamId', (req, res) => {
   try {
-    const updatedData = req.body;
-    console.log(req.body);
+    let updatedData = req.body;
+    if (Object.keys(updatedData).includes('area')) {
+      updatedData = {
+        area: {
+          name: updatedData.area,
+        },
+      };
+    }
+    const team = getTeamById(req.params.teamId);
+    Object.assign(team, updatedData);
+    updateTeam(team);
+
     res.status(204).send();
   } catch (error) {
-    console.error(error);
     res.status(400).send('Error updating team parameter');
   }
 });
