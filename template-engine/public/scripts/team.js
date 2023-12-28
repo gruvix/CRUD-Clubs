@@ -5,27 +5,47 @@ document.querySelector('#back-to-teams-button').addEventListener('click', () => 
   window.location.href = `/user/${username}/teams`;
 });
 
-function prepareEditField(cell) {
-  const text = $(cell).children('span').text();
-  $(cell).children('input').val(text).show();
-  $(cell).children('span').hide();
+function prepareEditField(tableRow) {
+  const values = tableRow.children[1];
+  const text = $(values).children('span').text();
+  $(values).children('input').val(text);
 }
 
-function applyEditField(cell) {
-  const text = $(cell).children('input').val();
-  $(cell).children('span').text(text).show();
-  $(cell).children('input').hide();
+function applyEditField(tableRow) {
+  const values = tableRow.children[1];
+  const text = $(values).children('input').val();
+  $(values).children('span').text(text);
+}
+function enableEditMode(tableRow) {
+  const values = tableRow.children[1];
+  const buttons = tableRow.children[2];
+  $(buttons).children('.edit').hide();
+  $(buttons).children('.apply').show();
+  $(values).children('input').show();
+  $(values).children('span').hide();
+}
+function disableEditMode(tableRow) {
+  const values = tableRow.children[1];
+  const buttons = tableRow.children[2];
+  $(buttons).children('.edit').show();
+  $(buttons).children('.apply').hide();
+  $(values).children('input').hide();
+  $(values).children('span').show();
 }
 
 $('#teamTable').on('click', (event) => {
   if (event.target.classList.contains('edit')) {
-    $(event.target).hide();
-    $(event.target.parentElement.children[1]).show();
-    prepareEditField(event.target.parentElement.parentElement.children[1]);
+    const tableRow = event.target.parentElement.parentElement;
+    prepareEditField(tableRow);
+    enableEditMode(tableRow);
   }
 });
-
-function updateTeamParameter(cell) {
+/**
+ * Updates the parameter of the team given the row of the value
+ * @param {HTMLElement} - The row containing the parameter
+ */
+function updateTeamParameter(tableRow) {
+  const cell = tableRow.children[1];
   const parameter = cell.id;
   const newValue = $(cell).children('input').val();
   const username = loadUsername();
@@ -42,13 +62,10 @@ function updateTeamParameter(cell) {
     body: requestBody,
   });
 }
-
 function confirmEdit(tableRow) {
-  $(tableRow.children[2].children[0]).show();
-  $(tableRow.children[2].children[1]).hide();
-  const targetCell = tableRow.children[1];
-  applyEditField(targetCell);
-  updateTeamParameter(targetCell);
+  disableEditMode(tableRow);
+  applyEditField(tableRow);
+  updateTeamParameter(tableRow);
 }
 
 $('#teamTable').on('click', (event) => {
