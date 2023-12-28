@@ -55,5 +55,18 @@ app.get('/user/:username/teams/:team', (req, res) => {
   });
 });
 
+app.use(bodyParser.json());
+
+app.patch('/user/:username/teams/:teamId', (req, res) => {
+  try {
+    const updatedData = req.body;
+    console.log(req.body);
+    res.status(204).send();
+  } catch (error) {
+    console.error(error);
+    res.status(400).send('Error updating team parameter');
+  }
+});
+
 app.listen(PORT);
 console.log(`Listening on port ${PORT}`);
