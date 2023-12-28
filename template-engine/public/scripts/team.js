@@ -43,12 +43,21 @@ function updateTeamParameter(cell) {
   });
 }
 
+function confirmEdit(tableRow) {
+  $(tableRow.children[2].children[0]).show();
+  $(tableRow.children[2].children[1]).hide();
+  const targetCell = tableRow.children[1];
+  applyEditField(targetCell);
+  updateTeamParameter(targetCell);
+}
+
 $('#teamTable').on('click', (event) => {
   if (event.target.classList.contains('apply')) {
-    $(event.target).hide();
-    $(event.target.parentElement.children[0]).show();
-    const targetCell = event.target.parentElement.parentElement.children[1];
-    applyEditField(targetCell);
-    updateTeamParameter(targetCell);
+    confirmEdit(event.target.parentElement.parentElement);
+  }
+});
+$('#teamTable').on('keydown', (event) => {
+  if (event.key === 'Enter') {
+    confirmEdit(event.target.parentElement.parentElement);
   }
 });
