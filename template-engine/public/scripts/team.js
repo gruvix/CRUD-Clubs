@@ -18,7 +18,7 @@ function applyEditField(cell) {
 }
 
 $('#teamTable').on('click', (event) => {
-  if (event.target.classList.contains('btn-outline-warning')) {
+  if (event.target.classList.contains('edit')) {
     $(event.target).hide();
     $(event.target.parentElement.children[1]).show();
     prepareEditField(event.target.parentElement.parentElement.children[1]);
@@ -44,7 +44,7 @@ function updateTeamParameter(cell) {
 }
 
 $('#teamTable').on('click', (event) => {
-  if (event.target.classList.contains('btn-outline-success')) {
+  if (event.target.classList.contains('apply')) {
     $(event.target).hide();
     $(event.target.parentElement.children[0]).show();
     const targetCell = event.target.parentElement.parentElement.children[1];
