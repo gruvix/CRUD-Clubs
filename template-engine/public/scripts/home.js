@@ -19,19 +19,38 @@ function showUsernameError(error){
 
 restoreSession();
 
-document.querySelector('#enter-page-button').addEventListener('click', () => {
-  const username = document.querySelector('#username').value.toLowerCase();
-
+function validateUsername(username) {
   const regexDefault = /^(?!default$).*$/;
   if (!regexDefault.test(username)) {
-    showUsernameError('"Default" is not available');
-    return;
+    return '"Default" is not available';
   }
   const regex = /^[a-zA-Z]+$/;
   if (!regex.test(username)) {
-    showUsernameError('Username may only contain letters');
-    return;
+    return 'Username may only contain letters';
   }
+  else {
+    return false;
+  }
+}
+function login(username) {
   saveUsername(username);
   window.location.href = `/user/${username}/teams`;
+};
+function handleLogin() {
+  const username = $('#username').val().toLowerCase();
+  const error = validateUsername(username);
+  if (!error) { 
+    login(username);
+  } else {
+    showUsernameError(error);
+  }
+}
+
+$('#enter-page-button').on('click', () => {
+  handleLogin();
+});
+$('#username').on('keydown', (event) => {
+  if (event.key === 'Enter') {
+    handleLogin();
+  }
 });
