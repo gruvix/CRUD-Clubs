@@ -65,6 +65,16 @@ function copyTeams(sourcePath, targetPath) {
 function updateTeam(team, username) {
   fs.writeFileSync(`./private/data/user/${username}/teams/${team.id}.json`, JSON.stringify(team));
 }
+function createNewUser(userPath) {
+  try {
+    const defaultPath = './private/data/user/default';
+    createFolder(userPath);
+    createFolder(`${userPath}/teams`);
+    copyTeams(defaultPath, userPath);
+  } catch {
+    throw new Error('Failed to create new user');
+  }
+}
 app.get('/', (req, res) => {
   res.render('home', {
     layout: 'main',
@@ -77,15 +87,7 @@ app.get('/user/:username/teams', (req, res) => {
   const userPath = `./private/data/user/${req.params.username}`;
   // check if user folder exists, if not, creates a copy from default folder
   if (!validateFile(`${userPath}/teams.json`)) {
-    try {
-      const defaultPath = './private/data/user/default';
-      createFolder(userPath);
-      createFolder(`${userPath}/teams`);
-      copyTeams(defaultPath, userPath);
-    } catch (err) {
-      console.log(err);
-      return;
-    }
+    createNewUser(userPath);
   }
   const teams = JSON.parse(fs.readFileSync(`${userPath}/teams.json`, 'utf-8'));
   res.render('teams', {
