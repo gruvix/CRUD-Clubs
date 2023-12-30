@@ -11,3 +11,9 @@ describe('test the CRUD', () => {
       .should('contain', 'Username may only contain letters');
   });
 
+  it('should show an error indicating that the username may not be "Default"', () => {
+    cy.get('#username').type('Default').get('#enter-page-button').click()
+      .get('#username-error')
+      .should('contain', '"Default" is not available');
+  });
+
