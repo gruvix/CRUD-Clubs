@@ -22,7 +22,7 @@ app.use(express.static(path.join(__dirname, 'public')));
  * @param {string} - Username
  */
 function getTeamByIdAndUser(teamId, username) {
-  return JSON.parse(fs.readFileSync(`./private/data/user/${username}/${teamId}.json`, 'utf-8'));
+  return JSON.parse(fs.readFileSync(`./private/data/user/${username}/teams/${teamId}.json`, 'utf-8'));
 }
 function validateFolder(folderPath) {
   fs.access(folderPath, fs.constants.F_OK, (accessError) => {
