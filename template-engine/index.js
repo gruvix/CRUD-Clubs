@@ -57,7 +57,7 @@ function copyTeams(sourcePath, targetPath) {
     }
   });
   try {
-    fs.copyFileSync(`${sourcePath}/index.json`, `${targetPath}/index.json`);
+    fs.copyFileSync(`${sourcePath}/teams.json`, `${targetPath}/teams.json`);
   } catch (creationError) {
     throw new Error(creationError);
   }
@@ -87,7 +87,7 @@ app.get('/user/:username/teams', (req, res) => {
       return;
     }
   }
-  const teams = JSON.parse(fs.readFileSync(`${userPath}/index.json`, 'utf-8'));
+  const teams = JSON.parse(fs.readFileSync(`${userPath}/teams.json`, 'utf-8'));
   res.render('teams', {
     layout: 'main',
     data: {
