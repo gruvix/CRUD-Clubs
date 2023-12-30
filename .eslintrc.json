@@ -1,7 +1,8 @@
 {
     "env": {
         "browser": true,
-        "es2021": true
+        "es2021": true,
+        "cypress/globals": true
     },
     "extends": "airbnb-base",
     "parserOptions": {
@@ -10,5 +11,8 @@
     },
     "rules": {
         "import/extensions": "off"
-    }
+    },
+    "plugins": [
+        "cypress"
+    ]
 }
