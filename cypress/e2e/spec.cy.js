@@ -1,6 +1,8 @@
-describe('template spec', () => {
 /// <reference types="cypress" />
+
+describe('test the CRUD', () => {
+  beforeEach(() => {
+    cy.visit('http://localhost:8000/');
+  });
+
   it('passes', () => {
-    cy.visit('https://example.cypress.io')
-  })
-})
