@@ -1,6 +1,7 @@
 {
   "devDependencies": {
     "@types/jquery": "^3.5.29",
+    "cypress": "^13.6.2",
     "eslint": "^8.56.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.29.1",
@@ -20,6 +21,7 @@
     "dev": "nodemon index-%npm_config_paso%.js",
     "dev:express": "nodemon ./express/index-%npm_config_paso%.js",
     "dev:template": "cd ./template-engine && nodemon --inspect index.js",
+    "dev:cypress": "cypress open",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
