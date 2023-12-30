@@ -42,6 +42,12 @@ function createFolder(folderPath) {
 }
 function copyDefaultTeams(userPath, defaultPath) {
   const teams = JSON.parse(fs.readFileSync(`${defaultPath}/teams.json}`, 'utf-8'));
+/**
+ * @param {string} sourcePath - source path of teams to be copied
+ * @param {string} targetPath - target path to place copy
+ */
+function copyTeams(sourcePath, targetPath) {
+  const teams = JSON.parse(fs.readFileSync(`${sourcePath}/teams.json`, 'utf-8'));
   teams.forEach((team) => {
     const teamJSON = getTeamByIdAndUser(team.id, 'default');
     try {
