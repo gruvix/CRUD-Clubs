@@ -17,3 +17,9 @@ describe('test the CRUD', () => {
       .should('contain', '"Default" is not available');
   });
 
+  it.only('should login with "test"', () => {
+    cy.get('#username').type('test').get('#enter-page-button').click()
+      .get('#username-error')
+      .should('not.be.visible');
+  });
+});
