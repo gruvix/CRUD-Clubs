@@ -40,8 +40,6 @@ function createFolder(folderPath) {
     console.log('User folder created');
   });
 }
-function copyDefaultTeams(userPath, defaultPath) {
-  const teams = JSON.parse(fs.readFileSync(`${defaultPath}/teams.json}`, 'utf-8'));
 /**
  * @param {string} sourcePath - source path of teams to be copied
  * @param {string} targetPath - target path to place copy
@@ -80,7 +78,7 @@ app.get('/user/:username/teams', (req, res) => {
       const defaultPath = './private/data/user/default';
       createFolder(userPath);
       createFolder(`${userPath}/teams`);
-      copyDefaultTeams(userPath, defaultPath);
+      copyTeams(defaultPath, userPath);
     } catch (err) {
       console.log(err);
       return;
