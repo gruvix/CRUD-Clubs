@@ -24,14 +24,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 function getTeamByIdAndUser(teamId, username) {
   return JSON.parse(fs.readFileSync(`./private/data/user/${username}/teams/${teamId}.json`, 'utf-8'));
 }
-function validateFolder(folderPath) {
-  fs.access(folderPath, fs.constants.F_OK, (accessError) => {
-    if (accessError) {
-      return false;
-    }
+function validateFile(filePath) {
+  try {
+    fs.accessSync(filePath, fs.constants.F_OK);
+    console.log('File exists!');
     return true;
-  });
+  } catch (err) {
+    console.log('File does not exist');
+    return false;
+  }
 }
+
 function createFolder(folderPath) {
   fs.mkdirSync(folderPath, (createFolderError) => {
     if (createFolderError) {
@@ -73,7 +76,7 @@ app.get('/', (req, res) => {
 app.get('/user/:username/teams', (req, res) => {
   const userPath = `./private/data/user/${req.params.username}`;
   // check if user folder exists, if not, creates a copy from default folder
-  if (!validateFolder(userPath)) { // TODO: check if index file exists INSTEAD of folder
+  if (!validateFile(`${userPath}/teams.json`)) {
     try {
       const defaultPath = './private/data/user/default';
       createFolder(userPath);
