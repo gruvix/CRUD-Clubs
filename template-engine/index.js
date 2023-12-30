@@ -40,23 +40,8 @@ function createFolder(folderPath) {
     console.log('User folder created');
   });
 }
-
-app.get('/', (req, res) => {
-  res.render('home', {
-    layout: 'main',
-    data: {
-
-    },
-  });
-});
-
-<<<<<<< HEAD
-app.get('/user/:username/teams', (req, res) => {
-  const teams = JSON.parse(fs.readFileSync('./private/data/teams.json', 'utf-8'));
-=======
-app.get('/user/:id/teams', (req, res) => {
-function copyDefaultTeams(userPath) {
-  const teams = JSON.parse(fs.readFileSync('./private/data/user/default/teams.json', 'utf-8'));
+function copyDefaultTeams(userPath, defaultPath) {
+  const teams = JSON.parse(fs.readFileSync(`${defaultPath}/teams.json}`, 'utf-8'));
   teams.forEach((team) => {
     const teamJSON = getTeamByIdAndUser(team.id, 'default');
     try {
@@ -74,21 +59,29 @@ function copyDefaultTeams(userPath) {
 function updateTeam(team, username) {
   fs.writeFileSync(`./private/data/user/${username}/teams/${team.id}.json`, JSON.stringify(team));
 }
+app.get('/', (req, res) => {
+  res.render('home', {
+    layout: 'main',
+    data: {
+
+    },
+  });
+});
 app.get('/user/:username/teams', (req, res) => {
   const userPath = `./private/data/user/${req.params.username}`;
   // check if user folder exists, if not, creates a copy from default folder
-  if (validateFolder(userPath)) { // TODO: check if index file exists INSTEAD of folder
+  if (!validateFolder(userPath)) { // TODO: check if index file exists INSTEAD of folder
     try {
+      const defaultPath = './private/data/user/default';
       createFolder(userPath);
       createFolder(`${userPath}/teams`);
-      copyDefaultTeams(userPath);
+      copyDefaultTeams(userPath, defaultPath);
     } catch (err) {
       console.log(err);
       return;
     }
   }
   const teams = JSON.parse(fs.readFileSync(`${userPath}/index.json`, 'utf-8'));
->>>>>>> b9f269f (Update index.js)
   res.render('teams', {
     layout: 'main',
     data: {
@@ -98,18 +91,8 @@ app.get('/user/:username/teams', (req, res) => {
     },
   });
 });
-
-<<<<<<< HEAD
-function getTeamById(teamId) {
-  return JSON.parse(fs.readFileSync(`./private/data/teams/${teamId}.json`, 'utf-8'));
-}
-
-app.get('/user/:username/teams/:team', (req, res) => {
-  const team = getTeamById(req.params.team, req.params.username);
-=======
 app.get('/user/:username/teams/:team', (req, res) => {
   const team = getTeamByIdAndUser(req.params.team, req.params.username);
->>>>>>> b9f269f (Update index.js)
   const players = [];
   team.squad.forEach((player) => {
     players.push(new Player(player));
@@ -127,13 +110,6 @@ app.get('/user/:username/teams/:team', (req, res) => {
   });
 });
 
-<<<<<<< HEAD
-function updateTeam(team) {
-  fs.writeFileSync(`./private/data/teams/${team.id}.json`, JSON.stringify(team));
-}
-
-=======
->>>>>>> b9f269f (Update index.js)
 app.use(bodyParser.json());
 
 app.patch('/user/:username/teams/:teamId', (req, res) => {
@@ -146,16 +122,9 @@ app.patch('/user/:username/teams/:teamId', (req, res) => {
         },
       };
     }
-<<<<<<< HEAD
-    const team = getTeamById(req.params.teamId);
-    Object.assign(team, updatedData);
-    updateTeam(team);
-=======
     const team = getTeamByIdAndUser(req.params.teamId, req.params.username);
     Object.assign(team, updatedData);
     updateTeam(team, req.params.username);
->>>>>>> b9f269f (Update index.js)
-
     res.status(204).send();
   } catch (error) {
     res.status(400).send('Error updating team parameter');
