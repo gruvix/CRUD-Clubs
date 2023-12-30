@@ -49,15 +49,14 @@ function copyDefaultTeams(userPath, defaultPath) {
 function copyTeams(sourcePath, targetPath) {
   const teams = JSON.parse(fs.readFileSync(`${sourcePath}/teams.json`, 'utf-8'));
   teams.forEach((team) => {
-    const teamJSON = getTeamByIdAndUser(team.id, 'default');
     try {
-      fs.writeFileSync(`${userPath}/teams/${team.id}.json`, JSON.stringify(teamJSON));
+      fs.copyFileSync(`${sourcePath}/teams/${team.id}.json`, `${targetPath}/teams/${team.id}.json`);
     } catch (creationError) {
       throw new Error(creationError);
     }
   });
   try {
-    fs.writeFileSync(`${userPath}/index.json`, JSON.stringify(teams));
+    fs.copyFileSync(`${sourcePath}/index.json`, `${targetPath}/index.json`);
   } catch (creationError) {
     throw new Error(creationError);
   }
