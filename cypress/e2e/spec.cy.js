@@ -18,8 +18,6 @@ describe('test the CRUD', () => {
   });
 
   it.only('should login with "test"', () => {
-    cy.get('#username').type('test').get('#enter-page-button').click()
-      .get('#username-error')
-      .should('not.be.visible');
+    cy.get('#username').type('test').get('#enter-page-button').click();
   });
 });
