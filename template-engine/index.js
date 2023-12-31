@@ -192,6 +192,15 @@ app.patch('/user/:username/teams/:teamId', (req, res) => {
     res.status(400).send('Error updating team parameter');
   }
 });
+app.patch('/user/:username/teams/reset', (req, res) => {
+  const { username } = req.params;
+  const userPath = generateUserPath(username);
+  console.log('reset')
+  deleteFolder(userPath);
+  if (!validateFile(`${userPath}/teams.json`)) {
+    createNewUser(userPath);
+  }
+});
 
 app.listen(PORT);
 console.log(`Listening on port ${PORT}`);
