@@ -19,10 +19,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 /**
  * gets a team by id and username
  * @param {Number} - Team id
- * @param {string} - Username
+ * @param {string} - path to user folder
  */
-function getTeamByIdAndUser(teamId, username) {
-  return JSON.parse(fs.readFileSync(`./private/data/user/${username}/teams/${teamId}.json`, 'utf-8'));
+function getTeamByIdAndPath(teamId, userPath) {
+  return JSON.parse(fs.readFileSync(`${userPath}/teams/${teamId}.json`, 'utf-8'));
+}
+/**
+ * @param {string} userName - username of the user
+ * @returns the path to the root of the user E.g. ./private/data/user/default
+ */
+function generateUserPath(userName) {
+  return `./private/data/user/${userName}`;
 }
 function validateFile(filePath) {
   try {
