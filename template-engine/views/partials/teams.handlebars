@@ -1,5 +1,18 @@
-<ul>
+<div class="container">
     {{#each items}}
-    <li><a href="user/{{../username}}/teams/{{this.id}}">{{this.name}}</a></li>
+    <div class="row">
+        <div class="col-md-9">
+            <a href="user/{{../username}}/teams/{{this.id}}">{{this.name}}</a>
+        </div>
+        <div class="col">
+            <button class="btn btn-outline-warning">edit</button>
+        </div>
+        <div class="col">
+            <button class="btn btn-outline-secondary">reset</button>
+        </div>
+        <div class="col">
+            <button class="btn btn-outline-danger">delete</button>
+        </div>
+    </div>
     {{/each}}
-</ul>
+</div>
