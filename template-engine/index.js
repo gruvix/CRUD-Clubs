@@ -184,7 +184,7 @@ app.patch('/user/:username/teams/:teamId', (req, res) => {
         },
       };
     }
-    const team = getTeamByIdAndPath(teamId, userPath);
+    const team = getTeamByIdAndPath(userPath, teamId);
     Object.assign(team, updatedData);
     updateTeam(team, userPath);
     res.status(204).send();
