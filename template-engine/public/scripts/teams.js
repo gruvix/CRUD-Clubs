@@ -16,4 +16,5 @@ $('#log-out-button').on('click', () => {
 $('#reset-teams-button').on('click', () => {
   const username = loadUsername();
   resetTeams(username);
+  window.location.href = `/user/${username}/teams`;
 });
