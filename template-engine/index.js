@@ -34,7 +34,6 @@ function validateFile(filePath) {
     return false;
   }
 }
-
 function createFolder(folderPath) {
   try {
     if (!fs.existsSync(folderPath)) {
@@ -64,7 +63,14 @@ function copyTeam(sourcePath, targetPath, teamId) {
 function updateTeam(team, username) {
   fs.writeFileSync(`./private/data/user/${username}/teams/${team.id}.json`, JSON.stringify(team));
 }
-
+function isTeamDefault(userPath, teamId) {
+  const teams = JSON.parse(fs.readFileSync(`${userPath}/teams.json`, 'utf-8'));
+  const team = teams[teamId];
+  if (team.isDefault) {
+    return true;
+  }
+  return false;
+}
 function createDefaultList(userPath) {
   const teams = JSON.parse(fs.readFileSync('./private/data/user/default/teams.json', 'utf-8'));
   const teamNames = {};
@@ -117,14 +123,6 @@ app.get('/user/:username/teams', (req, res) => {
     },
   });
 });
-function isTeamDefault(userPath, teamId){
-  const teams = JSON.parse(fs.readFileSync(`${userPath}/teams.json`, 'utf-8'));
-  const team = teams[teamId];
-  if (team.isDefault) {
-    return true;
-  }
-  return false;
-}
 app.get('/user/:username/teams/:team', (req, res) => {
   const { username } = req.params;
   const team = getTeamByIdAndUser(req.params.team, username);
