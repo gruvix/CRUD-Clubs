@@ -123,6 +123,14 @@ app.get('/user/:username/teams', (req, res) => {
     },
   });
 });
+function isTeamDefault(userPath, teamId){
+  const teams = JSON.parse(fs.readFileSync(`${userPath}/teams.json`, 'utf-8'));
+  const team = teams[teamId];
+  if (team.isDefault) {
+    return true;
+  }
+  return false;
+}
 app.get('/user/:username/teams/:team', (req, res) => {
   const team = getTeamByIdAndUser(req.params.team, req.params.username);
   const players = [];
