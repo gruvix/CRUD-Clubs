@@ -18,10 +18,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 /**
  * gets a team by id and username
- * @param {Number} - Team id
- * @param {string} - path to user folder
+ * @param {string} userPath - path to user folder
+ * @param {Number} teamId
  */
-function getTeamByIdAndPath(teamId, userPath) {
+function getTeamByIdAndPath(userPath, teamId) {
   return JSON.parse(fs.readFileSync(`${userPath}/teams/${teamId}.json`, 'utf-8'));
 }
 /**
@@ -32,10 +32,10 @@ function generateUserPath(userName) {
   return `./private/data/user/${userName}`;
 }
 /**
- * @param {Number} teamId
  * @param {string} userPath - path to user folder
+ * @param {Number} teamId
  */
-function unDefaultTeam(teamId, userPath) {
+function unDefaultTeam(userPath, teamId) {
   const teams = JSON.parse(fs.readFileSync(`${userPath}/teams.json`, 'utf-8'));
   teams[teamId].isDefault = false;
   fs.writeFileSync(`${userPath}/teams.json`, JSON.stringify(teams));
@@ -147,7 +147,7 @@ app.get('/user/:username/teams/:teamId', (req, res) => {
   if (isTeamDefault(userPath, teamId)) {
     userPath = generateUserPath('default');
   }
-  const team = getTeamByIdAndPath(teamId, userPath);
+  const team = getTeamByIdAndPath(userPath, teamId);
 
   const players = [];
   team.squad.forEach((player) => {
