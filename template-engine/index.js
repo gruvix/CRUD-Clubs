@@ -52,18 +52,11 @@ function createFolder(folderPath) {
 /**
  * @param {string} sourcePath - source path of teams to be copied
  * @param {string} targetPath - target path to place copy
+ * @param {Number} teamId - id of the team to be copied
  */
-function copyTeams(sourcePath, targetPath) {
-  const teams = JSON.parse(fs.readFileSync(`${sourcePath}/teams.json`, 'utf-8'));
-  teams.forEach((team) => {
-    try {
-      fs.copyFileSync(`${sourcePath}/teams/${team.id}.json`, `${targetPath}/teams/${team.id}.json`);
-    } catch (creationError) {
-      throw new Error(creationError);
-    }
-  });
+function copyTeam(sourcePath, targetPath, teamId) {
   try {
-    fs.copyFileSync(`${sourcePath}/teams.json`, `${targetPath}/teams.json`);
+    fs.copyFileSync(`${sourcePath}/teams/${teamId}.json`, `${targetPath}/teams/${teamId}.json`);
   } catch (creationError) {
     throw new Error(creationError);
   }
