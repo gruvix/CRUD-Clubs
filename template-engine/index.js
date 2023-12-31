@@ -130,7 +130,7 @@ function isTeamDefault(userPath, teamId){
   return false;
 }
 app.get('/user/:username/teams/:team', (req, res) => {
-  const username = req.params.username;
+  const { username } = req.params;
   const team = getTeamByIdAndUser(req.params.team, username);
   const players = [];
   team.squad.forEach((player) => {
