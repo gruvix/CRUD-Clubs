@@ -97,6 +97,7 @@ function createDefaultList(userPath) {
         name: team.name,
         id: team.id,
         isDefault: true,
+        lastUpdated: new Date().toISOString(),
       },
     });
   });
@@ -185,6 +186,9 @@ app.patch('/user/:username/teams/:teamId', (req, res) => {
       };
     }
     const team = getTeamByIdAndPath(userPath, teamId);
+    const now = new Date();
+    const lastUpdated = now.toISOString();
+    updatedData.lastUpdated = lastUpdated;
     Object.assign(team, updatedData);
     updateTeam(team, userPath);
     res.status(204).send();
