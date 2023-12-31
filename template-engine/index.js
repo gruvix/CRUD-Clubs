@@ -196,6 +196,10 @@ app.patch('/user/:username/teams/:teamId', (req, res) => {
     res.status(400).send('Error updating team parameter');
   }
 });
+function deleteFolder(userPath) {
+  fs.rmSync(userPath, { recursive: true, force: true });
+}
+
 app.patch('/user/:username/teams/reset', (req, res) => {
   const { username } = req.params;
   const userPath = generateUserPath(username);
