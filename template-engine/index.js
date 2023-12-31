@@ -67,8 +67,8 @@ function copyTeam(sourcePath, targetPath, teamId) {
     throw new Error(creationError);
   }
 }
-function updateTeam(team, username) {
-  fs.writeFileSync(`./private/data/user/${username}/teams/${team.id}.json`, JSON.stringify(team));
+function updateTeam(team, userPath) {
+  fs.writeFileSync(`${userPath}/teams/${team.id}.json`, JSON.stringify(team));
 }
 function isTeamDefault(userPath, teamId) {
   const teams = JSON.parse(fs.readFileSync(`${userPath}/teams.json`, 'utf-8'));
@@ -79,7 +79,8 @@ function isTeamDefault(userPath, teamId) {
   return false;
 }
 function createDefaultList(userPath) {
-  const teams = JSON.parse(fs.readFileSync('./private/data/user/default/teams.json', 'utf-8'));
+  const defaultPath = generateUserPath('default');
+  const teams = JSON.parse(fs.readFileSync(`${defaultPath}/teams.json`, 'utf-8'));
   const teamNames = {};
   teams.forEach((team) => {
     Object.assign(teamNames, {
@@ -115,7 +116,8 @@ app.get('/', (req, res) => {
   });
 });
 app.get('/user/:username/teams', (req, res) => {
-  const userPath = `./private/data/user/${req.params.username}`;
+  const { username } = req.params;
+  const userPath = generateUserPath(username);
   // check if user folder exists, if not, creates a copy from default folder
   if (!validateFile(`${userPath}/teams.json`)) {
     createNewUser(userPath);
@@ -124,15 +126,20 @@ app.get('/user/:username/teams', (req, res) => {
   res.render('teams', {
     layout: 'main',
     data: {
-      username: req.params.username,
-      capitalizedName: req.params.username.charAt(0).toUpperCase() + req.params.username.slice(1),
+      username,
+      capitalizedName: username.charAt(0).toUpperCase() + username.slice(1),
       teams,
     },
   });
 });
-app.get('/user/:username/teams/:team', (req, res) => {
-  const { username } = req.params;
-  const team = getTeamByIdAndUser(req.params.team, username);
+app.get('/user/:username/teams/:teamId', (req, res) => {
+  const { username, teamId } = req.params;
+  let userPath = generateUserPath(username);
+  if (isTeamDefault(userPath, teamId)) {
+    userPath = generateUserPath('default');
+  }
+  const team = getTeamByIdAndPath(teamId, userPath);
+
   const players = [];
   team.squad.forEach((player) => {
     players.push(new Player(player));
@@ -153,6 +160,8 @@ app.get('/user/:username/teams/:team', (req, res) => {
 app.use(bodyParser.json());
 
 app.patch('/user/:username/teams/:teamId', (req, res) => {
+  const { username, teamId } = req.params;
+  const userPath = generateUserPath(username);
   try {
     let updatedData = req.body;
     if (Object.keys(updatedData).includes('area')) {
@@ -162,9 +171,9 @@ app.patch('/user/:username/teams/:teamId', (req, res) => {
         },
       };
     }
-    const team = getTeamByIdAndUser(req.params.teamId, req.params.username);
+    const team = getTeamByIdAndPath(teamId, userPath);
     Object.assign(team, updatedData);
-    updateTeam(team, req.params.username);
+    updateTeam(team, userPath);
     res.status(204).send();
   } catch (error) {
     res.status(400).send('Error updating team parameter');
