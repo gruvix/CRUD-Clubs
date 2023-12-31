@@ -15,6 +15,7 @@ app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.json());
 
 /**
  * gets a team by id and username
@@ -166,7 +167,19 @@ app.get('/user/:username/teams/:teamId', (req, res) => {
   });
 });
 
-app.use(bodyParser.json());
+function deleteFolder(userPath) {
+  fs.rmSync(userPath, { recursive: true, force: true });
+}
+
+app.patch('/user/:username/reset', (req, res) => {
+  const { username } = req.params;
+  const userPath = generateUserPath(username);
+  console.log('reset');
+  deleteFolder(userPath);
+  if (!validateFile(`${userPath}/teams.json`)) {
+    createNewUser(userPath);
+  }
+});
 
 app.patch('/user/:username/teams/:teamId', (req, res) => {
   const { username, teamId } = req.params;
@@ -193,19 +206,6 @@ app.patch('/user/:username/teams/:teamId', (req, res) => {
     res.status(204).send();
   } catch (error) {
     res.status(400).send('Error updating team parameter');
-  }
-});
-function deleteFolder(userPath) {
-  fs.rmSync(userPath, { recursive: true, force: true });
-}
-
-app.patch('/user/:username/teams/reset', (req, res) => {
-  const { username } = req.params;
-  const userPath = generateUserPath(username);
-  console.log('reset')
-  deleteFolder(userPath);
-  if (!validateFile(`${userPath}/teams.json`)) {
-    createNewUser(userPath);
   }
 });
 
