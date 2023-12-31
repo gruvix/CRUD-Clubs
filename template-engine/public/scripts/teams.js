@@ -1,12 +1,13 @@
 import { clearUsername, loadUsername } from './localStorage.js';
 
-function resetTeams(username) {
-  fetch(`/user/${username}/reset`, {
+async function resetTeams(username, callback) {
+  await fetch(`/user/${username}/reset`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
     },
   });
+  callback();
 }
 $('#log-out-button').on('click', () => {
   clearUsername();
@@ -15,6 +16,8 @@ $('#log-out-button').on('click', () => {
 
 $('#reset-teams-button').on('click', () => {
   const username = loadUsername();
-  resetTeams(username);
-  window.location.href = `/user/${username}/teams`;
+  const callback = () => {
+    window.location.href = `/user/${username}/teams`;
+  };
+  resetTeams(username, callback);
 });
