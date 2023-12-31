@@ -174,10 +174,15 @@ function deleteFolder(userPath) {
 app.patch('/user/:username/reset', (req, res) => {
   const { username } = req.params;
   const userPath = generateUserPath(username);
-  console.log('reset');
-  deleteFolder(userPath);
-  if (!validateFile(`${userPath}/teams.json`)) {
-    createNewUser(userPath);
+  console.log(`Resetting user ${username}`);
+  try {
+    deleteFolder(userPath);
+    if (!validateFile(`${userPath}/teams.json`)) {
+      createNewUser(userPath);
+    }
+    res.status(204).send();
+  } catch (error) {
+    res.status(400).send('Error resetting teams');
   }
 });
 
