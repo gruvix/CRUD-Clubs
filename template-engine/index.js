@@ -128,7 +128,6 @@ app.get('/', (req, res) => {
 app.get('/user/:username/teams', (req, res) => {
   const { username } = req.params;
   const userPath = generateUserPath(username);
-  // check if user folder exists, if not, creates a copy from default folder
   if (!validateFile(`${userPath}/teams.json`)) {
     createNewUser(userPath);
   }
