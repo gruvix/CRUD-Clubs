@@ -171,6 +171,10 @@ app.use(bodyParser.json());
 app.patch('/user/:username/teams/:teamId', (req, res) => {
   const { username, teamId } = req.params;
   const userPath = generateUserPath(username);
+  if (isTeamDefault(userPath, teamId)) {
+    copyTeam(generateUserPath('default'), userPath, teamId);
+    unDefaultTeam(userPath, teamId);
+  }
   try {
     let updatedData = req.body;
     if (Object.keys(updatedData).includes('area')) {
