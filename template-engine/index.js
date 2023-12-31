@@ -132,7 +132,8 @@ function isTeamDefault(userPath, teamId){
   return false;
 }
 app.get('/user/:username/teams/:team', (req, res) => {
-  const team = getTeamByIdAndUser(req.params.team, req.params.username);
+  const username = req.params.username;
+  const team = getTeamByIdAndUser(req.params.team, username);
   const players = [];
   team.squad.forEach((player) => {
     players.push(new Player(player));
@@ -141,7 +142,7 @@ app.get('/user/:username/teams/:team', (req, res) => {
   res.render('team', {
     layout: 'main',
     data: {
-      username: req.params.username,
+      username,
       team: new Team(team),
       crest: team.crestUrl,
       id: team.id,
