@@ -31,6 +31,15 @@ function getTeamByIdAndPath(teamId, userPath) {
 function generateUserPath(userName) {
   return `./private/data/user/${userName}`;
 }
+/**
+ * @param {Number} teamId
+ * @param {string} userPath - path to user folder
+ */
+function unDefaultTeam(teamId, userPath) {
+  const teams = JSON.parse(fs.readFileSync(`${userPath}/teams.json`, 'utf-8'));
+  teams[teamId].isDefault = false;
+  fs.writeFileSync(`${userPath}/teams.json`, JSON.stringify(teams));
+}
 function validateFile(filePath) {
   try {
     fs.accessSync(filePath, fs.constants.F_OK);
