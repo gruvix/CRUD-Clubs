@@ -75,18 +75,16 @@ function createNewUser(userPath) {
 function createDefaultList(userPath) {
   const teams = JSON.parse(fs.readFileSync('./private/data/user/default/teams.json', 'utf-8'));
   const teamNames = {};
-  teams.forEach((team, index) => {
+  teams.forEach((team) => {
     Object.assign(teamNames, {
-      [index]: {
+      [team.id]: {
         name: team.name,
         id: team.id,
         isDefault: true,
       },
     });
   });
-  console.log(teamNames);
   try {
-    const defaultPath = './private/data/user/default';
     fs.writeFileSync(`${userPath}/teams.json`, JSON.stringify(teamNames));
   } catch (creationError) {
     throw new Error(creationError);
