@@ -90,6 +90,9 @@ function createDefaultList(userPath) {
     throw new Error(creationError);
   }
 }
+
+function createNewUser(userPath) {
+  try {
     createFolder(userPath);
     createFolder(`${userPath}/teams`);
     createDefaultList(userPath);
