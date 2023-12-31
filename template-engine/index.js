@@ -36,12 +36,18 @@ function validateFile(filePath) {
 }
 
 function createFolder(folderPath) {
-  fs.mkdirSync(folderPath, (createFolderError) => {
-    if (createFolderError) {
-      console.log(createFolderError);
+  try {
+    if (!fs.existsSync(folderPath)) {
+      fs.mkdirSync(folderPath, (createFolderError) => {
+        if (createFolderError) {
+          console.log(createFolderError);
+        }
+        console.log('User folder created');
+      });
     }
-    console.log('User folder created');
-  });
+  } catch (err) {
+    throw new Error(err);
+  }
 }
 /**
  * @param {string} sourcePath - source path of teams to be copied
