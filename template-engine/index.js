@@ -71,7 +71,7 @@ function copyTeams(sourcePath, targetPath) {
 function updateTeam(team, username) {
   fs.writeFileSync(`./private/data/user/${username}/teams/${team.id}.json`, JSON.stringify(team));
 }
-function createNewUser(userPath) {
+
 function createDefaultList(userPath) {
   const teams = JSON.parse(fs.readFileSync('./private/data/user/default/teams.json', 'utf-8'));
   const teamNames = {};
