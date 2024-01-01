@@ -72,3 +72,7 @@ td:first-child, th:first-child {
   opacity: 0;
   background-color: rgba(46, 40, 40, 0.548);
 }
+
+.btn {
+  text-shadow: 1px 1px 4px rgb(0, 0, 0);
+}
