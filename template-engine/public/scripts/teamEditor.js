@@ -21,7 +21,7 @@ $(() => {
 });
 
 $('#reset-team-button').on('click', () => {
-  $('#modal-confirmation-text').text('You are about to reset the teams. All custom data will be lost');
+  $('#modal-confirmation-text').text('You are about to reset the team. All custom data will be lost');
   $('#confirmation-modal-button').on('click', () => {
     console.log('Reset teams');
     const username = loadUsername();
