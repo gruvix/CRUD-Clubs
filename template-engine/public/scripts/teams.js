@@ -30,10 +30,23 @@ $('#reset-teams-button').on('click', () => {
   };
   resetTeams(username, callback);
 });
-function goEditTeam(button){
+function goEditTeam(teamId) {
   const username = loadUsername();
-  window.location.href = `/user/${username}/teams/${button.parentElement.id}`;
+  window.location.href = `/user/${username}/teams/${teamId}`;
+}
+function deleteTeam(teamId) {
+  const username = loadUsername();
+  fetch(`/user/${username}/teams/${teamId}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  $(`#${teamId}`).parent().remove();
 }
 $('.edit').on('click', (event) => {
-  goEditTeam(event.target);
+  goEditTeam(event.target.parentElement.id);
+});
+$('.delete').on('click', (event) => {
+  deleteTeam(event.target.parentElement.id);
 });
