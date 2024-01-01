@@ -43,6 +43,11 @@ function updateTeamlistParameter(userPath, teamId, parameter, value) {
   teams[teamId][parameter] = value;
   fs.writeFileSync(`${userPath}/teams.json`, JSON.stringify(teams));
 }
+function deleteTeamFromTeamlist(userPath, teamId) {
+  const teams = JSON.parse(fs.readFileSync(`${userPath}/teams.json`, 'utf-8'));
+  delete teams[teamId];
+  fs.writeFileSync(`${userPath}/teams.json`, JSON.stringify(teams));
+}
 function validateFile(filePath) {
   try {
     fs.accessSync(filePath, fs.constants.F_OK);
