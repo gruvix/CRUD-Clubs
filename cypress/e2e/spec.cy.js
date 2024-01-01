@@ -17,7 +17,20 @@ describe('test the CRUD', () => {
       .should('contain', '"Default" is not available');
   });
 
-  it.only('should login with "test"', () => {
+  it('should login with "test"', () => {
     cy.get('#username').type('test').get('#enter-page-button').click();
+  });
+
+  it.only('should delete a team and reset the teams', () => {
+    cy.intercept('PATCH', '/user/**/reset').as('resetTeams');
+    cy.get('#username').type('test').get('#enter-page-button').click();
+    cy.get('h5').first().then(($text) => {
+      const teamName = $text.text();
+      cy.get('.delete').first().click();
+
+      cy.get('.card-title').first().should('not.contain', teamName);
+      cy.get('#reset-teams-button').click().wait('@resetTeams');
+      cy.get('.card-title').first().should('contain', teamName);
+    });
   });
 });
