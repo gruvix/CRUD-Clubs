@@ -73,6 +73,10 @@ td:first-child, th:first-child {
   background-color: rgba(46, 40, 40, 0.548);
 }
 
-.btn {
+.btn-shadow {
   text-shadow: 1px 1px 4px rgb(0, 0, 0);
+}
+
+.modal-content {
+  background-color: rgba(216, 194, 164, 0.973);
 }
