@@ -6,6 +6,7 @@ const expresshandlebars = require('express-handlebars');
 const bodyParser = require('body-parser');
 const Team = require('./private/models/team.js');
 const Player = require('./private/models/player.js');
+const TeamListTeam = require('./private/models/teamListTeam.js');
 
 const PORT = 8000;
 const app = express();
