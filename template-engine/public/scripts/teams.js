@@ -27,11 +27,14 @@ $('#log-out-button').on('click', () => {
 });
 
 $('#reset-teams-button').on('click', () => {
-  const username = loadUsername();
-  const callback = () => {
-    window.location.href = `/user/${username}/teams`;
-  };
-  resetTeams(username, callback);
+  $('#modal-confirmation-text').text('You are about to reset all teams. All custom data (including new teams) will be lost');
+  $('#confirmation-modal-button').on('click', () => {
+    const username = loadUsername();
+    const callback = () => {
+      window.location.href = `/user/${username}/teams`;
+    };
+    resetTeams(username, callback);
+  });
 });
 function goEditTeam(teamId) {
   const username = loadUsername();
