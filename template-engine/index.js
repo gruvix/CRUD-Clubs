@@ -198,6 +198,22 @@ app.patch('/user/:username/reset/all', (req, res) => {
   }
 });
 
+app.patch('/user/:username/reset/:teamId', (req, res) => {
+  const { username, teamId } = req.params;
+  const userPath = generateUserPath(username);
+  const defaultPath = generateUserPath('default');
+  console.log(`Resetting team ${teamId} from ${username}`);
+  try {
+    deleteFile(`${userPath}/teams/${teamId}.json`);
+    copyTeam(defaultPath, userPath, teamId);
+    copyTeamFromTeamList(defaultPath, userPath, teamId);
+
+    res.status(204).send();
+  } catch (error) {
+    res.status(400).send(`Error resetting team ${teamId}`);
+  }
+});
+
 app.patch('/user/:username/teams/:teamId', (req, res) => {
   const { username, teamId } = req.params;
   const userPath = generateUserPath(username);
