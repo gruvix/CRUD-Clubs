@@ -181,7 +181,7 @@ function deleteFile(userPath) {
   fs.rmSync(userPath, { recursive: true, force: true });
 }
 
-app.patch('/user/:username/reset', (req, res) => {
+app.patch('/user/:username/reset/all', (req, res) => {
   const { username } = req.params;
   const userPath = generateUserPath(username);
   console.log(`Resetting user ${username}`);
