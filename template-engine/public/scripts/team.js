@@ -21,7 +21,7 @@ function enableEditMode(tableRow) {
   const buttons = tableRow.children[2];
   $('.edit').hide();
   $(buttons).children('.apply').show();
-  $(values).children('input').show();
+  $(values).children('input').show().trigger('focus').trigger('select');
   $(values).children('span').hide();
 }
 function disableEditMode(tableRow) {
