@@ -44,6 +44,29 @@ function updateTeamlistParameter(userPath, teamId, parameter, value) {
   teams[teamId][parameter] = value;
   fs.writeFileSync(`${userPath}/teams.json`, JSON.stringify(teams));
 }
+function copyTeamFromTeamList(sourcePath, targetPath, teamId) {
+  const userTeams = JSON.parse(fs.readFileSync(`${targetPath}/teams.json`, 'utf-8'));
+  const defaultTeams = JSON.parse(fs.readFileSync(`${sourcePath}/teams.json`, 'utf-8'));
+  const newTeam = Object.values(defaultTeams).find((team) => team.id === Number(teamId));
+  try {
+    userTeams[teamId] = new TeamListTeam(newTeam);
+    fs.writeFileSync(`${targetPath}/teams.json`, JSON.stringify(userTeams));
+  } catch (copyError) {
+    throw new Error(copyError);
+  }
+}
+function copyAllTeamsFromTeamList(userPath, defaultPath) {
+  const teams = JSON.parse(fs.readFileSync(`${defaultPath}/teams.json`, 'utf-8'));
+  const teamPrepared = {};
+  teams.forEach((team) => {
+    teamPrepared[team.id] = new TeamListTeam(team);
+  });
+  try {
+    fs.writeFileSync(`${userPath}/teams.json`, JSON.stringify(teamPrepared));
+  } catch (creationError) {
+    throw new Error(creationError);
+  }
+}
 function deleteTeamFromTeamlist(userPath, teamId) {
   const teams = JSON.parse(fs.readFileSync(`${userPath}/teams.json`, 'utf-8'));
   delete teams[teamId];
@@ -96,25 +119,11 @@ function isTeamDefault(userPath, teamId) {
   }
   return false;
 }
-function createDefaultList(userPath) {
-  const defaultPath = generateUserPath('default');
-  const teams = JSON.parse(fs.readFileSync(`${defaultPath}/teams.json`, 'utf-8'));
-  const teamNames = {};
-  teams.forEach((team) => {
-    teamNames[team.id] = new TeamListTeam(team);
-  });
-  try {
-    fs.writeFileSync(`${userPath}/teams.json`, JSON.stringify(teamNames));
-  } catch (creationError) {
-    throw new Error(creationError);
-  }
-}
-
-function createNewUser(userPath) {
+function createNewUser(userPath, defaultPath) {
   try {
     createFolder(userPath);
     createFolder(`${userPath}/teams`);
-    createDefaultList(userPath);
+    copyAllTeamsFromTeamList(userPath, defaultPath);
   } catch {
     throw new Error('Failed to create new user');
   }
@@ -130,8 +139,9 @@ app.get('/', (req, res) => {
 app.get('/user/:username/teams', (req, res) => {
   const { username } = req.params;
   const userPath = generateUserPath(username);
+  const defaultPath = generateUserPath('default');
   if (!validateFile(`${userPath}/teams.json`)) {
-    createNewUser(userPath);
+    createNewUser(userPath, defaultPath);
   }
   const teams = JSON.parse(fs.readFileSync(`${userPath}/teams.json`, 'utf-8'));
   res.render('teams', {
@@ -175,11 +185,12 @@ function deleteFile(userPath) {
 app.patch('/user/:username/reset/all', (req, res) => {
   const { username } = req.params;
   const userPath = generateUserPath(username);
+  const defaultPath = generateUserPath('default');
   console.log(`Resetting user ${username}`);
   try {
     deleteFile(userPath);
     if (!validateFile(`${userPath}/teams.json`)) {
-      createNewUser(userPath);
+      createNewUser(userPath, defaultPath);
     }
     res.status(204).send();
   } catch (error) {
