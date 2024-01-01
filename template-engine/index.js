@@ -101,16 +101,7 @@ function createDefaultList(userPath) {
   const teams = JSON.parse(fs.readFileSync(`${defaultPath}/teams.json`, 'utf-8'));
   const teamNames = {};
   teams.forEach((team) => {
-    Object.assign(teamNames, {
-      [team.id]: {
-        name: team.name,
-        id: team.id,
-        crestUrl: team.crestUrl,
-        isDefault: true,
-        hasDefault: true,
-        lastUpdated: team.lastUpdated,
-      },
-    });
+    teamNames[team.id] = new TeamListTeam(team);
   });
   try {
     fs.writeFileSync(`${userPath}/teams.json`, JSON.stringify(teamNames));
