@@ -30,3 +30,10 @@ $('#reset-teams-button').on('click', () => {
   };
   resetTeams(username, callback);
 });
+function goEditTeam(button){
+  const username = loadUsername();
+  window.location.href = `/user/${username}/teams/${button.parentElement.id}`;
+}
+$('.edit').on('click', (event) => {
+  goEditTeam(event.target);
+});
