@@ -226,5 +226,17 @@ app.patch('/user/:username/teams/:teamId', (req, res) => {
   }
 });
 
+app.delete('/user/:username/teams/:teamId', (req, res) => {
+  const { username, teamId } = req.params;
+  const userPath = generateUserPath(username);
+  try {
+    deleteFile(`${userPath}/teams/${teamId}.json`);
+    deleteTeamFromTeamlist(userPath, teamId);
+    res.status(204).send();
+  } catch (error) {
+    res.status(400).send('Error deleting team');
+  }
+})
+
 app.listen(PORT);
 console.log(`Listening on port ${PORT}`);
