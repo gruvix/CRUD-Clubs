@@ -1,6 +1,17 @@
 import { loadUsername } from './localStorage.js';
 
-document.querySelector('#back-to-teams-button').addEventListener('click', () => {
+async function resetTeam(username, callback) {
+  const teamId = $('#team-id').val();
+  await fetch(`/user/${username}/reset/${teamId}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  callback();
+}
+
+$('#back-to-teams-button').on('click', () => {
   const username = loadUsername();
   window.location.href = `/user/${username}/teams`;
 });
@@ -9,6 +20,17 @@ $(() => {
   $('[data-toggle="tooltip"]').tooltip();
 });
 
+$('#reset-team-button').on('click', () => {
+  $('#modal-confirmation-text').text('You are about to reset the teams. All custom data will be lost');
+  $('#confirmation-modal-button').on('click', () => {
+    console.log('Reset teams');
+    const username = loadUsername();
+    const callback = () => {
+      window.location.reload();
+    };
+    resetTeam(username, callback);
+  });
+});
 function prepareEditField(tableRow) {
   const values = tableRow.children[1];
   const text = $(values).children('span').text();
