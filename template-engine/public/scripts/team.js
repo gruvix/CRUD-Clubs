@@ -19,7 +19,7 @@ function applyEditField(tableRow) {
 function enableEditMode(tableRow) {
   const values = tableRow.children[1];
   const buttons = tableRow.children[2];
-  $(buttons).children('.edit').hide();
+  $('.edit').hide();
   $(buttons).children('.apply').show();
   $(values).children('input').show();
   $(values).children('span').hide();
@@ -27,7 +27,7 @@ function enableEditMode(tableRow) {
 function disableEditMode(tableRow) {
   const values = tableRow.children[1];
   const buttons = tableRow.children[2];
-  $(buttons).children('.edit').show();
+  $('.edit').show();
   $(buttons).children('.apply').hide();
   $(values).children('input').hide();
   $(values).children('span').show();
