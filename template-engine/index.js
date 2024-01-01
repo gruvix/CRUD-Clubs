@@ -176,7 +176,7 @@ app.get('/user/:username/teams/:teamId', (req, res) => {
   });
 });
 
-function deleteFolder(userPath) {
+function deleteFile(userPath) {
   fs.rmSync(userPath, { recursive: true, force: true });
 }
 
@@ -185,7 +185,7 @@ app.patch('/user/:username/reset', (req, res) => {
   const userPath = generateUserPath(username);
   console.log(`Resetting user ${username}`);
   try {
-    deleteFolder(userPath);
+    deleteFile(userPath);
     if (!validateFile(`${userPath}/teams.json`)) {
       createNewUser(userPath);
     }
