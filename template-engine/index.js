@@ -98,7 +98,7 @@ function createDefaultList(userPath) {
         name: team.name,
         id: team.id,
         isDefault: true,
-        lastUpdated: new Date().toISOString(),
+        lastUpdated: team.lastUpdated,
       },
     });
   });
