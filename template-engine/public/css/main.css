@@ -31,7 +31,38 @@ td:first-child, th:first-child {
   font-family: "Courier New", monospace;
 }
 
-.list-sprite{
-  max-width: 30px;
-  max-height: 30px;
+.teams-page-title {
+  font-family: "Courier New", monospace;
+  margin-top: 20px; color: rgb(255, 187, 0);
+}
+
+.list-team-crest-image{
+  padding-top: 5%;
+  max-width: 120px;
+  max-height: 120px;
+  align-self: center;
+}
+
+.card-container {
+  width: 15rem;
+  background-color: rgba(141, 119, 90, 0.603);
+}
+.card-container:hover .overlay-button {
+  opacity: 1;
+}
+.team-card-title{
+  font-size: 135%;
+  font-family: "Courier New", monospace;
+  color: rgb(238, 210, 179);
+  text-align: center;
+  border-radius: 25%;
+  text-shadow: 5px 5px 5px black;
+}
+.overlay-button {
+  float: left;
+  font-size: 110%;
+  padding: 5px 7px;
+  transition: opacity 0.3s;
+  opacity: 0;
+  background-color: rgba(46, 40, 40, 0.548);
 }

@@ -1,19 +1,18 @@
 <div class="container">
+    <div class="row row-cols-5 justify-content-center">
     {{#each items}}
-    <div class="row">
-        <div class="col-md-9">
-            <a href="user/{{../username}}/teams/{{this.id}}">{{this.name}}</a>
-            <img src="{{this.crestUrl}}" class="list-sprite" alt="crest">
+    <div class="card card-container">
+        <div class="card-header">
+            <h5 class="card-title team-card-title">{{this.name}}</h5>
+
         </div>
-        <div class="col">
-            <button class="btn btn-outline-warning">edit</button>
-        </div>
-        <div class="col">
-            <button class="btn btn-outline-secondary">reset</button>
-        </div>
-        <div class="col">
-            <button class="btn btn-outline-danger">delete</button>
+        <img src="{{this.crestUrl}}" class="list-team-crest-image" alt="team crest">
+        <div class="card-body" style="align-self: center">
+            <button class="btn btn-outline-warning overlay-button" href="user/{{../username}}/teams/{{this.id}}">edit</button>
+            <button class="btn btn-outline-light overlay-button" style="color: darkgrey; border-color: darkgrey">reset</button>
+            <button class="btn btn-outline-danger overlay-button">delete</button>
         </div>
     </div>
     {{/each}}
+    </div>
 </div>
