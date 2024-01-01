@@ -44,7 +44,7 @@ td:first-child, th:first-child {
 }
 
 .card-container {
-  width: 15rem;
+  width: 16rem;
   background-color: rgba(141, 119, 90, 0.603);
 }
 .card-container:hover .overlay-button {
@@ -61,7 +61,7 @@ td:first-child, th:first-child {
 .overlay-button {
   float: left;
   font-size: 110%;
-  padding: 5px 7px;
+  padding: 5px 10px;
   transition: opacity 0.3s;
   opacity: 0;
   background-color: rgba(46, 40, 40, 0.548);
