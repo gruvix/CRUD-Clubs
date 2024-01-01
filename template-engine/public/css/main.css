@@ -31,12 +31,18 @@ td:first-child, th:first-child {
   font-family: "Courier New", monospace;
 }
 
+.team-crest-image {
+  padding-top: 25px;
+  max-width: 400px;
+  max-height: 400px;
+}
+
 .teams-page-title {
   font-family: "Courier New", monospace;
   margin-top: 20px; color: rgb(255, 187, 0);
 }
 
-.list-team-crest-image{
+.list-team-crest-image {
   padding-top: 5%;
   max-width: 120px;
   max-height: 120px;
@@ -50,7 +56,7 @@ td:first-child, th:first-child {
 .card-container:hover .overlay-button {
   opacity: 1;
 }
-.team-card-title{
+.team-card-title {
   font-size: 135%;
   font-family: "Courier New", monospace;
   color: rgb(238, 210, 179);
