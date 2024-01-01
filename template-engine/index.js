@@ -164,7 +164,7 @@ app.get('/user/:username/teams/:teamId', (req, res) => {
     players.push(new Player(player));
   });
 
-  res.render('team', {
+  res.render('teamEditor', {
     layout: 'main',
     data: {
       username,
