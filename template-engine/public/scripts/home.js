@@ -54,3 +54,5 @@ $('#username').on('keydown', (event) => {
     handleLogin();
   }
 });
+
+$('#username').trigger('focus');
