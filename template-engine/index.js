@@ -35,10 +35,12 @@ function generateUserPath(userName) {
 /**
  * @param {string} userPath - path to user folder
  * @param {Number} teamId
+ * @param {string} parameter - teamlist parameter to be updated
+ * @param {any} value - new value for parameter
  */
-function unDefaultTeam(userPath, teamId) {
+function updateTeamlistParameter(userPath, teamId, parameter, value) {
   const teams = JSON.parse(fs.readFileSync(`${userPath}/teams.json`, 'utf-8'));
-  teams[teamId].isDefault = false;
+  teams[teamId][parameter] = value;
   fs.writeFileSync(`${userPath}/teams.json`, JSON.stringify(teams));
 }
 function validateFile(filePath) {
@@ -193,7 +195,7 @@ app.patch('/user/:username/teams/:teamId', (req, res) => {
   const userPath = generateUserPath(username);
   if (isTeamDefault(userPath, teamId)) {
     copyTeam(generateUserPath('default'), userPath, teamId);
-    unDefaultTeam(userPath, teamId);
+    updateTeamlistParameter(userPath, teamId, 'isDefault', false);
   }
   try {
     let updatedData = req.body;
@@ -203,6 +205,9 @@ app.patch('/user/:username/teams/:teamId', (req, res) => {
           name: updatedData.area,
         },
       };
+    }
+    if (Object.keys(updatedData).includes('name')) {
+      updateTeamlistParameter(userPath, teamId, 'name', updatedData.name);
     }
     const team = getTeamByIdAndPath(userPath, teamId);
     const now = new Date();
