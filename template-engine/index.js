@@ -97,8 +97,9 @@ function createDefaultList(userPath) {
       [team.id]: {
         name: team.name,
         id: team.id,
-        isDefault: true,
         crestUrl: team.crestUrl,
+        isDefault: true,
+        hasDefault: true,
         lastUpdated: team.lastUpdated,
       },
     });
