@@ -62,8 +62,15 @@ function updateTeamParameter(tableRow) {
     body: requestBody,
   });
 }
+function isInputEqualToValid(tableRow) {
+  const values = tableRow.children[1];
+  const text = $(values).children('input').val();
+  const validText = $(values).children('span').text();
+  return text === validText;
+}
 function confirmEdit(tableRow) {
   disableEditMode(tableRow);
+  if (isInputEqualToValid(tableRow)) return;
   applyEditField(tableRow);
   updateTeamParameter(tableRow);
 }
