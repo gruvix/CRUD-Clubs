@@ -18,6 +18,9 @@ async function resetTeams(username, callback) {
   });
   callback();
 }
+$(() => {
+  $('[data-toggle="tooltip"]').tooltip();
+});
 $('#log-out-button').on('click', () => {
   clearUsername();
   window.location.href = '/';

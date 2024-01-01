@@ -5,6 +5,10 @@ document.querySelector('#back-to-teams-button').addEventListener('click', () => 
   window.location.href = `/user/${username}/teams`;
 });
 
+$(() => {
+  $('[data-toggle="tooltip"]').tooltip();
+});
+
 function prepareEditField(tableRow) {
   const values = tableRow.children[1];
   const text = $(values).children('span').text();
@@ -21,7 +25,8 @@ function enableEditMode(tableRow) {
   const buttons = tableRow.children[2];
   $('.edit').hide();
   $(buttons).children('.apply').show();
-  $(values).children('input').show().trigger('focus').trigger('select');
+  $(values).children('input').show().trigger('focus')
+    .trigger('select');
   $(values).children('span').hide();
 }
 function disableEditMode(tableRow) {
