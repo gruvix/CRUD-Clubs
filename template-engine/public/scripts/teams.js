@@ -70,7 +70,8 @@ $('.edit').on('click', (event) => {
   goEditTeam(event.target.parentElement.id);
 });
 $('.delete').on('click', (event) => {
-  const confirmationText = 'You are about to delete this team. Custom teams are not recoverable';
+  const teamName = $(event.target).parent().parent().find('.team-card-title').text();
+  const confirmationText = `You are about to delete ${teamName}. Custom teams are not recoverable`;
   const teamId = event.target.parentElement.id;
   setupConfirmationModal(confirmationText, () => {
     deleteTeam(teamId);
