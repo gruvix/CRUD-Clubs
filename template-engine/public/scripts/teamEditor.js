@@ -2,7 +2,7 @@ import { loadUsername } from './localStorage.js';
 
 async function resetTeam(username, callback) {
   const teamId = $('#team-id').val();
-  await fetch(`/user/${username}/reset/${teamId}`, {
+  await fetch(`/user/reset/${teamId}`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
@@ -12,8 +12,7 @@ async function resetTeam(username, callback) {
 }
 
 $('#back-to-teams-button').on('click', () => {
-  const username = loadUsername();
-  window.location.href = `/user/${username}/teams`;
+  window.location.href = '/user/teams';
 });
 
 $(() => {
@@ -75,13 +74,12 @@ function updateTeamParameter(tableRow) {
   const parameterCell = tableRow.children[1];
   const parameter = parameterCell.id;
   const newValue = $(parameterCell).children('input').val();
-  const username = loadUsername();
   const teamId = $('#team-id').val();
   const updatedData = {};
   updatedData[parameter] = newValue;
   const requestBody = JSON.stringify(updatedData);
 
-  fetch(`/user/${username}/teams/${teamId}`, {
+  fetch(`/user/teams/${teamId}`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',

@@ -160,8 +160,9 @@ app.get('/', (req, res) => {
     },
   });
 });
-app.get('/user/:username/teams', (req, res) => {
-  const { username } = req.params;
+
+app.get('/user/teams', (req, res) => {
+  const { username } = req.session;
   const userPath = generateUserPath(username);
   const defaultPath = generateUserPath('default');
   if (!validateFile(`${userPath}/teams.json`)) {
@@ -177,8 +178,9 @@ app.get('/user/:username/teams', (req, res) => {
     },
   });
 });
-app.get('/user/:username/teams/:teamId', (req, res) => {
-  const { username, teamId } = req.params;
+app.get('/user/teams/:teamId', (req, res) => {
+  const { teamId } = req.params;
+  const { username } = req.session;
   let userPath = generateUserPath(username);
   if (isTeamDefault(userPath, teamId)) {
     userPath = generateUserPath('default');
@@ -206,8 +208,8 @@ function deleteFile(userPath) {
   fs.rmSync(userPath, { recursive: true, force: true });
 }
 
-app.patch('/user/:username/reset/all', (req, res) => {
-  const { username } = req.params;
+app.patch('/user/reset/all', (req, res) => {
+  const { username } = req.session;
   const userPath = generateUserPath(username);
   const defaultPath = generateUserPath('default');
   console.log(`Resetting user ${username}`);
@@ -222,8 +224,9 @@ app.patch('/user/:username/reset/all', (req, res) => {
   }
 });
 
-app.patch('/user/:username/reset/:teamId', (req, res) => {
-  const { username, teamId } = req.params;
+app.patch('/user/reset/:teamId', (req, res) => {
+  const { username } = req.session;
+  const { teamId } = req.params;
   const userPath = generateUserPath(username);
   const defaultPath = generateUserPath('default');
   console.log(`Resetting team ${teamId} from ${username}`);
@@ -238,8 +241,9 @@ app.patch('/user/:username/reset/:teamId', (req, res) => {
   }
 });
 
-app.patch('/user/:username/teams/:teamId', (req, res) => {
-  const { username, teamId } = req.params;
+app.patch('/user/teams/:teamId', (req, res) => {
+  const { teamId } = req.params;
+  const { username } = req.session;
   const userPath = generateUserPath(username);
   if (isTeamDefault(userPath, teamId)) {
     copyTeam(generateUserPath('default'), userPath, teamId);
@@ -269,8 +273,9 @@ app.patch('/user/:username/teams/:teamId', (req, res) => {
   }
 });
 
-app.delete('/user/:username/teams/:teamId', (req, res) => {
-  const { username, teamId } = req.params;
+app.delete('/user/teams/:teamId', (req, res) => {
+  const { username } = req.session;
+  const { teamId } = req.params;
   const userPath = generateUserPath(username);
   try {
     deleteFile(`${userPath}/teams/${teamId}.json`);

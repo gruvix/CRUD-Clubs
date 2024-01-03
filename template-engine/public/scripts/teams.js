@@ -9,8 +9,8 @@ function adjustTitles() {
   });
 }
 adjustTitles();
-async function resetTeams(username, callback) {
-  await fetch(`/user/${username}/reset/all`, {
+async function resetTeams(callback) {
+  await fetch('/user/reset/all', {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
@@ -22,27 +22,23 @@ $(() => {
   $('[data-toggle="tooltip"]').tooltip();
 });
 $('#log-out-button').on('click', () => {
-  clearUsername();
-  window.location.href = '/';
+  logout();
 });
 
 $('#reset-teams-button').on('click', () => {
   $('#modal-confirmation-text').text('You are about to reset all teams. All custom data (including new teams) will be lost');
   $('#confirmation-modal-button').on('click', () => {
-    const username = loadUsername();
     const callback = () => {
-      window.location.href = `/user/${username}/teams`;
+      window.location.href = '/user/teams';
     };
-    resetTeams(username, callback);
+    resetTeams(callback);
   });
 });
 function goEditTeam(teamId) {
-  const username = loadUsername();
-  window.location.href = `/user/${username}/teams/${teamId}`;
+  window.location.href = `/user/teams/${teamId}`;
 }
 function deleteTeam(teamId) {
-  const username = loadUsername();
-  fetch(`/user/${username}/teams/${teamId}`, {
+  fetch(`/user/teams/${teamId}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
