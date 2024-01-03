@@ -44,11 +44,11 @@ function getTeamByIdAndPath(userPath, teamId) {
   return JSON.parse(fs.readFileSync(`${userPath}/teams/${teamId}.json`, 'utf-8'));
 }
 /**
- * @param {string} userName - username of the user
+ * @param {string} username - username of the user
  * @returns the path to the root of the user E.g. ./private/data/user/default
  */
-function generateUserPath(userName) {
-  return `./private/data/user/${userName}`;
+function generateUserPath(username) {
+  return `./private/data/user/${username}`;
 }
 /**
  * @param {string} userPath - path to user folder
