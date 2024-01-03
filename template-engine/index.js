@@ -4,9 +4,19 @@ const multer = require('multer');
 const path = require('path');
 const expresshandlebars = require('express-handlebars');
 const bodyParser = require('body-parser');
+const session = require('express-session');
 const Team = require('./private/models/team.js');
 const Player = require('./private/models/player.js');
 const TeamListTeam = require('./private/models/teamListTeam.js');
+
+const ensureLoggedIn = (req, res, next) => {
+  if (req.session.username) {
+    next();
+  } else {
+    console.log('user not logged in, redirecting to homepage');
+    res.redirect(301, '/');
+  }
+};
 
 const PORT = 8000;
 const app = express();
@@ -17,7 +27,14 @@ app.set('view engine', 'handlebars');
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
+app.use(session({
+  secret: 'keyboard-cat',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { maxAge: 3600000 },
+}));
 
+app.use('/user', ensureLoggedIn);
 /**
  * gets a team by id and username
  * @param {string} userPath - path to user folder
