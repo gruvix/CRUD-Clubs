@@ -92,7 +92,7 @@ function deleteTeamFromTeamlist(userPath, teamId) {
 function validateFile(filePath) {
   try {
     fs.accessSync(filePath, fs.constants.F_OK);
-    console.log('File exists!');
+    console.log(`File under path ${filePath} exists!`);
     return true;
   } catch (err) {
     console.log('File does not exist');
