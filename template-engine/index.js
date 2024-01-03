@@ -296,7 +296,7 @@ app.post('/login/:username', (req, res) => {
   console.log(`User '${username}' logged in`);
   res.redirect(301, '/user/teams');
 });
-app.get('/logout', (req, res) => {
+app.post('/logout', (req, res) => {
   const { username } = req.session;
   req.session.destroy();
   console.log(`User '${username}' logged out`);

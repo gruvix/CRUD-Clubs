@@ -20,7 +20,7 @@ async function resetTeams(callback) {
 }
 async function logout() {
   const response = await fetch('/logout', {
-    method: 'get',
+    method: 'post',
     headers: {
       'Content-Type': 'application/json',
     },
