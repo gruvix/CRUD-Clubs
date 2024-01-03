@@ -4,6 +4,7 @@ body{
   background-repeat: repeat;
   background-position: center;
   height: 100vh;
+  cursor: url('/img/cursor-ball.cur'), auto;
 }
 
 table {
@@ -79,4 +80,17 @@ td:first-child, th:first-child {
 
 .modal-content {
   background-color: rgba(216, 194, 164, 0.973);
+}
+
+.btn-outline-warning:hover {
+  cursor: url('/img/cursor-red.cur'), auto;
+}
+.btn-outline-success:hover {
+  cursor: url('/img/cursor-red.cur'), auto;
+}
+.btn-outline-danger:hover {
+  cursor: url('/img/cursor-yellow.cur'), auto;
+}
+.btn-outline-dark:hover {
+  cursor: url('/img/cursor-yellow.cur'), auto;
 }
