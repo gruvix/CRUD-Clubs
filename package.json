@@ -24,6 +24,7 @@
     "dev:express": "nodemon ./express/index-%npm_config_paso%.js",
     "dev:template": "cd ./template-engine && nodemon --inspect index.js",
     "dev:cypress": "cypress open",
+    "dev:templateNodemonConfig": "cd ./template-engine && nodemon --config ../nodemon.json index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
