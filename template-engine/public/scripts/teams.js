@@ -18,6 +18,20 @@ async function resetTeams(callback) {
   });
   callback();
 }
+function logout() {
+  clearUsername();
+  fetch('/logout', {
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  }).then((response) => response.json()).then((data) => {
+    if (data.redirectTo) {
+      window.location.href = data.redirectTo;
+    }
+  });
+}
+
 $(() => {
   $('[data-toggle="tooltip"]').tooltip();
 });
