@@ -82,6 +82,13 @@ function validateFile(filePath) {
     return false;
   }
 }
+function validateUsername(username) {
+  const regexLettersWithNoDefault = /^[^\W\d_](?!default$)[^\W\d_]*$/i;
+  if (!regexLettersWithNoDefault.test(username)) {
+    return false;
+  }
+  return true;
+}
 function createFolder(folderPath) {
   try {
     if (!fs.existsSync(folderPath)) {
