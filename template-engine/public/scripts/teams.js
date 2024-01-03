@@ -1,3 +1,5 @@
+import setupConfirmationModal from './confirmationModal.js';
+
 function adjustTitles() {
   const titles = document.querySelectorAll('h5');
   titles.forEach((title) => {
@@ -36,11 +38,11 @@ $('#log-out-button').on('click', () => {
 });
 
 $('#reset-teams-button').on('click', () => {
-  $('#modal-confirmation-text').text('You are about to reset all teams. All custom data (including new teams) will be lost');
-  $('#confirmation-modal-button').on('click', () => {
-    const callback = () => {
-      window.location.reload();
-    };
+  const confirmationText = 'You are about to reset all teams. All custom data (including new teams) will be lost';
+  const callback = () => {
+    window.location.reload();
+  };
+  setupConfirmationModal(confirmationText, () => {
     resetTeams(callback);
   });
 });

@@ -1,6 +1,6 @@
-import { loadUsername } from './localStorage.js';
+import setupConfirmationModal from './confirmationModal.js';
 
-async function resetTeam(username, callback) {
+async function resetTeam(callback) {
   const teamId = $('#team-id').val();
   await fetch(`/user/reset/${teamId}`, {
     method: 'PATCH',
@@ -20,14 +20,12 @@ $(() => {
 });
 
 $('#reset-team-button').on('click', () => {
-  $('#modal-confirmation-text').text('You are about to reset the team. All custom data will be lost');
-  $('#confirmation-modal-button').on('click', () => {
-    console.log('Reset teams');
-    const username = loadUsername();
+  const confirmationText = 'You are about to reset the team. All custom data will be lost';
+  setupConfirmationModal(confirmationText, () => {
     const callback = () => {
       window.location.reload();
     };
-    resetTeam(username, callback);
+    resetTeam(callback);
   });
 });
 function prepareEditField(tableRow) {
