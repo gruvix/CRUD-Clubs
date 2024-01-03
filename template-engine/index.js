@@ -153,6 +153,10 @@ function createNewUser(userPath, defaultPath) {
   }
 }
 app.get('/', (req, res) => {
+  if (req.session.username) {
+    res.redirect(301, '/user/teams');
+    return;
+  }
   res.render('home', {
     layout: 'main',
     data: {
