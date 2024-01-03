@@ -291,12 +291,12 @@ app.post('/login/:username', (req, res) => {
   req.session.username = username;
   console.log(`User '${username}' logged in`);
   res.redirect(301, '/user/teams');
-  // res.json({ redirectTo: '/user/teams' });
 });
 app.get('/logout', (req, res) => {
+  const { username } = req.session;
   req.session.destroy();
-  console.log('User logged out');
-  res.json({ redirectTo: '/' });
+  console.log(`User '${username}' logged out`);
+  res.redirect(301, '/user/teams');
 });
 
 app.listen(PORT);

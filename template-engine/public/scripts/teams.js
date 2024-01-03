@@ -1,5 +1,3 @@
-import { clearUsername, loadUsername } from './localStorage.js';
-
 function adjustTitles() {
   const titles = document.querySelectorAll('h5');
   titles.forEach((title) => {
@@ -18,18 +16,16 @@ async function resetTeams(callback) {
   });
   callback();
 }
-function logout() {
-  clearUsername();
-  fetch('/logout', {
+async function logout() {
+  const response = await fetch('/logout', {
     method: 'get',
     headers: {
       'Content-Type': 'application/json',
     },
-  }).then((response) => response.json()).then((data) => {
-    if (data.redirectTo) {
-      window.location.href = data.redirectTo;
-    }
   });
+  if (response.redirected) {
+    window.location.href = response.url;
+  }
 }
 
 $(() => {
@@ -43,7 +39,7 @@ $('#reset-teams-button').on('click', () => {
   $('#modal-confirmation-text').text('You are about to reset all teams. All custom data (including new teams) will be lost');
   $('#confirmation-modal-button').on('click', () => {
     const callback = () => {
-      window.location.href = '/user/teams';
+      window.location.reload();
     };
     resetTeams(callback);
   });
@@ -51,14 +47,22 @@ $('#reset-teams-button').on('click', () => {
 function goEditTeam(teamId) {
   window.location.href = `/user/teams/${teamId}`;
 }
-function deleteTeam(teamId) {
-  fetch(`/user/teams/${teamId}`, {
+async function deleteTeam(teamId) {
+  const response = await fetch(`/user/teams/${teamId}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
     },
   });
-  $(`#${teamId}`).parent().remove();
+  if (response.redirected) {
+    window.location.href = response.url;
+  }
+  if (response.ok) {
+    $(`#${teamId}`).parent().remove();
+  }
+  else {
+    alert('Error: could not delete team');
+  }
 }
 $('.edit').on('click', (event) => {
   goEditTeam(event.target.parentElement.id);

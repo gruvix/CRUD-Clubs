@@ -16,13 +16,15 @@ function validateUsername(username) {
   return false;
 }
 async function login(username) {
-  await fetch(`/login/${username}`, {
+  const response = await fetch(`/login/${username}`, {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
     },
   });
-  window.location.href = '/user/teams';
+  if (response.redirected) {
+    window.location.href = response.url;
+  }
 }
 function handleLogin() {
   const username = $('#username').val().toLowerCase();

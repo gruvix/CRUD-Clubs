@@ -70,7 +70,7 @@ $('#teamTable').on('click', (event) => {
  * Updates the parameter of the team given the row of the value
  * @param {HTMLElement} - The row containing the parameter
  */
-function updateTeamParameter(tableRow) {
+async function updateTeamParameter(tableRow) {
   const parameterCell = tableRow.children[1];
   const parameter = parameterCell.id;
   const newValue = $(parameterCell).children('input').val();
@@ -79,13 +79,19 @@ function updateTeamParameter(tableRow) {
   updatedData[parameter] = newValue;
   const requestBody = JSON.stringify(updatedData);
 
-  fetch(`/user/teams/${teamId}`, {
+  const response = await fetch(`/user/teams/${teamId}`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
     },
     body: requestBody,
   });
+  if (response.redirected) {
+    window.location.href = response.url;
+  }
+  if (!response.ok) {
+    alert('Error: could not update team');
+  }
 }
 function isInputEqualToValid(tableRow) {
   const values = tableRow.children[1];
