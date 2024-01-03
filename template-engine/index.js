@@ -284,7 +284,20 @@ app.delete('/user/teams/:teamId', (req, res) => {
   } catch (error) {
     res.status(400).send('Error deleting team');
   }
-})
+});
+
+app.post('/login/:username', (req, res) => {
+  const { username } = req.params;
+  req.session.username = username;
+  console.log(`User '${username}' logged in`);
+  res.redirect(301, '/user/teams');
+  // res.json({ redirectTo: '/user/teams' });
+});
+app.get('/logout', (req, res) => {
+  req.session.destroy();
+  console.log('User logged out');
+  res.json({ redirectTo: '/' });
+});
 
 app.listen(PORT);
 console.log(`Listening on port ${PORT}`);
