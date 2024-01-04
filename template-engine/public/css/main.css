@@ -49,7 +49,14 @@ td:first-child, th:first-child {
   max-height: 120px;
   align-self: center;
 }
-
+.img-container {
+  position:relative;
+  display:inline-block;
+  text-align:center;
+}
+.img-container:hover .overlay-button {
+  opacity: 1;
+}
 .card-container {
   width: 16rem;
   background-color: rgba(141, 119, 90, 0.603);
