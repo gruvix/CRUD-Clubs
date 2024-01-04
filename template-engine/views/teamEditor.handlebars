@@ -1,23 +1,28 @@
 <div class="container">
     <div class="row">
-        <div class="col-2">
+        <div class="col-4">
             <button type="button" class="btn btn-shadow btn-outline-warning" style="margin-top: 25px;" id="back-to-teams-button">
                 Go back
             </button>
         </div>
 
-        <div class="col-8">
-            <div class="d-flex justify-content-center">
+        <div class="col-4">
+            <div class="d-flex justify-content-center img-container">
                 <img src="{{data.crest}}" alt="Team crest" class="team-crest-image">
+                <button class="btn btn-shadow overlay-button btn-outline-warning position-absolute top-50 start-50 translate-middle" style="font-size: 150%;">
+                    Upload new image
+                </button>
             </div>
         </div>
 
         <div class="col">
-            <button type="button" id="reset-team-button" class="btn btn-shadow btn-outline-danger" 
-            style="margin-top: 25px;" data-bs-toggle="modal" data-bs-target="#confirmationModal"
-            data-toggle="tooltip" data-placement="bottom" title="Reset the team to its default values">
-                Reset to default
-            </button>
+            <div class="text-end">
+                <button type="button" id="reset-team-button" class="btn btn-shadow btn-outline-danger" 
+                style="margin-top: 25px;" data-bs-toggle="modal" data-bs-target="#confirmationModal"
+                data-toggle="tooltip" data-placement="bottom" title="Reset the team to its default values">
+                    Reset to default
+                </button>
+            </div>
         </div>
     </div>
 
