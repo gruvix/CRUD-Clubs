@@ -22,14 +22,15 @@ describe('test the CRUD', () => {
   });
 
   it.only('should delete a team and reset the teams', () => {
-    cy.intercept('PATCH', '/user/**/reset').as('resetTeams');
+    cy.intercept('PATCH', '/user/reset/all').as('resetTeams');
     cy.get('#username').type('test').get('#enter-page-button').click();
     cy.get('h5').first().then(($text) => {
       const teamName = $text.text();
       cy.get('.delete').first().click();
 
       cy.get('.card-title').first().should('not.contain', teamName);
-      cy.get('#reset-teams-button').click().wait('@resetTeams');
+      cy.get('#reset-teams-button').click();
+      cy.get('#confirmation-modal-button').click();
       cy.get('.card-title').first().should('contain', teamName);
     });
   });

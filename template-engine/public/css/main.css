@@ -54,8 +54,16 @@ td:first-child, th:first-child {
   width: 16rem;
   background-color: rgba(141, 119, 90, 0.603);
 }
-.card-container:hover .overlay-button {
+.card-container:hover .overlay-button-dark {
   opacity: 1;
+}
+.overlay-button-dark {
+  float: left;
+  font-size: 110%;
+  padding: 5px 10px;
+  transition: opacity 0.3s;
+  opacity: 0;
+  background-color: rgba(46, 40, 40, 0.548);
 }
 .team-card-title {
   font-size: 135%;
@@ -64,14 +72,6 @@ td:first-child, th:first-child {
   text-align: center;
   border-radius: 25%;
   text-shadow: 5px 5px 5px black;
-}
-.overlay-button {
-  float: left;
-  font-size: 110%;
-  padding: 5px 10px;
-  transition: opacity 0.3s;
-  opacity: 0;
-  background-color: rgba(46, 40, 40, 0.548);
 }
 
 .btn-shadow {
