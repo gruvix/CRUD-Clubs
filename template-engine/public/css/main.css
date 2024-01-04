@@ -65,6 +65,14 @@ td:first-child, th:first-child {
   opacity: 0;
   background-color: rgba(46, 40, 40, 0.548);
 }
+.overlay-button {
+  float: left;
+  font-size: 130%;
+  padding: 5px 10px;
+  transition: opacity 0.3s;
+  opacity: 0;
+  background-color: rgba(187, 179, 179, 0.938);
+}
 .team-card-title {
   font-size: 135%;
   font-family: "Courier New", monospace;
