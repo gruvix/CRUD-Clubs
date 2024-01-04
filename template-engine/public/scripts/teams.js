@@ -77,3 +77,19 @@ $('.delete').on('click', (event) => {
     deleteTeam(teamId);
   });
 });
+function toggleCardVisibility(card, shouldShow) {
+  if (shouldShow) {
+    $(card).show();
+  } else {
+    $(card).hide();
+  }
+}
+$('#search-input').on('input', () => {
+  const searchValue = $('#search-input').val().toLowerCase();
+  $('.card-title').each((index, element) => {
+    const teamName = $(element).text().toLowerCase();
+    const card = $(element).parent().parent();
+    const shouldShow = teamName.includes(searchValue);
+    toggleCardVisibility(card, shouldShow);
+  });
+});
