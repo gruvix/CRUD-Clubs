@@ -114,3 +114,21 @@ $('#teamTable').on('keydown', (event) => {
     confirmEdit(event.target.parentElement.parentElement);
   }
 });
+function uploadImage(image) {
+  const teamId = $('#team-id').val();
+  fetch(`/user/${teamId}/upload`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+    body: image,
+  });
+}
+$('#upload-image-button').on('click', () => {
+  const input = $('#image-input');
+  input.trigger('click');
+});
+$('#image-input').on('change', (event) => {
+  const file = event.target.files[0];
+  uploadImage(file);
+});
