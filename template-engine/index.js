@@ -100,9 +100,9 @@ function validateFile(filePath) {
 function validateUsername(username) {
   const regexLettersWithNoDefault = /^[^\W\d_](?!default$)[^\W\d_]*$/i;
   if (!regexLettersWithNoDefault.test(username)) {
-    return false;
+    return 'Invalid username';
   }
-  return true;
+  return '';
 }
 function createFolder(folderPath) {
   try {
@@ -290,6 +290,11 @@ app.delete('/user/teams/:teamId', (req, res) => {
 
 app.post('/login/:username', (req, res) => {
   const { username } = req.params;
+  const error = validateUsername(username);
+  if (error) {
+    res.status(400).send(error);
+    return;
+  }
   req.session.username = username;
   console.log(`User '${username}' logged in`);
   res.redirect(301, '/user/teams');
