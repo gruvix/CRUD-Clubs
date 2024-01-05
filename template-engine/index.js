@@ -8,6 +8,13 @@ const session = require('express-session');
 const Team = require('./private/models/team.js');
 const Player = require('./private/models/player.js');
 const TeamListTeam = require('./private/models/teamListTeam.js');
+/**
+ * @param {string} username - username of the user
+ * @returns the path to the root of the user E.g. ./private/data/user/default
+ */
+function generateUserPath(username) {
+  return `./private/data/user/${username}`;
+}
 
 const ensureLoggedIn = (req, res, next) => {
   if (req.session.username) {
@@ -42,13 +49,6 @@ app.use('/user', ensureLoggedIn);
  */
 function getTeamByIdAndPath(userPath, teamId) {
   return JSON.parse(fs.readFileSync(`${userPath}/teams/${teamId}.json`, 'utf-8'));
-}
-/**
- * @param {string} username - username of the user
- * @returns the path to the root of the user E.g. ./private/data/user/default
- */
-function generateUserPath(username) {
-  return `./private/data/user/${username}`;
 }
 /**
  * @param {string} userPath - path to user folder
