@@ -8,6 +8,8 @@ const session = require('express-session');
 const Team = require('./private/models/team.js');
 const Player = require('./private/models/player.js');
 const TeamListTeam = require('./private/models/teamListTeam.js');
+const imgTypes = require('./private/models/imgTypes.js');
+
 /**
  * @param {string} username - username of the user
  * @returns the path to the root of the user E.g. ./private/data/user/default
@@ -15,6 +17,25 @@ const TeamListTeam = require('./private/models/teamListTeam.js');
 function generateUserPath(username) {
   return `./private/data/user/${username}`;
 }
+const imageFilter = (req, file, cb) => {
+  if (!file.originalname.match(imgTypes)) {
+    return cb(new Error('this file type is not allowed'), false);
+  }
+  cb(null, true);
+}
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const userId = req.session.username;
+    const userPath = `${generateUserPath(userId)}/upload`;
+    cb(null, userPath);
+  },
+  filename: (req, file, cb) => {
+    const { teamId } = req.params;
+    cb(null, teamId);
+  },
+});
+
+const upload = multer({ storage, fileFilter: imageFilter });
 
 const ensureLoggedIn = (req, res, next) => {
   if (req.session.username) {
