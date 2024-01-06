@@ -139,8 +139,10 @@ app.get('/user/teams', (req, res) => {
 app.get('/user/teams/:teamId', (req, res) => {
   const { teamId } = req.params;
   const { username } = req.session;
+  console.log(`User ${username} requested team ${teamId}`);
   let userPath = generateUserPath(username);
   if (isTeamDefault(userPath, teamId)) {
+    console.log(`Team ${teamId} from user '${username}' is default`);
     userPath = generateUserPath('default');
   }
   const team = getTeamByIdAndPath(userPath, teamId);
@@ -200,6 +202,7 @@ app.patch('/user/reset/:teamId', (req, res) => {
 app.patch('/user/teams/:teamId', (req, res) => {
   const { teamId } = req.params;
   const { username } = req.session;
+  console.log(`User ${username} updated team ${teamId}`);
   const userPath = generateUserPath(username);
 
   try {
