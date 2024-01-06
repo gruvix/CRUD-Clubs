@@ -109,7 +109,7 @@ app.route('/user/teams/:teamId')
     console.log(`User ${username} requested team ${teamId}`);
     let userPath = generateUserPath(username);
     if (!validateTeam(userPath, teamId)) {
-      res.redirect('/error?keyword=team-not-found&code=404');
+      res.redirect('/error?keyword=Team-not-found&code=404');
       return;
     }
     if (isTeamDefault(userPath, teamId)) {
@@ -212,7 +212,7 @@ app.post('/logout', (req, res) => {
 });
 
 app.get('/error', (req, res) => {
-  const message = req.query.keyword;
+  const message = req.query.keyword.replaceAll('-', ' ');
   const { code } = req.query;
   res.render('error', {
     layout: 'main',
