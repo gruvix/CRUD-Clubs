@@ -7,6 +7,15 @@ class TeamListTeam {
     this.hasDefault = true;
     this.lastUpdated = team.lastUpdated;
   }
+
+  static properties = () => [
+    'name',
+    'id',
+    'crestUrl',
+    'isDefault',
+    'hasDefault',
+    'lastUpdated',
+  ];
 }
 
 module.exports = TeamListTeam;
