@@ -124,6 +124,14 @@ function updateTeam(newData, userPath, teamId) {
 
   saveTeam(team, userPath);
 }
+function validateTeam(userPath, teamId) {
+  const teamsPath = `${userPath}/teams.json`;
+  const teamsData = readFile(teamsPath);
+  if (!teamsData[teamId]) {
+    return false;
+  }
+  return teamsData[teamId];
+}
 
 function deleteTeam(userPath, teamId) {
   const teamPath = `${userPath}/teams/${teamId}.json`;
@@ -139,4 +147,5 @@ module.exports = {
   updateTeam,
   deleteTeam,
   deleteFile,
+  validateTeam,
 };
