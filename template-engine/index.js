@@ -49,7 +49,6 @@ app.use(session({
   secret: 'keyboard-cat',
   resave: false,
   saveUninitialized: false,
-  cookie: { maxAge: 3600000 },
 }));
 
 app.use('/user', ensureLoggedIn);
