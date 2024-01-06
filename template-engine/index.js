@@ -17,8 +17,8 @@ const {
   copyTeam,
   isTeamDefault,
   getTeamByIdAndPath,
-  copyTeamFromTeamList,
-  copyAllTeamsFromTeamList,
+  copyTeamListTeam,
+  copyTeamList,
   updateTeam,
   deleteTeam,
   validateTeam,
@@ -65,7 +65,7 @@ function createNewUser(userPath, defaultPath) {
   try {
     createFolder(userPath);
     createFolder(`${userPath}/teams`);
-    copyAllTeamsFromTeamList(userPath, defaultPath);
+    copyTeamList(defaultPath, userPath);
   } catch {
     throw new Error('Failed to create new user');
   }
@@ -186,7 +186,7 @@ app.patch('/user/reset/:teamId', (req, res) => {
   try {
     deleteTeam(userPath, teamId);
     copyTeam(defaultPath, userPath, teamId);
-    copyTeamFromTeamList(defaultPath, userPath, teamId);
+    copyTeamListTeam(defaultPath, userPath, teamId);
 
     res.status(204).send();
   } catch (error) {

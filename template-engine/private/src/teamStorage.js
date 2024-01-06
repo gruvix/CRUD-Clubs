@@ -64,7 +64,7 @@ function updateTeamlistParameter(userPath, teamId, parameter, value) {
   teams[teamId][parameter] = value;
   writeFile(teamsPath, JSON.stringify(teams));
 }
-function copyTeamFromTeamList(sourcePath, targetPath, teamId) {
+function copyTeamListTeam(sourcePath, targetPath, teamId) {
   const targetTeamsPath = `${targetPath}/teams.json`;
   const sourceTeamsPath = `${sourcePath}/teams.json`;
   const userTeams = readFile(targetTeamsPath);
@@ -78,15 +78,15 @@ function copyTeamFromTeamList(sourcePath, targetPath, teamId) {
     throw new Error(copyError);
   }
 }
-function copyAllTeamsFromTeamList(userPath, defaultPath) {
-  const defaultTeamsPath = `${defaultPath}/teams.json`;
+function copyTeamList(sourcePath, targetPath) {
+  const defaultTeamsPath = `${sourcePath}/teams.json`;
   const teams = readFile(defaultTeamsPath);
   const teamPrepared = {};
   teams.forEach((team) => {
     teamPrepared[team.id] = new TeamListTeam(team);
   });
   try {
-    const teamsPath = `${userPath}/teams.json`;
+    const teamsPath = `${targetPath}/teams.json`;
     writeFile(teamsPath, JSON.stringify(teamPrepared));
   } catch (creationError) {
     throw new Error(creationError);
@@ -142,8 +142,8 @@ module.exports = {
   copyTeam,
   isTeamDefault,
   getTeamByIdAndPath,
-  copyTeamFromTeamList,
-  copyAllTeamsFromTeamList,
+  copyTeamListTeam,
+  copyTeamList,
   updateTeam,
   deleteTeam,
   deleteFile,
