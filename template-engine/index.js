@@ -24,7 +24,7 @@ const {
   validateTeam,
 } = require('./private/src/teamStorage.js');
 const { storage, imageFilter } = require('./private/src/multerConfig.js');
-const ensureLoggedIn = require('./private/src/auth.js');
+const { ensureLoggedIn, validateUsername } = require('./private/src/auth.js');
 
 const upload = multer({ storage, fileFilter: imageFilter });
 
@@ -45,13 +45,7 @@ app.use(session({
 
 app.use('/user', ensureLoggedIn);
 
-function validateUsername(username) {
-  const regexLettersWithNoDefault = /^[^\W\d_](?!default$)[^\W\d_]*$/i;
-  if (!regexLettersWithNoDefault.test(username)) {
-    return 'Invalid username';
-  }
-  return '';
-}
+
 
 function createNewUser(userPath, defaultPath) {
   try {

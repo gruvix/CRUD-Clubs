@@ -6,4 +6,12 @@ const ensureLoggedIn = (req, res, next) => {
     res.redirect(301, '/');
   }
 };
-module.exports = ensureLoggedIn;
+function validateUsername(username) {
+  const regexLettersWithNoDefault = /^[^\W\d_](?!default$)[^\W\d_]*$/i;
+  if (!regexLettersWithNoDefault.test(username)) {
+    return 'Invalid username';
+  }
+  return '';
+}
+
+module.exports = { ensureLoggedIn, validateUsername };
