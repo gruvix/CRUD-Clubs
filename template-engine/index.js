@@ -209,7 +209,7 @@ app.post('/logout', (req, res) => {
   const { username } = req.session;
   req.session.destroy();
   console.log(`User '${username}' logged out`);
-  res.redirect(301, '/user/teams');
+  res.redirect(301, '/');
 });
 
 app.get('/error', (req, res) => {
