@@ -118,9 +118,6 @@ function uploadImage(image) {
   const teamId = $('#team-id').val();
   fetch(`/user/${teamId}/upload`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
     body: image,
   });
 }
