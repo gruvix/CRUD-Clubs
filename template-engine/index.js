@@ -265,7 +265,7 @@ app.patch('/user/reset/:teamId', (req, res) => {
 
     res.status(204).send();
   } catch (error) {
-    res.status(400).send(`Error resetting team ${teamId}`);
+    res.status(400).send(`Error resetting team ${teamId} from ${username}`);
   }
 });
 
