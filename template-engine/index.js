@@ -22,11 +22,11 @@ const imageFilter = (req, file, cb) => {
     return cb(new Error('this file type is not allowed'), false);
   }
   cb(null, true);
-}
+};
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const userId = req.session.username;
-    const userPath = `${generateUserPath(userId)}/upload`;
+    const { username } = req.session;
+    const userPath = `${generateUserPath(username)}/upload`;
     cb(null, userPath);
   },
   filename: (req, file, cb) => {
