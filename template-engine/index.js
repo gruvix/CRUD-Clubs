@@ -53,7 +53,6 @@ app.use(session({
 
 app.use('/user', ensureLoggedIn);
 
-
 function validateUsername(username) {
   const regexLettersWithNoDefault = /^[^\W\d_](?!default$)[^\W\d_]*$/i;
   if (!regexLettersWithNoDefault.test(username)) {
@@ -61,7 +60,6 @@ function validateUsername(username) {
   }
   return '';
 }
-
 
 function createNewUser(userPath, defaultPath) {
   try {
@@ -102,33 +100,60 @@ app.get('/user/teams', (req, res) => {
     },
   });
 });
-app.get('/user/teams/:teamId', (req, res) => {
-  const { teamId } = req.params;
-  const { username } = req.session;
-  console.log(`User ${username} requested team ${teamId}`);
-  let userPath = generateUserPath(username);
-  if (isTeamDefault(userPath, teamId)) {
-    console.log(`Team ${teamId} from user '${username}' is default`);
-    userPath = generateUserPath('default');
-  }
-  const team = getTeamByIdAndPath(userPath, teamId);
 
-  const players = [];
-  team.squad.forEach((player) => {
-    players.push(new Player(player));
-  });
+app.route('/user/teams/:teamId')
+  .get((req, res) => {
+    const { teamId } = req.params;
+    const { username } = req.session;
+    console.log(`User ${username} requested team ${teamId}`);
+    let userPath = generateUserPath(username);
+    if (isTeamDefault(userPath, teamId)) {
+      console.log(`Team ${teamId} from user '${username}' is default`);
+      userPath = generateUserPath('default');
+    }
+    const team = getTeamByIdAndPath(userPath, teamId);
 
-  res.render('teamEditor', {
-    layout: 'main',
-    data: {
-      username,
-      team: new Team(team),
-      crest: team.crestUrl,
-      id: team.id,
-      players,
-    },
+    const players = [];
+    team.squad.forEach((player) => {
+      players.push(new Player(player));
+    });
+
+    res.render('teamEditor', {
+      layout: 'main',
+      data: {
+        username,
+        team: new Team(team),
+        crest: team.crestUrl,
+        id: team.id,
+        players,
+      },
+    });
+  })
+  .patch((req, res) => {
+    const { teamId } = req.params;
+    const { username } = req.session;
+    console.log(`User ${username} updated team ${teamId}`);
+    const userPath = generateUserPath(username);
+
+    try {
+      const updatedData = req.body;
+      updateTeam(updatedData, userPath, teamId);
+      res.status(204).send();
+    } catch (error) {
+      res.status(400).send('Error updating team parameter');
+    }
+  })
+  .delete((req, res) => {
+    const { username } = req.session;
+    const { teamId } = req.params;
+    const userPath = generateUserPath(username);
+    try {
+      deleteTeam(userPath, teamId);
+      res.status(204).send();
+    } catch (error) {
+      res.status(400).send('Error deleting team');
+    }
   });
-});
 
 app.patch('/user/reset/all', (req, res) => {
   const { username } = req.session;
@@ -160,33 +185,6 @@ app.patch('/user/reset/:teamId', (req, res) => {
     res.status(204).send();
   } catch (error) {
     res.status(400).send(`Error resetting team ${teamId} from ${username}`);
-  }
-});
-
-app.patch('/user/teams/:teamId', (req, res) => {
-  const { teamId } = req.params;
-  const { username } = req.session;
-  console.log(`User ${username} updated team ${teamId}`);
-  const userPath = generateUserPath(username);
-
-  try {
-    const updatedData = req.body;
-    updateTeam(updatedData, userPath, teamId);
-    res.status(204).send();
-  } catch (error) {
-    res.status(400).send('Error updating team parameter');
-  }
-});
-
-app.delete('/user/teams/:teamId', (req, res) => {
-  const { username } = req.session;
-  const { teamId } = req.params;
-  const userPath = generateUserPath(username);
-  try {
-    deleteTeam(userPath, teamId);
-    res.status(204).send();
-  } catch (error) {
-    res.status(400).send('Error deleting team');
   }
 });
 
