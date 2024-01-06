@@ -7,7 +7,6 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const Team = require('./private/models/team.js');
 const Player = require('./private/models/player.js');
-const imgTypes = require('./private/models/imgTypes.js');
 const generateUserPath = require('./private/src/path.js');
 const { deleteFile } = require('./private/src/utils.js');
 const {
@@ -19,24 +18,7 @@ const {
   updateTeam,
   deleteTeam,
 } = require('./private/src/teamStorage.js');
-
-const imageFilter = (req, file, cb) => {
-  if (!file.originalname.match(imgTypes)) {
-    return cb(new Error('this file type is not allowed'), false);
-  }
-  cb(null, true);
-};
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const { username } = req.session;
-    const userPath = `${generateUserPath(username)}/upload`;
-    cb(null, userPath);
-  },
-  filename: (req, file, cb) => {
-    const { teamId } = req.params;
-    cb(null, teamId);
-  },
-});
+const { storage, imageFilter } = require('./private/src/multerConfig.js');
 
 const upload = multer({ storage, fileFilter: imageFilter });
 
@@ -163,8 +145,6 @@ app.get('/user/teams/:teamId', (req, res) => {
     },
   });
 });
-
-
 
 app.patch('/user/reset/all', (req, res) => {
   const { username } = req.session;
