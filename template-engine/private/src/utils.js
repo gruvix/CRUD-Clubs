@@ -15,9 +15,33 @@ function writeFile(targetPath, content) {
 function readFile(targetPath) {
   return JSON.parse(fs.readFileSync(targetPath, 'utf-8'));
 }
+function validateFile(filePath) {
+  try {
+    fs.accessSync(filePath, fs.constants.F_OK);
+    return true;
+  } catch (err) {
+    return false;
+  }
+}
+function createFolder(folderPath) {
+  try {
+    if (!fs.existsSync(folderPath)) {
+      fs.mkdirSync(folderPath, (createFolderError) => {
+        if (createFolderError) {
+          console.log(createFolderError);
+        }
+        console.log('User folder created');
+      });
+    }
+  } catch (err) {
+    throw new Error(err);
+  }
+}
 module.exports = {
   deleteFile,
   copyFile,
   writeFile,
   readFile,
+  validateFile,
+  createFolder,
 };

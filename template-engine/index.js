@@ -8,7 +8,11 @@ const session = require('express-session');
 const Team = require('./private/models/team.js');
 const Player = require('./private/models/player.js');
 const generateUserPath = require('./private/src/path.js');
-const { deleteFile } = require('./private/src/utils.js');
+const {
+  deleteFile,
+  createFolder,
+  validateFile,
+} = require('./private/src/utils.js');
 const {
   copyTeam,
   isTeamDefault,
@@ -49,14 +53,7 @@ app.use(session({
 
 app.use('/user', ensureLoggedIn);
 
-function validateFile(filePath) {
-  try {
-    fs.accessSync(filePath, fs.constants.F_OK);
-    return true;
-  } catch (err) {
-    return false;
-  }
-}
+
 function validateUsername(username) {
   const regexLettersWithNoDefault = /^[^\W\d_](?!default$)[^\W\d_]*$/i;
   if (!regexLettersWithNoDefault.test(username)) {
@@ -64,20 +61,7 @@ function validateUsername(username) {
   }
   return '';
 }
-function createFolder(folderPath) {
-  try {
-    if (!fs.existsSync(folderPath)) {
-      fs.mkdirSync(folderPath, (createFolderError) => {
-        if (createFolderError) {
-          console.log(createFolderError);
-        }
-        console.log('User folder created');
-      });
-    }
-  } catch (err) {
-    throw new Error(err);
-  }
-}
+
 
 function createNewUser(userPath, defaultPath) {
   try {
