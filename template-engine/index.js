@@ -71,7 +71,9 @@ function createNewUser(userPath, defaultPath) {
   }
 }
 app.get('/', (req, res) => {
-  if (req.session.username) {
+  const { username } = req.session;
+  if (username) {
+    console.log(`User '${username}' requested landing page, redirecting to teams view`);
     res.redirect(301, '/user/teams');
     return;
   }
