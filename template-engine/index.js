@@ -21,6 +21,7 @@ const {
   copyAllTeamsFromTeamList,
   updateTeam,
   deleteTeam,
+  validateTeam,
 } = require('./private/src/teamStorage.js');
 const { storage, imageFilter } = require('./private/src/multerConfig.js');
 
@@ -107,6 +108,10 @@ app.route('/user/teams/:teamId')
     const { username } = req.session;
     console.log(`User ${username} requested team ${teamId}`);
     let userPath = generateUserPath(username);
+    if (!validateTeam(userPath, teamId)) {
+      res.redirect('/error?keyword=team-not-found&code=404');
+      return;
+    }
     if (isTeamDefault(userPath, teamId)) {
       console.log(`Team ${teamId} from user '${username}' is default`);
       userPath = generateUserPath('default');
@@ -204,6 +209,18 @@ app.post('/logout', (req, res) => {
   req.session.destroy();
   console.log(`User '${username}' logged out`);
   res.redirect(301, '/user/teams');
+});
+
+app.get('/error', (req, res) => {
+  const message = req.query.keyword;
+  const { code } = req.query;
+  res.render('error', {
+    layout: 'main',
+    data: {
+      message,
+      code,
+    },
+  });
 });
 
 app.listen(PORT);
