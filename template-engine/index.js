@@ -24,17 +24,9 @@ const {
   validateTeam,
 } = require('./private/src/teamStorage.js');
 const { storage, imageFilter } = require('./private/src/multerConfig.js');
+const ensureLoggedIn = require('./private/src/auth.js');
 
 const upload = multer({ storage, fileFilter: imageFilter });
-
-const ensureLoggedIn = (req, res, next) => {
-  if (req.session.username) {
-    next();
-  } else {
-    console.log('user not logged in, redirecting to homepage');
-    res.redirect(301, '/');
-  }
-};
 
 const PORT = 8000;
 const app = express();
