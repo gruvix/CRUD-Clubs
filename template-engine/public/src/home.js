@@ -16,11 +16,12 @@ function validateUsername(username) {
   return false;
 }
 async function login(username) {
-  const response = await fetch(`/login/${username}`, {
+  const response = await fetch('/login', {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
     },
+    body: JSON.stringify({ username }),
   });
   if (response.redirected) {
     window.location.href = response.url;

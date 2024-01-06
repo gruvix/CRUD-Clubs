@@ -194,8 +194,8 @@ app.patch('/user/reset/:teamId', (req, res) => {
   }
 });
 
-app.post('/login/:username', (req, res) => {
-  const { username } = req.params;
+app.post('/login', (req, res) => {
+  const { username } = req.body;
   const error = validateUsername(username);
   if (error) {
     res.status(400).send(error);
