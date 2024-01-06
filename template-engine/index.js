@@ -7,16 +7,19 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const Team = require('./private/models/team.js');
 const Player = require('./private/models/player.js');
-const TeamListTeam = require('./private/models/teamListTeam.js');
 const imgTypes = require('./private/models/imgTypes.js');
+const generateUserPath = require('./private/src/path.js');
+const { deleteFile } = require('./private/src/utils.js');
+const {
+  copyTeam,
+  isTeamDefault,
+  getTeamByIdAndPath,
+  copyTeamFromTeamList,
+  copyAllTeamsFromTeamList,
+  updateTeam,
+  deleteTeam,
+} = require('./private/src/teamStorage.js');
 
-/**
- * @param {string} username - username of the user
- * @returns the path to the root of the user E.g. ./private/data/user/default
- */
-function generateUserPath(username) {
-  return `./private/data/user/${username}`;
-}
 const imageFilter = (req, file, cb) => {
   if (!file.originalname.match(imgTypes)) {
     return cb(new Error('this file type is not allowed'), false);
@@ -63,58 +66,7 @@ app.use(session({
 }));
 
 app.use('/user', ensureLoggedIn);
-/**
- * gets a team by id and username
- * @param {string} userPath - path to user folder
- * @param {Number} teamId
- */
-function getTeamByIdAndPath(userPath, teamId) {
-  try {
-    const team = JSON.parse(fs.readFileSync(`${userPath}/teams/${teamId}.json`, 'utf-8'));
-    return team;
-  } catch (error) {
-    throw new Error(error);
-  }
-}
-/**
- * @param {string} userPath - path to user folder
- * @param {Number} teamId
- * @param {string} parameter - teamlist parameter to be updated
- * @param {any} value - new value for parameter
- */
-function updateTeamlistParameter(userPath, teamId, parameter, value) {
-  const teams = JSON.parse(fs.readFileSync(`${userPath}/teams.json`, 'utf-8'));
-  teams[teamId][parameter] = value;
-  fs.writeFileSync(`${userPath}/teams.json`, JSON.stringify(teams));
-}
-function copyTeamFromTeamList(sourcePath, targetPath, teamId) {
-  const userTeams = JSON.parse(fs.readFileSync(`${targetPath}/teams.json`, 'utf-8'));
-  const defaultTeams = JSON.parse(fs.readFileSync(`${sourcePath}/teams.json`, 'utf-8'));
-  const newTeam = Object.values(defaultTeams).find((team) => team.id === Number(teamId));
-  try {
-    userTeams[teamId] = new TeamListTeam(newTeam);
-    fs.writeFileSync(`${targetPath}/teams.json`, JSON.stringify(userTeams));
-  } catch (copyError) {
-    throw new Error(copyError);
-  }
-}
-function copyAllTeamsFromTeamList(userPath, defaultPath) {
-  const teams = JSON.parse(fs.readFileSync(`${defaultPath}/teams.json`, 'utf-8'));
-  const teamPrepared = {};
-  teams.forEach((team) => {
-    teamPrepared[team.id] = new TeamListTeam(team);
-  });
-  try {
-    fs.writeFileSync(`${userPath}/teams.json`, JSON.stringify(teamPrepared));
-  } catch (creationError) {
-    throw new Error(creationError);
-  }
-}
-function deleteTeamFromTeamlist(userPath, teamId) {
-  const teams = JSON.parse(fs.readFileSync(`${userPath}/teams.json`, 'utf-8'));
-  delete teams[teamId];
-  fs.writeFileSync(`${userPath}/teams.json`, JSON.stringify(teams));
-}
+
 function validateFile(filePath) {
   try {
     fs.accessSync(filePath, fs.constants.F_OK);
@@ -144,29 +96,7 @@ function createFolder(folderPath) {
     throw new Error(err);
   }
 }
-/**
- * @param {string} sourcePath - source path of teams to be copied
- * @param {string} targetPath - target path to place copy
- * @param {Number} teamId - id of the team to be copied
- */
-function copyTeam(sourcePath, targetPath, teamId) {
-  try {
-    fs.copyFileSync(`${sourcePath}/teams/${teamId}.json`, `${targetPath}/teams/${teamId}.json`);
-  } catch (creationError) {
-    throw new Error(creationError);
-  }
-}
-function updateTeam(team, userPath) {
-  fs.writeFileSync(`${userPath}/teams/${team.id}.json`, JSON.stringify(team));
-}
-function isTeamDefault(userPath, teamId) {
-  const teams = JSON.parse(fs.readFileSync(`${userPath}/teams.json`, 'utf-8'));
-  const team = teams[teamId];
-  if (team.isDefault) {
-    return true;
-  }
-  return false;
-}
+
 function createNewUser(userPath, defaultPath) {
   try {
     createFolder(userPath);
@@ -232,9 +162,7 @@ app.get('/user/teams/:teamId', (req, res) => {
   });
 });
 
-function deleteFile(userPath) {
-  fs.rmSync(userPath, { recursive: true, force: true });
-}
+
 
 app.patch('/user/reset/all', (req, res) => {
   const { username } = req.session;
@@ -259,7 +187,7 @@ app.patch('/user/reset/:teamId', (req, res) => {
   const defaultPath = generateUserPath('default');
   console.log(`Resetting team ${teamId} from ${username}`);
   try {
-    deleteFile(`${userPath}/teams/${teamId}.json`);
+    deleteTeam(userPath, teamId);
     copyTeam(defaultPath, userPath, teamId);
     copyTeamFromTeamList(defaultPath, userPath, teamId);
 
@@ -273,28 +201,10 @@ app.patch('/user/teams/:teamId', (req, res) => {
   const { teamId } = req.params;
   const { username } = req.session;
   const userPath = generateUserPath(username);
-  if (isTeamDefault(userPath, teamId)) {
-    copyTeam(generateUserPath('default'), userPath, teamId);
-    updateTeamlistParameter(userPath, teamId, 'isDefault', false);
-  }
+
   try {
-    let updatedData = req.body;
-    if (Object.keys(updatedData).includes('area')) {
-      updatedData = {
-        area: {
-          name: updatedData.area,
-        },
-      };
-    }
-    if (Object.keys(updatedData).includes('name')) {
-      updateTeamlistParameter(userPath, teamId, 'name', updatedData.name);
-    }
-    const team = getTeamByIdAndPath(userPath, teamId);
-    const now = new Date();
-    const lastUpdated = now.toISOString();
-    updatedData.lastUpdated = lastUpdated;
-    Object.assign(team, updatedData);
-    updateTeam(team, userPath);
+    const updatedData = req.body;
+    updateTeam(updatedData, userPath, teamId);
     res.status(204).send();
   } catch (error) {
     res.status(400).send('Error updating team parameter');
@@ -306,8 +216,7 @@ app.delete('/user/teams/:teamId', (req, res) => {
   const { teamId } = req.params;
   const userPath = generateUserPath(username);
   try {
-    deleteFile(`${userPath}/teams/${teamId}.json`);
-    deleteTeamFromTeamlist(userPath, teamId);
+    deleteTeam(userPath, teamId);
     res.status(204).send();
   } catch (error) {
     res.status(400).send('Error deleting team');
