@@ -69,7 +69,12 @@ app.use('/user', ensureLoggedIn);
  * @param {Number} teamId
  */
 function getTeamByIdAndPath(userPath, teamId) {
-  return JSON.parse(fs.readFileSync(`${userPath}/teams/${teamId}.json`, 'utf-8'));
+  try {
+    const team = JSON.parse(fs.readFileSync(`${userPath}/teams/${teamId}.json`, 'utf-8'));
+    return team;
+  } catch (error) {
+    throw new Error(error);
+  }
 }
 /**
  * @param {string} userPath - path to user folder
