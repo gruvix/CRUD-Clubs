@@ -13,7 +13,12 @@ function writeFile(targetPath, content) {
  * @returns - JSON object
  */
 function readFile(targetPath) {
-  return JSON.parse(fs.readFileSync(targetPath, 'utf-8'));
+  try {
+    const content = JSON.parse(fs.readFileSync(targetPath, 'utf-8'));
+    return content;
+  } catch (err) {
+    throw new Error(err);
+  }
 }
 function validateFile(filePath) {
   try {
