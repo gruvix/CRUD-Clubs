@@ -45,8 +45,6 @@ app.use(session({
 
 app.use('/user', ensureLoggedIn);
 
-
-
 function createNewUser(userPath, defaultPath) {
   try {
     createFolder(userPath);
@@ -147,7 +145,7 @@ app.route('/user/teams/:teamId')
     }
   });
 
-app.patch('/user/reset/all', (req, res) => {
+app.put('/user/reset/all', (req, res) => {
   const { username } = req.session;
   const userPath = generateUserPath(username);
   const defaultPath = generateUserPath('default');
@@ -163,7 +161,7 @@ app.patch('/user/reset/all', (req, res) => {
   }
 });
 
-app.patch('/user/reset/:teamId', (req, res) => {
+app.put('/user/reset/:teamId', (req, res) => {
   const { username } = req.session;
   const { teamId } = req.params;
   const userPath = generateUserPath(username);

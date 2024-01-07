@@ -11,7 +11,7 @@ function adjustTitles() {
 adjustTitles();
 async function resetTeams(callback) {
   await fetch('/user/reset/all', {
-    method: 'PATCH',
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
