@@ -24,14 +24,23 @@ The server will run on port 8000.
 main adress: `localhost:8000`
 
 Homepage: `/` (GET)
+
 Login: `/login` (POST)
+
 Teams list: `/user/teams` (GET)
+
 Team details: `/user/teams/:teamId` (GET)
+
 Edit a team: `/user/teams/:teamId` (PATCH)
+
 Delete a team: `/user/teams/:teamId` (DELETE)
+
 Reset a team: `/user/reset/:teamId` (PUT) 
+
 Reset all teams: `/user/reset/all` (PUT)
+
 Error page: `/error` (GET)
+
 Logout: `/logout` (POST)
 
 ## Credits
