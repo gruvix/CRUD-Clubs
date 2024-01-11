@@ -3,6 +3,6 @@
  * @returns the path to the root of the user E.g. ./private/data/user/default
  */
 function generateUserPath(username) {
-  return `./private/data/user/${username}`;
+  return `./private/userData/${username}`;
 }
 module.exports = generateUserPath;
