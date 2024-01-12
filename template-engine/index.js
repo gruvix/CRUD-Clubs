@@ -1,4 +1,3 @@
-const fs = require('fs');
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
@@ -13,8 +12,7 @@ const {
   getUserCustomCrestFolderPath,
   getUserCustomCrestIMGPath,
   getUserTeamsFolderPath,
-  getUserTeamJSONPath,
-} = require('./private/src/path.js');
+} = require('./private/src/userPath.js');
 const {
   deleteFile,
   createFolder,
@@ -44,7 +42,6 @@ app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(bodyParser.json());
 app.use(session({
   secret: 'keyboard-cat',
   resave: false,
