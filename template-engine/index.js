@@ -65,6 +65,13 @@ function createUser(username) {
     throw new Error('Failed to create new user');
   }
 }
+function deleteUser(username) {
+  try {
+    deleteFile(getUserRootPath(username));
+  } catch {
+    throw new Error('Failed to delete user');
+  }
+}
 app.get('/', (req, res) => {
   const { username } = req.session;
   if (username) {
