@@ -1,10 +1,10 @@
 const multer = require('multer');
-const imgTypes = require('../models/imgTypes.js');
 const generateUserPath = require('./path.js');
 
 const imageFilter = (req, file, cb) => {
-  if (!file.originalname.match(imgTypes)) {
-    return cb(new Error('this file type is not allowed'), false);
+  const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+  if (!allowedTypes.includes(file.mimetype)) {
+    return cb(new Error(`User tried to upload invalid image: ${file.mimetype}`), false);
   }
   cb(null, true);
 };
