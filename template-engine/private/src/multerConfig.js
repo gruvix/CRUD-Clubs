@@ -11,7 +11,7 @@ const imageFilter = (req, file, cb) => {
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const { username } = req.session;
-    const userPath = `${generateUserPath(username)}/upload`;
+    const userPath = `${generateUserPath(username)}/customCrests`;
     cb(null, userPath);
   },
   filename: (req, file, cb) => {
