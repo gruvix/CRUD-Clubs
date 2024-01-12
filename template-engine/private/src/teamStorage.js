@@ -1,10 +1,8 @@
 const TeamListTeam = require('../models/teamListTeam.js');
 const {
-  getUserRootPath,
-  getUserCustomCrestIMGPath,
   getUserTeamJSONPath,
   getUserTeamsListJSONPath,
-} = require('./path.js');
+} = require('./userPath.js');
 const {
   readFile,
   writeFile,

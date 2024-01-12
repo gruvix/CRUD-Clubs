@@ -25,7 +25,7 @@ function getUserCustomCrestFolderPath(username, fullpath = true) {
 /**
  * @param {string} username - username of the user
  * @param {string} teamId
- * @param {boolean} fullpath - if true, return the full path to the crest image file of the teamId of the user, if false, return the relative path
+ * @param {boolean} fullpath - if true, return the full path to the crest image file of the teamId of the user WITHOUT filetype, if false, return the relative path
  * @returns the path to the image file of the user (without type) E.g. .../USERNAME/customCrests/TEAMID
  */
 function getUserCustomCrestIMGPath(username, teamId, fullpath = true) {
