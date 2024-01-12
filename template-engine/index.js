@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const Team = require('./private/models/team.js');
 const Player = require('./private/models/player.js');
+const { createUser, deleteUser } = require('./private/src/user.js');
 const {
   getUserRootPath,
   getUserTeamsListJSONPath,
@@ -51,24 +52,7 @@ app.use(session({
 app.use('/user', ensureLoggedIn);
 app.use(bodyParser.json());
 
-function createUser(username) {
-  try {
-    createFolder(getUserRootPath(username));
-    createFolder(getUserTeamsFolderPath(username));
-    createFolder(getUserCustomCrestFolderPath(username));
-    const defaultUsername = 'default';
-    copyTeamList(defaultUsername, username);
-  } catch {
-    throw new Error('Failed to create new user');
-  }
-}
-function deleteUser(username) {
-  try {
-    deleteFile(getUserRootPath(username));
-  } catch {
-    throw new Error('Failed to delete user');
-  }
-}
+
 app.get('/', (req, res) => {
   const { username } = req.session;
   if (username) {
