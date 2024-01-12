@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const Team = require('./private/models/team.js');
 const Player = require('./private/models/player.js');
-const generateUserPath = require('./private/src/path.js');
+const {
 const {
   deleteFile,
   createFolder,
@@ -44,6 +44,7 @@ app.use(session({
 }));
 
 app.use('/user', ensureLoggedIn);
+app.use(bodyParser.json());
 
 function createNewUser(userPath, defaultPath) {
   try {
