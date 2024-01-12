@@ -206,6 +206,20 @@ app.post('/logout', (req, res) => {
   res.redirect(301, '/');
 });
 
+app.get('/user/customCrest/:teamId', (req, res) => {
+  const { username } = req.session;
+  const { teamId } = req.params;
+  const { imgFileType } = req.query;
+  console.log(imgFileType);
+  const imgPath = `${getUserCustomCrestFolderPath(username, teamId)}/${teamId}.${imgFileType}`;
+  console.log(imgPath);
+  if (!validateFile(imgPath)) {
+    res.status(404).send('Crest not found');
+  } else {
+    res.sendFile(imgPath, { root: '.' });
+  }
+});
+
 app.get('/error', (req, res) => {
   let message = 'Bad Request';
   if (req.query.keyword) {
