@@ -1,5 +1,6 @@
 const multer = require('multer');
-const generateUserPath = require('./path.js');
+const path = require('path');
+const { getUserCustomCrestFolderPath } = require('./userPath.js');
 
 const imageFilter = (req, file, cb) => {
   const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
@@ -11,12 +12,13 @@ const imageFilter = (req, file, cb) => {
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const { username } = req.session;
-    const userPath = `${generateUserPath(username)}/customCrests`;
-    cb(null, userPath);
+    const userCrestsFolderPath = `${getUserCustomCrestFolderPath(username)}`;
+    cb(null, userCrestsFolderPath);
   },
   filename: (req, file, cb) => {
     const { teamId } = req.params;
-    cb(null, teamId);
+    const filename = `${teamId}${path.extname(file.originalname)}`;
+    cb(null, filename);
   },
 });
 
