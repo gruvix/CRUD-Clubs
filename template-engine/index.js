@@ -34,7 +34,7 @@ const {
 const { storage, imageFilter } = require('./private/src/multerConfig.js');
 const { ensureLoggedIn, validateUsername } = require('./private/src/auth.js');
 
-const upload = multer({ storage, fileFilter: imageFilter });
+const uploadImage = multer({ storage, fileFilter: imageFilter });
 
 const PORT = 8000;
 const app = express();
