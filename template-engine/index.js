@@ -8,6 +8,13 @@ const session = require('express-session');
 const Team = require('./private/models/team.js');
 const Player = require('./private/models/player.js');
 const {
+  getUserRootPath,
+  getUserTeamsListJSONPath,
+  getUserCustomCrestFolderPath,
+  getUserCustomCrestIMGPath,
+  getUserTeamsFolderPath,
+  getUserTeamJSONPath,
+} = require('./private/src/path.js');
 const {
   deleteFile,
   createFolder,
@@ -16,7 +23,8 @@ const {
 const {
   copyTeam,
   isTeamDefault,
-  getTeamByIdAndPath,
+  getTeam,
+  getTeamsList,
   copyTeamListTeam,
   copyTeamList,
   updateTeam,
@@ -46,11 +54,13 @@ app.use(session({
 app.use('/user', ensureLoggedIn);
 app.use(bodyParser.json());
 
-function createNewUser(userPath, defaultPath) {
+function createUser(username) {
   try {
-    createFolder(userPath);
-    createFolder(`${userPath}/teams`);
-    copyTeamList(defaultPath, userPath);
+    createFolder(getUserRootPath(username));
+    createFolder(getUserTeamsFolderPath(username));
+    createFolder(getUserCustomCrestFolderPath(username));
+    const defaultUsername = 'default';
+    copyTeamList(defaultUsername, username);
   } catch {
     throw new Error('Failed to create new user');
   }
@@ -72,12 +82,10 @@ app.get('/', (req, res) => {
 
 app.get('/user/teams', (req, res) => {
   const { username } = req.session;
-  const userPath = generateUserPath(username);
-  const defaultPath = generateUserPath('default');
-  if (!validateFile(`${userPath}/teams.json`)) {
-    createNewUser(userPath, defaultPath);
+  if (!validateFile(getUserTeamsListJSONPath(username))) {
+    createUser(username);
   }
-  const teams = JSON.parse(fs.readFileSync(`${userPath}/teams.json`, 'utf-8'));
+  const teams = getTeamsList(username);
   res.render('teams', {
     layout: 'main',
     data: {
@@ -93,16 +101,18 @@ app.route('/user/teams/:teamId')
     const { teamId } = req.params;
     const { username } = req.session;
     console.log(`User ${username} requested team ${teamId}`);
-    let userPath = generateUserPath(username);
-    if (!validateTeam(userPath, teamId)) {
+    if (!validateTeam(username, teamId)) {
       res.redirect('/error?keyword=Team-not-found&code=404');
       return;
     }
-    if (isTeamDefault(userPath, teamId)) {
+    let team;
+    if (isTeamDefault(username, teamId)) {
       console.log(`Team ${teamId} from user '${username}' is default`);
-      userPath = generateUserPath('default');
+      const defaultUsername = 'default';
+      team = getTeam(defaultUsername, teamId);
+    } else {
+      team = getTeam(username, teamId);
     }
-    const team = getTeamByIdAndPath(userPath, teamId);
 
     const players = [];
     team.squad.forEach((player) => {
@@ -124,11 +134,10 @@ app.route('/user/teams/:teamId')
     const { teamId } = req.params;
     const { username } = req.session;
     console.log(`User ${username} updated team ${teamId}`);
-    const userPath = generateUserPath(username);
 
     try {
       const updatedData = req.body;
-      updateTeam(updatedData, userPath, teamId);
+      updateTeam(updatedData, username, teamId);
       res.status(204).send();
     } catch (error) {
       res.status(400).send('Error updating team parameter');
@@ -137,9 +146,8 @@ app.route('/user/teams/:teamId')
   .delete((req, res) => {
     const { username } = req.session;
     const { teamId } = req.params;
-    const userPath = generateUserPath(username);
     try {
-      deleteTeam(userPath, teamId);
+      deleteTeam(username, teamId);
       res.status(204).send();
     } catch (error) {
       res.status(400).send('Error deleting team');
@@ -148,13 +156,11 @@ app.route('/user/teams/:teamId')
 
 app.put('/user/reset/all', (req, res) => {
   const { username } = req.session;
-  const userPath = generateUserPath(username);
-  const defaultPath = generateUserPath('default');
   console.log(`Resetting user ${username}`);
   try {
-    deleteFile(userPath);
-    if (!validateFile(`${userPath}/teams.json`)) {
-      createNewUser(userPath, defaultPath);
+    deleteUser(username);
+    if (!validateFile(getUserTeamsListJSONPath(username))) {
+      createUser(username);
     }
     res.status(204).send();
   } catch (error) {
@@ -165,13 +171,12 @@ app.put('/user/reset/all', (req, res) => {
 app.put('/user/reset/:teamId', (req, res) => {
   const { username } = req.session;
   const { teamId } = req.params;
-  const userPath = generateUserPath(username);
-  const defaultPath = generateUserPath('default');
   console.log(`Resetting team ${teamId} from ${username}`);
   try {
-    deleteTeam(userPath, teamId);
-    copyTeam(defaultPath, userPath, teamId);
-    copyTeamListTeam(defaultPath, userPath, teamId);
+    deleteTeam(username, teamId);
+    const defaultUsername = 'default';
+    copyTeam(defaultUsername, username, teamId);
+    copyTeamListTeam(defaultUsername, username, teamId);
 
     res.status(204).send();
   } catch (error) {
