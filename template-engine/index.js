@@ -204,6 +204,11 @@ app.post('/user/:teamId/upload', uploadImage.single('image'), (req, res) => {
   updateTeam(newData, username, teamId);
   res.send('image uploaded successfully');
 });
+
+app.get('/user/customCrest/:teamId/:filename', (req, res) => {
+  const { username } = req.session;
+  const { teamId, filename } = req.params;
+  const imgPath = `${getUserCustomCrestFolderPath(username, teamId)}/${filename}`;
   if (!validateFile(imgPath)) {
     res.status(404).send('Crest not found');
   } else {
