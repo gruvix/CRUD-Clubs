@@ -4,6 +4,7 @@ const path = require('path');
 const expresshandlebars = require('express-handlebars');
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const FileStore = require('session-file-store')(session);
 const Team = require('./private/models/team.js');
 const Player = require('./private/models/player.js');
 const { createUser, deleteUser } = require('./private/src/user.js');
@@ -27,7 +28,6 @@ const {
 } = require('./private/src/teamStorage.js');
 const { storage, imageFilter } = require('./private/src/multerConfig.js');
 const { ensureLoggedIn, validateUsername } = require('./private/src/auth.js');
-const FileStore = require('session-file-store')(session);
 
 const uploadImage = multer({ storage, fileFilter: imageFilter });
 
