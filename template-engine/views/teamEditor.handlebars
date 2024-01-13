@@ -8,7 +8,13 @@
 
         <div class="col-4">
             <div class="d-flex justify-content-center img-container">
+                {{#if data.hasCustomCrest}}
+                <img src="{{data.domain}}{{data.crest}}" class="team-crest-image" alt="team crest">
+                {{else}}
                 <img src="{{data.crest}}" alt="Team crest" class="team-crest-image">
+                {{/if}}
+
+
                 <button class="btn btn-shadow overlay-button btn-outline-warning position-absolute top-50 start-50 translate-middle" id="upload-image-button" style="font-size: 150%;">
                     Upload new image
                 </button>

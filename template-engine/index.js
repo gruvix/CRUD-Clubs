@@ -7,6 +7,7 @@ const session = require('express-session');
 const Team = require('./private/models/team.js');
 const Player = require('./private/models/player.js');
 const { createUser, deleteUser } = require('./private/src/user.js');
+const { getDomain } = require('./private/src/domain.js');
 const {
   getUserRootPath,
   getUserTeamsListJSONPath,
@@ -74,12 +75,14 @@ app.get('/user/teams', (req, res) => {
     createUser(username);
   }
   const teams = getTeamsList(username);
+  const domain = getDomain(req);
   res.render('teams', {
     layout: 'main',
     data: {
       username,
       capitalizedName: username.charAt(0).toUpperCase() + username.slice(1),
       teams,
+      domain,
     },
   });
 });
@@ -107,6 +110,7 @@ app.route('/user/teams/:teamId')
       players.push(new Player(player));
     });
 
+    const domain = getDomain(req);
     res.render('teamEditor', {
       layout: 'main',
       data: {
@@ -115,6 +119,8 @@ app.route('/user/teams/:teamId')
         crest: team.crestUrl,
         id: team.id,
         players,
+        domain,
+        hasCustomCrest: team.hasCustomCrest,
       },
     });
   })

@@ -5,7 +5,11 @@
         <div class="card-header">
             <h5 class="card-title team-card-title">{{this.name}}</h5>
         </div>
+        {{#if this.hasCustomCrest}}
+        <img src="{{../domain}}{{this.crestUrl}}" class="list-team-crest-image" alt="team crest">
+        {{else}}
         <img src="{{this.crestUrl}}" class="list-team-crest-image" alt="team crest">
+        {{/if}}
         <div class="card-body" style="align-self: center" id="{{this.id}}">
             <button class="btn btn-outline-warning overlay-button-dark edit" style="margin-right: 10px;">edit</button>
             <button class="btn btn-outline-danger overlay-button-dark delete"

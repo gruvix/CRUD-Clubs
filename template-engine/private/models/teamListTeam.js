@@ -3,6 +3,7 @@ class TeamListTeam {
     this.name = team.name;
     this.id = team.id;
     this.crestUrl = team.crestUrl;
+    this.hasCustomCrest = false;
     this.isDefault = true;
     this.hasDefault = true;
     this.lastUpdated = team.lastUpdated;
@@ -12,6 +13,7 @@ class TeamListTeam {
     'name',
     'id',
     'crestUrl',
+    'hasCustomCrest',
     'isDefault',
     'hasDefault',
     'lastUpdated',
