@@ -27,6 +27,7 @@ const {
 } = require('./private/src/teamStorage.js');
 const { storage, imageFilter } = require('./private/src/multerConfig.js');
 const { ensureLoggedIn, validateUsername } = require('./private/src/auth.js');
+const FileStore = require('session-file-store')(session);
 
 const uploadImage = multer({ storage, fileFilter: imageFilter });
 
@@ -38,7 +39,9 @@ app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 
 app.use(express.static(path.join(__dirname, 'public')));
+const fileStoreOptions = { path: path.join(__dirname, 'private', 'sessions'), ttl: 60 * 60 * 24 * 7, logFn: () => {} };
 app.use(session({
+  store: new FileStore(fileStoreOptions),
   secret: 'keyboard-cat',
   resave: false,
   saveUninitialized: false,
