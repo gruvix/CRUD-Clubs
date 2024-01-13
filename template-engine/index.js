@@ -64,6 +64,7 @@ app.get('/', (req, res) => {
 app.get('/user/teams', (req, res) => {
   const { username } = req.session;
   if (!validateFile(getUserTeamsListJSONPath(username))) {
+    console.log(`User not found, creating new user "${username}"`);
     createUser(username);
   }
   const teams = getTeamsList(username);
