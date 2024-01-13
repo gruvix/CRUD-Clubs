@@ -9,15 +9,10 @@ const Player = require('./private/models/player.js');
 const { createUser, deleteUser } = require('./private/src/user.js');
 const { getDomain } = require('./private/src/domain.js');
 const {
-  getUserRootPath,
   getUserTeamsListJSONPath,
   getUserCustomCrestFolderPath,
-  getUserCustomCrestIMGPath,
-  getUserTeamsFolderPath,
 } = require('./private/src/userPath.js');
 const {
-  deleteFile,
-  createFolder,
   validateFile,
 } = require('./private/src/utils.js');
 const {
@@ -26,10 +21,9 @@ const {
   getTeam,
   getTeamsList,
   copyTeamListTeam,
-  copyTeamList,
   updateTeam,
-  deleteTeam,
   validateTeam,
+  deleteTeam,
 } = require('./private/src/teamStorage.js');
 const { storage, imageFilter } = require('./private/src/multerConfig.js');
 const { ensureLoggedIn, validateUsername } = require('./private/src/auth.js');
@@ -49,10 +43,8 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
 }));
-
 app.use('/user', ensureLoggedIn);
 app.use(bodyParser.json());
-
 
 app.get('/', (req, res) => {
   const { username } = req.session;

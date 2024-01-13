@@ -160,6 +160,5 @@ module.exports = {
   copyTeamList,
   updateTeam,
   deleteTeam,
-  deleteFile,
   validateTeam,
 };
