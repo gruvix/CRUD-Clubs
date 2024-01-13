@@ -30,7 +30,7 @@ $('#image-input').on('change', (event) => {
   uploadImage(file);
 });
 
-$('#teamTable').on('click', (event) => {
+$('#team-table').on('click', (event) => {
   if (event.target.classList.contains('edit')) {
     const tableRow = event.target.parentElement.parentElement;
     team.prepareEditField(tableRow);
@@ -38,12 +38,12 @@ $('#teamTable').on('click', (event) => {
   }
 });
 
-$('#teamTable').on('click', (event) => {
+$('#team-table').on('click', (event) => {
   if (event.target.classList.contains('apply')) {
     team.confirmEdit(event.target.parentElement.parentElement);
   }
 });
-$('#teamTable').on('keydown', (event) => {
+$('#team-table').on('keydown', (event) => {
   if (event.key === 'Enter') {
     team.confirmEdit(event.target.parentElement.parentElement);
   }
