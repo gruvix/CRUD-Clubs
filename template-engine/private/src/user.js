@@ -1,4 +1,5 @@
-const { createFolder, deleteFile, copyTeamList } = require('./teamStorage');
+const { copyTeamList } = require('./teamStorage');
+const { createFolder, deleteFile } = require('./utils');
 const { getUserRootPath, getUserTeamsFolderPath, getUserCustomCrestFolderPath } = require('./userPath');
 
 function createUser(username) {
