@@ -190,13 +190,20 @@ app.post('/logout', (req, res) => {
   res.redirect(301, '/');
 });
 
-app.get('/user/customCrest/:teamId', (req, res) => {
+app.post('/user/:teamId/upload', uploadImage.single('image'), (req, res) => {
   const { username } = req.session;
   const { teamId } = req.params;
-  const { imgFileType } = req.query;
-  console.log(imgFileType);
-  const imgPath = `${getUserCustomCrestFolderPath(username, teamId)}/${teamId}.${imgFileType}`;
-  console.log(imgPath);
+  const { filename } = req.file;
+  console.log(`User '${username}' uploaded new crest for team ${teamId}`);
+  console.log(req.file);
+  const crestUrl = `/user/customCrest/${teamId}/${filename}`;
+  const newData = {
+    crestUrl,
+    hasCustomCrest: true,
+  };
+  updateTeam(newData, username, teamId);
+  res.send('image uploaded successfully');
+});
   if (!validateFile(imgPath)) {
     res.status(404).send('Crest not found');
   } else {
