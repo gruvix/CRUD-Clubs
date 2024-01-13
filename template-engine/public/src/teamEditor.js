@@ -1,15 +1,5 @@
 import setupConfirmationModal from './confirmationModal.js';
 
-async function resetTeam(callback) {
-  const teamId = $('#team-id').val();
-  await fetch(`/user/reset/${teamId}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-  callback();
-}
 
 $('#back-to-teams-button').on('click', () => {
   window.location.href = '/user/teams';
