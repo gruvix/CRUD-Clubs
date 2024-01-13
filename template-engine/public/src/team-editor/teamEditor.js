@@ -1,6 +1,6 @@
 import setupConfirmationModal from '../confirmationModal.js';
 import * as team from './teamEdit.js';
-import resetTeam from '../teams.js';
+import resetTeam from './reset.js';
 import uploadImage from './crest.js';
 
 $('#back-to-teams-button').on('click', () => {
