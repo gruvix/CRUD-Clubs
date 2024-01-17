@@ -71,5 +71,24 @@ describe.only('test the team editor page with the first team', () => {
   });
 
   const FIRST_TEAM_PATH = '/user/teams/57';
+
+  it('updates all team parameters with a random string', () => {
+    const randomString = generateRandomString();
+    cy.get('#team-table .edit').each(($editButton, index) => {
+      cy.wrap($editButton).click().parent().parent()
+        .find('input')
+        .type(randomString)
+        .get('#team-table .apply')
+        .then(($applyButton) => {
+          cy.wrap($applyButton[index]).click();
+        });
+    });
+    cy.visit(BASE_URL).get('.team-card-title').first().should('contain', randomString);
+    cy.get('.edit').first().click();
+    cy.get('#team-table span').each(($spanField) => {
+      cy.wrap($spanField).should('contain', randomString);
+    });
+  });
+
   });
 });
