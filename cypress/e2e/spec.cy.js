@@ -1,8 +1,10 @@
 /// <reference types="cypress" />
 
 describe('test the CRUD', () => {
+const TEST_USER = 'cypress';
+const BASE_URL = 'http://localhost:8000';
   beforeEach(() => {
-    cy.visit('http://localhost:8000/');
+    cy.visit(BASE_URL);
   });
 
   it('should show an error indicating that the username may only contain letters', () => {
@@ -18,7 +20,7 @@ describe('test the CRUD', () => {
   });
 
   it('should login with "test"', () => {
-    cy.get('#username').type('test').get('#enter-page-button').click();
+    cy.get('#username').type(TEST_USER).get('#enter-page-button').click();
   });
 
   it.only('should delete a team and reset the teams', () => {
