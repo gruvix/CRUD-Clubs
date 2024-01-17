@@ -90,5 +90,16 @@ describe.only('test the team editor page with the first team', () => {
     });
   });
 
+  it.only('edits and then resets a team', () => {
+    const randomString = generateRandomString();
+    cy.get('#team-table .edit').first().click();
+    cy.get('#team-table input').first().type(randomString).get('#team-table .apply')
+      .first()
+      .click();
+    cy.visit(BASE_URL + FIRST_TEAM_PATH);
+    cy.get('#team-table span').first().should('contain', randomString);
+    cy.get('#reset-team-button').click().wait(MODAL_APPEAR_DELAY);
+    cy.get('#confirmation-modal-button').click();
+    cy.get('#team-table span').first().should('not.contain', randomString);
   });
 });
