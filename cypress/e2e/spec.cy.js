@@ -34,6 +34,16 @@ describe('test the CRUD', () => {
   });
 
   const MODAL_APPEAR_DELAY = 500;
+
+  it('should reset teams to default', () => {
+    const FIRST_TEAM_NAME = 'Arsenal FC';
+    cy.get('.delete').first().click().wait(MODAL_APPEAR_DELAY);
+    cy.get('#confirmation-modal-button').click();
+    cy.get('#reset-teams-button').click().wait(MODAL_APPEAR_DELAY);
+    cy.get('#confirmation-modal-button').click();
+    cy.get('.card-title').first().should('contain', FIRST_TEAM_NAME);
+  });
+
   it('should delete a team and reset the teams', () => {
     cy.intercept('PATCH', '/user/reset/all').as('resetTeams');
     cy.get('h5').first().then(($text) => {
