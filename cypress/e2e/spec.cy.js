@@ -33,16 +33,18 @@ describe('test the CRUD', () => {
     cy.wait('@login');
   });
 
-  it.only('should delete a team and reset the teams', () => {
+  const MODAL_APPEAR_DELAY = 500;
+  it('should delete a team and reset the teams', () => {
     cy.intercept('PATCH', '/user/reset/all').as('resetTeams');
-    cy.get('#username').type('test').get('#enter-page-button').click();
     cy.get('h5').first().then(($text) => {
       const teamName = $text.text();
-      cy.get('.delete').first().click();
+      cy.get('.delete').first().click().wait(MODAL_APPEAR_DELAY);
+      cy.get('#confirmation-modal-button').click();
 
       cy.get('.card-title').first().should('not.contain', teamName);
-      cy.get('#reset-teams-button').click();
+      cy.get('#reset-teams-button').click().wait(MODAL_APPEAR_DELAY);
       cy.get('#confirmation-modal-button').click();
+
       cy.get('.card-title').first().should('contain', teamName);
     });
   });
