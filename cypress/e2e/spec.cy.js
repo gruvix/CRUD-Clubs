@@ -2,6 +2,9 @@
 
 const TEST_USER = 'cypress';
 const BASE_URL = 'http://localhost:8000';
+function generateRandomString() {
+  return Math.random().toString(36).substring(2);
+}
 
 describe('test login', () => {
   beforeEach(() => {
@@ -25,7 +28,7 @@ describe('test login', () => {
   });
 });
 
-describe('test the CRUD', () => {
+describe('test teams view page', () => {
   beforeEach(() => {
     cy.visit(BASE_URL);
     cy.intercept('POST', '/login').as('login');
@@ -57,5 +60,16 @@ describe('test the CRUD', () => {
 
       cy.get('.card-title').first().should('contain', teamName);
     });
+  });
+});
+describe.only('test the team editor page with the first team', () => {
+  beforeEach(() => {
+    cy.visit(BASE_URL);
+    cy.intercept('POST', '/login').as('login');
+    cy.get('#username').type(TEST_USER).get('#enter-page-button').click();
+    cy.wait('@login');
+    cy.get('.edit').first().click();
+  });
+
   });
 });
