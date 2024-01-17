@@ -2,6 +2,7 @@
 
 const TEST_USER = 'cypress';
 const BASE_URL = 'http://localhost:8000';
+const MODAL_APPEAR_DELAY = 500;
 function generateRandomString() {
   return Math.random().toString(36).substring(2);
 }
@@ -35,8 +36,6 @@ describe('test teams view page', () => {
     cy.get('#username').type(TEST_USER).get('#enter-page-button').click();
     cy.wait('@login');
   });
-
-  const MODAL_APPEAR_DELAY = 500;
 
   it('should reset teams to default', () => {
     const FIRST_TEAM_NAME = 'Arsenal FC';
