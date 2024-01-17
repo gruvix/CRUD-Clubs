@@ -61,7 +61,7 @@ describe('test teams view page', () => {
     });
   });
 });
-describe.only('test the team editor page with the first team', () => {
+describe('test the team editor page with the first team', () => {
   beforeEach(() => {
     cy.visit(BASE_URL);
     cy.intercept('POST', '/login').as('login');
@@ -90,7 +90,7 @@ describe.only('test the team editor page with the first team', () => {
     });
   });
 
-  it.only('edits and then resets a team', () => {
+  it('edits and then resets a team', () => {
     const randomString = generateRandomString();
     cy.get('#team-table .edit').first().click();
     cy.get('#team-table input').first().type(randomString).get('#team-table .apply')
