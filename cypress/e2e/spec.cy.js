@@ -70,5 +70,6 @@ describe.only('test the team editor page with the first team', () => {
     cy.get('.edit').first().click();
   });
 
+  const FIRST_TEAM_PATH = '/user/teams/57';
   });
 });
