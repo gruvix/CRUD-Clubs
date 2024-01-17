@@ -1,8 +1,9 @@
 /// <reference types="cypress" />
 
-describe('test the CRUD', () => {
 const TEST_USER = 'cypress';
 const BASE_URL = 'http://localhost:8000';
+
+describe('test login', () => {
   beforeEach(() => {
     cy.visit(BASE_URL);
   });
@@ -21,6 +22,15 @@ const BASE_URL = 'http://localhost:8000';
 
   it('should login with "test"', () => {
     cy.get('#username').type(TEST_USER).get('#enter-page-button').click();
+  });
+});
+
+describe('test the CRUD', () => {
+  beforeEach(() => {
+    cy.visit(BASE_URL);
+    cy.intercept('POST', '/login').as('login');
+    cy.get('#username').type(TEST_USER).get('#enter-page-button').click();
+    cy.wait('@login');
   });
 
   it.only('should delete a team and reset the teams', () => {
