@@ -7,3 +7,10 @@ export function prepareEditFields(tableRow) {
     $(cell).children('input').val(cellText);
   }
 }
+export function enableEditMode(tableRow) {
+  $('.edit').hide();
+  $('.remove').hide();
+  $(tableRow).children().children('.apply').show();
+  $(tableRow).children().children('span').hide();
+  $(tableRow).children().children('input').show();
+}
