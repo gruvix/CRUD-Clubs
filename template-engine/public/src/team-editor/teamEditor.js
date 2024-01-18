@@ -49,5 +49,9 @@ $('#team-table').on('keydown', (event) => {
     team.confirmEdit(event.target.parentElement.parentElement);
   }
 });
-
-
+$('#players-table').on('click', (event) => {
+  if (event.target.classList.contains('edit')) {
+    const tableRow = event.target.parentElement.parentElement;
+    player.prepareEditFields(tableRow);
+  }
+});
