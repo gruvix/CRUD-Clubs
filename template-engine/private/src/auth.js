@@ -3,7 +3,7 @@ const ensureLoggedIn = (req, res, next) => {
     next();
   } else {
     console.log('user not logged in, redirecting to homepage');
-    res.redirect(301, '/');
+    res.redirect(302, '/');
   }
 };
 function validateUsername(username) {

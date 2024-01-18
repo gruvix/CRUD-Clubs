@@ -53,7 +53,7 @@ app.get('/', (req, res) => {
   const { username } = req.session;
   if (username) {
     console.log(`User '${username}' requested landing page, redirecting to teams view`);
-    res.redirect(301, '/user/teams');
+    res.redirect(302, '/user/teams');
     return;
   }
   res.render('home', {
@@ -183,13 +183,13 @@ app.post('/login', (req, res) => {
   }
   req.session.username = username;
   console.log(`User '${username}' logged in`);
-  res.redirect(301, '/user/teams');
+  res.redirect(302, '/user/teams');
 });
 app.post('/logout', (req, res) => {
   const { username } = req.session;
   req.session.destroy();
   console.log(`User '${username}' logged out`);
-  res.redirect(301, '/');
+  res.redirect(302, '/');
 });
 
 app.post('/user/:teamId/upload', uploadImage.single('image'), (req, res) => {
