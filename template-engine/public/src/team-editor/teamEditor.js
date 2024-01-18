@@ -1,5 +1,6 @@
 import setupConfirmationModal from '../confirmationModal.js';
 import * as team from './teamEdit.js';
+import * as player from './playerEdit.js';
 import resetTeam from './reset.js';
 import uploadImage from './crest.js';
 
