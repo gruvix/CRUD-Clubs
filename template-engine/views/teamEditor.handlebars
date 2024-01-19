@@ -13,10 +13,13 @@
                 {{else}}
                 <img src="{{data.crest}}" alt="Team crest" class="team-crest-image">
                 {{/if}}
-
-
                 <button class="btn btn-shadow overlay-button btn-outline-warning position-absolute top-50 start-50 translate-middle" id="upload-image-button" style="font-size: 150%;">
-                    Upload new image
+                    <span style="display:block">
+                        Upload new image
+                    </span>
+                    <span style="font-size: 60%; display:block">
+                        jpeg / jpg / png / gif   
+                    </span>
                 </button>
                 <input type="file" id="image-input" style="display: none">
             </div>

@@ -4,7 +4,7 @@ import setupConfirmationModal from '../confirmationModal.js';
 import updateTeamParameter from './teamEdit.js';
 import updatePlayer from './playerEdit.js';
 import resetTeam from './reset.js';
-import uploadImage from './crest.js';
+import handleImageUpdate from './crest.js';
 import * as common from './commonEdit.js';
 
 $('#back-to-teams-button').on('click', () => {
@@ -31,7 +31,7 @@ $('#upload-image-button').on('click', () => {
 });
 $('#image-input').on('change', (event) => {
   const file = event.target.files[0];
-  uploadImage(file);
+  handleImageUpdate(file);
 });
 
 $('#tables').on('click', (event) => {
