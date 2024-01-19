@@ -204,7 +204,7 @@ app.post('/user/:teamId/upload', uploadImage.single('image'), (req, res) => {
     hasCustomCrest: true,
   };
   updateTeam(newData, username, teamId);
-  res.send('image uploaded successfully');
+  res.status(200).send(crestUrl);
 });
 
 app.get('/user/customCrest/:teamId/:filename', (req, res) => {

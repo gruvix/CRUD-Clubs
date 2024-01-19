@@ -2,15 +2,26 @@ function isImageTypeValid(image) {
   const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
   return validTypes.includes(image.type);
 }
-
-function uploadImage(image) {
+function updateImage(imageUrl) {
+  $('#team-crest').attr('src', imageUrl);
+}
+async function uploadImage(image) {
   const teamId = $('#team-id').val();
   const formData = new FormData();
   formData.append('image', image);
-  fetch(`/user/${teamId}/upload`, {
+  const response = await fetch(`/user/${teamId}/upload`, {
     method: 'POST',
     body: formData,
   });
+  if (response.redirected) {
+    window.location.href = response.url;
+  }
+  if (!response.ok) {
+    alert('Error: could not update team crest');
+  } else {
+    const imageUrl = await response.text();
+    updateImage(imageUrl);
+  }
 }
 
 export default function handleImageUpdate(image) {
