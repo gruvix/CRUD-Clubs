@@ -1,8 +1,11 @@
+/// <reference types="jquery" />
+
 import setupConfirmationModal from '../confirmationModal.js';
-import * as team from './teamEdit.js';
-import * as player from './playerEdit.js';
+import updateTeamParameter from './teamEdit.js';
+import updatePlayer from './playerEdit.js';
 import resetTeam from './reset.js';
 import uploadImage from './crest.js';
+import * as common from './commonEdit.js';
 
 $('#back-to-teams-button').on('click', () => {
   window.location.href = '/user/teams';
@@ -31,27 +34,38 @@ $('#image-input').on('change', (event) => {
   uploadImage(file);
 });
 
-$('#team-table').on('click', (event) => {
+$('#tables').on('click', (event) => {
   if (event.target.classList.contains('edit')) {
     const tableRow = event.target.parentElement.parentElement;
-    team.prepareEditField(tableRow);
-    team.enableEditMode(tableRow);
+    common.prepareEditFields(tableRow);
+    common.enableEditMode(tableRow);
   }
 });
-
-$('#team-table').on('click', (event) => {
+function handleApplyAction(tableRow) {
+  const table = $(tableRow).parent().parent().attr('id');
+  let callback;
+  switch (table) {
+    case 'team-table':
+      callback = updateTeamParameter;
+      break;
+    case 'players-table':
+      callback = updatePlayer;
+      break;
+    default:
+      callback = () => {};
+      break;
+  }
+  common.submitChanges(tableRow, callback);
+}
+$('#tables').on('click', (event) => {
   if (event.target.classList.contains('apply')) {
-    team.confirmEdit(event.target.parentElement.parentElement);
-  }
-});
-$('#team-table').on('keydown', (event) => {
-  if (event.key === 'Enter') {
-    team.confirmEdit(event.target.parentElement.parentElement);
-  }
-});
-$('#players-table').on('click', (event) => {
-  if (event.target.classList.contains('edit')) {
     const tableRow = event.target.parentElement.parentElement;
-    player.prepareEditFields(tableRow);
+    handleApplyAction(tableRow);
+  }
+});
+$('#tables').on('keydown', (event) => {
+  if (event.key === 'Enter') {
+    const tableRow = event.target.parentElement.parentElement;
+    handleApplyAction(tableRow);
   }
 });
