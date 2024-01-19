@@ -1,16 +1,21 @@
-/// <reference types="jquery" />
-
-export function prepareEditFields(tableRow) {
-  for (let cellIndex = 0; cellIndex < tableRow.children.length; cellIndex += 1) {
-    const cell = tableRow.children[cellIndex];
-    const cellText = $(cell).children('span').text();
-    $(cell).children('input').val(cellText);
-  }
-}
-export function enableEditMode(tableRow) {
-  $('.edit').hide();
-  $('.remove').hide();
-  $(tableRow).children().children('.apply').show();
-  $(tableRow).children().children('span').hide();
-  $(tableRow).children().children('input').show();
+/**
+   * Updates the player of the team given the row of the values
+   * @param {HTMLElement} - The row containing the player
+   */
+export default async function updatePlayer(tableRow) {
+  console.log('updating player');
+  return;
+  // const response = await fetch(`/user/teams/${teamId}`, {
+  //   method: 'PATCH',
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //   },
+  //   body: requestBody,
+  // });
+  // if (response.redirected) {
+  //   window.location.href = response.url;
+  // }
+  // if (!response.ok) {
+  //   alert('Error: could not update team');
+  // }
 }
