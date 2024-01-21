@@ -102,4 +102,29 @@ describe('test the team editor page with the first team', () => {
     cy.get('#confirmation-modal-button').click();
     cy.get('#team-table span').first().should('not.contain', randomString);
   });
+
+  it('edits a random player from a team', () => {
+    cy.get('#players-table .edit').then(($editButtons) => {
+      const playersAmount = $editButtons.length;
+      const randomStrings = [];
+      for (let i = 0; i < playersAmount; i += 1) {
+        randomStrings.push(generateRandomString());
+      }
+      const randomIndex = Math.floor(Math.random() * playersAmount);
+      const playerGetString = `#players-table [data-index="${randomIndex}"]`;
+      cy.get(playerGetString).find('.edit').click();
+
+      cy.get(playerGetString).find('input').each(($input, index) => {
+        cy.wrap($input).clear().type(randomStrings[index]);
+      });
+      cy.wrap($editButtons[randomIndex]).parent().parent().children()
+        .children('.apply')
+        .click();
+      cy.visit(BASE_URL + FIRST_TEAM_PATH);
+      cy.get(playerGetString).children().children('span')
+        .each(($spanField, index) => {
+          cy.wrap($spanField).should('contain', randomStrings[index]);
+        });
+    });
+  });
 });
