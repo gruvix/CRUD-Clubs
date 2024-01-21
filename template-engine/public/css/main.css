@@ -40,7 +40,11 @@ td:first-child, th:first-child {
 
 .teams-page-title {
   font-family: "Courier New", monospace;
-  margin-top: 20px; color: rgb(255, 187, 0);
+  display: flex;
+  margin-top: -30px;
+  margin-bottom: 33px;
+  margin-left: 95px;
+  color: rgb(255, 187, 0);
 }
 
 .list-team-crest-image {
