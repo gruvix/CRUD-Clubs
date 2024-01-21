@@ -66,7 +66,7 @@ function getTeam(username, teamId) {
  * @param {string} username
  * @param {Number} teamId
  * @param {string} parameter - teamlist parameter to be updated
- * @param {any} value - new value for parameter
+ * @param {any} value - new value of parameter
  */
 function updateTeamlistParameter(username, teamId, parameter, value) {
   const teamsPath = getUserTeamsListJSONPath(username);
@@ -133,7 +133,11 @@ function updateTeam(newData, username, teamId) {
     }
   });
   const team = getTeam(username, teamId);
-  Object.assign(team, updatedData);
+  if (Object.keys(updatedData).includes('squad')) {
+    Object.assign(team.squad, updatedData.squad);
+  } else {
+    Object.assign(team, updatedData);
+  }
 
   saveTeam(team, username);
 }
