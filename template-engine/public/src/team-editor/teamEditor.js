@@ -1,8 +1,8 @@
 /// <reference types="jquery" />
 
 import setupConfirmationModal from '../confirmationModal.js';
-import updateTeamParameter from './teamEdit.js';
-import updatePlayer from './playerEdit.js';
+import updateTeamParameter from './updateTeam.js';
+import updatePlayer from './updatePlayer.js';
 import resetTeam from './reset.js';
 import handleImageUpdate from './crest.js';
 import * as common from './commonEdit.js';
