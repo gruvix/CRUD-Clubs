@@ -1,3 +1,18 @@
+import Player from '../../models/player.js';
+
+function generateSquadPlayer(tableRow){
+  const inputs = $(tableRow).children().children('input');
+  const playerIndex = $(tableRow).attr('data-index');
+  const values = {};
+  inputs.each((index, input) => {
+    const parameter = $(input).attr('data-parameter');
+    const value = $(input).val();
+    values[parameter] = value;
+  });
+  const player = new Player(values);
+  const squad = { [playerIndex]: player };
+  return squad;
+}
 /**
    * Updates the player of the team given the row of the values
    * @param {HTMLElement} - The row containing the player
