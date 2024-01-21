@@ -12,25 +12,25 @@
             </td>
         </tr>
         {{#each players}}
-           <tr class="table-dark table-bordered">
+           <tr class="table-dark table-bordered" data-index="{{@index}}">
                 <td>
-                    <span>{{this.name}}</span>
-                    <input type="text" class="form-control" value="" style="display: none;">
+                    <span >{{this.name}}</span>
+                    <input type="text" class="form-control" value="" style="display: none;" data-parameter="name">
                 </td>
             {{#if this.position}}
                 <td>
                     <span>{{this.position}}</span>
-                    <input type="text" class="form-control" value="" style="display: none;">
+                    <input type="text" class="form-control" value="" style="display: none;" data-parameter="position">
                 </td>
             {{else}}
                 <td>
                     <span>{{this.role}}</span>
-                    <input type="text" class="form-control" value="" style="display: none;">
+                    <input type="text" class="form-control" value="" style="display: none;" data-parameter="role">
                 </td>
             {{/if}}
                 <td>
                     <span>{{this.nationality}}</span>
-                    <input type="text" class="form-control" value="" style="display: none;">
+                    <input type="text" class="form-control" value="" style="display: none;" data-parameter="nationality">
                 </td>
                 <td class="buttons-column" style="display: flex;">
                     <button class="btn btn-outline-warning edit" style="margin-right: 10px;">
