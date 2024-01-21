@@ -59,13 +59,14 @@ function handleApplyAction(tableRow) {
 }
 $('#tables').on('click', (event) => {
   if (event.target.classList.contains('apply')) {
-    const tableRow = event.target.parentElement.parentElement;
-    handleApplyAction(tableRow);
+    const playerRow = event.target.parentElement.parentElement;
+    handleApplyAction(playerRow);
+  }
   }
 });
 $('#tables').on('keydown', (event) => {
   if (event.key === 'Enter') {
-    const tableRow = event.target.parentElement.parentElement;
-    handleApplyAction(tableRow);
+    const playerRow = event.target.parentElement.parentElement;
+    handleApplyAction(playerRow);
   }
 });
