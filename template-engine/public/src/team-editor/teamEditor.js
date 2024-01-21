@@ -62,6 +62,17 @@ $('#tables').on('click', (event) => {
     const playerRow = event.target.parentElement.parentElement;
     handleApplyAction(playerRow);
   }
+  if (event.target.classList.contains('remove')) {
+    const playerRow = event.target.parentElement.parentElement;
+    const playerName = $(playerRow).children().children('span').first()
+      .text();
+    const confirmationText = `You are about to remove ${playerName}`;
+    setupConfirmationModal(confirmationText, () => {
+      const callback = () => {
+        // callback to remove player from table
+      };
+      console.log(`${playerName}was removed`);
+    });
   }
 });
 $('#tables').on('keydown', (event) => {
