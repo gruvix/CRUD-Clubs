@@ -58,11 +58,12 @@ function handleApplyAction(tableRow) {
   common.submitChanges(tableRow, callback);
 }
 $('#tables').on('click', (event) => {
-  if (event.target.classList.contains('apply')) {
+  const buttonClassList = event.target.classList;
+  if (buttonClassList.contains('apply')) {
     const tableRow = event.target.parentElement.parentElement;
     handleApplyAction(tableRow);
   }
-  if (event.target.classList.contains('remove')) {
+  if (buttonClassList.contains('remove')) {
     const playerRow = event.target.parentElement.parentElement;
     const playerName = $(playerRow).children().children('span').first()
       .text();
