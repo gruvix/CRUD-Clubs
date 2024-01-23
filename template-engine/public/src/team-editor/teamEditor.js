@@ -85,12 +85,13 @@ $('#tables').on('keydown', (event) => {
       const playerRow = event.target.parentElement.parentElement;
       handleApplyAction(playerRow);
     } else {
-      submitNewPlayer();
+      submitNewPlayer($('#add-player-row'));
     }
   }
 });
 $('#confirm-player-button').on('click', () => {
-  submitNewPlayer();
+  submitNewPlayer($('#add-player-row'));
+});
 });
 $('#add-player-button').on('click', (event) => {
   const tableRow = event.target.parentElement.parentElement;
