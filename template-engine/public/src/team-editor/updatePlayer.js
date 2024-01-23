@@ -17,7 +17,7 @@ function generateSquadPlayer(tableRow){
    * Updates the player of the team given the row of the values
    * @param {HTMLElement} - The row containing the player
    */
-export default async function updatePlayer(tableRow) {
+export async function updatePlayer(tableRow) {
   console.log('updating player');
   const squadPlayer = generateSquadPlayer(tableRow);
   const updatedData = { squad: squadPlayer };
@@ -47,4 +47,7 @@ function sendNewPlayersToServer(players) {
     },
     body: requestBody,
   });
+}
+export function submitNewPlayer() {
+  sendNewPlayersToServer(generateSquadPlayer($('#add-player-row')));
 }
