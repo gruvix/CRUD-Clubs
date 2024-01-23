@@ -45,7 +45,11 @@ export function disableEditMode() {
   $('.remove').show();
   $('span').show();
   $('.apply').hide();
+  $('.cancel').hide();
   $('input').hide();
+  $('#add-player-button').show();
+  $('#confirm-player-button').hide();
+  $('#cancel-player-button').hide();
 }
 function isInputEqualToSpan(tableRow) {
   let returnValue = true;
