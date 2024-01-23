@@ -156,6 +156,18 @@ function deleteTeam(username, teamId) {
   deleteFile(teamPath);
   deleteTeamFromTeamlist(username, teamId);
 }
+
+function addPlayersToTeam(username, teamId, players) {
+  try {
+    const team = getTeam(username, teamId);
+    players.forEach((player) => {
+      team.squad.push(player);
+    });
+    updateTeam(team, username, teamId);
+    return true;
+  } catch (error) {
+    return error;
+  }
 }
 module.exports = {
   copyTeam,
