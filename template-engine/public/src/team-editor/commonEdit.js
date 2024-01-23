@@ -19,14 +19,20 @@ export function prepareEditFields(tableRow) {
   }
 }
 export function enableEditMode(tableRow) {
+  $('#add-player-button').hide();
   $('.edit').hide();
   $('.remove').hide();
   $(tableRow).children().children('.apply').show();
+  $(tableRow).children().children('.cancel').show();
   $(tableRow).children().children('span').hide();
   $(tableRow).children().children('input').show()
     .first()
     .trigger('focus')
     .trigger('select');
+  if (tableRow.id === 'add-player-row') {
+    $('#confirm-player-button').show();
+    $('#cancel-player-button').show();
+  }
 }
 export function applyEditField(tableRow) {
   for (let cellIndex = 0; cellIndex < tableRow.children.length; cellIndex += 1) {
