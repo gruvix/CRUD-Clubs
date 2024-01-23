@@ -2,7 +2,7 @@
 
 import setupConfirmationModal from '../confirmationModal.js';
 import updateTeamParameter from './updateTeam.js';
-import updatePlayer from './updatePlayer.js';
+import { updatePlayer, submitNewPlayer } from './updatePlayer.js';
 import resetTeam from './reset.js';
 import handleImageUpdate from './crest.js';
 import * as common from './commonEdit.js';
@@ -77,7 +77,14 @@ $('#tables').on('click', (event) => {
 });
 $('#tables').on('keydown', (event) => {
   if (event.key === 'Enter') {
-    const playerRow = event.target.parentElement.parentElement;
-    handleApplyAction(playerRow);
+    if (event.target.parentElement.parentElement.id !== 'add-player-row') {
+      const playerRow = event.target.parentElement.parentElement;
+      handleApplyAction(playerRow);
+    } else {
+      submitNewPlayer();
+    }
   }
+});
+$('#confirm-player-button').on('click', () => {
+  submitNewPlayer();
 });
