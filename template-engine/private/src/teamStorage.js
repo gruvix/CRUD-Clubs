@@ -109,7 +109,7 @@ function deleteTeamFromTeamlist(username, teamId) {
   writeFile(teamsPath, JSON.stringify(teams));
 }
 function updateTeam(newData, username, teamId) {
-  let updatedData = newData;
+  const updatedData = newData;
   if (isTeamDefault(username, teamId)) {
     const defaultTeam = 'default';
     copyTeam(defaultTeam, username, teamId);
@@ -118,10 +118,8 @@ function updateTeam(newData, username, teamId) {
   }
   const areaParameter = 'area';
   if (Object.keys(updatedData).includes(areaParameter)) {
-    updatedData = {
-      area: {
-        name: updatedData.area,
-      },
+    updatedData.area = {
+      name: updatedData.area,
     };
   }
   const now = new Date();
