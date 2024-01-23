@@ -59,8 +59,8 @@ function handleApplyAction(tableRow) {
 }
 $('#tables').on('click', (event) => {
   if (event.target.classList.contains('apply')) {
-    const playerRow = event.target.parentElement.parentElement;
-    handleApplyAction(playerRow);
+    const tableRow = event.target.parentElement.parentElement;
+    handleApplyAction(tableRow);
   }
   if (event.target.classList.contains('remove')) {
     const playerRow = event.target.parentElement.parentElement;
