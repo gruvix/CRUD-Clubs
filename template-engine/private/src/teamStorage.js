@@ -151,10 +151,11 @@ function validateTeam(username, teamId) {
   return teamsData[teamId];
 }
 
-function deleteTeam(userPath, teamId) {
-  const teamPath = getUserTeamJSONPath(userPath, teamId);
+function deleteTeam(username, teamId) {
+  const teamPath = getUserTeamJSONPath(username, teamId);
   deleteFile(teamPath);
-  deleteTeamFromTeamlist(userPath, teamId);
+  deleteTeamFromTeamlist(username, teamId);
+}
 }
 module.exports = {
   copyTeam,
@@ -166,4 +167,5 @@ module.exports = {
   updateTeam,
   deleteTeam,
   validateTeam,
+  addPlayersToTeam,
 };
