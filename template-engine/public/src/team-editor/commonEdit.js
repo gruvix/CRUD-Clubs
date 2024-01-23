@@ -1,3 +1,16 @@
+export function areInputsValid(tableRow) {
+  const validRegex = /^[a-zA-Z\s]*$/;
+  let returnValue = true;
+  $(tableRow).children().children('input').each((index, input) => {
+    if ($(input).val() === '' || !validRegex.test($(input).val())) {
+      $(input).addClass('invalid-input');
+      returnValue = false;
+    } else {
+      $(input).removeClass('invalid-input');
+    }
+  });
+  return returnValue;
+}
 export function prepareEditFields(tableRow) {
   for (let cellIndex = 0; cellIndex < tableRow.children.length; cellIndex += 1) {
     const cell = tableRow.children[cellIndex];
