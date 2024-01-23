@@ -63,6 +63,9 @@ $('#tables').on('click', (event) => {
     const tableRow = event.target.parentElement.parentElement;
     handleApplyAction(tableRow);
   }
+  if (buttonClassList.contains('cancel')) {
+    common.disableEditMode();
+  }
   if (buttonClassList.contains('remove')) {
     const playerRow = event.target.parentElement.parentElement;
     const playerName = $(playerRow).children().children('span').first()
