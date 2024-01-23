@@ -88,3 +88,8 @@ $('#tables').on('keydown', (event) => {
 $('#confirm-player-button').on('click', () => {
   submitNewPlayer();
 });
+$('#add-player-button').on('click', (event) => {
+  const tableRow = event.target.parentElement.parentElement;
+  common.prepareEditFields(tableRow);
+  common.enableEditMode(tableRow);
+});
