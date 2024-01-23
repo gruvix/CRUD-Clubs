@@ -37,3 +37,14 @@ export default async function updatePlayer(tableRow) {
     alert('Error: could not update player');
   }
 }
+function sendNewPlayersToServer(players) {
+  const teamId = $('#team-id').val();
+  const requestBody = JSON.stringify({ players });
+  fetch(`/user/team/${teamId}/player`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: requestBody,
+  });
+}
