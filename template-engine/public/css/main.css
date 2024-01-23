@@ -113,3 +113,7 @@ td:first-child, th:first-child {
 .btn-outline-dark:hover {
   cursor: url('/img/cursor-yellow.cur'), auto;
 }
+
+.invalid-input {
+  border: 1px solid red;
+}
