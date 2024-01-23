@@ -12,11 +12,11 @@ export function areInputsValid(tableRow) {
   return returnValue;
 }
 export function prepareEditFields(tableRow) {
-  for (let cellIndex = 0; cellIndex < tableRow.children.length; cellIndex += 1) {
-    const cell = tableRow.children[cellIndex];
+  $(tableRow).children().each((index, cell) => {
+    $(cell).children('input').removeClass('invalid-input');
     const cellText = $(cell).children('span').text();
     $(cell).children('input').val(cellText);
-  }
+  });
 }
 export function enableEditMode(tableRow) {
   $('#add-player-button').hide();
@@ -35,11 +35,10 @@ export function enableEditMode(tableRow) {
   }
 }
 export function applyEditField(tableRow) {
-  for (let cellIndex = 0; cellIndex < tableRow.children.length; cellIndex += 1) {
-    const cell = tableRow.children[cellIndex];
+  $(tableRow).children().each((index, cell) => {
     const newText = $(cell).children('input').val();
     $(cell).children('span').text(newText);
-  }
+  });
 }
 export function disableEditMode() {
   $('.edit').show();
@@ -49,13 +48,13 @@ export function disableEditMode() {
   $('input').hide();
 }
 function isInputEqualToSpan(tableRow) {
-  for (let cellIndex = 0; cellIndex < tableRow.children.length; cellIndex += 1) {
-    const cell = tableRow.children[cellIndex];
+  let returnValue = true;
+  $(tableRow).children().each((index, cell) => {
     const spanText = $(cell).children('span').text();
     const inputText = $(cell).children('input').val();
-    if (inputText !== undefined && inputText !== spanText) return false;
-  }
-  return true;
+    if (inputText !== undefined && inputText !== spanText) returnValue = false;
+  });
+  return returnValue;
 }
 export function submitChanges(tableRow, updateCallback) {
   disableEditMode();
