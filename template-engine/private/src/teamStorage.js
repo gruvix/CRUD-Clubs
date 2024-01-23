@@ -160,8 +160,8 @@ function deleteTeam(username, teamId) {
 function addPlayersToTeam(username, teamId, players) {
   try {
     const team = getTeam(username, teamId);
-    players.forEach((player) => {
-      team.squad.push(player);
+    Object.keys(players).forEach((player) => {
+      team.squad.push(players[player]);
     });
     updateTeam(team, username, teamId);
     return true;
