@@ -102,9 +102,13 @@ app.route('/user/teams/:teamId')
     }
 
     const players = [];
-    team.squad.forEach((player) => {
-      players.push(new Player(player));
-    });
+    if (Array.isArray(team.squad)) {
+      team.squad.forEach((player) => {
+        players.push(new Player(player));
+      });
+    } else {
+      players.push(new Player(team.squad));
+    }
 
     const domain = getDomain(req);
     res.render('teamEditor', {
