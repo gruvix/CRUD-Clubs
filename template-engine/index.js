@@ -25,6 +25,7 @@ const {
   updateTeam,
   validateTeam,
   deleteTeam,
+  addPlayersToTeam,
 } = require('./private/src/teamStorage.js');
 const { storage, imageFilter } = require('./private/src/multerConfig.js');
 const { ensureLoggedIn, validateUsername } = require('./private/src/auth.js');
@@ -147,6 +148,18 @@ app.route('/user/teams/:teamId')
       res.status(400).send('Error deleting team');
     }
   });
+
+app.put('/user/team/:teamId/player', (req, res) => {
+  const { username } = req.session;
+  const { teamId } = req.params;
+  const { player } = req.body;
+  console.log(`User ${username} added player ${player} to team ${teamId}`);
+  try {
+    addPlayersToTeam(username, teamId, player);
+  } catch {
+    res.status(400).send('Error adding player to team');
+  }
+});
 
 app.put('/user/reset/all', (req, res) => {
   const { username } = req.session;
