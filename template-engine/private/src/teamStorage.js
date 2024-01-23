@@ -159,7 +159,9 @@ function deleteTeam(username, teamId) {
 
 function addPlayersToTeam(username, teamId, players) {
   try {
-    const team = getTeam(username, teamId);
+    const originalTeam = getTeam(username, teamId);
+    const team = {};
+    team.squad = originalTeam.squad;
     Object.keys(players).forEach((player) => {
       team.squad.push(players[player]);
     });
