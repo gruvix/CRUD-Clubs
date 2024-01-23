@@ -92,6 +92,8 @@ $('#tables').on('keydown', (event) => {
 $('#confirm-player-button').on('click', () => {
   submitNewPlayer($('#add-player-row'));
 });
+$('#cancel-player-button').on('click', () => {
+  common.disableEditMode();
 });
 $('#add-player-button').on('click', (event) => {
   const tableRow = event.target.parentElement.parentElement;
