@@ -152,10 +152,12 @@ app.route('/user/teams/:teamId')
 app.put('/user/team/:teamId/player', (req, res) => {
   const { username } = req.session;
   const { teamId } = req.params;
-  const { player } = req.body;
-  console.log(`User ${username} added player ${player} to team ${teamId}`);
+  const { players } = req.body;
+  Object.keys(players).forEach((player) => {
+    console.log(`User ${username} added player ${players[player].name} to team ${teamId}`);
+  });
   try {
-    addPlayersToTeam(username, teamId, player);
+    addPlayersToTeam(username, teamId, players);
   } catch {
     res.status(400).send('Error adding player to team');
   }
