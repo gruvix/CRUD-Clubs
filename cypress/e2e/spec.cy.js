@@ -145,7 +145,7 @@ describe('test the team editor page with the first team', () => {
       cy.wrap($input).clear().type(randomStrings[index]);
     });
     cy.get('#confirm-player-button').click().wait('@addPlayer');
-    cy.scrollTo('bottom').get('#players-table').parent().scrollTo('bottom');
+    cy.get('#players-table').parent().scrollTo('bottom');
     cy.get('#players-table tr').last().children().children('span')
       .each(($spanField, index) => {
         cy.wrap($spanField).should('contain', randomStrings[index]);
