@@ -41,7 +41,7 @@ export async function updatePlayer(tableRow) {
 async function sendNewPlayersToServer(players, callback) {
   const teamId = $('#team-id').val();
   const requestBody = JSON.stringify({ players });
-  const response = await fetch(`/user/team/${teamId}/player`, {
+  const response = await fetch(`/user/teams/${teamId}/player`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
