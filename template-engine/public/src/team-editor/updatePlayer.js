@@ -37,6 +37,9 @@ export async function updatePlayer(tableRow) {
     alert(`Error ${response.status}: could not update player`);
   }
 }
+function removePlayerRow(playerRow) {
+  $(playerRow).remove();
+}
 async function sendNewPlayersToServer(players, callback) {
   const teamId = $('#team-id').val();
   const requestBody = JSON.stringify({ players });
