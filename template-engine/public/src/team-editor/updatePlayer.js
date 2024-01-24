@@ -58,9 +58,26 @@ async function sendNewPlayersToServer(players, callback) {
     callback();
   }
 }
+/**
+   * adds a new player to the player table, given the row of the values
+   * @param {HTMLElement} - The add player row, containing new player's values
+   */
+function addNewPlayerRow(tableRow) {
+  console.log('adding new player row');
+  const $table = $('#players-table');
+  const $template = $('#new-player-template');
+  const $newPlayerRow = $template.contents().clone(true);
+
+  $($newPlayerRow).find('span').each((index, span) => {
+    $(span).text($(tableRow).find('input').eq(index).val());
+  });
+  const newIndex = $($table).find('.edit').length;
+  console.log(newIndex);
+  $($newPlayerRow).attr('data-index', newIndex);
+  $table.children('thead').append($newPlayerRow);
 }
 export function submitNewPlayer(tableRow) {
   if (!areInputsValid(tableRow)) return;
   disableEditMode();
-  sendNewPlayersToServer(generateSquadPlayer(tableRow), () => { addNewPlayerToTable(tableRow); });
+  sendNewPlayersToServer(generateSquadPlayer(tableRow), () => { addNewPlayerRow(tableRow); });
 }
