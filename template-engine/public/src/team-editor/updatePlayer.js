@@ -62,5 +62,5 @@ async function sendNewPlayersToServer(players, callback) {
 export function submitNewPlayer(tableRow) {
   if (!areInputsValid(tableRow)) return;
   disableEditMode();
-  sendNewPlayersToServer(generateSquadPlayer(tableRow));
+  sendNewPlayersToServer(generateSquadPlayer(tableRow), () => { addNewPlayerToTable(tableRow); });
 }
