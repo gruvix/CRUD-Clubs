@@ -54,7 +54,6 @@ async function sendNewPlayersToServer(players, callback) {
   if (!response.ok) {
     alert(`Error ${response.status}: could not add player`);
   } else {
-    console.log('added player, server respondend OK cool');
     callback();
   }
 }
