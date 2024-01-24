@@ -38,16 +38,26 @@ export async function updatePlayer(tableRow) {
     alert(`Error ${response.status}: could not update player`);
   }
 }
-function sendNewPlayersToServer(players) {
+async function sendNewPlayersToServer(players, callback) {
   const teamId = $('#team-id').val();
   const requestBody = JSON.stringify({ players });
-  fetch(`/user/team/${teamId}/player`, {
+  const response = await fetch(`/user/team/${teamId}/player`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
     body: requestBody,
   });
+  if (response.redirected) {
+    window.location.href = response.url;
+  }
+  if (!response.ok) {
+    alert(`Error ${response.status}: could not add player`);
+  } else {
+    console.log('added player, server respondend OK cool');
+    callback();
+  }
+}
 }
 export function submitNewPlayer(tableRow) {
   if (!areInputsValid(tableRow)) return;
