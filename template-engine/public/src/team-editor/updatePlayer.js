@@ -40,6 +40,26 @@ export async function updatePlayer(tableRow) {
 function removePlayerRow(playerRow) {
   $(playerRow).remove();
 }
+export async function removePlayer(tableRow) {
+  const teamId = $('#team-id').val();
+  const playersIndex = [`${$(tableRow).attr('data-index')}`];
+  const requestBody = JSON.stringify({ playersIndex });
+  const response = await fetch(`/user/teams/${teamId}/player`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: requestBody,
+  });
+  if (response.redirected) {
+    window.location.href = response.url;
+  }
+  if (!response.ok) {
+    alert(`Error ${response.status}: could not remove player`);
+  } else {
+    removePlayerRow(tableRow);
+  }
+}
 async function sendNewPlayersToServer(players, callback) {
   const teamId = $('#team-id').val();
   const requestBody = JSON.stringify({ players });
