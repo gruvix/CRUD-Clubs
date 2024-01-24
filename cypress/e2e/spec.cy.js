@@ -3,8 +3,16 @@
 const TEST_USER = 'cypress';
 const BASE_URL = 'http://localhost:8000';
 const MODAL_APPEAR_DELAY = 500;
-function generateRandomString() {
-  return Math.random().toString(36).substring(2);
+function generateRandomString(length = 5) {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+  let result = '';
+
+  for (let i = 0; i < length; i += 1) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    result += characters.charAt(randomIndex);
+  }
+
+  return result;
 }
 
 describe('test login', () => {
