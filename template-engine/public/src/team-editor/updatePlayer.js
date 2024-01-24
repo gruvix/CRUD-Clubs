@@ -19,7 +19,6 @@ function generateSquadPlayer(tableRow) {
    * @param {HTMLElement} - The row containing the player
    */
 export async function updatePlayer(tableRow) {
-  console.log('updating player');
   const squadPlayer = generateSquadPlayer(tableRow);
   const updatedData = { squad: squadPlayer };
   const requestBody = JSON.stringify(updatedData);
