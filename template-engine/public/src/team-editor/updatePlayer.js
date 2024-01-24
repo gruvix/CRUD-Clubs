@@ -35,7 +35,7 @@ export async function updatePlayer(tableRow) {
     window.location.href = response.url;
   }
   if (!response.ok) {
-    alert('Error: could not update player');
+    alert(`Error ${response.status}: could not update player`);
   }
 }
 function sendNewPlayersToServer(players) {
