@@ -1,67 +1,68 @@
 <div style="height: 410px; overflow: auto;">
-<table class="table" id="players-table">
-    <thead>
-        <tr class="table-dark" id="add-player-row" data-index="0">
-            <td class="text-warning">Name
-                <input type="text" class="form-control" value="" style="display: none;" data-parameter="name">
-            </td>
-            <td class="text-warning">Position
-                <input type="text" class="form-control" value="" style="display: none;" data-parameter="position">
-            </td>
-            <td class="text-warning">Nationality
-                <input type="text" class="form-control" value="" style="display: none;" data-parameter="nationality">
-            </td>
-            <td style="display: flex; min-height: 80px; padding-top: 20px;">
-                <button class="btn btn-shadow btn-outline-warning"  id="add-player-button" style="max-height: 40px; min-width: 120px;">
-                    new player
-                </button>
-                <button class="btn btn-shadow btn-outline-success"  id="confirm-player-button" style="max-height: 40px; min-width: 50px; margin-right: 10px; display: none;">
-                    Add
-                </button>
-                <button class="btn btn-shadow btn-outline-secondary"  id="cancel-player-button" style="max-height: 40px; min-width: 75px; display: none;">
-                    Cancel
-                </button>
-            </td>
-        </tr>
-        {{#each players}}
-           <tr class="table-dark table-bordered" data-index="{{@index}}">
-                <td>
-                    <span >{{this.name}}</span>
+    <table class="table" id="players-table">
+        <thead>
+            <tr class="table-dark" id="add-player-row" data-index="-1">
+                <td class="text-warning">Name
                     <input type="text" class="form-control" value="" style="display: none;" data-parameter="name">
                 </td>
-            {{#if this.position}}
-                <td>
-                    <span>{{this.position}}</span>
+                <td class="text-warning">Position
                     <input type="text" class="form-control" value="" style="display: none;" data-parameter="position">
                 </td>
-            {{else}}
-                <td>
-                    <span>{{this.role}}</span>
-                    <input type="text" class="form-control" value="" style="display: none;" data-parameter="role">
-                </td>
-            {{/if}}
-                <td>
-                    <span>{{this.nationality}}</span>
+                <td class="text-warning">Nationality
                     <input type="text" class="form-control" value="" style="display: none;" data-parameter="nationality">
                 </td>
-                <td class="buttons-column" style="display: flex; min-height: 42px;">
-                    <button class="btn btn-outline-warning edit" style="margin-right: 10px;">
-                        edit
+                <td style="display: flex; min-height: 80px; padding-top: 20px;">
+                    <button class="btn btn-shadow btn-outline-warning"  id="add-player-button" style="max-height: 40px; min-width: 120px;">
+                        new player
                     </button>
-                    <button class="btn btn-outline-danger remove" data-bs-toggle="modal" data-bs-target="#confirmationModal"> 
-                        remove
+                    <button class="btn btn-shadow btn-outline-success"  id="confirm-player-button" style="max-height: 40px; min-width: 50px; margin-right: 10px; display: none;">
+                        Add
                     </button>
-                    <button class="btn btn-outline-success apply" style="display: none; margin-right: 10px;">
-                        apply
-                    </button>
-                    <button class="btn btn-outline-secondary cancel" style="display: none;">
-                        cancel
+                    <button class="btn btn-shadow btn-outline-secondary"  id="cancel-player-button" style="max-height: 40px; min-width: 75px; display: none;">
+                        Cancel
                     </button>
                 </td>
             </tr>
-        {{/each}}
-    </thead>
-</table>
+            {{#each players}}
+            <tr class="table-dark table-bordered" data-index="{{@index}}">
+                    <td>
+                        <span >{{this.name}}</span>
+                        <input type="text" class="form-control" value="" style="display: none;" data-parameter="name">
+                    </td>
+                {{#if this.position}}
+                    <td>
+                        <span>{{this.position}}</span>
+                        <input type="text" class="form-control" value="" style="display: none;" data-parameter="position">
+                    </td>
+                {{else}}
+                    <td>
+                        <span>{{this.role}}</span>
+                        <input type="text" class="form-control" value="" style="display: none;" data-parameter="role">
+                    </td>
+                {{/if}}
+                    <td>
+                        <span>{{this.nationality}}</span>
+                        <input type="text" class="form-control" value="" style="display: none;" data-parameter="nationality">
+                    </td>
+                    <td class="buttons-column" style="display: flex; min-height: 42px;">
+                        <button class="btn btn-outline-warning edit" style="margin-right: 10px;">
+                            edit
+                        </button>
+                        <button class="btn btn-outline-danger remove" data-bs-toggle="modal" data-bs-target="#confirmationModal"> 
+                            remove
+                        </button>
+                        <button class="btn btn-outline-success apply" style="display: none; margin-right: 10px;">
+                            apply
+                        </button>
+                        <button class="btn btn-outline-secondary cancel" style="display: none;">
+                            cancel
+                        </button>
+                    </td>
+                </tr>
+            {{/each}}
+        </thead>
+    </table>
+
     <template id="new-player-template">
         <tr class="table-dark table-bordered" data-index="-1" >
             <td>
