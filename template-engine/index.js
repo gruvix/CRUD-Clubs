@@ -149,7 +149,7 @@ app.route('/user/teams/:teamId')
     }
   });
 
-app.put('/user/team/:teamId/player', (req, res) => {
+app.put('/user/teams/:teamId/player', (req, res) => {
   const { username } = req.session;
   const { teamId } = req.params;
   const { players } = req.body;
