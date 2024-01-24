@@ -158,6 +158,7 @@ app.put('/user/teams/:teamId/player', (req, res) => {
   });
   try {
     addPlayersToTeam(username, teamId, players);
+    res.status(204).send();
   } catch {
     res.status(400).send('Error adding player to team');
   }
