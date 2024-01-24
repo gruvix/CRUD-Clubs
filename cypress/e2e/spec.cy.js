@@ -135,4 +135,20 @@ describe('test the team editor page with the first team', () => {
         });
     });
   });
+  it('adds a player to the team and shows it', () => {
+    cy.intercept('PUT', `${FIRST_TEAM_PATH}/player`).as('addPlayer');
+    const randomStrings = [];
+    cy.get('#add-player-button').click();
+    cy.get('#add-player-row').find('input').each(($input, index) => {
+      const randomString = generateRandomString();
+      randomStrings.push(randomString);
+      cy.wrap($input).clear().type(randomStrings[index]);
+    });
+    cy.get('#confirm-player-button').click().wait('@addPlayer');
+    cy.scrollTo('bottom').get('#players-table').parent().scrollTo('bottom');
+    cy.get('#players-table tr').last().children().children('span')
+      .each(($spanField, index) => {
+        cy.wrap($spanField).should('contain', randomStrings[index]);
+      });
+  });
 });
