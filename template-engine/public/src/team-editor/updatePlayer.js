@@ -1,7 +1,7 @@
 import Player from '../../models/player.js';
 import { disableEditMode, areInputsValid } from './commonEdit.js';
 
-function generateSquadPlayer(tableRow){
+function generateSquadPlayer(tableRow) {
   const inputs = $(tableRow).children().children('input');
   const playerIndex = $(tableRow).attr('data-index');
   const values = {};
