@@ -149,21 +149,22 @@ app.route('/user/teams/:teamId')
       res.status(400).send('Error deleting team');
     }
   });
-
-app.put('/user/teams/:teamId/player', (req, res) => {
-  const { username } = req.session;
-  const { teamId } = req.params;
-  const { players } = req.body;
-  Object.keys(players).forEach((player) => {
-    console.log(`User ${username} added player ${players[player].name} to team ${teamId}`);
+app.route('/user/teams/:teamId/player')
+  .put((req, res) => {
+    const { username } = req.session;
+    const { teamId } = req.params;
+    const { players } = req.body;
+    Object.keys(players).forEach((player) => {
+      console.log(`User ${username} added player ${players[player].name} to team ${teamId}`);
+    });
+    try {
+      addPlayersToTeam(username, teamId, players);
+      res.status(204).send();
+    } catch {
+      res.status(400).send('Error adding player to team');
+    }
+  })
   });
-  try {
-    addPlayersToTeam(username, teamId, players);
-    res.status(204).send();
-  } catch {
-    res.status(400).send('Error adding player to team');
-  }
-});
 
 app.put('/user/reset/all', (req, res) => {
   const { username } = req.session;
