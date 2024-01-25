@@ -171,9 +171,9 @@ function removePlayer(username, teamId, playerIndex) {
   try {
     const team = getTeam(username, teamId);
     team.squad.splice(playerIndex, 1);
-    updateTeam(team, username, teamId);
+    saveTeam(team, username);
   } catch (error) {
-    return error;
+    console.log(error);
   }
   return true;
 }
