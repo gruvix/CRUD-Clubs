@@ -17,7 +17,7 @@ const {
   validateFile,
 } = require('./private/src/utils.js');
 const {
-  copyTeam,
+  cloneTeamFromDefault,
   isTeamDefault,
   getTeam,
   getTeamsList,
@@ -185,7 +185,7 @@ app.put('/user/reset/:teamId', (req, res) => {
   try {
     deleteTeam(username, teamId);
     const defaultUsername = 'default';
-    copyTeam(defaultUsername, username, teamId);
+    cloneTeamFromDefault(username, teamId);
     copyTeamListTeam(defaultUsername, username, teamId);
 
     res.status(204).send();
