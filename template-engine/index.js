@@ -95,7 +95,8 @@ app.route('/user/teams/:teamId')
       return;
     }
     let team;
-    if (isTeamDefault(username, teamId)) {
+    const teamDefaultBool = isTeamDefault(username, teamId);
+    if (teamDefaultBool) {
       console.log(`Team ${teamId} from user '${username}' is default`);
       const defaultUsername = 'default';
       team = getTeam(defaultUsername, teamId);
@@ -117,7 +118,7 @@ app.route('/user/teams/:teamId')
       layout: 'main',
       data: {
         username,
-        team: new Team(team),
+        team: new Team(team, teamDefaultBool),
         crest: team.crestUrl,
         id: team.id,
         players,
