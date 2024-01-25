@@ -135,6 +135,7 @@ app.route('/user/teams/:teamId')
       updateTeam(updatedData, username, teamId);
       res.status(204).send();
     } catch (error) {
+      console.log(error);
       res.status(400).send('Error updating team parameter');
     }
   })
