@@ -151,7 +151,22 @@ describe('test the team editor page with the first team', () => {
         cy.wrap($spanField).should('contain', randomStrings[index]);
       });
   });
-  it.only('removes all players', () => {
+  it('removes a random player', () => {
+    cy.intercept('DELETE', `${FIRST_TEAM_PATH}/player`).as('removePlayer');
+    cy.get('#players-table .remove').then(($removeButtons) => {
+      const playersAmount = $removeButtons.length;
+      const randomIndex = Math.floor(Math.random() * playersAmount);
+      cy.get('#players-table tr').eq(randomIndex).find('span').first()
+        .then(($spanField) => {
+          const text = $spanField.text();
+          cy.get('#players-table .remove').eq(randomIndex).click().wait(MODAL_APPEAR_DELAY);
+          cy.get('#confirmation-modal-button').click().wait('@removePlayer');
+          cy.get('#players-table tr').eq(randomIndex).find('span').first()
+            .should('not.contain', text);
+        });
+    });
+  });
+  it('removes all players', () => {
     cy.intercept('DELETE', `${FIRST_TEAM_PATH}/player`).as('removePlayer');
     cy.get('#players-table .remove').then(($removeButtons) => {
       cy.wrap($removeButtons).each(($removeButton) => {
