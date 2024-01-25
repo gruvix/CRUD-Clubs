@@ -117,12 +117,6 @@ function updateTeam(newData, username, teamId) {
     const teamListParameter = 'isDefault';
     updateTeamlistParameter(username, teamId, teamListParameter, false);
   }
-  const areaParameter = 'area';
-  if (Object.keys(updatedData).includes(areaParameter)) {
-    updatedData.area = {
-      name: updatedData.area,
-    };
-  }
   const now = new Date();
   const lastUpdated = now.toISOString();
   updatedData.lastUpdated = lastUpdated;
