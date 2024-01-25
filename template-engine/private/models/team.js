@@ -1,7 +1,11 @@
 class Team {
-  constructor(data) {
+  constructor(data, isDefault = false) {
     this.name = data.name;
-    this.area = data.area.name;
+    if (isDefault) {
+      this.area = data.area.name;
+    } else {
+      this.area = data.area;
+    }
     this.address = data.address;
     this.phone = data.phone;
     this.website = data.website;
