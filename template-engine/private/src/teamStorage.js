@@ -13,6 +13,7 @@ const {
 function saveTeam(team, username) {
   try {
     const targetPath = getUserTeamJSONPath(username, team.id);
+    console.log(`Saving team ${team.id} to ${username} on ${targetPath}`);
     const content = JSON.stringify(team);
     writeFile(targetPath, content);
   } catch (writeError) {
