@@ -1,4 +1,5 @@
 const TeamListTeam = require('../models/teamListTeam.js');
+const SquadTeam = require('../models/squadTeam.js');
 const {
   getUserTeamJSONPath,
   getUserTeamsListJSONPath,
@@ -6,23 +7,9 @@ const {
 const {
   readFile,
   writeFile,
-  copyFile,
   deleteFile,
 } = require('./utils.js');
-/**
- * @param {string} sourceUser - username of copy source folder
- * @param {string} targetUser - username of copy target folder
- * @param {Number} teamId - id of the team to be copied
- */
-function copyTeam(sourceUser, targetUser, teamId) {
-  try {
-    const sourceTeamPath = getUserTeamJSONPath(sourceUser, teamId);
-    const targetTeamPath = getUserTeamJSONPath(targetUser, teamId);
-    copyFile(sourceTeamPath, targetTeamPath);
-  } catch (copyError) {
-    throw new Error(copyError);
-  }
-}
+
 function saveTeam(team, username) {
   try {
     const targetPath = getUserTeamJSONPath(username, team.id);
@@ -108,11 +95,25 @@ function deleteTeamFromTeamlist(username, teamId) {
   delete teams[teamId];
   writeFile(teamsPath, JSON.stringify(teams));
 }
+/**
+ * @param {string} sourceUser - username of copy source folder
+ * @param {string} targetUser - username of copy target folder
+ * @param {Number} teamId - id of the team to be copied
+ */
+function cloneTeamFromDefault(targetUser, teamId) {
+  try {
+    const DEFAULT_USER = 'default';
+    const team = getTeam(DEFAULT_USER, teamId);
+    const teamClone = new SquadTeam(team, true);
+    saveTeam(teamClone, targetUser);
+  } catch (copyError) {
+    throw new Error(copyError);
+  }
+}
 function updateTeam(newData, username, teamId) {
   const updatedData = newData;
   if (isTeamDefault(username, teamId)) {
-    const defaultTeam = 'default';
-    copyTeam(defaultTeam, username, teamId);
+    cloneTeamFromDefault(username, teamId);
     const teamListParameter = 'isDefault';
     updateTeamlistParameter(username, teamId, teamListParameter, false);
   }
@@ -172,7 +173,7 @@ function addPlayersToTeam(username, teamId, players) {
   }
 }
 module.exports = {
-  copyTeam,
+  cloneTeamFromDefault,
   isTeamDefault,
   getTeam,
   getTeamsList,
