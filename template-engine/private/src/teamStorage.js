@@ -167,6 +167,17 @@ function addPlayersToTeam(username, teamId, players) {
     return error;
   }
 }
+function removePlayer(username, teamId, playerIndex) {
+  try {
+    const team = getTeam(username, teamId);
+    team.squad.splice(playerIndex, 1);
+    updateTeam(team, username, teamId);
+  } catch (error) {
+    return error;
+  }
+  return true;
+}
+
 module.exports = {
   cloneTeamFromDefault,
   isTeamDefault,

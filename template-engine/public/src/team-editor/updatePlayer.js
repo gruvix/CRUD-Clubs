@@ -42,8 +42,8 @@ function removePlayerRow(playerRow) {
 }
 export async function removePlayer(tableRow) {
   const teamId = $('#team-id').val();
-  const playersIndex = [`${$(tableRow).attr('data-index')}`];
-  const requestBody = JSON.stringify({ playersIndex });
+  const playerIndex = $(tableRow).attr('data-index');
+  const requestBody = JSON.stringify({ playerIndex });
   const response = await fetch(`/user/teams/${teamId}/player`, {
     method: 'DELETE',
     headers: {
