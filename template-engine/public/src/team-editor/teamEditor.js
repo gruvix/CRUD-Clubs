@@ -2,7 +2,7 @@
 
 import setupConfirmationModal from '../confirmationModal.js';
 import updateTeamParameter from './updateTeam.js';
-import { updatePlayer, submitNewPlayer } from './updatePlayer.js';
+import { updatePlayer, submitNewPlayer, removePlayer } from './updatePlayer.js';
 import resetTeam from './reset.js';
 import handleImageUpdate from './crest.js';
 import * as common from './commonEdit.js';
@@ -72,10 +72,7 @@ $('#tables').on('click', (event) => {
       .text();
     const confirmationText = `You are about to remove ${playerName}`;
     setupConfirmationModal(confirmationText, () => {
-      const callback = () => {
-        // callback to remove player from table
-      };
-      console.log(`${playerName}was removed`);
+      removePlayer(playerRow);
     });
   }
 });
