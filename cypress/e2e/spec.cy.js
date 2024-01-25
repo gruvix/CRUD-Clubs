@@ -151,4 +151,13 @@ describe('test the team editor page with the first team', () => {
         cy.wrap($spanField).should('contain', randomStrings[index]);
       });
   });
+  it.only('removes all players', () => {
+    cy.intercept('DELETE', `${FIRST_TEAM_PATH}/player`).as('removePlayer');
+    cy.get('#players-table .remove').then(($removeButtons) => {
+      cy.wrap($removeButtons).each(($removeButton) => {
+        cy.wrap($removeButton).click().wait(MODAL_APPEAR_DELAY);
+        cy.get('#confirmation-modal-button').click().wait('@removePlayer');
+      });
+    });
+  });
 });
