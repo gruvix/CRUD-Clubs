@@ -26,6 +26,7 @@ const {
   validateTeam,
   deleteTeam,
   addPlayersToTeam,
+  removePlayer,
 } = require('./private/src/teamStorage.js');
 const { storage, imageFilter } = require('./private/src/multerConfig.js');
 const { ensureLoggedIn, validateUsername } = require('./private/src/auth.js');
@@ -164,6 +165,17 @@ app.route('/user/teams/:teamId/player')
       res.status(400).send('Error adding player to team');
     }
   })
+  .delete((req, res) => {
+    const { username } = req.session;
+    const { teamId } = req.params;
+    const { playerIndex } = req.body;
+    console.log(`User ${username} is removing player ${playerIndex} from team ${teamId}`);
+    try {
+      removePlayer(username, teamId, playerIndex);
+      res.status(204).send();
+    } catch {
+      res.status(400).send('Error removing player from team');
+    }
   });
 
 app.put('/user/reset/all', (req, res) => {
