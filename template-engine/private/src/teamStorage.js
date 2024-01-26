@@ -228,7 +228,7 @@ module.exports = {
   updateTeam,
   deleteTeam,
   validateTeam,
-  addPlayers,
+  addPlayer,
   updatePlayer,
   removePlayer,
 };
