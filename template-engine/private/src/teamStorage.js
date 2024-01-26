@@ -159,17 +159,33 @@ function deleteTeam(username, teamId) {
   deleteFile(teamPath);
   deleteTeamFromTeamlist(username, teamId);
 }
+function findNextFreeId(players) {
+  const sortedPlayers = [...players].sort((a, b) => a.id - b.id);
 
-function addPlayers(username, teamId, players) {
+  let nextFreeId = 0;
+
+  for (let index = 0; index < sortedPlayers.length; index += 1) {
+    if (sortedPlayers[index].id > nextFreeId) {
+      return nextFreeId;
+    }
+    nextFreeId = sortedPlayers[index].id + 1;
+    console.log(`Next free ID: ${nextFreeId}`);
+  }
+  return nextFreeId;
+}
+
+function addPlayer(username, teamId, playerData) {
   try {
+    const player = new Player(playerData);
     defaultTeamCheck(username, teamId);
     const originalTeam = getTeam(username, teamId);
-    const team = {};
-    team.squad = originalTeam.squad;
-    Object.keys(players).forEach((player) => {
-      team.squad.push(players[player]);
-    });
-    updateTeam(team, username, teamId);
+    const team = originalTeam;
+    const id = findNextFreeId(team.squad);
+    player.id = id;
+    team.squad.unshift(player);
+    console.log('Adding players to team', teamId);
+
+    saveTeam(team, username);
     return true;
   } catch (error) {
     return error;
