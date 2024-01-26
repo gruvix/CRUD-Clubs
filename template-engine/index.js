@@ -111,6 +111,18 @@ app.route('/user/teams/:teamId/player')
       res.status(400).send('Error updating player in team');
     }
   })
+  .delete((req, res) => {
+    const { username } = req.session;
+    const { teamId } = req.params;
+    const { playerId } = req.body;
+    console.log(`User ${username} is removing player ${playerId} from team ${teamId}`);
+    try {
+      removePlayer(username, teamId, playerId);
+      res.status(204).send();
+    } catch {
+      res.status(400).send('Error removing player from team');
+    }
+  });
 app.route('/user/teams/:teamId')
   .get((req, res) => {
     const { teamId } = req.params;
