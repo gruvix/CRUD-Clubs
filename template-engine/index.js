@@ -85,6 +85,18 @@ app.get('/user/teams', (req, res) => {
   });
 });
 
+  .patch((req, res) => {
+    const { username } = req.session;
+    const { teamId } = req.params;
+    const { player } = req.body;
+    console.log(`User ${username} updated player ${player.id} in team ${teamId}`);
+    try {
+      updatePlayer(username, teamId, player);
+    } catch (error) {
+      console.log(error);
+      res.status(400).send('Error updating player in team');
+    }
+  })
 app.route('/user/teams/:teamId')
   .get((req, res) => {
     const { teamId } = req.params;
