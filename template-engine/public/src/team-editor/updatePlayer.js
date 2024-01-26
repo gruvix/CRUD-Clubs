@@ -18,11 +18,11 @@ function generatePlayer(tableRow) {
    * @param {HTMLElement} - The row containing the player
    */
 export async function updatePlayer(tableRow) {
-  const squadPlayer = generateSquadPlayer(tableRow);
-  const updatedData = { squad: squadPlayer };
+  const player = generatePlayer(tableRow);
+  const updatedData = { player };
   const requestBody = JSON.stringify(updatedData);
   const teamId = $('#team-id').val();
-  const response = await fetch(`/user/teams/${teamId}`, {
+  const response = await fetch(`/user/teams/${teamId}/player`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
