@@ -190,7 +190,7 @@ function addPlayer(username, teamId, playerData) {
     saveTeam(team, username);
     return true;
   } catch (error) {
-    return error;
+    throw new Error(error);
   }
 }
 function updatePlayer(username, teamId, player) {
