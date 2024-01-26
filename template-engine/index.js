@@ -106,6 +106,7 @@ app.route('/user/teams/:teamId/player')
     console.log(`User ${username} updated player ${player.id} in team ${teamId}`);
     try {
       updatePlayer(username, teamId, player);
+      res.status(204).send();
     } catch (error) {
       console.log(error);
       res.status(400).send('Error updating player in team');
