@@ -122,6 +122,7 @@ describe.only('test the player editor with the first team', () => {
   const FIRST_TEAM_PATH = '/user/teams/57';
 
   it('edits a random player from a team', () => {
+    cy.intercept('PATCH', `${FIRST_TEAM_PATH}/player`).as('editPlayer');
     cy.get('#players-table .edit').then(($editButtons) => {
       const playersAmount = $editButtons.length;
       const randomIndex = Math.floor(Math.random() * playersAmount);
@@ -129,7 +130,6 @@ describe.only('test the player editor with the first team', () => {
       cy.get('#players-table').find('[data-id]').then(($playerRows) => {
         cy.wrap($playerRows[randomIndex]).invoke('attr', 'data-id').then((value) => {
           const randomPlayerId = value;
-          console.log(`random selected player id: ${randomPlayerId}`);
           const playerGetString = `#players-table [data-id="${randomPlayerId}"]`;
           cy.get(playerGetString).find('.edit').click();
           cy.get(playerGetString).find('input').each(($input, index) => {
@@ -138,11 +138,10 @@ describe.only('test the player editor with the first team', () => {
             cy.wrap($input).clear().type(randomStrings[index]);
           });
 
-          cy.wrap($editButtons[randomIndex]).parent().parent().children()
-            .children('.apply')
+          cy.get(playerGetString).find('.apply')
             .click();
-          cy.visit(BASE_URL + FIRST_TEAM_PATH);
-          cy.get(playerGetString).children().children('span')
+          cy.visit(BASE_URL + FIRST_TEAM_PATH).wait('@editPlayer');
+          cy.get(playerGetString).find('span')
             .each(($spanField, index) => {
               cy.wrap($spanField).should('contain', randomStrings[index]);
             });
