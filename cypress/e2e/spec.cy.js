@@ -160,8 +160,7 @@ describe.only('test the player editor with the first team', () => {
       cy.wrap($input).clear().type(randomStrings[index]);
     });
     cy.get('#confirm-player-button').click().wait('@addPlayer');
-    cy.get('#players-table').parent().scrollTo('bottom');
-    cy.get('#players-table tr').last().children().children('span')
+    cy.get('#players-table tr').eq(1).children().children('span')
       .each(($spanField, index) => {
         cy.wrap($spanField).should('contain', randomStrings[index]);
       });

@@ -83,7 +83,6 @@ async function sendNewPlayersToServer(players, callback) {
    * @param {HTMLElement} - The add player row, containing new player's values
    */
 function addNewPlayerRow(tableRow) {
-  console.log('adding new player row');
   const $table = $('#players-table');
   const $template = $('#new-player-template');
   const $newPlayerRow = $template.contents().clone(true);
@@ -94,7 +93,8 @@ function addNewPlayerRow(tableRow) {
   const newIndex = $($table).find('.edit').length;
   console.log(newIndex);
   $($newPlayerRow).attr('data-index', newIndex);
-  $table.children('thead').append($newPlayerRow);
+  $($table).children('thead').children().first()
+    .after($newPlayerRow);
 }
 export function submitNewPlayer(tableRow) {
   if (!areInputsValid(tableRow)) return;
