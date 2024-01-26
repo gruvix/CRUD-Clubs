@@ -125,24 +125,29 @@ describe.only('test the player editor with the first team', () => {
     cy.get('#players-table .edit').then(($editButtons) => {
       const playersAmount = $editButtons.length;
       const randomIndex = Math.floor(Math.random() * playersAmount);
-      const playerGetString = `#players-table [data-index="${randomIndex}"]`;
       const randomStrings = [];
-      cy.get(playerGetString).find('.edit').click();
+      cy.get('#players-table').find('[data-id]').then(($playerRows) => {
+        cy.wrap($playerRows[randomIndex]).invoke('attr', 'data-id').then((value) => {
+          const randomPlayerId = value;
+          console.log(`random selected player id: ${randomPlayerId}`);
+          const playerGetString = `#players-table [data-id="${randomPlayerId}"]`;
+          cy.get(playerGetString).find('.edit').click();
+          cy.get(playerGetString).find('input').each(($input, index) => {
+            const randomString = generateRandomString();
+            randomStrings.push(randomString);
+            cy.wrap($input).clear().type(randomStrings[index]);
+          });
 
-      cy.get(playerGetString).find('input').each(($input, index) => {
-        const randomString = generateRandomString();
-        randomStrings.push(randomString);
-        cy.wrap($input).clear().type(randomStrings[index]);
-      });
-
-      cy.wrap($editButtons[randomIndex]).parent().parent().children()
-        .children('.apply')
-        .click();
-      cy.visit(BASE_URL + FIRST_TEAM_PATH);
-      cy.get(playerGetString).children().children('span')
-        .each(($spanField, index) => {
-          cy.wrap($spanField).should('contain', randomStrings[index]);
+          cy.wrap($editButtons[randomIndex]).parent().parent().children()
+            .children('.apply')
+            .click();
+          cy.visit(BASE_URL + FIRST_TEAM_PATH);
+          cy.get(playerGetString).children().children('span')
+            .each(($spanField, index) => {
+              cy.wrap($spanField).should('contain', randomStrings[index]);
+            });
         });
+      });
     });
   });
   it('adds a player to the team and shows it', () => {
