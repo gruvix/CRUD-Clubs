@@ -1,18 +1,17 @@
 import Player from '../../models/player.js';
 import { disableEditMode, areInputsValid } from './commonEdit.js';
 
-function generateSquadPlayer(tableRow) {
+function generatePlayer(tableRow) {
   const inputs = $(tableRow).children().children('input');
-  const playerIndex = $(tableRow).attr('data-index');
-  const values = {};
+  const playerId = $(tableRow).attr('data-id');
+  const values = { id: playerId };
   inputs.each((index, input) => {
     const parameter = $(input).attr('data-parameter');
     const value = $(input).val();
     values[parameter] = value;
   });
   const player = new Player(values);
-  const squad = { [playerIndex]: player };
-  return squad;
+  return player;
 }
 /**
    * Updates the player of the team given the row of the values
