@@ -99,5 +99,5 @@ function addNewPlayerRow(tableRow) {
 export function submitNewPlayer(tableRow) {
   if (!areInputsValid(tableRow)) return;
   disableEditMode();
-  sendNewPlayersToServer(generateSquadPlayer(tableRow), () => { addNewPlayerRow(tableRow); });
+  sendNewPlayersToServer(generatePlayer(tableRow), () => { addNewPlayerRow(tableRow); });
 }
