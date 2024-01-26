@@ -211,6 +211,10 @@ function updatePlayer(username, teamId, player) {
   }
 }
 function removePlayer(username, teamId, playerId) {
+  try {
+    defaultTeamCheck(username, teamId);
+    const team = getTeam(username, teamId);
+    team.squad = team.squad.filter((player) => player.id !== playerId);
     saveTeam(team, username);
   } catch (error) {
     console.log(error);
