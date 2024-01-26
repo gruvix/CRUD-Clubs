@@ -191,7 +191,6 @@ app.route('/user/teams/:teamId')
     }
   });
 
-
 app.put('/user/reset/all', (req, res) => {
   const { username } = req.session;
   console.log(`Resetting user ${username}`);
