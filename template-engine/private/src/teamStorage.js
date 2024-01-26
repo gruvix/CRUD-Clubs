@@ -178,8 +178,8 @@ function findNextFreeId(players) {
 
 function addPlayer(username, teamId, playerData) {
   try {
-    const player = new Player(playerData);
     defaultTeamCheck(username, teamId);
+    const player = new Player(playerData);
     const originalTeam = getTeam(username, teamId);
     const team = originalTeam;
     const id = findNextFreeId(team.squad);
