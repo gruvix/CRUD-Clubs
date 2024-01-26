@@ -110,6 +110,16 @@ describe('test the team editor page with the first team', () => {
     cy.get('#confirmation-modal-button').click();
     cy.get('#team-table span').first().should('not.contain', randomString);
   });
+});
+describe.only('test the player editor with the first team', () => {
+  beforeEach(() => {
+    cy.visit(BASE_URL);
+    cy.intercept('POST', '/login').as('login');
+    cy.get('#username').type(TEST_USER).get('#enter-page-button').click();
+    cy.wait('@login');
+    cy.get('.edit').first().click();
+  });
+  const FIRST_TEAM_PATH = '/user/teams/57';
 
   it('edits a random player from a team', () => {
     cy.get('#players-table .edit').then(($editButtons) => {
