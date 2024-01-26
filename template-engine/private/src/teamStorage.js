@@ -198,15 +198,10 @@ function updatePlayer(username, teamId, player) {
     defaultTeamCheck(username, teamId);
     const team = getTeam(username, teamId);
     console.log(`Updating player ${player.id} in team ${teamId}`);
-    let foundPlayer = false;
-    for (let index = 0; index < team.squad.length; index += 1) {
-      if (Number(team.squad[index].id) === Number(player.id)) {
-        team.squad[index] = player;
-        foundPlayer = true;
-        break;
-      }
-    }
-    if (foundPlayer) {
+    const playerIndex = team.squad
+      .findIndex((squadPlayer) => Number(squadPlayer.id) === Number(player.id));
+    if (playerIndex !== -1) {
+      team.squad[playerIndex] = player;
       saveTeam(team, username);
     } else {
       throw new Error('Player not found');
