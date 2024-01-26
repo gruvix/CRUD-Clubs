@@ -92,6 +92,11 @@ $('#confirm-player-button').on('click', () => {
 $('#cancel-player-button').on('click', () => {
   common.disableEditMode();
 });
+$('#tables').on('keydown', (event) => {
+  if (event.key === 'Escape') {
+    common.disableEditMode();
+  }
+});
 $('#add-player-button').on('click', (event) => {
   const tableRow = event.target.parentElement.parentElement;
   common.prepareEditFields(tableRow);
