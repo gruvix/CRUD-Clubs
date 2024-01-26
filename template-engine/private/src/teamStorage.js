@@ -1,5 +1,6 @@
 const TeamListTeam = require('../models/teamListTeam.js');
 const SquadTeam = require('../models/squadTeam.js');
+const Player = require('../models/player.js');
 const {
   getUserTeamJSONPath,
   getUserTeamsListJSONPath,
