@@ -160,7 +160,7 @@ function deleteTeam(username, teamId) {
   deleteTeamFromTeamlist(username, teamId);
 }
 
-function addPlayersToTeam(username, teamId, players) {
+function addPlayers(username, teamId, players) {
   try {
     defaultTeamCheck(username, teamId);
     const originalTeam = getTeam(username, teamId);
@@ -215,7 +215,7 @@ module.exports = {
   updateTeam,
   deleteTeam,
   validateTeam,
-  addPlayersToTeam,
+  addPlayers,
   updatePlayer,
   removePlayer,
 };
