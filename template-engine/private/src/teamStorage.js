@@ -175,11 +175,29 @@ function addPlayersToTeam(username, teamId, players) {
     return error;
   }
 }
-function removePlayer(username, teamId, playerIndex) {
+function updatePlayer(username, teamId, player) {
   try {
     defaultTeamCheck(username, teamId);
     const team = getTeam(username, teamId);
-    team.squad.splice(playerIndex, 1);
+    console.log(`Updating player ${player.id} in team ${teamId}`);
+    let foundPlayer = false;
+    for (let index = 0; index < team.squad.length; index += 1) {
+      if (Number(team.squad[index].id) === Number(player.id)) {
+        team.squad[index] = player;
+        foundPlayer = true;
+        break;
+      }
+    }
+    if (foundPlayer) {
+      saveTeam(team, username);
+    } else {
+      throw new Error('Player not found');
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+}
+function removePlayer(username, teamId, playerId) {
     saveTeam(team, username);
   } catch (error) {
     console.log(error);
@@ -198,5 +216,6 @@ module.exports = {
   deleteTeam,
   validateTeam,
   addPlayersToTeam,
+  updatePlayer,
   removePlayer,
 };

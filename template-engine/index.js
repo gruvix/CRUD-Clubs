@@ -27,6 +27,7 @@ const {
   deleteTeam,
   addPlayersToTeam,
   removePlayer,
+  updatePlayer,
 } = require('./private/src/teamStorage.js');
 const { storage, imageFilter } = require('./private/src/multerConfig.js');
 const { ensureLoggedIn, validateUsername } = require('./private/src/auth.js');
