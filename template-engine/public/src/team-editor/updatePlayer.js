@@ -59,7 +59,6 @@ export async function removePlayer(tableRow) {
     removePlayerRow(tableRow);
   }
 }
-async function sendNewPlayersToServer(players, callback) {
 async function sendNewPlayers(player, callback) {
   const teamId = $('#team-id').val();
   const requestBody = JSON.stringify({ player });
