@@ -134,15 +134,16 @@ function updateTeam(newData, username, teamId) {
     }
   });
   const team = getTeam(username, teamId);
-  if (Object.keys(updatedData).includes('squad')) {
-    const oldPlayers = team.squad;
-    Object.assign(team, updatedData);
-    team.squad = [];
-    Object.assign(team.squad, oldPlayers);
-    Object.assign(team.squad, updatedData.squad);
-  } else {
-    Object.assign(team, updatedData);
-  }
+  Object.assign(team, updatedData);
+  // if (Object.keys(updatedData).includes('squad')) {
+  //   const oldPlayers = team.squad;
+  //   Object.assign(team, updatedData);
+  //   team.squad = [];
+  //   Object.assign(team.squad, oldPlayers);
+  //   Object.assign(team.squad, updatedData.squad);
+  // } else {
+  //   Object.assign(team, updatedData);
+  // }
   saveTeam(team, username);
 }
 function validateTeam(username, teamId) {
