@@ -25,7 +25,7 @@ const {
   updateTeam,
   validateTeam,
   deleteTeam,
-  addPlayers,
+  addPlayer,
   removePlayer,
   updatePlayer,
 } = require('./private/src/teamStorage.js');
@@ -85,7 +85,20 @@ app.get('/user/teams', (req, res) => {
     },
   });
 });
-
+app.route('/user/teams/:teamId/player')
+  .put((req, res) => {
+    const { username } = req.session;
+    const { teamId } = req.params;
+    const { player } = req.body;
+    console.log(`User ${username} added player ${player.name} to team ${teamId}`);
+    try {
+      addPlayer(username, teamId, player);
+      res.status(204).send();
+    } catch (error) {
+      console.log(error);
+      res.status(400).send('Error adding player to team');
+    }
+  })
   .patch((req, res) => {
     const { username } = req.session;
     const { teamId } = req.params;
