@@ -111,7 +111,7 @@ describe('test the team editor page with the first team', () => {
     cy.get('#team-table span').first().should('not.contain', randomString);
   });
 });
-describe.only('test the player editor with the first team', () => {
+describe('test the player editor with the first team', () => {
   beforeEach(() => {
     cy.visit(BASE_URL);
     cy.intercept('POST', '/login').as('login');
@@ -169,7 +169,9 @@ describe.only('test the player editor with the first team', () => {
     cy.get('#players-table .remove').then(($removeButtons) => {
       const playersAmount = $removeButtons.length;
       const randomIndex = Math.floor(Math.random() * playersAmount);
-      cy.get('#players-table tr').eq(randomIndex).find('span').first()
+      cy.get('#players-table .remove').eq(randomIndex).parent().parent()
+        .find('span')
+        .first()
         .then(($spanField) => {
           const text = $spanField.text();
           cy.get('#players-table .remove').eq(randomIndex).click().wait(MODAL_APPEAR_DELAY);
