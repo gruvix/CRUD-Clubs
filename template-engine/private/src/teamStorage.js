@@ -111,13 +111,20 @@ function cloneTeamFromDefault(targetUser, teamId) {
     throw new Error(copyError);
   }
 }
+function defaultTeamCheck(username, teamId) {
+  try {
+    if (isTeamDefault(username, teamId)) {
+      cloneTeamFromDefault(username, teamId);
+      const DEFAULT_TEAMLIST_PARAMETER = 'isDefault';
+      updateTeamlistParameter(username, teamId, DEFAULT_TEAMLIST_PARAMETER, false);
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+}
 function updateTeam(newData, username, teamId) {
   const updatedData = newData;
-  if (isTeamDefault(username, teamId)) {
-    cloneTeamFromDefault(username, teamId);
-    const teamListParameter = 'isDefault';
-    updateTeamlistParameter(username, teamId, teamListParameter, false);
-  }
+  defaultTeamCheck(username, teamId);
   const now = new Date();
   const lastUpdated = now.toISOString();
   updatedData.lastUpdated = lastUpdated;
@@ -155,6 +162,7 @@ function deleteTeam(username, teamId) {
 
 function addPlayersToTeam(username, teamId, players) {
   try {
+    defaultTeamCheck(username, teamId);
     const originalTeam = getTeam(username, teamId);
     const team = {};
     team.squad = originalTeam.squad;
@@ -169,6 +177,7 @@ function addPlayersToTeam(username, teamId, players) {
 }
 function removePlayer(username, teamId, playerIndex) {
   try {
+    defaultTeamCheck(username, teamId);
     const team = getTeam(username, teamId);
     team.squad.splice(playerIndex, 1);
     saveTeam(team, username);
