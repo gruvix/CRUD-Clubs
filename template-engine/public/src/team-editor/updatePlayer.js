@@ -1,7 +1,7 @@
 import Player from '../../models/player.js';
 import { disableEditMode, areInputsValid } from './commonEdit.js';
 
-function generatePlayer(tableRow) {
+function generatePlayerObject(tableRow) {
   const inputs = $(tableRow).children().children('input');
   const playerId = $(tableRow).attr('data-id');
   const values = { id: playerId };
@@ -18,7 +18,7 @@ function generatePlayer(tableRow) {
    * @param {HTMLElement} - The row containing the player
    */
 export async function updatePlayer(tableRow) {
-  const player = generatePlayer(tableRow);
+  const player = generatePlayerObject(tableRow);
   const updatedData = { player };
   const requestBody = JSON.stringify(updatedData);
   const teamId = $('#team-id').val();
@@ -60,8 +60,9 @@ export async function removePlayer(tableRow) {
   }
 }
 async function sendNewPlayersToServer(players, callback) {
+async function sendNewPlayers(player, callback) {
   const teamId = $('#team-id').val();
-  const requestBody = JSON.stringify({ players });
+  const requestBody = JSON.stringify({ player });
   const response = await fetch(`/user/teams/${teamId}/player`, {
     method: 'PUT',
     headers: {
@@ -99,5 +100,5 @@ function addNewPlayerRow(tableRow) {
 export function submitNewPlayer(tableRow) {
   if (!areInputsValid(tableRow)) return;
   disableEditMode();
-  sendNewPlayersToServer(generatePlayer(tableRow), () => { addNewPlayerRow(tableRow); });
+  sendNewPlayers(generatePlayerObject(tableRow), () => { addNewPlayerRow(tableRow); });
 }
