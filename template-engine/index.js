@@ -37,8 +37,8 @@ const userSessionRoutes = require('./private/src/routing/user.js');
 const errorRoutes = require('./private/src/routing/error.js');
 const { storage, imageFilter } = require('./private/src/multerConfig.js');
 const { ensureLoggedIn, validateUsername } = require('./private/src/auth.js');
+const teamCrestRoutes = require('./private/src/routing/crest.js');
 
-const uploadImage = multer({ storage, fileFilter: imageFilter });
 
 const PORT = 8000;
 const app = express();
@@ -82,33 +82,7 @@ app.use('/user/teams', playerRoutes);
 app.use('/user/teams', teamRoutes);
 app.use('/user/reset', resetRoutes);
 app.use('', userSessionRoutes);
-
-app.put('/user/customCrest/:teamId/upload', uploadImage.single('image'), (req, res) => {
-  const { username } = req.session;
-  const { teamId } = req.params;
-  const { filename } = req.file;
-  console.log(`User '${username}' uploaded new crest for team ${teamId}`);
-  console.log(req.file);
-  const crestUrl = `/user/customCrest/${teamId}/${filename}`;
-  const newData = {
-    crestUrl,
-    hasCustomCrest: true,
-  };
-  updateTeam(newData, username, teamId);
-  res.status(200).send(crestUrl);
-});
-
-app.get('/user/customCrest/:teamId/:filename', (req, res) => {
-  const { username } = req.session;
-  const { teamId, filename } = req.params;
-  const imgPath = `${getUserCustomCrestFolderPath(username, teamId)}/${filename}`;
-  if (!validateFile(imgPath)) {
-    res.status(404).send('Crest not found');
-  } else {
-    res.sendFile(imgPath, { root: '.' });
-  }
-});
-
+app.use('/user/customCrest', teamCrestRoutes);
 app.use('/error', errorRoutes);
 
 app.listen(PORT);

@@ -114,7 +114,7 @@ describe('test the team editor page with the first team', () => {
 
   it('uploads an image to the team crest', () => {
     const EXPECTED_IMG_SRC = '/user/customCrest/57/57.jpg';
-    cy.intercept(`/user/${FIRST_TEAM_ID}/upload`).as('uploadImage');
+    cy.intercept(`/user/customCrest/${FIRST_TEAM_ID}/upload`).as('uploadImage');
     cy.fixture('crest.jpg').then((fileContent) => {
       console.log(fileContent);
       cy.get('#image-input').selectFile({
