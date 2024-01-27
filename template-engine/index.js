@@ -30,6 +30,7 @@ const {
   updatePlayer,
 } = require('./private/src/teamStorage.js');
 const homeRoute = require('./private/src/routing/home.js');
+const teamsRoutes = require('./private/src/routing/teams.js');
 const teamRoutes = require('./private/src/routing/team.js');
 const playerRoutes = require('./private/src/routing/player.js');
 const resetRoutes = require('./private/src/routing/reset.js');
@@ -60,24 +61,7 @@ app.use(bodyParser.json());
 
 app.use('/', homeRoute);
 
-app.get('/user/teams', (req, res) => {
-  const { username } = req.session;
-  if (!validateFile(getUserTeamsListJSONPath(username))) {
-    console.log(`User not found, creating new user "${username}"`);
-    createUser(username);
-  }
-  const teams = getTeamsList(username);
-  const domain = getDomain(req);
-  res.render('teams', {
-    layout: 'main',
-    data: {
-      username,
-      capitalizedName: username.charAt(0).toUpperCase() + username.slice(1),
-      teams,
-      domain,
-    },
-  });
-});
+app.use('/user/teams', teamsRoutes);
 app.use('/user/teams', playerRoutes);
 app.use('/user/teams', teamRoutes);
 app.use('/user/reset', resetRoutes);
