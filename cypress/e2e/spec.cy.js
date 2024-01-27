@@ -192,6 +192,8 @@ describe('test the player editor with the first team', () => {
           cy.get('#confirmation-modal-button').click().wait('@removePlayer');
           cy.get('#players-table tr').eq(randomIndex).find('span').first()
             .should('not.contain', text);
+          const newPlayersAmount = playersAmount - 1;
+          cy.get('#players-table .remove').should('have.length', newPlayersAmount);
         });
     });
   });
