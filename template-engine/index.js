@@ -33,6 +33,7 @@ const homeRoute = require('./private/src/routing/home.js');
 const teamRoutes = require('./private/src/routing/team.js');
 const playerRoutes = require('./private/src/routing/player.js');
 const resetRoutes = require('./private/src/routing/reset.js');
+const userSessionRoutes = require('./private/src/routing/user.js');
 const { storage, imageFilter } = require('./private/src/multerConfig.js');
 const { ensureLoggedIn, validateUsername } = require('./private/src/auth.js');
 
@@ -79,24 +80,7 @@ app.get('/user/teams', (req, res) => {
 app.use('/user/teams', playerRoutes);
 app.use('/user/teams', teamRoutes);
 app.use('/user/reset', resetRoutes);
-
-app.post('/login', (req, res) => {
-  const { username } = req.body;
-  const error = validateUsername(username);
-  if (error) {
-    res.status(400).send(error);
-    return;
-  }
-  req.session.username = username;
-  console.log(`User '${username}' logged in`);
-  res.redirect(302, '/user/teams');
-});
-app.post('/logout', (req, res) => {
-  const { username } = req.session;
-  req.session.destroy();
-  console.log(`User '${username}' logged out`);
-  res.redirect(302, '/');
-});
+app.use('', userSessionRoutes);
 
 app.put('/user/:teamId/upload', uploadImage.single('image'), (req, res) => {
   const { username } = req.session;
