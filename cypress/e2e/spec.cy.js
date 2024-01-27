@@ -150,7 +150,7 @@ describe('test the player editor with the first team', () => {
     });
   });
   it('adds a player to the team and shows it', () => {
-    cy.intercept('PUT', `${FIRST_TEAM_PATH}/player`).as('addPlayer');
+    cy.intercept(`${FIRST_TEAM_PATH}/player`).as('addPlayer');
     const randomStrings = [];
     cy.get('#add-player-button').click();
     cy.get('#add-player-row').find('input').each(($input, index) => {
