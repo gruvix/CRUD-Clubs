@@ -8,6 +8,12 @@ const Team = require('../../models/team');
 
 const router = express.Router();
 
+router.route('/add')
+  .get((req, res) => {
+    res.render('newTeam', {
+    });
+  });
+
 router.route('/:teamId')
   .get((req, res) => {
     const { teamId } = req.params;
