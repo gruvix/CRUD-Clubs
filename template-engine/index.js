@@ -32,6 +32,7 @@ const {
 const homeRoute = require('./private/src/routing/home.js');
 const teamRoutes = require('./private/src/routing/team.js');
 const playerRoutes = require('./private/src/routing/player.js');
+const resetRoutes = require('./private/src/routing/reset.js');
 const { storage, imageFilter } = require('./private/src/multerConfig.js');
 const { ensureLoggedIn, validateUsername } = require('./private/src/auth.js');
 
@@ -77,35 +78,7 @@ app.get('/user/teams', (req, res) => {
 });
 app.use('/user/teams', playerRoutes);
 app.use('/user/teams', teamRoutes);
-app.put('/user/reset/all', (req, res) => {
-  const { username } = req.session;
-  console.log(`Resetting user ${username}`);
-  try {
-    deleteUser(username);
-    if (!validateFile(getUserTeamsListJSONPath(username))) {
-      createUser(username);
-    }
-    res.status(204).send();
-  } catch (error) {
-    res.status(400).send('Error resetting teams');
-  }
-});
-
-app.put('/user/reset/:teamId', (req, res) => {
-  const { username } = req.session;
-  const { teamId } = req.params;
-  console.log(`Resetting team ${teamId} from ${username}`);
-  try {
-    deleteTeam(username, teamId);
-    const defaultUsername = 'default';
-    cloneTeamFromDefault(username, teamId);
-    copyTeamListTeam(defaultUsername, username, teamId);
-
-    res.status(204).send();
-  } catch (error) {
-    res.status(400).send(`Error resetting team ${teamId} from ${username}`);
-  }
-});
+app.use('/user/reset', resetRoutes);
 
 app.post('/login', (req, res) => {
   const { username } = req.body;
