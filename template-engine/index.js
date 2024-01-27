@@ -1,34 +1,9 @@
 const express = require('express');
-const multer = require('multer');
 const path = require('path');
 const expresshandlebars = require('express-handlebars');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const FileStore = require('session-file-store')(session);
-const Team = require('./private/models/team.js');
-const Player = require('./private/models/player.js');
-const { createUser, deleteUser } = require('./private/src/user.js');
-const { getDomain } = require('./private/src/domain.js');
-const {
-  getUserTeamsListJSONPath,
-  getUserCustomCrestFolderPath,
-} = require('./private/src/userPath.js');
-const {
-  validateFile,
-} = require('./private/src/utils.js');
-const {
-  cloneTeamFromDefault,
-  isTeamDefault,
-  getTeam,
-  getTeamsList,
-  copyTeamListTeam,
-  updateTeam,
-  validateTeam,
-  deleteTeam,
-  addPlayer,
-  removePlayer,
-  updatePlayer,
-} = require('./private/src/teamStorage.js');
 const homeRoute = require('./private/src/routing/home.js');
 const teamsRoutes = require('./private/src/routing/teams.js');
 const teamRoutes = require('./private/src/routing/team.js');
@@ -36,10 +11,9 @@ const playerRoutes = require('./private/src/routing/player.js');
 const resetRoutes = require('./private/src/routing/reset.js');
 const userSessionRoutes = require('./private/src/routing/user.js');
 const errorRoutes = require('./private/src/routing/error.js');
-const { storage, imageFilter } = require('./private/src/multerConfig.js');
-const { ensureLoggedIn, validateUsername } = require('./private/src/auth.js');
 const teamCrestRoutes = require('./private/src/routing/crest.js');
 
+const { ensureLoggedIn } = require('./private/src/auth.js');
 
 const PORT = 8000;
 const app = express();
