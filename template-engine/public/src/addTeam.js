@@ -8,6 +8,9 @@ function addPlayerRow() {
   $($table).children('thead').children().first()
     .after($newPlayerRow);
 }
+function removePlayerRow(row) {
+  $(row).remove();
+}
 $('#back-to-teams-button').on('click', () => {
   setupConfirmationModal('You are about to leave this page, team data will be lost', () => {
     window.location.href = '/user/teams';
@@ -15,4 +18,9 @@ $('#back-to-teams-button').on('click', () => {
 });
 $('#add-player-button').on('click', () => {
   addPlayerRow();
+});
+$('#players-table').on('click', (event) => {
+  if (event.target.classList.contains('remove')) {
+    removePlayerRow(event.target.parentElement.parentElement);
+  }
 });
