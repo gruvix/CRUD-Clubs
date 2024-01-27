@@ -86,14 +86,15 @@ app.get('/user/teams', (req, res) => {
   });
 });
 app.route('/user/teams/:teamId/player')
-  .put((req, res) => {
+  .post((req, res) => {
     const { username } = req.session;
     const { teamId } = req.params;
     const { player } = req.body;
     console.log(`User ${username} added player ${player.name} to team ${teamId}`);
     try {
-      addPlayer(username, teamId, player);
-      res.status(204).send();
+      const newId = addPlayer(username, teamId, player);
+      console.log(`Added player ${newId} to team ${teamId}`);
+      res.status(200).send(newId.toString());
     } catch (error) {
       console.log(error);
       res.status(400).send('Error adding player to team');

@@ -166,7 +166,12 @@ function findNextFreeId(players) {
   }
   return nextFreeId;
 }
-
+/**
+ * @param {string} username - owner of team
+ * @param {Number} teamId - target team id
+ * @param {JSON} playerData - id of the team to be copied
+ * @returns {Number} - id of the new player
+ */
 function addPlayer(username, teamId, playerData) {
   try {
     defaultTeamCheck(username, teamId);
@@ -176,10 +181,9 @@ function addPlayer(username, teamId, playerData) {
     const id = findNextFreeId(team.squad);
     player.id = id;
     team.squad.unshift(player);
-    console.log('Adding players to team', teamId);
-
+    console.log('Adding player to team', teamId);
     saveTeam(team, username);
-    return true;
+    return id;
   } catch (error) {
     throw new Error(error);
   }

@@ -59,11 +59,16 @@ export async function removePlayer(tableRow) {
     removePlayerRow(tableRow);
   }
 }
-async function sendNewPlayers(player, callback) {
+/**
+   * Sends the player data to a POST endpoint
+   * awaits a new id response, which introduces into a callback funtion when finished
+   * @param {JSON} - new player data
+   */
+async function sendNewPlayer(player, callback) {
   const teamId = $('#team-id').val();
   const requestBody = JSON.stringify({ player });
   const response = await fetch(`/user/teams/${teamId}/player`, {
-    method: 'PUT',
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
@@ -75,7 +80,8 @@ async function sendNewPlayers(player, callback) {
   if (!response.ok) {
     alert(`Error ${response.status}: could not add player`);
   } else {
-    callback();
+    const newId = await response.text();
+    callback(newId);
   }
 }
 /**
@@ -90,14 +96,18 @@ function addNewPlayerRow(tableRow) {
   $($newPlayerRow).find('span').each((index, span) => {
     $(span).text($(tableRow).find('input').eq(index).val());
   });
-  const newIndex = $($table).find('.edit').length;
-  console.log(newIndex);
-  $($newPlayerRow).attr('data-index', newIndex);
   $($table).children('thead').children().first()
     .after($newPlayerRow);
+  return $newPlayerRow;
 }
-export function submitNewPlayer(tableRow) {
+function updatePlayerId(newId, tableRow) {
+  $(tableRow).attr('data-id', newId);
+}
+export async function submitNewPlayer(tableRow) {
   if (!areInputsValid(tableRow)) return;
   disableEditMode();
-  sendNewPlayers(generatePlayerObject(tableRow), () => { addNewPlayerRow(tableRow); });
+  sendNewPlayer(generatePlayerObject(tableRow), (newId) => {
+    const newRow = addNewPlayerRow(tableRow);
+    updatePlayerId(newId, newRow);
+  });
 }
