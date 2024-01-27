@@ -240,7 +240,7 @@ app.post('/logout', (req, res) => {
   res.redirect(302, '/');
 });
 
-app.post('/user/:teamId/upload', uploadImage.single('image'), (req, res) => {
+app.put('/user/:teamId/upload', uploadImage.single('image'), (req, res) => {
   const { username } = req.session;
   const { teamId } = req.params;
   const { filename } = req.file;

@@ -10,7 +10,7 @@ async function uploadImage(image) {
   const formData = new FormData();
   formData.append('image', image);
   const response = await fetch(`/user/${teamId}/upload`, {
-    method: 'POST',
+    method: 'PUT',
     body: formData,
   });
   if (response.redirected) {
