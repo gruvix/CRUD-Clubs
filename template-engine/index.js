@@ -34,6 +34,7 @@ const teamRoutes = require('./private/src/routing/team.js');
 const playerRoutes = require('./private/src/routing/player.js');
 const resetRoutes = require('./private/src/routing/reset.js');
 const userSessionRoutes = require('./private/src/routing/user.js');
+const errorRoutes = require('./private/src/routing/error.js');
 const { storage, imageFilter } = require('./private/src/multerConfig.js');
 const { ensureLoggedIn, validateUsername } = require('./private/src/auth.js');
 
@@ -108,23 +109,7 @@ app.get('/user/customCrest/:teamId/:filename', (req, res) => {
   }
 });
 
-app.get('/error', (req, res) => {
-  let message = 'Bad Request';
-  if (req.query.keyword) {
-    message = req.query.keyword.replaceAll('-', ' ');
-  }
-  let code = 400;
-  if (req.query.code) {
-    code = req.query.code;
-  }
-  res.render('error', {
-    layout: 'main',
-    data: {
-      message,
-      code,
-    },
-  });
-});
+app.use('/error', errorRoutes);
 
 app.listen(PORT);
 console.log(`Listening on port ${PORT}`);
