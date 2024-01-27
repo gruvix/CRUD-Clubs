@@ -11,6 +11,10 @@ const router = express.Router();
 router.route('/add')
   .get((req, res) => {
     res.render('newTeam', {
+      layout: 'main',
+      data: {
+        team: new Team({}),
+      },
     });
   });
 

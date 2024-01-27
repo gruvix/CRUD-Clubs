@@ -1,0 +1,12 @@
+<table class="table" id="team-table">
+    <thead>
+        {{#each team}}
+           <tr class="table-dark table-bordered">
+                <td class="text-warning" style="text-transform: capitalize; padding-top: 3.5%;">{{@key}}</td>
+                <td id="{{@key}}">
+                    <input type="text" class="form-control" value="">
+                </td>
+            </tr>
+        {{/each}}
+    </thead>
+</table>
