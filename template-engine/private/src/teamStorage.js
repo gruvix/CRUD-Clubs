@@ -209,12 +209,11 @@ function removePlayer(username, teamId, playerId) {
   try {
     defaultTeamCheck(username, teamId);
     const team = getTeam(username, teamId);
-    team.squad = team.squad.filter((player) => player.id !== playerId);
+    team.squad = team.squad.filter((player) => Number(player.id) !== Number(playerId));
     saveTeam(team, username);
   } catch (error) {
-    console.log(error);
+    throw new Error(error);
   }
-  return true;
 }
 
 module.exports = {
