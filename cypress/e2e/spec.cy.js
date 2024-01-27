@@ -207,3 +207,13 @@ describe('test the player editor with the first team', () => {
     });
   });
 });
+describe.only('test add team', () => {
+  beforeEach(() => {
+    cy.visit(BASE_URL);
+    cy.intercept('POST', '/login').as('login');
+    cy.get('#username').type(TEST_USER).get('#enter-page-button').click();
+    cy.wait('@login');
+    cy.get('#add-new-team-button').click();
+  });
+
+});
