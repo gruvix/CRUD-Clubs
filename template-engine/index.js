@@ -29,7 +29,7 @@ const {
   removePlayer,
   updatePlayer,
 } = require('./private/src/teamStorage.js');
-const teamsRoutes = require('./private/src/routing/team.js');
+const teamRoutes = require('./private/src/routing/team.js');
 const playerRoutes = require('./private/src/routing/player.js');
 const { storage, imageFilter } = require('./private/src/multerConfig.js');
 const { ensureLoggedIn, validateUsername } = require('./private/src/auth.js');
@@ -88,6 +88,7 @@ app.get('/user/teams', (req, res) => {
   });
 });
 app.use('/user/teams', playerRoutes);
+app.use('/user/teams', teamRoutes);
 app.put('/user/reset/all', (req, res) => {
   const { username } = req.session;
   console.log(`Resetting user ${username}`);
