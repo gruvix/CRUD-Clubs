@@ -83,7 +83,7 @@ app.use('/user/teams', teamRoutes);
 app.use('/user/reset', resetRoutes);
 app.use('', userSessionRoutes);
 
-app.put('/user/:teamId/upload', uploadImage.single('image'), (req, res) => {
+app.put('/user/customCrest/:teamId/upload', uploadImage.single('image'), (req, res) => {
   const { username } = req.session;
   const { teamId } = req.params;
   const { filename } = req.file;
