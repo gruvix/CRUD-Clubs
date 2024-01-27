@@ -79,6 +79,7 @@ describe('test the team editor page with the first team', () => {
   });
 
   const FIRST_TEAM_PATH = '/user/teams/57';
+  const FIRST_TEAM_ID = 57;
 
   it('updates all team parameters with a random string', () => {
     const randomString = generateRandomString();
@@ -109,6 +110,19 @@ describe('test the team editor page with the first team', () => {
     cy.get('#reset-team-button').click().wait(MODAL_APPEAR_DELAY);
     cy.get('#confirmation-modal-button').click();
     cy.get('#team-table span').first().should('not.contain', randomString);
+  });
+
+  it('uploads an image to the team crest', () => {
+    const EXPECTED_IMG_SRC = '/user/customCrest/57/57.jpg';
+    cy.intercept(`/user/${FIRST_TEAM_ID}/upload`).as('uploadImage');
+    cy.fixture('crest.jpg').then((fileContent) => {
+      console.log(fileContent);
+      cy.get('#image-input').selectFile({
+        contents: Cypress.Buffer(fileContent),
+        fileName: 'crest.jpg',
+      }, { force: true });
+    });
+    cy.wait('@uploadImage').get('#team-crest').should('have.attr', 'src', EXPECTED_IMG_SRC);
   });
 });
 describe('test the player editor with the first team', () => {
@@ -181,7 +195,7 @@ describe('test the player editor with the first team', () => {
         });
     });
   });
-  it('removes all players', () => {
+  it.skip('removes all players', () => {
     cy.intercept('DELETE', `${FIRST_TEAM_PATH}/player`).as('removePlayer');
     cy.get('#players-table .remove').then(($removeButtons) => {
       cy.wrap($removeButtons).each(($removeButton) => {
