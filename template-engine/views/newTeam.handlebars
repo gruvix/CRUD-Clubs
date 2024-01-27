@@ -1,0 +1,45 @@
+<div class="container">
+    <div class="row">
+        <div class="col-4">
+            <button type="button" class="btn btn-shadow btn-outline-warning" style="margin-top: 25px;" id="back-to-teams-button" data-bs-toggle="modal" data-bs-target="#confirmationModal">
+                Go back
+            </button>
+        </div>
+
+        <div class="col-4">
+            <div class="d-flex justify-content-center img-container">
+                <img src="" alt="Team crest" class="team-crest-image" id="team-crest">
+                <button class="btn btn-shadow btn-outline-warning position-absolute top-50 start-50 translate-middle" id="upload-image-button" style="font-size: 150%;">
+                    <span style="display:block">
+                        Upload new image
+                    </span>
+                    <span style="font-size: 60%; display:block">
+                        jpeg / jpg / png / gif   
+                    </span>
+                </button>
+                <input type="file" id="image-input" style="display: none">
+            </div>
+        </div>
+    </div>
+
+    <div class="row" id="tables">
+        <div class="col">
+            <strong class="d-flex justify-content-center text-warning table-title">
+                Team
+            </strong>
+            <div class="d-flex justify-content-center">
+                {{> teamTable }}
+            </div>
+        </div>
+        <div class="col">
+            <strong class="d-flex justify-content-center text-warning table-title">
+                Players
+            </strong>
+            <div class="d-flex justify-content-center">
+                {{> playersTable }}
+            </div>
+        </div>
+    </div>
+</div>
+{{> confirmationModal }}
+<script type="module" src="src/addTeam.js"></script>
