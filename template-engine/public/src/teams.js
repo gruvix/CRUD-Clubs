@@ -66,6 +66,9 @@ async function deleteTeam(teamId) {
     alert('Error: could not delete team');
   }
 }
+$('#add-new-team-button').on('click', () => {
+  window.location.href = '/user/teams/add';
+});
 $('.edit').on('click', (event) => {
   goEditTeam(event.target.parentElement.id);
 });
