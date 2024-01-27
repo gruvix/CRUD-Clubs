@@ -29,6 +29,7 @@ const {
   removePlayer,
   updatePlayer,
 } = require('./private/src/teamStorage.js');
+const homeRoute = require('./private/src/routing/home.js');
 const teamRoutes = require('./private/src/routing/team.js');
 const playerRoutes = require('./private/src/routing/player.js');
 const { storage, imageFilter } = require('./private/src/multerConfig.js');
@@ -54,20 +55,7 @@ app.use(session({
 app.use('/user', ensureLoggedIn);
 app.use(bodyParser.json());
 
-app.get('/', (req, res) => {
-  const { username } = req.session;
-  if (username) {
-    console.log(`User '${username}' requested landing page, redirecting to teams view`);
-    res.redirect(302, '/user/teams');
-    return;
-  }
-  res.render('home', {
-    layout: 'main',
-    data: {
-
-    },
-  });
-});
+app.use('/', homeRoute);
 
 app.get('/user/teams', (req, res) => {
   const { username } = req.session;
