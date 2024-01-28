@@ -11,11 +11,18 @@ function addPlayerRow() {
 function removePlayerRow(row) {
   $(row).remove();
 }
+function toggleUploadButton(fileName) {
+  console.log(fileName);
+  $('#upload-image-button').hide();
+  $('#uploaded-image-button').show().find('span').text(fileName);
+}
+
 $('#back-to-teams-button').on('click', () => {
   setupConfirmationModal('You are about to leave this page, team data will be lost', () => {
     window.location.href = '/user/teams';
   });
 });
+
 $('#add-player-button').on('click', () => {
   addPlayerRow();
 });
