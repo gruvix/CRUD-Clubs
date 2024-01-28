@@ -5,6 +5,7 @@ const {
 const { getDomain } = require('../domain');
 const Player = require('../../models/player');
 const Team = require('../../models/team');
+const paths = require('./paths');
 
 const router = express.Router();
 
@@ -57,6 +58,11 @@ router.route('/:teamId')
         players,
         domain,
         hasCustomCrest: team.hasCustomCrest,
+        resetTeamPath: paths.resetSingle,
+        teamsPath: paths.teams,
+        crestPath: paths.crest,
+        playerPath: paths.player,
+        teamPath: paths.team,
       },
     });
   })

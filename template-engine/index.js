@@ -12,6 +12,7 @@ const resetRoutes = require('./private/src/routing/reset.js');
 const userSessionRoutes = require('./private/src/routing/user.js');
 const errorRoutes = require('./private/src/routing/error.js');
 const teamCrestRoutes = require('./private/src/routing/crest.js');
+const paths = require('./private/src/routing/paths.js');
 
 const { ensureLoggedIn } = require('./private/src/auth.js');
 
@@ -30,18 +31,24 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
 }));
-app.use('/user', ensureLoggedIn);
+app.use((req, res, next) => {
+  const allowedPaths = /^\/user(?!\/(login))(\/\w+)*/;
+  if (allowedPaths.test(req.path)) {
+    ensureLoggedIn(req, res, next);
+  } else {
+    next();
+  }
+});
 app.use(bodyParser.json());
 
-app.use('/', homeRoute);
-
-app.use('/user/teams', teamsRoutes);
-app.use('/user/teams', playerRoutes);
-app.use('/user/teams', teamRoutes);
-app.use('/user/reset', resetRoutes);
-app.use('', userSessionRoutes);
-app.use('/user/customCrest', teamCrestRoutes);
-app.use('/error', errorRoutes);
+app.use(paths.home, homeRoute);
+app.use(paths.teams, teamsRoutes);
+app.use(paths.player, playerRoutes);
+app.use(paths.team, teamRoutes);
+app.use(paths.reset, resetRoutes);
+app.use(paths.user, userSessionRoutes);
+app.use(paths.crest, teamCrestRoutes);
+app.use(paths.error, errorRoutes);
 
 app.listen(PORT);
 console.log(`Listening on port ${PORT}`);

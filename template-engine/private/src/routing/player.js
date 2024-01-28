@@ -3,7 +3,7 @@ const { addPlayer, updatePlayer, removePlayer } = require('../teamStorage');
 
 const router = express.Router();
 
-router.route('/:teamId/player')
+router.route('/:teamId')
   .post((req, res) => {
     const { username } = req.session;
     const { teamId } = req.params;

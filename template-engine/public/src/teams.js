@@ -10,7 +10,8 @@ function adjustTitles() {
 }
 adjustTitles();
 async function resetTeams(callback) {
-  await fetch('/user/reset/all', {
+  const resetPath = $('#reset-teams-button').attr('href');
+  await fetch(resetPath, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -19,7 +20,9 @@ async function resetTeams(callback) {
   callback();
 }
 async function logout() {
-  const response = await fetch('/logout', {
+  const logoutPath = $('#log-out-button').attr('href');
+  console.log(logoutPath);
+  const response = await fetch(logoutPath, {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
@@ -46,11 +49,11 @@ $('#reset-teams-button').on('click', () => {
     resetTeams(callback);
   });
 });
-function goEditTeam(teamId) {
-  window.location.href = `/user/teams/${teamId}`;
+function goEditTeam(teamPath) {
+  window.location.href = `${teamPath}`;
 }
-async function deleteTeam(teamId) {
-  const response = await fetch(`/user/teams/${teamId}`, {
+async function deleteTeam(teamPath, teamId) {
+  const response = await fetch(`${teamPath}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
@@ -66,18 +69,21 @@ async function deleteTeam(teamId) {
     alert('Error: could not delete team');
   }
 }
-$('#add-new-team-button').on('click', () => {
-  window.location.href = '/user/teams/add';
+$('#add-team-button').on('click', (event) => {
+  window.location.href = $(event.target).attr('href');
 });
 $('.edit').on('click', (event) => {
-  goEditTeam(event.target.parentElement.id);
+  const teamHref = $(event.target.parentElement).attr('href');
+  goEditTeam(teamHref);
 });
 $('.delete').on('click', (event) => {
   const teamName = $(event.target).parent().parent().find('.team-card-title').text();
   const confirmationText = `You are about to delete ${teamName}. Custom teams are not recoverable`;
-  const teamId = event.target.parentElement.id;
+  const $buttonHolder = $(event.target.parentElement);
+  const teamHref = $($buttonHolder).attr('href');
+  const teamId = $($buttonHolder).attr('id');
   setupConfirmationModal(confirmationText, () => {
-    deleteTeam(teamId);
+    deleteTeam(teamHref, teamId);
   });
 });
 function toggleCardVisibility(card, shouldShow) {

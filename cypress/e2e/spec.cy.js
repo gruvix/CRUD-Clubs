@@ -1,12 +1,15 @@
 /// <reference types="cypress" />
+import paths from '../../template-engine/private/src/routing/paths.js';
 
 const TEST_USER = 'cypress';
 const BASE_URL = 'http://localhost:8000';
 const MODAL_APPEAR_DELAY = 500;
 const TEST_TEAM_ID = 57;
-const TEST_TEAM_PATH = `/user/teams/${TEST_TEAM_ID}`;
-const CUSTOM_CREST_UPLOAD_PATH = `/user/customCrest/${TEST_TEAM_ID}/upload`;
-const EXPECTED_IMG_SRC = `/user/customCrest/${TEST_TEAM_ID}/${TEST_TEAM_ID}.jpg`;
+const TEST_TEAM_PATH = `${paths.team}/${TEST_TEAM_ID}`;
+const TEST_TEAM_PLAYER_PATH = `${paths.player}/${TEST_TEAM_ID}`;
+const CUSTOM_CREST_UPLOAD_PATH = `${paths.crest}/${TEST_TEAM_ID}`;
+const EXPECTED_IMG_SRC = `${paths.crest}/${TEST_TEAM_ID}/${TEST_TEAM_ID}.jpg`;
+const LOGIN_PATH = `${paths.login}`;
 
 function generateRandomString(length = 5) {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
@@ -45,7 +48,7 @@ describe('test login', () => {
 describe('test teams view page', () => {
   beforeEach(() => {
     cy.visit(BASE_URL);
-    cy.intercept('POST', '/login').as('login');
+    cy.intercept('POST', LOGIN_PATH).as('login');
     cy.get('#username').type(TEST_USER).get('#enter-page-button').click();
     cy.wait('@login');
   });
@@ -77,7 +80,7 @@ describe('test teams view page', () => {
 describe('test the team editor page with the first team', () => {
   beforeEach(() => {
     cy.visit(BASE_URL);
-    cy.intercept('POST', '/login').as('login');
+    cy.intercept('POST', LOGIN_PATH).as('login');
     cy.get('#username').type(TEST_USER).get('#enter-page-button').click();
     cy.wait('@login');
     cy.get('.edit').first().click();
@@ -128,14 +131,14 @@ describe('test the team editor page with the first team', () => {
 describe('test the player editor with the first team', () => {
   beforeEach(() => {
     cy.visit(BASE_URL);
-    cy.intercept('POST', '/login').as('login');
+    cy.intercept('POST', LOGIN_PATH).as('login');
     cy.get('#username').type(TEST_USER).get('#enter-page-button').click();
     cy.wait('@login');
     cy.get('.edit').first().click();
   });
 
   it('edits a random player from a team', () => {
-    cy.intercept('PATCH', `${TEST_TEAM_PATH}/player`).as('editPlayer');
+    cy.intercept('PATCH', TEST_TEAM_PLAYER_PATH).as('editPlayer');
     cy.get('#players-table .edit').then(($editButtons) => {
       const playersAmount = $editButtons.length;
       const randomIndex = Math.floor(Math.random() * playersAmount);
@@ -163,7 +166,7 @@ describe('test the player editor with the first team', () => {
     });
   });
   it('adds a player to the team and shows it', () => {
-    cy.intercept(`${TEST_TEAM_PATH}/player`).as('addPlayer');
+    cy.intercept(TEST_TEAM_PLAYER_PATH).as('addPlayer');
     const randomStrings = [];
     cy.get('#add-player-button').click();
     cy.get('#add-player-row').find('input').each(($input, index) => {
@@ -178,7 +181,7 @@ describe('test the player editor with the first team', () => {
       });
   });
   it('removes a random player', () => {
-    cy.intercept('DELETE', `${TEST_TEAM_PATH}/player`).as('removePlayer');
+    cy.intercept('DELETE', `${TEST_TEAM_PLAYER_PATH}`).as('removePlayer');
     cy.get('#players-table .remove').then(($removeButtons) => {
       const playersAmount = $removeButtons.length;
       const randomIndex = Math.floor(Math.random() * playersAmount);
@@ -197,7 +200,7 @@ describe('test the player editor with the first team', () => {
     });
   });
   it.skip('removes all players', () => {
-    cy.intercept('DELETE', `${TEST_TEAM_PATH}/player`).as('removePlayer');
+    cy.intercept('DELETE', TEST_TEAM_PLAYER_PATH).as('removePlayer');
     cy.get('#players-table .remove').then(($removeButtons) => {
       cy.wrap($removeButtons).each(($removeButton) => {
         cy.wrap($removeButton).click().wait(MODAL_APPEAR_DELAY);
@@ -206,13 +209,13 @@ describe('test the player editor with the first team', () => {
     });
   });
 });
-describe.only('test add team', () => {
+describe('test add team', () => {
   beforeEach(() => {
     cy.visit(BASE_URL);
-    cy.intercept('POST', '/login').as('login');
+    cy.intercept('POST', LOGIN_PATH).as('login');
     cy.get('#username').type(TEST_USER).get('#enter-page-button').click();
     cy.wait('@login');
-    cy.get('#add-new-team-button').click();
+    cy.get('#add-team-button').click();
   });
 
   it('adds a team', () => {

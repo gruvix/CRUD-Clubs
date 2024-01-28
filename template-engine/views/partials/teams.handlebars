@@ -10,7 +10,7 @@
         {{else}}
         <img src="{{this.crestUrl}}" class="list-team-crest-image" alt="team crest">
         {{/if}}
-        <div class="card-body" style="align-self: center" id="{{this.id}}">
+        <div class="card-body" style="align-self: center" id="{{this.id}}" href="{{../path}}/{{this.id}}">
             <button class="btn btn-outline-warning overlay-button-dark edit" style="margin-right: 10px;">edit</button>
             <button class="btn btn-outline-danger overlay-button-dark delete"
              data-bs-toggle="modal" data-bs-target="#confirmationModal">delete</button>

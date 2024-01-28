@@ -1,14 +1,14 @@
 <div class="container">
     <div class="row">
         <div class="col">
-            <button type="button" class="btn btn-shadow btn-outline-warning" style="margin-top: 15px;" id="log-out-button">log out</button>
+            <button type="button" class="btn btn-shadow btn-outline-warning" style="margin-top: 15px;" id="log-out-button" href="{{data.logoutPath}}">log out</button>
             <span class="text-center teams-page-title"> User: {{data.capitalizedName}}</span>
         </div>
     </div>
 
     <div class="row" style="padding-bottom: 3%;">
         <div class="col text-center">
-            <button type="button" id="add-new-team-button" class="btn btn-shadow btn-outline-warning">
+            <button type="button" id="add-team-button" class="btn btn-shadow btn-outline-warning" href="{{data.addTeamPath}}">
                 Add new team
             </button>
         </div>
@@ -28,7 +28,7 @@
         <div class="col text-center">
             <button type="button" id="reset-teams-button" class="btn btn-shadow btn-outline-danger"  
             data-toggle="tooltip" data-placement="auto" title="Erase all teams and reload default teams"
-            data-bs-toggle="modal" data-bs-target="#confirmationModal">
+            data-bs-toggle="modal" data-bs-target="#confirmationModal" href="{{data.resetTeamsPath}}">
                 Reset Teams
             </button>
         </div>
@@ -36,7 +36,7 @@
 
     <div class="row">
         <div class="col">
-            {{> teams items=data.teams domain=data.domain }}
+            {{> teams items=data.teams domain=data.domain path=data.teamPath}}
         </div>
     </div>
 {{> confirmationModal }}

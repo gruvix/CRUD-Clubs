@@ -9,7 +9,7 @@ const uploadImage = multer({ storage, fileFilter: imageFilter });
 
 const router = express.Router();
 
-router.put('/:teamId/upload', uploadImage.single('image'), (req, res) => {
+router.put('/:teamId', uploadImage.single('image'), (req, res) => {
   const { username } = req.session;
   const { teamId } = req.params;
   const { filename } = req.file;

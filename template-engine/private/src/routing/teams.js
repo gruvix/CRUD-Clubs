@@ -4,6 +4,7 @@ const { getUserTeamsListJSONPath } = require('../userPath');
 const { createUser } = require('../user');
 const { getTeamsList } = require('../teamStorage');
 const { getDomain } = require('../domain');
+const paths = require('./paths');
 
 const router = express.Router();
 router.get('', (req, res) => {
@@ -21,6 +22,11 @@ router.get('', (req, res) => {
       capitalizedName: username.charAt(0).toUpperCase() + username.slice(1),
       teams,
       domain,
+      userPath: paths.user,
+      logoutPath: paths.logout,
+      teamPath: paths.team,
+      addTeamPath: paths.addTeam,
+      resetTeamsPath: paths.resetAll,
     },
   });
 });

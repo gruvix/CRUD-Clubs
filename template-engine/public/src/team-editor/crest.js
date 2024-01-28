@@ -9,7 +9,8 @@ async function uploadImage(image) {
   const teamId = $('#team-id').val();
   const formData = new FormData();
   formData.append('image', image);
-  const response = await fetch(`/user/customCrest/${teamId}/upload`, {
+  const href = $('#team-crest').attr('href');
+  const response = await fetch(`${href}/${teamId}`, {
     method: 'PUT',
     body: formData,
   });

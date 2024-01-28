@@ -7,8 +7,8 @@ import resetTeam from './reset.js';
 import handleImageUpdate from './crest.js';
 import * as common from './commonEdit.js';
 
-$('#back-to-teams-button').on('click', () => {
-  window.location.href = '/user/teams';
+$('#back-to-teams-button').on('click', (event) => {
+  window.location.href = $(event.target).attr('href');
 });
 
 $(() => {

@@ -16,7 +16,8 @@ function validateUsername(username) {
   return false;
 }
 async function login(username) {
-  const response = await fetch('/login', {
+  const loginPath = $('#enter-page-button').attr('href');
+  const response = await fetch(loginPath, {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',

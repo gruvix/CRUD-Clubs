@@ -21,8 +21,8 @@ export async function updatePlayer(tableRow) {
   const player = generatePlayerObject(tableRow);
   const updatedData = { player };
   const requestBody = JSON.stringify(updatedData);
-  const teamId = $('#team-id').val();
-  const response = await fetch(`/user/teams/${teamId}/player`, {
+  const href = $('#players-table').attr('href');
+  const response = await fetch(href, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
@@ -40,10 +40,10 @@ function removePlayerRow(playerRow) {
   $(playerRow).remove();
 }
 export async function removePlayer(tableRow) {
-  const teamId = $('#team-id').val();
   const playerId = $(tableRow).attr('data-id');
   const requestBody = JSON.stringify({ playerId });
-  const response = await fetch(`/user/teams/${teamId}/player`, {
+  const href = $('#players-table').attr('href');
+  const response = await fetch(href, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
@@ -65,9 +65,9 @@ export async function removePlayer(tableRow) {
    * @param {JSON} - new player data
    */
 async function sendNewPlayer(player, callback) {
-  const teamId = $('#team-id').val();
   const requestBody = JSON.stringify({ player });
-  const response = await fetch(`/user/teams/${teamId}/player`, {
+  const href = $('#players-table').attr('href');
+  const response = await fetch(href, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
