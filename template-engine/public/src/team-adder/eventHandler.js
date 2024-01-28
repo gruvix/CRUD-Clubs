@@ -1,11 +1,6 @@
 import setupConfirmationModal from '../confirmationModal.js';
-import { addPlayerRow, removePlayerRow } from './queryController.js';
-
-function toggleUploadButton(fileName) {
-  console.log(fileName);
-  $('#upload-image-button').hide();
-  $('#uploaded-image-button').show().find('span').text(fileName);
-}
+import { addPlayerRow, removePlayerRow, toggleUploadButton } from './queryController.js';
+import submitTeamHandler from './submitHandler.js';
 
 $('#back-to-teams-button').on('click', () => {
   setupConfirmationModal('You are about to leave this page, team data will be lost', () => {
@@ -31,6 +26,5 @@ $('#image-input').on('change', (event) => {
   toggleUploadButton(file.name);
 });
 $('#submit-team-button').on('click', () => {
-  const file = $('#image-input').prop('files')[0];
-  console.log(file);
+  submitTeamHandler();
 });
