@@ -153,7 +153,7 @@ function deleteTeam(username, teamId) {
   deleteFile(teamPath);
   deleteTeamFromTeamlist(username, teamId);
 }
-function findNextFreeId(players) {
+function findNextFreePlayerId(players) {
   const sortedPlayers = [...players].sort((a, b) => a.id - b.id);
 
   let nextFreeId = 0;
@@ -179,7 +179,7 @@ function addPlayer(username, teamId, playerData) {
     const player = new Player(playerData);
     const originalTeam = getTeam(username, teamId);
     const team = originalTeam;
-    const id = findNextFreeId(team.squad);
+    const id = findNextFreePlayerId(team.squad);
     player.id = id;
     team.squad.unshift(player);
     console.log('Adding player to team', teamId);
