@@ -1,6 +1,7 @@
 const TeamListTeam = require('../models/teamListTeam.js');
 const SquadTeam = require('../models/squadTeam.js');
 const Player = require('../models/player.js');
+const Team = require('../models/team.js');
 const {
   getUserTeamJSONPath,
   getUserTeamsListJSONPath,
@@ -215,6 +216,15 @@ function removePlayer(username, teamId, playerId) {
     throw new Error(error);
   }
 }
+function addTeam(username, teamData) {
+  try {
+    const team = new Team(teamData);
+    console.log(`Adding team ${team.name} to user ${username}`);
+    return;
+  } catch (error) {
+    throw new Error(error);
+  }
+}
 
 module.exports = {
   cloneTeamFromDefault,
@@ -229,4 +239,5 @@ module.exports = {
   addPlayer,
   updatePlayer,
   removePlayer,
+  addTeam,
 };
