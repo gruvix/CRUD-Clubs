@@ -215,4 +215,27 @@ describe.only('test add team', () => {
     cy.get('#add-new-team-button').click();
   });
 
+  it('adds a team', () => {
+    const teamFields = [];
+    cy.get('#team-table input').each(($input) => {
+      const randomString = generateRandomString();
+      teamFields.push(randomString);
+      cy.wrap($input).clear().type(randomString);
+    });
+    const playerFields = [];
+    cy.get('#add-player-button').click().click().click();
+    cy.get('#players-table input').each(($input) => {
+      const randomString = generateRandomString();
+      playerFields.push(randomString);
+      cy.wrap($input).clear().type(randomString);
+    });
+    cy.intercept(`${CUSTOM_CREST_UPLOAD_PATH}`).as('uploadImage');
+    cy.fixture('crest.jpg').then((fileContent) => {
+      cy.get('#image-input').selectFile({
+        contents: Cypress.Buffer(JSON.stringify(fileContent)),
+        fileName: 'crest.jpg',
+      }, { force: true });
+    });
+    cy.get('#submit-team-button').click();
+  });
 });
