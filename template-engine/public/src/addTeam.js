@@ -40,3 +40,7 @@ $('#image-input').on('change', (event) => {
   const file = event.target.files[0];
   toggleUploadButton(file.name);
 });
+$('#submit-team-button').on('click', () => {
+  const file = $('#image-input').prop('files')[0];
+  console.log(file);
+});
