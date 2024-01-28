@@ -25,10 +25,10 @@
             </div>
         </div>
     </div>
-    <div>
+    <div class="row">
         <div class="d-flex justify-content-center img-container">
-            <button class="btn btn-shadow btn-outline-warning" id="upload-image-button" style="font-size: 150%;">
-                <div id="upload-image-button-text">
+            <button class="btn btn-shadow btn-outline-warning" id="upload-image-button" style="font-size: 150%; margin-bottom: 2%">
+                <div>
                     <span style="display:block">
                         Upload Crest
                     </span>
@@ -36,17 +36,23 @@
                         jpeg / jpg / png / gif   
                     </span>
                 </div>
-                <div id="selected-image-text" style="display: none;">
-                    <span>
+            </button>
+
+            <button class="btn btn-shadow btn-success" id="uploaded-image-button" style="font-size: 150%; margin-bottom: 2%; display: none">
+                <div style="display: block;">
+                    <div>
                         Selected file:
-                    </span>
+                    </div>
                     <span style="font-size: 60%; display:block">
                         image.png 
                     </span>
                 </div>
             </button>
-            <input type="file" id="image-input" style="display: none;">
 
+
+            <input type="file" id="image-input" style="display: none;">
+        </div>
+    </div>
         </div>
     </div>
 </div>

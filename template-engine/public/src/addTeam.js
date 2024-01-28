@@ -24,3 +24,12 @@ $('#players-table').on('click', (event) => {
     removePlayerRow(event.target.parentElement.parentElement);
   }
 });
+
+$('#upload-image-button, #uploaded-image-button').on('click', () => {
+  const input = $('#image-input');
+  input.trigger('click');
+});
+$('#image-input').on('change', (event) => {
+  const file = event.target.files[0];
+  toggleUploadButton(file.name);
+});
