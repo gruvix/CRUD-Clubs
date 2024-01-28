@@ -15,6 +15,7 @@ router.route('/add')
       layout: 'main',
       data: {
         team: new Team({}),
+        addTeamPath: paths.addTeam,
       },
     });
   })
