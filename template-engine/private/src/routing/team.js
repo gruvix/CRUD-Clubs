@@ -21,7 +21,11 @@ router.route('/add')
   .post((req, res) => {
     const { username } = req.session;
     const teamData = req.body;
-    addTeam(username, teamData);
+    try {
+      addTeam(username, teamData);
+    } catch {
+      res.status(400).send('Error adding team');
+    }
   });
 
 router.route('/:teamId')
