@@ -23,7 +23,8 @@ router.route('/add')
     const { username } = req.session;
     const teamData = req.body;
     try {
-      addTeam(username, teamData);
+      const id = addTeam(username, teamData);
+      res.redirect(302, `paths.team/${id}`);
     } catch {
       res.status(400).send('Error adding team');
     }
