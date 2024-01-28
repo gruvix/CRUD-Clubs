@@ -1,6 +1,6 @@
 const express = require('express');
 const {
-  validateTeam, isTeamDefault, getTeam, updateTeam, deleteTeam,
+  validateTeam, isTeamDefault, getTeam, updateTeam, deleteTeam, addTeam,
 } = require('../teamStorage');
 const { getDomain } = require('../domain');
 const Player = require('../../models/player');
@@ -17,6 +17,11 @@ router.route('/add')
         team: new Team({}),
       },
     });
+  })
+  .post((req, res) => {
+    const { username } = req.session;
+    const teamData = req.body;
+    addTeam(username, teamData);
   });
 
 router.route('/:teamId')
