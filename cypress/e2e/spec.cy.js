@@ -3,6 +3,11 @@
 const TEST_USER = 'cypress';
 const BASE_URL = 'http://localhost:8000';
 const MODAL_APPEAR_DELAY = 500;
+const TEST_TEAM_ID = 57;
+const TEST_TEAM_PATH = `/user/teams/${TEST_TEAM_ID}`;
+const CUSTOM_CREST_UPLOAD_PATH = `/user/customCrest/${TEST_TEAM_ID}/upload`;
+const EXPECTED_IMG_SRC = `/user/customCrest/${TEST_TEAM_ID}/${TEST_TEAM_ID}.jpg`;
+
 function generateRandomString(length = 5) {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
   let result = '';
@@ -78,9 +83,6 @@ describe('test the team editor page with the first team', () => {
     cy.get('.edit').first().click();
   });
 
-  const FIRST_TEAM_PATH = '/user/teams/57';
-  const FIRST_TEAM_ID = 57;
-
   it('updates all team parameters with a random string', () => {
     const randomString = generateRandomString();
     cy.get('#team-table .edit').each(($editButton, index) => {
@@ -105,7 +107,7 @@ describe('test the team editor page with the first team', () => {
     cy.get('#team-table input').first().type(randomString).get('#team-table .apply')
       .first()
       .click();
-    cy.visit(BASE_URL + FIRST_TEAM_PATH);
+    cy.visit(BASE_URL + TEST_TEAM_PATH);
     cy.get('#team-table span').first().should('contain', randomString);
     cy.get('#reset-team-button').click().wait(MODAL_APPEAR_DELAY);
     cy.get('#confirmation-modal-button').click();
@@ -113,10 +115,8 @@ describe('test the team editor page with the first team', () => {
   });
 
   it('uploads an image to the team crest', () => {
-    const EXPECTED_IMG_SRC = '/user/customCrest/57/57.jpg';
-    cy.intercept(`/user/customCrest/${FIRST_TEAM_ID}/upload`).as('uploadImage');
+    cy.intercept(`${CUSTOM_CREST_UPLOAD_PATH}`).as('uploadImage');
     cy.fixture('crest.jpg').then((fileContent) => {
-      console.log(fileContent);
       cy.get('#image-input').selectFile({
         contents: Cypress.Buffer(fileContent),
         fileName: 'crest.jpg',
@@ -133,10 +133,9 @@ describe('test the player editor with the first team', () => {
     cy.wait('@login');
     cy.get('.edit').first().click();
   });
-  const FIRST_TEAM_PATH = '/user/teams/57';
 
   it('edits a random player from a team', () => {
-    cy.intercept('PATCH', `${FIRST_TEAM_PATH}/player`).as('editPlayer');
+    cy.intercept('PATCH', `${TEST_TEAM_PATH}/player`).as('editPlayer');
     cy.get('#players-table .edit').then(($editButtons) => {
       const playersAmount = $editButtons.length;
       const randomIndex = Math.floor(Math.random() * playersAmount);
@@ -154,7 +153,7 @@ describe('test the player editor with the first team', () => {
 
           cy.get(playerGetString).find('.apply')
             .click();
-          cy.visit(BASE_URL + FIRST_TEAM_PATH).wait('@editPlayer');
+          cy.visit(BASE_URL + TEST_TEAM_PATH).wait('@editPlayer');
           cy.get(playerGetString).find('span')
             .each(($spanField, index) => {
               cy.wrap($spanField).should('contain', randomStrings[index]);
@@ -164,7 +163,7 @@ describe('test the player editor with the first team', () => {
     });
   });
   it('adds a player to the team and shows it', () => {
-    cy.intercept(`${FIRST_TEAM_PATH}/player`).as('addPlayer');
+    cy.intercept(`${TEST_TEAM_PATH}/player`).as('addPlayer');
     const randomStrings = [];
     cy.get('#add-player-button').click();
     cy.get('#add-player-row').find('input').each(($input, index) => {
@@ -179,7 +178,7 @@ describe('test the player editor with the first team', () => {
       });
   });
   it('removes a random player', () => {
-    cy.intercept('DELETE', `${FIRST_TEAM_PATH}/player`).as('removePlayer');
+    cy.intercept('DELETE', `${TEST_TEAM_PATH}/player`).as('removePlayer');
     cy.get('#players-table .remove').then(($removeButtons) => {
       const playersAmount = $removeButtons.length;
       const randomIndex = Math.floor(Math.random() * playersAmount);
@@ -198,7 +197,7 @@ describe('test the player editor with the first team', () => {
     });
   });
   it.skip('removes all players', () => {
-    cy.intercept('DELETE', `${FIRST_TEAM_PATH}/player`).as('removePlayer');
+    cy.intercept('DELETE', `${TEST_TEAM_PATH}/player`).as('removePlayer');
     cy.get('#players-table .remove').then(($removeButtons) => {
       cy.wrap($removeButtons).each(($removeButton) => {
         cy.wrap($removeButton).click().wait(MODAL_APPEAR_DELAY);
