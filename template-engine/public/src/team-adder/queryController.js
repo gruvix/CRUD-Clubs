@@ -9,3 +9,8 @@ export function addPlayerRow() {
 export function removePlayerRow(row) {
   $(row).remove();
 }
+export function toggleUploadButton(fileName) {
+  console.log(fileName);
+  $('#upload-image-button').hide();
+  $('#uploaded-image-button').show().find('span').text(fileName);
+}
