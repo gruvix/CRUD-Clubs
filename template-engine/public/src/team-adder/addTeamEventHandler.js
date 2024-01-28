@@ -1,16 +1,6 @@
-import setupConfirmationModal from './confirmationModal.js';
+import setupConfirmationModal from '../confirmationModal.js';
+import { addPlayerRow, removePlayerRow } from './queryController.js';
 
-function addPlayerRow() {
-  const $table = $('#players-table');
-  const $template = $('#new-player-template');
-  const $newPlayerRow = $template.contents().clone(true);
-
-  $($table).children('thead').children().first()
-    .after($newPlayerRow);
-}
-function removePlayerRow(row) {
-  $(row).remove();
-}
 function toggleUploadButton(fileName) {
   console.log(fileName);
   $('#upload-image-button').hide();
