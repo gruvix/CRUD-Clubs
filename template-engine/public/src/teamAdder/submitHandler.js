@@ -5,11 +5,14 @@ function getImageFile() {
   return $('#image-input').prop('files')[0];
 }
 async function sendData(teamData) {
+  const preparedData = JSON.stringify({ teamData });
   const href = $('#submit-team-button').attr('href');
   const response = await fetch(href, {
     method: 'POST',
-    headers: { application: 'json' },
-    body: teamData,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: preparedData,
   });
   if (response.redirected) {
     window.location.href = response.url;
