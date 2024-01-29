@@ -11,6 +11,7 @@ const {
   writeFile,
   deleteFile,
 } = require('./utils.js');
+const paths = require('./routing/paths.js');
 
 function saveTeam(team, username) {
   try {
@@ -238,16 +239,16 @@ function findNextFreeTeamId(username) {
 function addTeamToTeamlist(newTeam, username) {
   const userTeamsPath = getUserTeamsListJSONPath(username);
   const userTeams = readFile(userTeamsPath);
-  userTeams[newTeam.id] = new TeamListTeam(newTeam, false, false, false);
+  userTeams[newTeam.id] = new TeamListTeam(newTeam, true, false, false);
   writeFile(userTeamsPath, JSON.stringify(userTeams));
 }
-function addTeam(username, teamData) {
+function addTeam(username, teamData, imageFileName) {
   try {
     const team = new TeamFullData(teamData);
-    console.log(`Adding team ${team.name} to user ${username}`);
     const teamId = findNextFreeTeamId(username);
     team.id = teamId;
     team.lastUpdated = getDate();
+    team.crestUrl = paths.generateCustomCrestUrl(teamId, imageFileName);
     saveTeam(team, username);
     addTeamToTeamlist(team, username);
     return teamId;
