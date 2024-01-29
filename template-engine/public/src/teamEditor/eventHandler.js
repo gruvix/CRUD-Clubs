@@ -5,7 +5,7 @@ import updateTeamParameter from './updateTeam.js';
 import { updatePlayer, submitNewPlayer, removePlayer } from './updatePlayer.js';
 import resetTeam from './reset.js';
 import handleImageUpdate from './updateCrest.js';
-import * as common from './commonEdit.js';
+import * as query from './queryController.js';
 
 $('#back-to-teams-button').on('click', (event) => {
   window.location.href = $(event.target).attr('href');
@@ -37,8 +37,8 @@ $('#image-input').on('change', (event) => {
 $('#tables').on('click', (event) => {
   if (event.target.classList.contains('edit')) {
     const tableRow = event.target.parentElement.parentElement;
-    common.prepareEditFields(tableRow);
-    common.enableEditMode(tableRow);
+    query.prepareEditFields(tableRow);
+    query.enableEditMode(tableRow);
   }
 });
 function handleApplyAction(tableRow) {
@@ -55,7 +55,7 @@ function handleApplyAction(tableRow) {
       callback = () => {};
       break;
   }
-  common.submitChanges(tableRow, callback);
+  query.submitChanges(tableRow, callback);
 }
 $('#tables').on('click', (event) => {
   const buttonClassList = event.target.classList;
@@ -64,7 +64,7 @@ $('#tables').on('click', (event) => {
     handleApplyAction(tableRow);
   }
   if (buttonClassList.contains('cancel')) {
-    common.disableEditMode();
+    query.disableEditMode();
   }
   if (buttonClassList.contains('remove')) {
     const playerRow = event.target.parentElement.parentElement;
@@ -90,15 +90,15 @@ $('#confirm-player-button').on('click', () => {
   submitNewPlayer($('#add-player-row'));
 });
 $('#cancel-player-button').on('click', () => {
-  common.disableEditMode();
+  query.disableEditMode();
 });
 $('#tables').on('keydown', (event) => {
   if (event.key === 'Escape') {
-    common.disableEditMode();
+    query.disableEditMode();
   }
 });
 $('#add-player-button').on('click', (event) => {
   const tableRow = event.target.parentElement.parentElement;
-  common.prepareEditFields(tableRow);
-  common.enableEditMode(tableRow);
+  query.prepareEditFields(tableRow);
+  query.enableEditMode(tableRow);
 });

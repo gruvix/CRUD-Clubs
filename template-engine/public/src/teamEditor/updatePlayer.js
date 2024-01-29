@@ -1,5 +1,5 @@
 import Player from '../../models/player.js';
-import { disableEditMode, areInputsValid } from './commonEdit.js';
+import { disableEditMode, areInputsValid } from './queryController.js';
 
 function generatePlayerObject(tableRow) {
   const inputs = $(tableRow).children().children('input');
