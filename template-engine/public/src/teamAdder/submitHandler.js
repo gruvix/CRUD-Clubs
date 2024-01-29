@@ -1,3 +1,6 @@
+import Player from '../../models/player.js';
+import Team from '../../models/team.js';
+
 function getImageFile() {
   return $('#image-input').prop('files')[0];
 }
