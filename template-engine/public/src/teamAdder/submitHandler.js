@@ -15,6 +15,22 @@ async function sendData(teamData) {
     alert(`Error ${response.status}: could not add team`);
   }
 }
+function generateTeamData() {
+  const teamData = new Team({});
+  Object.keys(teamData).forEach((key) => {
+    teamData[key] = $(`#team-parameter-${key} input`).val();
+  });
+  teamData.squad = [];
+  $('#players-table .player').each((index, $player) => {
+    const player = new Player({});
+    Object.keys(player).forEach((key) => {
+      player[key] = $($player).find(`[data-parameter="${key}"]`).val();
+    });
+    player.id = index;
+    teamData.squad.push(player);
+  });
+  return teamData;
+}
 export default function submitHandler() {
   const image = getImageFile();
   sendData({});
