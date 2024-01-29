@@ -1,6 +1,6 @@
 import setupConfirmationModal from '../confirmationModal.js';
 import { addPlayerRow, removePlayerRow, toggleUploadButton } from './queryController.js';
-import submitTeamHandler from './submitHandler.js';
+import submitTeamHandler from './submitTeam.js';
 
 $('#back-to-teams-button').on('click', () => {
   setupConfirmationModal('You are about to leave this page, team data will be lost', () => {
