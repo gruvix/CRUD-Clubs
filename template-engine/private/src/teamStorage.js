@@ -235,8 +235,8 @@ function findNextFreeTeamId(username) {
   }
   return nextFreeId;
 }
-function addTeamToTeamlist(newTeam) {
-  const userTeamsPath = getUserTeamsListJSONPath();
+function addTeamToTeamlist(newTeam, username) {
+  const userTeamsPath = getUserTeamsListJSONPath(username);
   const userTeams = readFile(userTeamsPath);
   userTeams[newTeam.id] = new TeamListTeam(newTeam, false, false, false);
   writeFile(userTeamsPath, JSON.stringify(userTeams));
@@ -249,7 +249,7 @@ function addTeam(username, teamData) {
     team.id = teamId;
     team.lastUpdated = getDate();
     saveTeam(team, username);
-    addTeamToTeamlist(team);
+    addTeamToTeamlist(team, username);
     return teamId;
   } catch (error) {
     throw new Error(error);
