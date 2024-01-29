@@ -4,6 +4,7 @@ const { updateTeam } = require('../teamStorage');
 const { getUserCustomCrestFolderPath } = require('../userPath');
 const { validateFile } = require('../utils');
 const { storage, imageFilter } = require('../multerConfig.js');
+const paths = require('./paths');
 
 const uploadImage = multer({ storage, fileFilter: imageFilter });
 
@@ -15,7 +16,7 @@ router.put('/:teamId', uploadImage.single('image'), (req, res) => {
   const { filename } = req.file;
   console.log(`User '${username}' uploaded new crest for team ${teamId}`);
   console.log(req.file);
-  const crestUrl = `/user/customCrest/${teamId}/${filename}`;
+  const crestUrl = paths.generateCustomCrestUrl(teamId, filename);
   const newData = {
     crestUrl,
     hasCustomCrest: true,
