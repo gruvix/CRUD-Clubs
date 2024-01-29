@@ -66,3 +66,9 @@ export function submitChanges(tableRow, updateCallback) {
   applyEditField(tableRow);
   updateCallback(tableRow);
 }
+const $image = $('#team-crest');
+$image.on('error', () => {
+  console.log('Image not found');
+  const IDEAL_CREST_BUTTON_TOP_MARGIN = 10;
+  $('#upload-image-button').removeClass('overlay-button').css('margin-top', `${IDEAL_CREST_BUTTON_TOP_MARGIN}%`);
+});
