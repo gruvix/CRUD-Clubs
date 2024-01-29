@@ -5,3 +5,10 @@ export function toggleCardVisibility(card, shouldShow) {
     $(card).hide();
   }
 }
+export function adjustTitles() {
+  $('h5').each((index, title) => {
+    if (title.offsetHeight > 50) {
+      title.style.fontSize = '100%';
+    }
+  });
+}

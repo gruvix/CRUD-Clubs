@@ -1,17 +1,9 @@
 import setupConfirmationModal from '../confirmationModal.js';
 import deleteTeam from './deleteTeam.js';
-import { toggleCardVisibility } from './queryController.js';
+import { adjustTitles, toggleCardVisibility } from './queryController.js';
 import resetTeams from './reset.js';
 import logout from './userSession.js';
 
-function adjustTitles() {
-  const titles = document.querySelectorAll('h5');
-  titles.forEach((title) => {
-    if (title.offsetHeight > 50) {
-      title.style.fontSize = '100%';
-    }
-  });
-}
 adjustTitles();
 $(() => {
   $('[data-toggle="tooltip"]').tooltip();
