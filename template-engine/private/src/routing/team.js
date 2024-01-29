@@ -1,4 +1,5 @@
 const express = require('express');
+const multer = require('multer');
 const {
   validateTeam, isTeamDefault, getTeam, updateTeam, deleteTeam, addTeam,
 } = require('../teamStorage');
@@ -6,9 +7,10 @@ const { getDomain } = require('../domain');
 const Player = require('../../models/player');
 const Team = require('../../models/team');
 const paths = require('./paths');
+const { storage, imageFilter } = require('../multerConfig.js');
 
+const uploadImage = multer({ storage, fileFilter: imageFilter });
 const router = express.Router();
-
 router.route('/add')
   .get((req, res) => {
     res.render('newTeam', {
@@ -19,12 +21,13 @@ router.route('/add')
       },
     });
   })
-  .post((req, res) => {
+  .post(uploadImage.single('image'), (req, res) => {
     const { username } = req.session;
     const { teamData } = req.body;
+    const { filename } = req.file;
+    const team = JSON.parse(teamData);
     try {
-      console.log(`User ${username} is adding team ${teamData.name}`);
-      const id = addTeam(username, teamData);
+      const id = addTeam(username, team, filename);
       res.redirect(302, `${paths.team}/${id}`);
     } catch (error) {
       console.log(`Error adding team: ${error}`);
