@@ -32,6 +32,11 @@ function generateTeamData() {
   return teamData;
 }
 export default function submitHandler() {
-  const image = getImageFile();
-  sendData({});
+  const teamData = generateTeamData();
+  console.log(teamData);
+  callback = () => {
+    const imageFile = getImageFile();
+    // TODO: add image handling
+  }
+  sendData(teamData, callback);
 }
