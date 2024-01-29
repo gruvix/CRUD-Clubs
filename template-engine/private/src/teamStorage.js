@@ -216,6 +216,20 @@ function removePlayer(username, teamId, playerId) {
     throw new Error(error);
   }
 }
+function findNextFreeTeamId(username) {
+  const teamsPath = getUserTeamsListJSONPath(username);
+  const teamsData = readFile(teamsPath);
+  const sortedTeams = Object.values(teamsData).sort((a, b) => a.id - b.id);
+  let nextFreeId = 0;
+  for (let index = 0; index < sortedTeams.length; index += 1) {
+    if (sortedTeams[index].id > nextFreeId) {
+      return nextFreeId;
+    }
+    nextFreeId = sortedTeams[index].id + 1;
+    console.log(`Next free team ID: ${nextFreeId}`);
+  }
+  return nextFreeId;
+}
 function addTeam(username, teamData) {
   try {
     const team = new Team(teamData);
