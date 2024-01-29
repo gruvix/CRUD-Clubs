@@ -4,7 +4,7 @@ import Team from '../../models/team.js';
 function getImageFile() {
   return $('#image-input').prop('files')[0];
 }
-async function sendData(teamData) {
+async function sendData(teamData, callback) {
   const preparedData = JSON.stringify({ teamData });
   const href = $('#submit-team-button').attr('href');
   const response = await fetch(href, {
@@ -14,11 +14,13 @@ async function sendData(teamData) {
     },
     body: preparedData,
   });
-  if (response.redirected) {
-    window.location.href = response.url;
-  }
   if (!response.ok) {
     alert(`Error ${response.status}: could not add team`);
+  } else {
+    callback();
+  }
+  if (response.redirected) {
+    window.location.href = response.url;
   }
 }
 function generateTeamData() {
