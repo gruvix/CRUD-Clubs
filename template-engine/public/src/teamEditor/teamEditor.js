@@ -4,7 +4,7 @@ import setupConfirmationModal from '../confirmationModal.js';
 import updateTeamParameter from './updateTeam.js';
 import { updatePlayer, submitNewPlayer, removePlayer } from './updatePlayer.js';
 import resetTeam from './reset.js';
-import handleImageUpdate from './crest.js';
+import handleImageUpdate from './updateCrest.js';
 import * as common from './commonEdit.js';
 
 $('#back-to-teams-button').on('click', (event) => {
