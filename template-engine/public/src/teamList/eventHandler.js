@@ -1,4 +1,8 @@
-import setupConfirmationModal from './confirmationModal.js';
+import setupConfirmationModal from '../confirmationModal.js';
+import deleteTeam from './deleteTeam.js';
+import { toggleCardVisibility } from './queryController.js';
+import resetTeams from './reset.js';
+import logout from './userSession.js';
 
 function adjustTitles() {
   const titles = document.querySelectorAll('h5');
@@ -9,30 +13,6 @@ function adjustTitles() {
   });
 }
 adjustTitles();
-async function resetTeams(callback) {
-  const resetPath = $('#reset-teams-button').attr('href');
-  await fetch(resetPath, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-  callback();
-}
-async function logout() {
-  const logoutPath = $('#log-out-button').attr('href');
-  console.log(logoutPath);
-  const response = await fetch(logoutPath, {
-    method: 'post',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-  if (response.redirected) {
-    window.location.href = response.url;
-  }
-}
-
 $(() => {
   $('[data-toggle="tooltip"]').tooltip();
 });
@@ -49,32 +29,12 @@ $('#reset-teams-button').on('click', () => {
     resetTeams(callback);
   });
 });
-function goEditTeam(teamPath) {
-  window.location.href = `${teamPath}`;
-}
-async function deleteTeam(teamPath, teamId) {
-  const response = await fetch(`${teamPath}`, {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-  if (response.redirected) {
-    window.location.href = response.url;
-  }
-  if (response.ok) {
-    $(`#${teamId}`).parent().remove();
-  }
-  else {
-    alert('Error: could not delete team');
-  }
-}
 $('#add-team-button').on('click', (event) => {
   window.location.href = $(event.target).attr('href');
 });
 $('.edit').on('click', (event) => {
   const teamHref = $(event.target.parentElement).attr('href');
-  goEditTeam(teamHref);
+  window.location.href = teamHref;
 });
 $('.delete').on('click', (event) => {
   const teamName = $(event.target).parent().parent().find('.team-card-title').text();
@@ -86,13 +46,6 @@ $('.delete').on('click', (event) => {
     deleteTeam(teamHref, teamId);
   });
 });
-function toggleCardVisibility(card, shouldShow) {
-  if (shouldShow) {
-    $(card).show();
-  } else {
-    $(card).hide();
-  }
-}
 $('#search-input').on('input', () => {
   const searchValue = $('#search-input').val().toLowerCase();
   $('.card-title').each((index, element) => {
