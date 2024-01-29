@@ -1,7 +1,7 @@
 const TeamListTeam = require('../models/teamListTeam.js');
 const SquadTeam = require('../models/squadTeam.js');
 const Player = require('../models/player.js');
-const Team = require('../models/team.js');
+const TeamFullData = require('../models/teamFullData.js');
 const {
   getUserTeamJSONPath,
   getUserTeamsListJSONPath,
@@ -237,10 +237,13 @@ function findNextFreeTeamId(username) {
 }
 function addTeam(username, teamData) {
   try {
-    const team = new Team(teamData);
+    const team = new TeamFullData(teamData);
     console.log(`Adding team ${team.name} to user ${username}`);
-    return;
+    const teamId = findNextFreeTeamId(username);
+    team.id = teamId;
     team.lastUpdated = getDate();
+    saveTeam(team, username);
+    return teamId;
   } catch (error) {
     throw new Error(error);
   }
