@@ -124,12 +124,17 @@ function defaultTeamCheck(username, teamId) {
     throw new Error(error);
   }
 }
+/**
+ * @returns {string} - Returns current date in ISOS string format
+ */
+function getDate() {
+  const now = new Date();
+  return now.toISOString();
+}
 function updateTeam(newData, username, teamId) {
   const updatedData = newData;
   defaultTeamCheck(username, teamId);
-  const now = new Date();
-  const lastUpdated = now.toISOString();
-  updatedData.lastUpdated = lastUpdated;
+  updatedData.lastUpdated = getDate();
   TeamListTeam.properties().forEach((key) => {
     if (updatedData[key] !== undefined) {
       updateTeamlistParameter(username, teamId, key, updatedData[key]);
@@ -235,6 +240,7 @@ function addTeam(username, teamData) {
     const team = new Team(teamData);
     console.log(`Adding team ${team.name} to user ${username}`);
     return;
+    team.lastUpdated = getDate();
   } catch (error) {
     throw new Error(error);
   }
