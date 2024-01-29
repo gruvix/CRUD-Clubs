@@ -39,28 +39,8 @@ function generateTeamData() {
   });
   return teamData;
 }
-async function uploadImage(image, teamId) {
-  const teamId = $('#team-id').val();
-  const formData = new FormData();
-  formData.append('image', image);
-  const href = $('#team-crest').attr('href');
-  const response = await fetch(`${href}/${teamId}`, {
-    method: 'PUT',
-    body: formData,
-  });
-  if (response.redirected) {
-    window.location.href = response.url;
-  }
-  if (!response.ok) {
-    alert('Error: failed to upload team crest');
-  }
-}
 export default function submitHandler() {
   const teamData = generateTeamData();
   console.log(teamData);
-  const callback = () => {
-    const imageFile = getImageFile();
-    // TODO: add image handling
-  }
   sendData(teamData, callback);
 }
