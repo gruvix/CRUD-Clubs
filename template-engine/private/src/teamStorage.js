@@ -271,4 +271,5 @@ module.exports = {
   updatePlayer,
   removePlayer,
   addTeam,
+  findNextFreeTeamId,
 };

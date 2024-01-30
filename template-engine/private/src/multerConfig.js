@@ -1,6 +1,7 @@
 const multer = require('multer');
 const path = require('path');
 const { getUserCustomCrestFolderPath } = require('./userPath.js');
+const { findNextFreeTeamId } = require('./teamStorage.js');
 
 const imageFilter = (req, file, cb) => {
   const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
@@ -16,7 +17,13 @@ const storage = multer.diskStorage({
     cb(null, userCrestsFolderPath);
   },
   filename: (req, file, cb) => {
-    const { teamId } = req.params;
+    let { teamId } = req.params;
+    console.log(`MULTER teamId: ${teamId}`);
+    if (!teamId) {
+      console.log('MULTER teamId not found');
+      const { username } = req.session;
+      teamId = findNextFreeTeamId(username);
+    }
     const filename = `${teamId}${path.extname(file.originalname)}`;
     cb(null, filename);
   },
