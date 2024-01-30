@@ -8,7 +8,7 @@ const TEST_TEAM_ID = 57;
 const TEST_TEAM_PATH = `${paths.team}/${TEST_TEAM_ID}`;
 const TEST_TEAM_PLAYER_PATH = `${paths.player}/${TEST_TEAM_ID}`;
 const CUSTOM_CREST_UPLOAD_PATH = `${paths.crest}/${TEST_TEAM_ID}`;
-const EXPECTED_IMG_SRC = `${paths.crest}/${TEST_TEAM_ID}/${TEST_TEAM_ID}.jpg`;
+const TEST_TEAM_EXPECTED_IMG_SRC = `${paths.crest}/${TEST_TEAM_ID}/${TEST_TEAM_ID}.jpg`;
 const LOGIN_PATH = `${paths.login}`;
 
 function generateRandomString(length = 5) {
@@ -125,7 +125,7 @@ describe('test the team editor page with the first team', () => {
         fileName: 'crest.jpg',
       }, { force: true });
     });
-    cy.wait('@uploadImage').get('#team-crest').should('have.attr', 'src', EXPECTED_IMG_SRC);
+    cy.wait('@uploadImage').get('#team-crest').should('have.attr', 'src', TEST_TEAM_EXPECTED_IMG_SRC);
   });
 });
 describe('test the player editor with the first team', () => {
@@ -235,10 +235,20 @@ describe('test add team', () => {
     cy.intercept(`${CUSTOM_CREST_UPLOAD_PATH}`).as('uploadImage');
     cy.fixture('crest.jpg').then((fileContent) => {
       cy.get('#image-input').selectFile({
-        contents: Cypress.Buffer(JSON.stringify(fileContent)),
+        contents: Cypress.Buffer.from(JSON.stringify(fileContent)),
         fileName: 'crest.jpg',
       }, { force: true });
     });
     cy.get('#submit-team-button').click();
+    cy.get('#team-table span').each(($spanField, index) => {
+      cy.wrap($spanField).should('contain', teamFields[index]);
+    });
+    cy.get('#players-table span').each(($spanField, index) => {
+      cy.wrap($spanField).should('contain', playerFields[index]);
+    });
+    cy.get('#team-id').invoke('val').then((teamId) => {
+      const expectedNewTeamImgSrc = `${BASE_URL}${paths.crest}/${teamId}/${teamId}.jpg`;
+      cy.get('#team-crest').should('have.attr', 'src', expectedNewTeamImgSrc);
+    });
   });
 });
