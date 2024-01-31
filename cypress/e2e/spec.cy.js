@@ -250,5 +250,6 @@ describe('test add team', () => {
       const expectedNewTeamImgSrc = `${BASE_URL}${paths.crest}/${teamId}/${teamId}.jpg`;
       cy.get('#team-crest').should('have.attr', 'src', expectedNewTeamImgSrc);
     });
+    cy.get('#reset-team-button').should('has.class', 'disabled');
   });
 });
