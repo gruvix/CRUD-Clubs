@@ -16,7 +16,7 @@ This proyects implements a CRUD (create, read update delete) of football teams w
 
 `npm install`
 
-`npm run dev:templateNodemonConfig`
+`npm run dev:templateNodemon`
 
 The server will run on port 8000.
 
@@ -25,23 +25,21 @@ main adress: `localhost:8000`
 
 Homepage: `/` (GET)
 
-Login: `/login` (POST)
+Login: `/user/login` (POST)
+
+Logout: `/user/logout` (POST)
 
 Teams list: `/user/teams` (GET)
 
-Team details: `/user/teams/:teamId` (GET)
+Team details: `/user/team/:teamId` (GET, PATCH, PUT, DELETE)
 
-Edit a team: `/user/teams/:teamId` (PATCH)
-
-Delete a team: `/user/teams/:teamId` (DELETE)
+Add a team: `/user/team/add` (GET, POST)
 
 Reset a team: `/user/reset/:teamId` (PUT) 
 
 Reset all teams: `/user/reset/all` (PUT)
 
 Error page: `/error` (GET)
-
-Logout: `/logout` (POST)
 
 ## Credits
 [Javascript Course Argentina Programa](https://argentinaprograma.com/)
