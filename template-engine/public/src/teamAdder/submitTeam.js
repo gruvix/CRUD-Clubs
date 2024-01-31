@@ -38,7 +38,6 @@ function generateTeamData() {
 }
 export default function submitHandler() {
   const teamData = generateTeamData();
-  console.log(teamData);
   const imageFile = getImageFile();
   sendData(teamData, imageFile);
 }
