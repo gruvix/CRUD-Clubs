@@ -32,6 +32,12 @@ function isTeamDefault(username, teamId) {
   }
   return false;
 }
+function hasTeamDefault(username, teamId) {
+  const teamsListPath = getUserTeamsListJSONPath(username);
+  const teams = readFile(teamsListPath);
+  const team = teams[teamId];
+  return team.hasDefault;
+}
 /**
  * gets a teams list by username
  * @param {string} username
@@ -260,6 +266,7 @@ function addTeam(username, teamData, imageFileName) {
 module.exports = {
   cloneTeamFromDefault,
   isTeamDefault,
+  hasTeamDefault,
   getTeam,
   getTeamsList,
   copyTeamListTeam,

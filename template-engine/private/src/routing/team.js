@@ -1,7 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const {
-  validateTeam, isTeamDefault, getTeam, updateTeam, deleteTeam, addTeam,
+  validateTeam, isTeamDefault, getTeam, updateTeam, deleteTeam, addTeam, hasTeamDefault,
 } = require('../teamStorage');
 const { getDomain } = require('../domain');
 const Player = require('../../models/player');
@@ -73,6 +73,7 @@ router.route('/:teamId')
         id: team.id,
         players,
         domain,
+        hasDefault: hasTeamDefault(username, teamId),
         hasCustomCrest: team.hasCustomCrest,
         resetTeamPath: paths.resetSingle,
         teamsPath: paths.teams,

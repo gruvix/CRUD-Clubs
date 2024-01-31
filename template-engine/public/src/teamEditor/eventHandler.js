@@ -15,15 +15,18 @@ $(() => {
   $('[data-toggle="tooltip"]').tooltip();
 });
 
-$('#reset-team-button').on('click', () => {
-  const confirmationText = 'You are about to reset the team. All custom data will be lost';
-  setupConfirmationModal(confirmationText, () => {
-    const callback = () => {
-      window.location.reload();
-    };
-    resetTeam(callback);
+const $resetButton = $('#reset-team-button');
+if (!$($resetButton).hasClass('disabled')) {
+  $($resetButton).on('click', () => {
+    const confirmationText = 'You are about to reset the team. All custom data will be lost';
+    setupConfirmationModal(confirmationText, () => {
+      const callback = () => {
+        window.location.reload();
+      };
+      resetTeam(callback);
+    });
   });
-});
+}
 
 $('#upload-image-button').on('click', () => {
   const input = $('#image-input');

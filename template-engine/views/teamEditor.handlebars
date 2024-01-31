@@ -27,11 +27,19 @@
 
         <div class="col">
             <div class="text-end">
-                <button type="button" id="reset-team-button" class="btn btn-shadow btn-outline-danger" 
-                style="margin-top: 25px;" data-bs-toggle="modal" data-bs-target="#confirmationModal" href="{{data.resetTeamPath}}"
-                data-toggle="tooltip" data-placement="bottom" title="Reset the team to its default values">
-                    Reset to default
-                </button>
+                {{#if data.hasDefault}}
+                    <button type="button" id="reset-team-button" class="btn btn-shadow btn-outline-danger" 
+                    style="margin-top: 25px;" data-bs-toggle="modal" data-bs-target="#confirmationModal" href="{{data.resetTeamPath}}"
+                    data-toggle="tooltip" data-placement="bottom" title="Reset the team to its default values">
+                        Reset to default
+                    </button>
+                {{else}}
+                    <button id="reset-team-button" class="btn btn-shadow btn-outline-danger disabled" 
+                    style="margin-top: 25px; pointer-events: auto" href=""
+                    data-toggle="tooltip" data-placement="bottom" title="This team is custom-made and has no default values">
+                        Reset to default
+                    </button>
+                {{/if}}
             </div>
         </div>
     </div>
