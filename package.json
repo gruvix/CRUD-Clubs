@@ -23,7 +23,7 @@
   },
   "scripts": {
     "dev:cypress": "cypress open",
-    "dev:templateNodemonConfig": "cd ./template-engine && nodemon --config ../nodemon.json index.js",
+    "dev:templateNodemon": "cd ./template-engine && nodemon --config ../nodemon.json index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
