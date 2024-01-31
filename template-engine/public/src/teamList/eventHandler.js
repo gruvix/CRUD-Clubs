@@ -1,6 +1,6 @@
 import setupConfirmationModal from '../confirmationModal.js';
 import deleteTeam from './deleteTeam.js';
-import { adjustTitles, toggleCardVisibility } from './queryController.js';
+import { adjustTitles, compareSearch } from './queryController.js';
 import resetTeams from './reset.js';
 import logout from './userSession.js';
 
@@ -29,7 +29,8 @@ $('.edit').on('click', (event) => {
   window.location.href = teamHref;
 });
 $('.delete').on('click', (event) => {
-  const teamName = $(event.target).parent().parent().find('.team-card-title').text();
+  const teamName = $(event.target).parent().parent().find('.team-card-title')
+    .text();
   const confirmationText = `You are about to delete ${teamName}. Custom teams are not recoverable`;
   const $buttonHolder = $(event.target.parentElement);
   const teamHref = $($buttonHolder).attr('href');
@@ -39,11 +40,10 @@ $('.delete').on('click', (event) => {
   });
 });
 $('#search-input').on('input', () => {
-  const searchValue = $('#search-input').val().toLowerCase();
-  $('.card-title').each((index, element) => {
-    const teamName = $(element).text().toLowerCase();
-    const card = $(element).parent().parent();
-    const shouldShow = teamName.includes(searchValue);
-    toggleCardVisibility(card, shouldShow);
-  });
+  compareSearch();
+});
+$('#search-options .dropdown-item').on('click', (event) => {
+  const selectedOption = $(event.target).text();
+  $('#search-options-button').text(selectedOption);
+  compareSearch();
 });
