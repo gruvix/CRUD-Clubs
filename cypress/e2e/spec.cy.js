@@ -83,7 +83,10 @@ describe('test the team editor page with the first team', () => {
     cy.intercept('POST', LOGIN_PATH).as('login');
     cy.get('#username').type(TEST_USER).get('#enter-page-button').click();
     cy.wait('@login');
-    cy.get('.edit').first().click();
+    cy.get('#search-options-button').click();
+    cy.get('#search-options').contains('Default teams').click();
+    cy.get('.card').filter(':visible').find('.edit').first()
+      .click();
   });
 
   it('updates all team parameters with a random string', () => {
@@ -104,7 +107,7 @@ describe('test the team editor page with the first team', () => {
     });
   });
 
-  it('edits and then resets a team', () => {
+  it('edits and then resets a default team', () => {
     const randomString = generateRandomString();
     cy.get('#team-table .edit').first().click();
     cy.get('#team-table input').first().type(randomString).get('#team-table .apply')
@@ -215,6 +218,8 @@ describe('test add team', () => {
     cy.intercept('POST', LOGIN_PATH).as('login');
     cy.get('#username').type(TEST_USER).get('#enter-page-button').click();
     cy.wait('@login');
+    cy.get('#search-options-button').click();
+    cy.get('#search-options').contains('Custom teams').click();
     cy.get('#add-team-button').click();
   });
 
