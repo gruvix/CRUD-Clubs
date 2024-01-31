@@ -18,9 +18,7 @@ const storage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     let { teamId } = req.params;
-    console.log(`MULTER teamId: ${teamId}`);
     if (!teamId) {
-      console.log('MULTER teamId not found');
       const { username } = req.session;
       teamId = findNextFreeTeamId(username);
     }
