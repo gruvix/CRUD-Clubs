@@ -64,6 +64,10 @@ Reset a team: `/user/reset/:teamId` (PUT)
 
 Reset all teams: `/user/reset/all` (PUT)
 
+Upload crest image: `/user/customCrest/:teamId` (PUT)
+
+Get crest image: `/user/customCrest/:teamId/:filename` (GET)
+
 Error page: `/error` (GET)
 
 ## Tests <a name="tests"></a>
