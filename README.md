@@ -108,7 +108,7 @@ There's a disabled test for removing all players from a team, but it lacks any a
     Future improvements could implement a centralized error handling mechanism for consistent
     logging, user-friendly messages, and potential recovery actions.
 
-### Potencial Image Misnaming During Team Creation
+### Potential Image Misnaming During Team Creation
 
     Because how Multer's storage settings generate a provisional team ID when receiving an image
     without team id, if any errors or delays occur between Multer's ID generation and the endpoint's
