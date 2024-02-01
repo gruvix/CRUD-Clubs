@@ -4,6 +4,7 @@
 
 ### Team Management:<a name="teamManagement"></a>
 
+
     Create: Add new teams with customized names, properties, and logos (image upload supported).
     Read: View a list of your user-specific teams with basic information and optional filtering/sorting.
     Update: Edit existing team details (name, description, logo) to keep them current.
@@ -12,6 +13,7 @@
     Reset All: Reset all your teams to their default states, starting fresh.
 
 ### Player Management:
+
 
     Add: Assign players to specific teams, providing their names, positions, and country of origin.
     Edit: Modify player information within a team.
@@ -71,16 +73,19 @@ Error page: `/error` (GET)
 
 ### Inefficient Team Updates:
 
+
     Currently, updating teams involves multiple filesystem read/write operations, which can impact performance, especially for large datasets.
     Future improvements could explore a database-driven approach for more efficient data management.
 
 ### Limited Security:
+
 
     The app lacks mechanisms to prevent unauthorized access or data manipulation:
         User requests are not validated to ensure they only modify their own data.
         Password protection is not implemented, making accounts vulnerable to unauthorized access.
       
 ### Inconsistent Error Handling:
+
 
     Lacks a standardized approach for managing errors.
     Relies primarily on try-catch blocks with console logging or throwing errors.
