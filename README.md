@@ -56,6 +56,8 @@ Teams list: `/user/teams` (GET)
 
 Team details: `/user/team/:teamId` (GET, PATCH, PUT, DELETE)
 
+Player editing: `/user/player/:teamId` (POST, PATCH, DELETE)
+
 Add a team: `/user/team/add` (GET, POST)
 
 Reset a team: `/user/reset/:teamId` (PUT) 
