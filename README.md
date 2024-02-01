@@ -3,20 +3,20 @@
 ## Expanded Description of Key Features:
 
 ### Team Management:<a name="teamManagement"></a>
-
+```
     Create: Add new teams with customized names, properties, and logos (image upload supported).
     Read: View a list of your user-specific teams with basic information and optional filtering/sorting.
     Update: Edit existing team details (name, description, logo) to keep them current.
     Delete: Remove unwanted teams from your list permanently.
     Reset: Set a specific team back to its default state, clearing customised information.
     Reset All: Reset all your teams to their default states, starting fresh.
-
+```
 ### Player Management:
-
+```
     Add: Assign players to specific teams, providing their names, positions, and country of origin.
     Edit: Modify player information within a team.
     Remove: Take players out of specific teams.
-
+```
 ## Technologies
 
     Express
@@ -30,15 +30,18 @@
 ## How to use
 
 -Install dependencies `npm install`
+
 -Run the server `npm run dev:templateNodemon`
+
 The server will run on port 8000.
+
 -Access from a web browser to `localhost:8000`
+
 -Login with any name with only letters
--Do teams changes, see [Team and Player Management](#teamManagement)
+
+-Do stuff, see [Team Management](#teamManagement)
 
 For test runs see [Tests](#tests)
-
-detailed steps below
 
 ## Access URLs
 Main address: `localhost:8000`
@@ -67,20 +70,23 @@ Error page: `/error` (GET)
 ## Known Limitations:
 
 ### Inefficient Team Updates:
+```
     Currently, updating teams involves multiple filesystem read/write operations, which can impact performance, especially for large datasets.
     Future improvements could explore a database-driven approach for more efficient data management.
-
+```
 ### Limited Security:
+```
     The app lacks mechanisms to prevent unauthorized access or data manipulation:
         User requests are not validated to ensure they only modify their own data.
         Password protection is not implemented, making accounts vulnerable to unauthorized access.
-        
+```      
 ### Inconsistent Error Handling:
+```
     Lacks a standardized approach for managing errors.
     Relies primarily on try-catch blocks with console logging or throwing errors.
     User-facing errors are communicated via basic alerts, potentially limiting clarity and guidance.
     Future improvements could implement a centralized error handling mechanism for consistent logging, user-friendly messages, and potential recovery actions.
-
+```
 ## Credits
 [Javascript Course Argentina Programa](https://argentinaprograma.com/)
 
