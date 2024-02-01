@@ -1,8 +1,8 @@
 # Football teams CRUD proyect
 
-## Expanded Description of Key Features:
+## Expanded Description of Key Features: <a name="teamManagement"></a>
 
-### Team Management:<a name="teamManagement"></a>
+### Team Management:
 
     Create: Add new teams with customized names, properties, and logos (image upload supported).
     Read: View a list of your user-specific teams with basic information and optional filtering.
@@ -39,7 +39,7 @@ The server will run on port 8000.
 
 -Login with any name with only letters
 
--Do stuff, see [Team Management](#teamManagement)
+-Do stuff, see [Team and Player Management](#teamManagement)
 
 For test runs see [Tests](#tests)
 
