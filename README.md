@@ -114,6 +114,10 @@ There's a disabled test for removing all players from a team, but it lacks any a
     without team id, if any errors or delays occur between Multer's ID generation and the endpoint's
     team creation, the generated ID might not match the final team ID
 
+### Limited Test Coverage: absence of Unit Tests
+
+    This application lacks unit tests focused on individiaul functions and logic components
+
 ## Credits
 [Javascript Course Argentina Programa](https://argentinaprograma.com/)
 
