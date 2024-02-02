@@ -1,6 +1,6 @@
 # Football teams CRUD proyect
 
-## Expanded Description of Key Features: <a name="teamManagement"></a>
+## Expanded Description of Key Features: <a name="team-management"></a>
 
 ### Team Management:
 
@@ -39,7 +39,7 @@ The server will run on port 8000.
 
 -Login with any name with only letters
 
--Do stuff, see [Team and Player Management](#teamManagement)
+-Do stuff, see [Team and Player Management](#team-management)
 
 For test runs see [Tests](#tests)
 
