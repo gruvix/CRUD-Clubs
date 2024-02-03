@@ -13,6 +13,9 @@ module.exports = {
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader', // Use Babel for .js and .jsx files
+          options: {
+            cacheDirectory: true,
+          },
         },
       },
     ],
