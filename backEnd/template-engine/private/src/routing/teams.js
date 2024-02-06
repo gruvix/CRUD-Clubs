@@ -4,7 +4,7 @@ const { getUserTeamsListJSONPath } = require('../userPath');
 const { createUser } = require('../user');
 const { getTeamsList } = require('../teamStorage');
 const { getDomain } = require('../domain');
-const paths = require('./paths');
+const { paths, WEBPACK_BASE_URL } = require('./paths');
 
 const router = express.Router();
 router.get('', (req, res) => {

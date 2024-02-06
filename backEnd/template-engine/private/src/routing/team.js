@@ -6,7 +6,7 @@ const {
 const { getDomain } = require('../domain');
 const Player = require('../../models/player');
 const Team = require('../../models/team');
-const paths = require('./paths');
+const { redirectPaths, paths } = require('./paths');
 const { storage, imageFilter } = require('../multerConfig.js');
 
 const uploadImage = multer({ storage, fileFilter: imageFilter });
@@ -28,7 +28,7 @@ router.route('/add')
     const team = JSON.parse(teamData);
     try {
       const id = addTeam(username, team, filename);
-      res.redirect(302, `${paths.team}/${id}`);
+      res.redirect(302, redirectPaths.generateTeamUrl(id));
     } catch (error) {
       console.log(`Error adding team: ${error}`);
       res.status(400).send('Error adding team');
@@ -41,7 +41,7 @@ router.route('/:teamId')
     const { username } = req.session;
     console.log(`User ${username} requested team ${teamId}`);
     if (!validateTeam(username, teamId)) {
-      res.redirect(`${paths.error}?keyword=Team-${teamId}-not-found&code=404`);
+      res.redirect(`${redirectPaths.error}?keyword=Team-${teamId}-not-found&code=404`);
       return;
     }
     let team;
