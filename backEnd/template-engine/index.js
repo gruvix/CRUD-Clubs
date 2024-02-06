@@ -3,6 +3,7 @@ const path = require('path');
 const expresshandlebars = require('express-handlebars');
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const cors = require('cors');
 const FileStore = require('session-file-store')(session);
 const homeRoute = require('./private/src/routing/home.js');
 const teamsRoutes = require('./private/src/routing/teams.js');
@@ -23,6 +24,7 @@ const handlebars = expresshandlebars.create();
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 
+app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 const fileStoreOptions = { path: path.join(__dirname, 'private', 'sessions'), ttl: 60 * 60 * 24 * 7, logFn: () => {} };
 app.use(session({
