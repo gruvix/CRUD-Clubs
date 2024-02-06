@@ -14,8 +14,8 @@ export default function Home() {
   const userInputErrorStyle = {
     paddingTop: '1%',
   };
-  const noDisplayStyle = {
-    display: 'none',
+  const noOpacityStyle = {
+    opacity: '0',
   };
   return (
     <div className="container">
@@ -35,7 +35,7 @@ export default function Home() {
       <div className="row justify-content-center align-items-center" style={userInputErrorStyle}>
         <div className="col-md-3">
           <div className="input-group">
-            <p className="alert alert-danger" role="alert" id="username-error" style={noDisplayStyle}>Username may only contain letters</p>
+            <p className="alert alert-danger" role="alert" id="username-error" style={noOpacityStyle}>Username may only contain letters</p>
           </div>
         </div>
       </div>
