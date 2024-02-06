@@ -1,5 +1,6 @@
 import React from 'react';
 import validateUsername from './usernameValidation';
+import loginErrorHandler from './loginErrorHandler';
 
 function handleLogin() {
   const username = document.getElementById('username').value;
@@ -7,6 +8,7 @@ function handleLogin() {
   if (!error) {
     alert('Login successful!');
   } else {
+    loginErrorHandler(error);
   }
 }
 export default function LoginButton() {
