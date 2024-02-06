@@ -1,11 +1,18 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import BrowserRouter from "react-router-dom/BrowserRouter";
+import { Route, Routes } from "react-router-dom";
 
 function App() {
     return (
     <BrowserRouter>
-    {/* Routing here */}
+        <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/user/teams" element={<TeamsList />} />
+            <Route path="/user/team/:teamId" element={<TeamEditor />} />
+            <Route path="/user/team/add" element={<TeamAdder />} />
+            <Route path="/error" element={<Error />} />
+        </Routes>
     </BrowserRouter>
     )
 }
