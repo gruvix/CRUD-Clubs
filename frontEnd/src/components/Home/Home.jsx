@@ -1,4 +1,5 @@
 import React from 'react';
+import LoginButton from './LoginButton.jsx';
 
 export default function Home() {
   const titleStyle = {
@@ -27,9 +28,7 @@ export default function Home() {
         <div className="col-md-3 my-auto">
           <div className="input-group" style={userInputStyle}>
             <input type="text" className="form-control" id="username" placeholder="Username" />
-            <button type="button" id="enter-page-button" className="btn btn-outline-warning" href="MUST_BE_SET">
-              Enter Page
-            </button>
+            <LoginButton />
           </div>
         </div>
       </div>
