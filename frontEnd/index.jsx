@@ -5,10 +5,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import './css/main.css';
 import Home from './src/components/Home/Home.jsx';
-import TeamEditor from './src/components/TeamEditor/TeamEditor';
-import TeamAdder from './src/components/TeamAdder/TeamAdder';
-import Error from './src/components/Error/Error';
-import TeamsList from './src/components/TeamsList/TeamsList';
+import TeamEditor from './src/components/TeamEditor/TeamEditor.jsx';
+import TeamAdder from './src/components/TeamAdder/TeamAdder.jsx';
+import Error from './src/components/Error/Error.jsx';
+import TeamsList from './src/components/TeamsList/TeamsList.jsx';
 
 function App() {
   return (
