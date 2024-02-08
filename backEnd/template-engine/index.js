@@ -24,7 +24,9 @@ const handlebars = expresshandlebars.create();
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 
-app.use(cors());
+const corsOptions = {
+  origin: 'http://localhost:8080',
+};
 app.use(express.static(path.join(__dirname, 'public')));
 const fileStoreOptions = { path: path.join(__dirname, 'private', 'sessions'), ttl: 60 * 60 * 24 * 7, logFn: () => {} };
 app.use(session({
@@ -42,6 +44,7 @@ app.use((req, res, next) => {
   }
 });
 app.use(bodyParser.json());
+app.use(cors(corsOptions));
 
 app.use(paths.home, homeRoute);
 app.use(paths.teams, teamsRoutes);
