@@ -1,5 +1,6 @@
 import React from 'react';
-import LoginButton from './LoginButton.jsx';
+import handleLogin from './loginHandler.js';
+import { POST } from '../../routes.js';
 
 export default function Home() {
   const titleStyle = {
@@ -28,7 +29,9 @@ export default function Home() {
         <div className="col-md-3 my-auto">
           <div className="input-group" style={userInputStyle}>
             <input type="text" className="form-control" id="username" placeholder="Username" />
-            <LoginButton />
+            <button type="button" id="enter-page-button" className="btn btn-outline-warning" href={POST.login} onClick={handleLogin}>
+              Enter Page
+            </button>
           </div>
         </div>
       </div>
