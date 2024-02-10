@@ -1,10 +1,11 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+
 module.exports = {
-  entry: './index.jsx', // Entry point of your application
+  entry: './index.jsx',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js', // Output bundle file name
+    filename: 'bundle.js',
   },
   module: {
     rules: [
@@ -12,24 +13,24 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader', // Use Babel for .js and .jsx files
+          loader: 'babel-loader',
           options: {
             cacheDirectory: true,
           },
         },
       },
       {
-          test: /\.css$/,
-          use: [
-              "style-loader",
-              "css-loader"
-          ]
-      }
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          'css-loader',
+        ],
+      },
     ],
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './index.html', // Use this HTML file as a template
+      template: './index.html',
     }),
   ],
 };
