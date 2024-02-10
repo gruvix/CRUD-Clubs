@@ -1,6 +1,5 @@
 const express = require('express');
 const path = require('path');
-const expresshandlebars = require('express-handlebars');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const cors = require('cors');
@@ -19,11 +18,6 @@ const { ensureLoggedIn } = require('./private/src/auth.js');
 
 const PORT = 8000;
 const app = express();
-const handlebars = expresshandlebars.create();
-
-app.engine('handlebars', handlebars.engine);
-app.set('view engine', 'handlebars');
-
 const corsOptions = {
   origin: 'http://localhost:8080',
 };
