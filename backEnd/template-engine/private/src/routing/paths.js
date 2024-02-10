@@ -2,7 +2,7 @@ const USER_PATH = '/user';
 const resetPath = `${USER_PATH}/reset`;
 const teamPath = `${USER_PATH}/team`;
 const crestPath = `${USER_PATH}/customCrest`;
-const WEBPACK_BASE_URL = 'http://localhost:8080';
+const WEBPACK_BASE_URL = 'http://localhost:8080/#';
 
 const paths = {
   home: '/',
