@@ -16,7 +16,7 @@ const { paths, CLIENT_BASE_URL } = require('./private/src/routing/paths.js');
 
 const { ensureLoggedIn } = require('./private/src/auth.js');
 
-const PORT = 8000;
+const PORT = 3000;
 const app = express();
 const corsOptions = {
   origin: CLIENT_BASE_URL,
