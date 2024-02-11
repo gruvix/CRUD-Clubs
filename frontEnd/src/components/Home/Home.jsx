@@ -1,6 +1,5 @@
 import React from 'react';
 import LoginComponent from './loginHandler.jsx';
-import { apiRequestPaths } from '../../paths.js';
 
 export default function Home() {
   const titleStyle = {
