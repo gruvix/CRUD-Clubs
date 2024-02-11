@@ -1,6 +1,6 @@
 import React from 'react';
-import handleLogin from './loginHandler.js';
-import { POST } from '../../routes.js';
+import LoginComponent from './loginHandler.jsx';
+import { apiRequestPaths } from '../../paths.js';
 
 export default function Home() {
   const titleStyle = {
@@ -28,10 +28,7 @@ export default function Home() {
       <div className="row justify-content-center align-items-center align-self-center">
         <div className="col-md-3 my-auto">
           <div className="input-group" style={userInputStyle}>
-            <input type="text" className="form-control" id="username" placeholder="Username" onKeyDown={(e) => (e.key === 'Enter' ? handleLogin() : null)} />
-            <button type="button" id="enter-page-button" className="btn btn-outline-warning" href={POST.login} onClick={handleLogin}>
-              Enter Page
-            </button>
+            <LoginComponent />
           </div>
         </div>
       </div>
