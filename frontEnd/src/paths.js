@@ -1,12 +1,12 @@
 const BASE_API_URL = 'http://localhost:3000';
 
-export const WEB_APP_PATHS = {
+export const webAppPaths = {
   home: '/',
   teams: '/user/teams',
   team: '/user/team/:teamId',
   addTeam: '/user/team/add',
   error: '/error',
 };
-export const API_REQUESTS_PATHS = {
+export const apiRequestPaths = {
   login: `${BASE_API_URL}/user/login`,
 };

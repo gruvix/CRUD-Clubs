@@ -4,7 +4,7 @@ import { HashRouter, Routes, Route } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import './css/main.css';
-import { WEB_APP_PATHS } from './src/paths.js';
+import { webAppPaths } from './src/paths.js';
 import Home from './src/components/Home/Home.jsx';
 import TeamEditor from './src/components/TeamEditor/TeamEditor.jsx';
 import TeamAdder from './src/components/TeamAdder/TeamAdder.jsx';
@@ -15,11 +15,11 @@ function App() {
   return (
     <HashRouter>
       <Routes>
-        <Route path={WEB_APP_PATHS.home} element={<Home />} />
-        <Route path={WEB_APP_PATHS.teams} element={<TeamsList />} />
-        <Route path={WEB_APP_PATHS.team} element={<TeamEditor />} />
-        <Route path={WEB_APP_PATHS.addTeam} element={<TeamAdder />} />
-        <Route path={WEB_APP_PATHS.error} element={<Error />} />
+        <Route path={webAppPaths.home} element={<Home />} />
+        <Route path={webAppPaths.teams} element={<TeamsList />} />
+        <Route path={webAppPaths.team} element={<TeamEditor />} />
+        <Route path={webAppPaths.addTeam} element={<TeamAdder />} />
+        <Route path={webAppPaths.error} element={<Error />} />
       </Routes>
     </HashRouter>
   );
