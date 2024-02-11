@@ -12,14 +12,15 @@ const resetRoutes = require('./private/src/routing/reset.js');
 const userSessionRoutes = require('./private/src/routing/user.js');
 const errorRoutes = require('./private/src/routing/error.js');
 const teamCrestRoutes = require('./private/src/routing/crest.js');
-const paths = require('./private/src/routing/paths.js');
+const { paths, CLIENT_BASE_URL } = require('./private/src/routing/paths.js');
 
 const { ensureLoggedIn } = require('./private/src/auth.js');
 
 const PORT = 8000;
 const app = express();
 const corsOptions = {
-  origin: 'http://localhost:8080',
+  origin: CLIENT_BASE_URL,
+  credentials: false,
 };
 app.use(express.static(path.join(__dirname, 'public')));
 const fileStoreOptions = { path: path.join(__dirname, 'private', 'sessions'), ttl: 60 * 60 * 24 * 7, logFn: () => {} };
