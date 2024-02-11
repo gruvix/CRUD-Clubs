@@ -21,11 +21,4 @@ const paths = {
   generateCustomCrestUrl: (teamId, filename) => `${crestPath}/${teamId}/${filename}`,
 };
 
-const redirectPaths = {
-  home: WEBPACK_BASE_URL,
-  teams: `${WEBPACK_BASE_URL}${paths.teams}`,
-  generateTeamUrl: (teamId) => `${WEBPACK_BASE_URL}${paths.team}/${teamId}`,
-  error: `${WEBPACK_BASE_URL}${paths.error}`,
-};
-
-module.exports = { paths, redirectPaths, CLIENT_BASE_URL };
+module.exports = { paths, CLIENT_BASE_URL };
