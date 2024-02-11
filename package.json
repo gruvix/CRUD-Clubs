@@ -1,5 +1,8 @@
 {
   "devDependencies": {
     "eslint-plugin-react-hooks": "^4.6.0"
+  },
+  "dependencies": {
+    "react-bootstrap": "^2.10.1"
   }
 }
