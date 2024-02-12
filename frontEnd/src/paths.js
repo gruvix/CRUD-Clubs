@@ -9,4 +9,5 @@ export const webAppPaths = {
 };
 export const apiRequestPaths = {
   login: `${BASE_API_URL}/user/login`,
+  logout: `${BASE_API_URL}/user/logout`,
 };
