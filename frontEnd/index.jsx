@@ -10,6 +10,7 @@ import TeamEditor from './src/components/TeamEditor/TeamEditor.jsx';
 import TeamAdder from './src/components/TeamAdder/TeamAdder.jsx';
 import TeamsList from './src/components/TeamsList/TeamsList.jsx';
 import Error from './src/components/Error/Error.jsx';
+import NotFound from './src/components/NotFound.jsx';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path={webAppPaths.team} element={<TeamEditor />} />
         <Route path={webAppPaths.addTeam} element={<TeamAdder />} />
         <Route path={webAppPaths.error} element={<Error />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </HashRouter>
   );
