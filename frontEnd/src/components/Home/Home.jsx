@@ -1,5 +1,5 @@
 import React from 'react';
-import LoginComponent from './loginHandler.jsx';
+import LoginComponent from './LoginComponent.jsx';
 
 export default function Home() {
   const titleStyle = {
