@@ -2,15 +2,15 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiRequestPaths, webAppPaths } from '../../paths';
 
-async function logout(okResponseCallback) {
+async function logout(redirectCallback) {
   const response = await fetch(apiRequestPaths.logout, {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
     },
   });
-  if (response.ok) {
-    okResponseCallback();
+  if (response.ok || response.status === 401) {
+    redirectCallback();
   }
 }
 function logoutHandler(logoutCallback) {
