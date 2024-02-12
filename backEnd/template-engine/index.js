@@ -30,6 +30,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
 }));
+app.use(cors(corsOptions));
 app.use((req, res, next) => {
   const allowedPaths = /^\/user(?!\/(login))(\/\w+)*/;
   if (allowedPaths.test(req.path)) {
@@ -39,7 +40,6 @@ app.use((req, res, next) => {
   }
 });
 app.use(bodyParser.json());
-app.use(cors(corsOptions));
 
 app.use(paths.home, homeRoute);
 app.use(paths.teams, teamsRoutes);
