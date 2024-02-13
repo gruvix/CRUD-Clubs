@@ -16,9 +16,13 @@ router.post('/login', (req, res) => {
 });
 router.post('/logout', (req, res) => {
   const { username } = req.session;
-  req.session.destroy();
-  console.log(`User '${username}' logged out`);
-  res.status(200).send();
+  try {
+    req.session.destroy();
+    console.log(`User '${username}' logged out`);
+    res.status(200).send();
+  } catch {
+    res.status(401).send();
+  }
 });
 
 module.exports = router;
