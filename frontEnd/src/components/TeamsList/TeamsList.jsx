@@ -1,8 +1,9 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 import React from 'react';
-import LogoutComponent from './LogoutComponent.jsx';
+import LogoutButton from './LogoutButton.jsx';
 // Use teams list eventHandler
 export default function TeamsList() {
+  const [username, setUsername] = React.useState('');
   const logOutButtonStyle = {
     marginTop: '15px',
   };
@@ -13,10 +14,10 @@ export default function TeamsList() {
     <div className="container">
       <div className="row">
         <div className="col">
-          <LogoutComponent style={logOutButtonStyle} text="Log out" />
+          <LogoutButton style={logOutButtonStyle} text="Log out" />
           <span className="text-center teams-page-title">
-            { /* user name */ }
             User:{' '}
+            {username}
           </span>
         </div>
       </div>

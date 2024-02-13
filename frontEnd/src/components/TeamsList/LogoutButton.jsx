@@ -16,7 +16,7 @@ async function logout(redirectCallback) {
 function logoutHandler(logoutCallback) {
   logout(logoutCallback);
 }
-export default function LogoutComponent({ style, text }) {
+export default function LogoutButton({ style, text }) {
   const navigate = useNavigate();
   const logoutCallback = () => {
     navigate(webAppPaths.home);

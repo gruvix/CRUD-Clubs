@@ -29,7 +29,7 @@ function handleLogin(loginCallback) {
   }
 }
 
-export default function LoginComponent() {
+export default function LoginButton() {
   const navigate = useNavigate();
   const loginCallback = () => {
     navigate(webAppPaths.teams);

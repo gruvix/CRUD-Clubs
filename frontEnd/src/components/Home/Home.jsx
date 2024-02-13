@@ -1,5 +1,5 @@
 import React from 'react';
-import LoginComponent from './LoginComponent.jsx';
+import LoginButton from './LoginButton.jsx';
 
 export default function Home() {
   const titleStyle = {
@@ -27,7 +27,7 @@ export default function Home() {
       <div className="row justify-content-center align-items-center align-self-center">
         <div className="col-md-3 my-auto">
           <div className="input-group" style={userInputStyle}>
-            <LoginComponent />
+            <LoginButton />
           </div>
         </div>
       </div>
