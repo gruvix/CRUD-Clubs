@@ -10,7 +10,7 @@ router.post('/login', (req, res) => {
     res.status(400).send(error);
     return;
   }
-  req.session.username = username;
+  req.session.username = username.toLowerCase();
   console.log(`User '${username}' logged in`);
   res.status(200).send();
 });
