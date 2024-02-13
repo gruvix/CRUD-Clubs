@@ -4,7 +4,7 @@ import validateUsername from './usernameValidation';
 import loginErrorHandler from './loginErrorHandler';
 import { apiRequestPaths, webAppPaths } from '../../paths';
 
-async function login(username, callback) {
+async function login(username, responseOkCallback) {
   const loginPath = document.getElementById('enter-page-button').getAttribute('href');
   console.log(`Logging in ${username}, path: ${loginPath}`);
   const response = await fetch(loginPath, {
@@ -16,7 +16,7 @@ async function login(username, callback) {
   });
   if (response.ok) {
     console.log('Login successful');
-    callback();
+    responseOkCallback();
   }
 }
 function handleLogin(loginCallback) {
