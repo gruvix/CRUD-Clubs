@@ -1,5 +1,6 @@
 const ensureLoggedIn = (req, res, next) => {
   if (req.session.username) {
+    console.log(`User ${req.session.username} is requesting ${req.path}`);
     next();
   } else {
     console.log('user not logged in');
