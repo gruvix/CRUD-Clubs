@@ -1,8 +1,10 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 import React from 'react';
 import LogoutButton from './LogoutButton.jsx';
+import getTeamsData from './teamsData.js';
 // Use teams list eventHandler
 export default function TeamsList() {
+  const teamsData = getTeamsData();
   const [username, setUsername] = React.useState('');
   const logOutButtonStyle = {
     marginTop: '15px',
