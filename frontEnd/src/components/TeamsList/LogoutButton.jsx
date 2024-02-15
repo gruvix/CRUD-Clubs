@@ -5,6 +5,7 @@ import { apiRequestPaths, webAppPaths } from '../../paths';
 async function logout(redirectCallback) {
   const response = await fetch(apiRequestPaths.logout, {
     method: 'post',
+    credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
     },

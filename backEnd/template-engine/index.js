@@ -20,7 +20,7 @@ const PORT = 3000;
 const app = express();
 const corsOptions = {
   origin: CLIENT_BASE_URL,
-  credentials: false,
+  credentials: true,
 };
 app.use(express.static(path.join(__dirname, 'public')));
 const fileStoreOptions = { path: path.join(__dirname, 'private', 'sessions'), ttl: 60 * 60 * 24 * 7, logFn: () => {} };

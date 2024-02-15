@@ -6,16 +6,15 @@ import { apiRequestPaths, webAppPaths } from '../../paths';
 
 async function login(username, responseOkCallback) {
   const loginPath = document.getElementById('enter-page-button').getAttribute('href');
-  console.log(`Logging in ${username}, path: ${loginPath}`);
   const response = await fetch(loginPath, {
     method: 'POST',
+    credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ username }),
   });
   if (response.ok) {
-    console.log('Login successful');
     responseOkCallback();
   }
 }
