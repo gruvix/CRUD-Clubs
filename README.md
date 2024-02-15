@@ -116,7 +116,7 @@ There's a disabled test for removing all players from a team, but it lacks any a
 
 ### Limited Test Coverage: absence of Unit Tests
 
-    This application lacks unit tests focused on individiaul functions and logic components
+    This application lacks unit tests focused on individual functions and logic components
 
 ## Credits
 [Javascript Course Argentina Programa](https://argentinaprograma.com/)
