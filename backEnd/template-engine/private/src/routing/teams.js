@@ -3,7 +3,6 @@ const { validateFile } = require('../utils');
 const { getUserTeamsListJSONPath } = require('../userPath');
 const { createUser } = require('../user');
 const { getTeamsList } = require('../teamStorage');
-const { getDomain } = require('../domain');
 
 const router = express.Router();
 router.get('', (req, res) => {
@@ -12,7 +11,6 @@ router.get('', (req, res) => {
     console.log(`User not found, creating new user "${username}"`);
     createUser(username);
   }
-  const domain = getDomain(req);
   const data = {
     username,
     teams: getTeamsList(username),
