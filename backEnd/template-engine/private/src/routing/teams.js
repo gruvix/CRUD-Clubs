@@ -4,7 +4,6 @@ const { getUserTeamsListJSONPath } = require('../userPath');
 const { createUser } = require('../user');
 const { getTeamsList } = require('../teamStorage');
 const { getDomain } = require('../domain');
-const { paths, WEBPACK_BASE_URL } = require('./paths');
 
 const router = express.Router();
 router.get('', (req, res) => {
@@ -13,22 +12,12 @@ router.get('', (req, res) => {
     console.log(`User not found, creating new user "${username}"`);
     createUser(username);
   }
-  const teams = getTeamsList(username);
   const domain = getDomain(req);
-  res.render('teams', {
-    layout: 'main',
-    data: {
-      username,
-      capitalizedName: username.charAt(0).toUpperCase() + username.slice(1),
-      teams,
-      domain,
-      userPath: paths.user,
-      logoutPath: paths.logout,
-      teamPath: paths.team,
-      addTeamPath: paths.addTeam,
-      resetTeamsPath: paths.resetAll,
-    },
-  });
+  const data = {
+    username,
+    teams: getTeamsList(username),
+  };
+  res.json(data);
 });
 
 module.exports = router;
