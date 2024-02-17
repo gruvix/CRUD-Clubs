@@ -9,8 +9,12 @@ export default async function getTeamsData() {
     },
   });
   if (response.ok) {
-    console.log(response);
-  } else if (response.status === 401) {
-    console.log('Can\'t get team\'s data: Unauthorized');
+    const data = await response.json();
+    data.auth = true;
+    return data;
   }
+  if (response.status === 401) {
+    return { auth: false };
+  }
+  throw new Error(`Can't get team's data: ${response.status}`);
 }
