@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiRequestPaths, webAppPaths } from '../../paths';
 
-async function logout(redirectCallback) {
+async function logout() {
   const response = await fetch(apiRequestPaths.logout, {
     method: 'post',
     credentials: 'include',
@@ -11,19 +11,22 @@ async function logout(redirectCallback) {
     },
   });
   if (response.ok || response.status === 401) {
-    redirectCallback();
+    return true;
   }
-}
-function logoutHandler(logoutCallback) {
-  logout(logoutCallback);
+  throw new Error(`Logout Failed - server response ${response.status}`);
 }
 export default function LogoutButton({ style, text }) {
   const navigate = useNavigate();
-  const logoutCallback = () => {
-    navigate(webAppPaths.home);
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate(webAppPaths.home);
+    } catch {
+      alert('Error: could not logout');
+    }
   };
   return (
-    <button type="button" style={style} className="btn btn-shadow btn-outline-warning" id="log-out-button" onClick={() => logoutHandler(logoutCallback)}>
+    <button type="button" style={style} className="btn btn-shadow btn-outline-warning" id="log-out-button" onClick={() => handleLogout()}>
       {text}
     </button>
   );
