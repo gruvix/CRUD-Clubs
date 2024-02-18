@@ -12,7 +12,7 @@ export default function TeamCard({ team }) {
     marginRight: '10px',
   };
   return (
-    <div className="card card-container" data-isDefaultTeam={team.hasDefault}>
+    <div className="card card-container" data-isdefaultteam={team.hasDefault}>
       <div className="card-header">
         <h5 className="card-title team-card-title">{team.name}</h5>
       </div>
