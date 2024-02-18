@@ -87,7 +87,11 @@ export default function TeamsList() {
 
       <div className="row">
         <div className="col">
-          { /* team cards */ }
+          <div className="container">
+            <div className="row row-cols-5 justify-content-center">
+              { teamCards }
+            </div>
+          </div>
         </div>
       </div>
       { /* confirmation modal */ }
