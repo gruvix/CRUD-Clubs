@@ -1,6 +1,6 @@
 import React, { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
-import { HashRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import './css/main.css';
@@ -14,7 +14,7 @@ import NotFound from './src/components/NotFound.jsx';
 
 function App() {
   return (
-    <HashRouter>
+    <BrowserRouter>
       <Routes>
         <Route path={webAppPaths.home} element={<Home />} />
         <Route path={webAppPaths.teams} element={<TeamsList />} />
@@ -23,7 +23,7 @@ function App() {
         <Route path={webAppPaths.error} element={<Error />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
-    </HashRouter>
+    </BrowserRouter>
   );
 }
 
