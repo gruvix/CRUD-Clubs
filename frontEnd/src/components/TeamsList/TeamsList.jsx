@@ -1,15 +1,36 @@
 /* eslint-disable react/jsx-one-expression-per-line */
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import LogoutButton from './LogoutButton.jsx';
 import getTeamsData from './teamsData.js';
-// Use teams list eventHandler
+import { webAppPaths } from '../../paths.js';
 import TeamCard from './TeamCard.jsx';
+
 function createTeamCards(teams) {
   return Object.keys(teams).map((key) => <TeamCard team={teams[key]} />);
 }
 export default function TeamsList() {
-  const teamsData = getTeamsData();
+  const navigate = useNavigate();
   const [username, setUsername] = React.useState('');
+  const [teamCards, setTeamCards] = React.useState('');
+
+  useEffect(() => {
+    const handleTeamsData = async () => {
+      try {
+        const teamsData = await getTeamsData();
+        if (!teamsData.auth) {
+          navigate(webAppPaths.home);
+        } else {
+          setUsername(teamsData.username);
+          setTeamCards(createTeamCards(teamsData.teams));
+        }
+      } catch (error) {
+        alert(error);
+      }
+    };
+    handleTeamsData();
+  });
+
   const logOutButtonStyle = {
     marginTop: '15px',
   };
