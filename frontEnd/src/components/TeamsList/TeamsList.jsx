@@ -3,6 +3,10 @@ import React from 'react';
 import LogoutButton from './LogoutButton.jsx';
 import getTeamsData from './teamsData.js';
 // Use teams list eventHandler
+import TeamCard from './TeamCard.jsx';
+function createTeamCards(teams) {
+  return Object.keys(teams).map((key) => <TeamCard team={teams[key]} />);
+}
 export default function TeamsList() {
   const teamsData = getTeamsData();
   const [username, setUsername] = React.useState('');
