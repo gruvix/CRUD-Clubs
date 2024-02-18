@@ -7,7 +7,7 @@ import { webAppPaths } from '../../paths.js';
 import TeamCard from './TeamCard.jsx';
 
 function createTeamCards(teams) {
-  return Object.keys(teams).map((key) => <TeamCard team={teams[key]} />);
+  return Object.keys(teams).map((key) => <TeamCard team={teams[key]} key={key} />);
 }
 export default function TeamsList() {
   const navigate = useNavigate();
