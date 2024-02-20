@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import TeamCrest from './TeamCrest.jsx';
+import TeamCrest from '../shared/TeamCrest.jsx';
 import { webAppPaths } from '../../paths.js';
 
 export default function TeamCard({ team }) {
@@ -16,7 +16,7 @@ export default function TeamCard({ team }) {
       <div className="card-header">
         <h5 className="card-title team-card-title">{team.name}</h5>
       </div>
-      <TeamCrest teamCrest={team.crestUrl} hasCustomCrest={team.hasCustomCrest} />
+      <TeamCrest teamCrest={team.crestUrl} hasCustomCrest={team.hasCustomCrest} className="list-team-crest-image" />
       <div className="card-body" style={cardBodyStyle} id={team.id}>
         <button
           type="button"
