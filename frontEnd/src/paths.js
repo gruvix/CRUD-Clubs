@@ -11,4 +11,5 @@ export const apiRequestPaths = {
   login: `${BASE_API_URL}/user/login`,
   logout: `${BASE_API_URL}/user/logout`,
   teams: `${BASE_API_URL}/user/teams`,
+  userStatus: `${BASE_API_URL}/user/status`,
 };
