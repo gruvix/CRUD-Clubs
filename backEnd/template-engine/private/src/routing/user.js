@@ -3,6 +3,15 @@ const { validateUsername } = require('../auth');
 
 const router = express.Router();
 
+router.get('/status', (req, res) => {
+  const { username } = req.session;
+  console.log(`User ${username} is requesting login status`);
+  if (username) {
+    res.status(200).send();
+  } else {
+    res.status(401).send();
+  }
+});
 router.post('/login', (req, res) => {
   const { username } = req.body;
   const error = validateUsername(username);
