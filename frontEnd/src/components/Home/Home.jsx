@@ -1,7 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import LoginButton from './LoginButton.jsx';
+import { apiRequestPaths, webAppPaths } from '../../paths.js';
 
+async function getAuthStatus() {
+  const response = await fetch(apiRequestPaths.userStatus, {
+    method: 'GET',
+  });
+  return response.status === 200;
+}
 export default function Home() {
+  const navigate = useNavigate();
+  useEffect(() => {
+    const checkLogin = async () => {
+      const isLoggedIn = await getAuthStatus();
+      if (isLoggedIn) navigate(webAppPaths.teams);
+    };
+    checkLogin();
+  });
   const titleStyle = {
     color: 'rgb(255, 187, 0)',
     padding: '10px',
