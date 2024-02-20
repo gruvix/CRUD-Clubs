@@ -29,7 +29,7 @@ export default function TeamsList() {
       }
     };
     handleTeamsData();
-  });
+  }, []);
 
   const logOutButtonStyle = {
     marginTop: '15px',
