@@ -1,13 +1,29 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import TeamCrest from '../shared/TeamCrest.jsx';
 import ResetTeamButton from './ResetTeamButton.jsx';
 import { webAppPaths } from '../../paths.js';
+import getTeamData from './teamData.js';
 
 export default function TeamEditor() {
   const navigate = useNavigate();
   const { teamId } = useParams();
   const [team, setTeam] = React.useState({ id: null, hasDefault: false, hasCustomCrest: false });
+  useEffect(() => {
+    const updateTeamData = async () => {
+      try {
+        const teamData = await getTeamData(teamId);
+        if (!teamData.auth) {
+          navigate(webAppPaths.home);
+        } else {
+          setTeam(teamData);
+        }
+      } catch (error) {
+        alert(error);
+      }
+    };
+    updateTeamData();
+  }, []);
 
   const goBackButtonStyle = {
     marginTop: '25px',
