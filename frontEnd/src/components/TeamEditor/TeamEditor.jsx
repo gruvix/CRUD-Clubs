@@ -1,9 +1,11 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import TeamCrest from '../shared/TeamCrest.jsx';
 import ResetTeamButton from './ResetTeamButton.jsx';
+import { webAppPaths } from '../../paths.js';
 
 export default function TeamEditor() {
+  const navigate = useNavigate();
   const { teamId } = useParams();
   const [team, setTeam] = React.useState({ id: null, hasDefault: false, hasCustomCrest: false });
 
@@ -28,7 +30,7 @@ export default function TeamEditor() {
     <div className="container">
       <div className="row">
         <div className="col-4">
-          <button type="button" className="btn btn-shadow btn-outline-warning" style={goBackButtonStyle} id="back-to-teams-button">
+          <button type="button" className="btn btn-shadow btn-outline-warning" style={goBackButtonStyle} onClick={() => navigate(webAppPaths.teams)} id="back-to-teams-button">
             Go back
           </button>
         </div>
