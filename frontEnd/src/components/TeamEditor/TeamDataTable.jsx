@@ -12,7 +12,7 @@ async function createTeamDataRows(teamData) {
     <tr className="table-dark table-bordered">
       <td className="text-warning" style={parameterKeyStyle}>{key}</td>
       <td id={key}>
-        <span>{/* this */}</span>
+        <span>{teamData[key]}</span>
         <input type="text" className="form-control" value="" style={noDisplayStyle} />
       </td>
       <td>
