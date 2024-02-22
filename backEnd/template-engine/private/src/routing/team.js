@@ -3,11 +3,11 @@ const multer = require('multer');
 const {
   validateTeam, isTeamDefault, getTeam, updateTeam, deleteTeam, addTeam, hasTeamDefault,
 } = require('../teamStorage');
-const { getDomain } = require('../domain');
 const Player = require('../../models/player');
 const Team = require('../../models/team');
 const { redirectPaths, paths } = require('./paths');
 const { storage, imageFilter } = require('../multerConfig.js');
+const TeamFullData = require('../../models/teamFullData');
 
 const uploadImage = multer({ storage, fileFilter: imageFilter });
 const router = express.Router();
@@ -63,25 +63,7 @@ router.route('/:teamId')
       players.push(new Player(team.squad));
     }
 
-    const domain = getDomain(req);
-    res.render('teamEditor', {
-      layout: 'main',
-      data: {
-        username,
-        team: new Team(team, teamDefaultBool),
-        crest: team.crestUrl,
-        id: team.id,
-        players,
-        domain,
-        hasDefault: hasTeamDefault(username, teamId),
-        hasCustomCrest: team.hasCustomCrest,
-        resetTeamPath: paths.resetSingle,
-        teamsPath: paths.teams,
-        crestPath: paths.crest,
-        playerPath: paths.player,
-        teamPath: paths.team,
-      },
-    });
+    res.json(new TeamFullData(team, teamDefaultBool));
   })
   .patch((req, res) => {
     const { teamId } = req.params;
