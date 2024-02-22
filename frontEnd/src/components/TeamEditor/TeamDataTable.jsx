@@ -9,7 +9,7 @@ async function createTeamDataRows(teamData) {
     display: 'none',
   };
   return Object.keys(teamData).map((key) => (
-    <tr className="table-dark table-bordered">
+    <tr className="table-dark table-bordered" key={key}>
       <td className="text-warning" style={parameterKeyStyle}>{key}</td>
       <td id={key}>
         <span>{teamData[key]}</span>
