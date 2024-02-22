@@ -15,12 +15,15 @@ export default function TeamEditor() {
   useEffect(() => {
     const updateTeamData = async () => {
       try {
-        const teamData = await getTeamData(teamId);
-        if (!teamData.auth) {
-          navigate(webAppPaths.home);
-        } else {
-          setTeam(teamData);
-        }
+        teamData.getTeamData(teamId)
+          .then((data) => {
+            if (!data.private.auth) {
+              navigate(webAppPaths.home);
+            } else {
+              setPublicTeamData(data.public);
+              setPrivateTeamData(data.private);
+            }
+          });
       } catch (error) {
         alert(error);
       }
@@ -56,7 +59,7 @@ export default function TeamEditor() {
 
         <div className="col-4">
           <div className="d-flex justify-content-center img-container">
-            <TeamCrest teamCrest={team.crestUrl} hasCustomCrest={team.hasCustomCrest} className="team-crest-image" />
+            <TeamCrest teamCrest={privateTeamData.crestUrl} hasCustomCrest={privateTeamData.hasCustomCrest} className="team-crest-image" />
             <button type="button" className="btn btn-shadow overlay-button btn-outline-warning position-absolute top-50 start-50 translate-middle" id="upload-image-button" style={uploadImageButtonStyle}>
               <span style={uploadImageSpanStyle}>
                 Upload new image
@@ -71,7 +74,7 @@ export default function TeamEditor() {
 
         <div className="col">
           <div className="text-end">
-            <ResetTeamButton id={teamId} hasDefault={team.hasDefault} />
+            <ResetTeamButton id={teamId} hasDefault={privateTeamData.hasDefault} />
           </div>
         </div>
       </div>
@@ -82,7 +85,7 @@ export default function TeamEditor() {
             Team
           </strong>
           <div className="d-flex justify-content-center">
-            <TeamDataTable teamData={team} />
+            <TeamDataTable teamData={publicTeamData} />
           </div>
         </div>
         <div className="col">
