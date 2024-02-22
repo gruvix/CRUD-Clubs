@@ -10,7 +10,7 @@ export default function TeamEditor() {
   const navigate = useNavigate();
   const { teamId } = useParams();
   const [publicTeamData, setPublicTeamData] = React.useState({});
-  const [privateTeamData, setPrivateTeamData] = React.useState({ id: null, hasDefault: false, hasCustomCrest: false });
+  const [privateTeamData, setPrivateTeamData] = React.useState({});
   const teamData = new TeamsAdapter();
   useEffect(() => {
     const updateTeamData = async () => {
