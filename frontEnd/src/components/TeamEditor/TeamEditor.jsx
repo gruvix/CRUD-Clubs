@@ -3,13 +3,15 @@ import { useNavigate, useParams } from 'react-router-dom';
 import TeamCrest from '../shared/TeamCrest.jsx';
 import ResetTeamButton from './ResetTeamButton.jsx';
 import { webAppPaths } from '../../paths.js';
-import getTeamData from './teamData.js';
 import TeamDataTable from './TeamDataTable.jsx';
+import TeamsAdapter from '../adapters/TeamsAdapter.js';
 
 export default function TeamEditor() {
   const navigate = useNavigate();
   const { teamId } = useParams();
-  const [team, setTeam] = React.useState({ id: null, hasDefault: false, hasCustomCrest: false });
+  const [publicTeamData, setPublicTeamData] = React.useState({});
+  const [privateTeamData, setPrivateTeamData] = React.useState({ id: null, hasDefault: false, hasCustomCrest: false });
+  const teamData = new TeamsAdapter();
   useEffect(() => {
     const updateTeamData = async () => {
       try {
