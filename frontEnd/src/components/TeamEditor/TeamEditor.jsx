@@ -4,6 +4,7 @@ import TeamCrest from '../shared/TeamCrest.jsx';
 import ResetTeamButton from './ResetTeamButton.jsx';
 import { webAppPaths } from '../../paths.js';
 import getTeamData from './teamData.js';
+import TeamDataTable from './TeamDataTable.jsx';
 
 export default function TeamEditor() {
   const navigate = useNavigate();
@@ -79,7 +80,7 @@ export default function TeamEditor() {
             Team
           </strong>
           <div className="d-flex justify-content-center">
-            {/* teamTable team=data.team path=data.teamPath id=data.id */}
+            <TeamDataTable teamData={team} />
           </div>
         </div>
         <div className="col">
