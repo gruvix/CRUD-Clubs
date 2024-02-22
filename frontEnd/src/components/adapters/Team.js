@@ -9,7 +9,7 @@ export default class Team {
     };
     this.public = {
       name: teamData.name,
-      area: teamData.area,
+      area: typeof teamData.area === 'object' ? teamData.area.name : teamData.area,
       address: teamData.address,
       phone: teamData.phone,
       website: teamData.website,
