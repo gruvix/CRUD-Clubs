@@ -22,7 +22,7 @@ export default class TeamsAdapter {
       return teamData;
     } catch (error) {
       if (response.status === 401) {
-        return { private: { auth: false } };
+        return { other: { auth: false } };
       }
       throw error;
     }

@@ -2,14 +2,14 @@ import Player from './Player';
 
 export default class Team {
   constructor(teamData) {
-    this.private = {
+    this.other = {
       id: teamData.id,
       crestUrl: teamData.crestUrl,
       hasCustomCrest: teamData.hasCustomCrest,
       lastUpdated: teamData.lastUpdated,
       auth: teamData.auth,
     };
-    this.public = {
+    this.teamParameters = {
       name: teamData.name,
       area: typeof teamData.area === 'object' ? teamData.area.name : teamData.area,
       address: teamData.address,
