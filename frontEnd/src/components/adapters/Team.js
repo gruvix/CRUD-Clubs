@@ -1,3 +1,5 @@
+import Player from './Player';
+
 export default class Team {
   constructor(teamData) {
     this.private = {
@@ -16,6 +18,6 @@ export default class Team {
       email: teamData.email,
       venue: teamData.venue,
     };
-    this.squad = teamData.squad;
+    this.players = teamData.squad.map((player) => new Player(player));
   }
 }
