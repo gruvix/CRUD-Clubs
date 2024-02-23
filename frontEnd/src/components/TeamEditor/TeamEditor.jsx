@@ -5,12 +5,14 @@ import ResetTeamButton from './ResetTeamButton.jsx';
 import { webAppPaths } from '../../paths.js';
 import TeamDataTable from './TeamDataTable.jsx';
 import TeamsAdapter from '../adapters/TeamsAdapter.js';
+import PlayersDataTable from './PlayersDataTable.jsx';
 
 export default function TeamEditor() {
   const navigate = useNavigate();
   const { teamId } = useParams();
-  const [publicTeamData, setPublicTeamData] = React.useState({});
-  const [privateTeamData, setPrivateTeamData] = React.useState({});
+  const [teamParameters, setTeamParameters] = React.useState({});
+  const [otherTeamData, setOtherTeamData] = React.useState({});
+  const [players, setPlayers] = React.useState([]);
   const teamData = new TeamsAdapter();
   useEffect(() => {
     const updateTeamData = async () => {
@@ -20,8 +22,9 @@ export default function TeamEditor() {
             if (!data.private.auth) {
               navigate(webAppPaths.home);
             } else {
-              setPublicTeamData(data.public);
-              setPrivateTeamData(data.private);
+              setTeamParameters(data.teamParameters);
+              setOtherTeamData(data.other);
+              setPlayers(data.players);
             }
           });
       } catch (error) {
@@ -93,7 +96,7 @@ export default function TeamEditor() {
             Players
           </strong>
           <div className="d-flex justify-content-center">
-            {/* playersTable players=data.players path=data.playerPath id=data.id */}
+            <PlayersDataTable playersData={players} />
           </div>
         </div>
       </div>
