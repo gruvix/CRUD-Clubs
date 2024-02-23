@@ -19,7 +19,7 @@ export default function TeamEditor() {
       try {
         teamData.getTeamData(teamId)
           .then((data) => {
-            if (!data.private.auth) {
+            if (!data.other.auth) {
               navigate(webAppPaths.home);
             } else {
               setTeamParameters(data.teamParameters);
@@ -62,7 +62,7 @@ export default function TeamEditor() {
 
         <div className="col-4">
           <div className="d-flex justify-content-center img-container">
-            <TeamCrest teamCrest={privateTeamData.crestUrl} hasCustomCrest={privateTeamData.hasCustomCrest} className="team-crest-image" />
+            <TeamCrest teamCrest={otherTeamData.crestUrl} hasCustomCrest={otherTeamData.hasCustomCrest} className="team-crest-image" />
             <button type="button" className="btn btn-shadow overlay-button btn-outline-warning position-absolute top-50 start-50 translate-middle" id="upload-image-button" style={uploadImageButtonStyle}>
               <span style={uploadImageSpanStyle}>
                 Upload new image
@@ -77,7 +77,7 @@ export default function TeamEditor() {
 
         <div className="col">
           <div className="text-end">
-            <ResetTeamButton id={teamId} hasDefault={privateTeamData.hasDefault} />
+            <ResetTeamButton id={teamId} hasDefault={otherTeamData.hasDefault} />
           </div>
         </div>
       </div>
@@ -88,7 +88,7 @@ export default function TeamEditor() {
             Team
           </strong>
           <div className="d-flex justify-content-center">
-            <TeamDataTable teamData={publicTeamData} />
+            <TeamDataTable teamData={teamParameters} />
           </div>
         </div>
         <div className="col">
