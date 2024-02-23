@@ -2,9 +2,9 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LogoutButton from './LogoutButton.jsx';
-import getTeamsData from './teamsData.js';
 import { webAppPaths } from '../../paths.js';
 import TeamCard from './TeamCard.jsx';
+import TeamsAdapter from '../adapters/TeamsAdapter.js';
 
 function createTeamCards(teams) {
   return Object.keys(teams).map((key) => <TeamCard team={teams[key]} key={key} />);
@@ -13,22 +13,23 @@ export default function TeamsList() {
   const navigate = useNavigate();
   const [username, setUsername] = React.useState('');
   const [teamCards, setTeamCards] = React.useState('');
-
+  const teamsData = new TeamsAdapter();
   useEffect(() => {
-    const handleTeamsData = async () => {
+    const updateTeamsData = async () => {
       try {
-        const teamsData = await getTeamsData();
-        if (!teamsData.auth) {
-          navigate(webAppPaths.home);
-        } else {
-          setUsername(teamsData.username);
-          setTeamCards(createTeamCards(teamsData.teams));
-        }
+        teamsData.getTeamsData().then((data) => {
+          if (!data.auth) {
+            navigate(webAppPaths.home);
+          } else {
+            setUsername(data.username);
+            setTeamCards(createTeamCards(data.teams));
+          }
+        });
       } catch (error) {
         alert(error);
       }
     };
-    handleTeamsData();
+    updateTeamsData();
   }, []);
 
   const logOutButtonStyle = {
