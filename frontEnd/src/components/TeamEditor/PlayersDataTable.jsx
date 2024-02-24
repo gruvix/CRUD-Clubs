@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 export default function PlayersDataTable({ playersData }) {
+  const [rowsPlayersData, setRowsPlayersData] = React.useState([]);
   const [playerInputValue, setplayerInputValue] = React.useState({
     name: {}, position: {}, nationality: {},
   });
@@ -42,12 +43,22 @@ export default function PlayersDataTable({ playersData }) {
       },
     });
   }
-  const enableRowEditing = (playerId) => () => {
+  const enableRowEditing = (playerId, player) => () => {
     setEditingRowKey(playerId);
+    const newPlayerInputValues = {};
+    Object.keys(playerInputValue).forEach((parameter) => {
+      newPlayerInputValues[parameter] = {
+        ...playerInputValue[parameter], [playerId]: rowsPlayersData[player][parameter],
+      };
+    });
+    setplayerInputValue(newPlayerInputValues);
   };
   const disableRowEditing = () => () => {
     setEditingRowKey(null);
-  }
+  };
+  useEffect(() => {
+    setRowsPlayersData(playersData);
+  }, [playersData]);
 
   return (
     <div style={tableStyle}>
@@ -75,27 +86,27 @@ export default function PlayersDataTable({ playersData }) {
             </td>
           </tr>
           {
-            playersData.map((player) => (
-              <tr className="table-dark table-bordered" data-id={player.id} key={player.id}>
+            Object.keys(rowsPlayersData).map((player) => (
+              <tr className="table-dark table-bordered" data-id={rowsPlayersData[player].id} key={rowsPlayersData[player].id}>
                 {
                   Object.keys(playerInputValue).map((parameter) => (
-                    <td key={`${parameter}-${player.id}`}>
-                      <span style={{ display: editingRowKey === player.id ? 'none' : 'inline' }}>{player[parameter]}</span>
-                      <input type="text" className="form-control" value={playerInputValue[parameter][player.id]} onChange={(e) => updateInputValue(e, player.id, parameter)} style={{ display: editingRowKey === player.id ? 'inline' : 'none' }} />
+                    <td key={`${parameter}-${rowsPlayersData[player].id}`}>
+                      <span style={{ display: editingRowKey === rowsPlayersData[player].id ? 'none' : 'inline' }}>{rowsPlayersData[player][parameter]}</span>
+                      <input type="text" className="form-control" value={playerInputValue[parameter][rowsPlayersData[player].id]} onChange={(e) => updateInputValue(e, rowsPlayersData[player].id, parameter)} style={{ display: editingRowKey === rowsPlayersData[player].id ? 'inline' : 'none' }} />
                     </td>
                   ))
                 }
                 <td className="buttons-column" style={buttonsColumnStyle}>
-                  <button type="button" className="btn btn-outline-warning edit" onClick={enableRowEditing(player.id)} style={{ marginRight: '10px', display: editingRowKey === null ? 'inline' : 'none' }}>
+                  <button type="button" className="btn btn-outline-warning edit" onClick={enableRowEditing(rowsPlayersData[player].id, player)} style={{ marginRight: '10px', display: editingRowKey === null ? 'inline' : 'none' }}>
                     edit
                   </button>
                   <button type="button" className="btn btn-outline-danger remove" data-bs-toggle="modal" data-bs-target="#confirmationModal" style={{ display: editingRowKey === null ? 'inline' : 'none' }}>
                     remove
                   </button>
-                  <button type="button" className="btn btn-outline-success apply" style={{ display: editingRowKey === player.id ? 'inline' : 'none', marginRight: '10px' }}>
+                  <button type="button" className="btn btn-outline-success apply" style={{ display: editingRowKey === rowsPlayersData[player].id ? 'inline' : 'none', marginRight: '10px' }}>
                     apply
                   </button>
-                  <button type="button" className="btn btn-outline-secondary cancel" onClick={disableRowEditing()} style={{ display: editingRowKey === player.id ? 'inline' : 'none' }}>
+                  <button type="button" className="btn btn-outline-secondary cancel" onClick={disableRowEditing()} style={{ display: editingRowKey === rowsPlayersData[player].id ? 'inline' : 'none' }}>
                     cancel
                   </button>
                 </td>
