@@ -5,6 +5,7 @@ import LogoutButton from './LogoutButton.jsx';
 import { webAppPaths } from '../../paths.js';
 import TeamCard from './TeamCard.jsx';
 import TeamsAdapter from '../adapters/TeamsAdapter.js';
+import ConfirmationModal from '../shared/ConfirmationModal.jsx';
 
 function createTeamCards(teams) {
   return Object.keys(teams).map((key) => <TeamCard team={teams[key]} key={key} />);
@@ -95,7 +96,7 @@ export default function TeamsList() {
           </div>
         </div>
       </div>
-      { /* confirmation modal */ }
+      <ConfirmationModal />
     </div>
   );
 }

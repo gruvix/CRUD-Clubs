@@ -6,6 +6,7 @@ import { webAppPaths } from '../../paths.js';
 import TeamDataTable from './TeamDataTable.jsx';
 import TeamsAdapter from '../adapters/TeamsAdapter.js';
 import PlayersDataTable from './PlayersDataTable.jsx';
+import ConfirmationModal from '../shared/ConfirmationModal.jsx';
 
 export default function TeamEditor() {
   const navigate = useNavigate();
@@ -101,6 +102,7 @@ export default function TeamEditor() {
         </div>
       </div>
       <input type="hidden" id="team-id" value={teamId} />
-    </div> /* confirmationModal */
+      <ConfirmationModal />
+    </div>
   );
 }
