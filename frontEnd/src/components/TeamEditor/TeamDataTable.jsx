@@ -1,6 +1,28 @@
 import React, { useEffect } from 'react';
 
-async function createTeamDataRows(teamData) {
+export default function TeamDataTable({ teamData }) {
+  const [rowsTeamData, setRowsTeamData] = React.useState([]);
+  const [editingRowKey, setEditingRowKey] = React.useState(null);
+
+  const toggleApplyButton = (key, show) => {
+    const applyButton = document.getElementById(`apply-button-${key}`);
+    if (applyButton) {
+      applyButton.style.display = show ? 'inline' : 'none';
+    }
+  };
+  const enableRowEditing = (key) => () => {
+    setEditingRowKey(key);
+    toggleApplyButton(key, true);
+  };
+  const disableRowEditing = (key) => () => {
+    setEditingRowKey(null);
+    toggleApplyButton(key, false);
+  };
+
+  useEffect(() => {
+    setRowsTeamData(teamData);
+  }, [teamData]);
+
   const parameterKeyStyle = {
     textTransform: 'capitalize',
     paddingTop: '3.5%',
@@ -8,49 +30,30 @@ async function createTeamDataRows(teamData) {
   const noDisplayStyle = {
     display: 'none',
   };
-  return Object.keys(teamData).map((key) => (
-    <tr className="table-dark table-bordered" key={key}>
-      <td className="text-warning" style={parameterKeyStyle}>{key}</td>
-      <td id={key}>
-        <span>{teamData[key]}</span>
-        <input type="text" className="form-control" value="" style={noDisplayStyle} />
-      </td>
-      <td>
-        <button type="button" className="btn btn-shadow btn-outline-warning edit">
-          edit
-        </button>
-        <button type="button" className="btn btn-shadow btn-outline-success apply" style={noDisplayStyle}>
-          apply
-        </button>
-      </td>
-    </tr>
-  ));
-}
-export default function TeamDataTable({ teamData }) {
-  const [teamDataRows, setTeamDataRows] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(true);
-  useEffect(() => {
-    const fetchRows = async () => {
-      try {
-        const rows = await createTeamDataRows(teamData);
-        setTeamDataRows(rows);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchRows();
-  }, [teamData]);
+
   return (
     <div>
       <table className="table" id="team-table">
         <thead>
-          {isLoading ? (
-            <tr>
-              <td colSpan="3">Loading team data...</td>
-            </tr>
-          ) : (
-            teamDataRows
-          )}
+          {
+            Object.keys(rowsTeamData).map((key) => (
+              <tr className="table-dark table-bordered" id={key} key={key}>
+                <td className="text-warning" style={parameterKeyStyle}>{key}</td>
+                <td>
+                  <span style={{ display: editingRowKey === key ? 'none' : 'inline' }}>{rowsTeamData[key]}</span>
+                  <input type="text" className="form-control" value="" style={{ display: editingRowKey === key ? 'inline' : 'none' }} />
+                </td>
+                <td>
+                  <button type="button" className="btn btn-shadow btn-outline-warning edit" onClick={enableRowEditing(key)} style={{ display: editingRowKey === null ? 'inline' : 'none' }}>
+                    edit
+                  </button>
+                  <button type="button" className="btn btn-shadow btn-outline-success apply" onClick={disableRowEditing(key)} style={noDisplayStyle} id={`apply-button-${key}`}>
+                    apply
+                  </button>
+                </td>
+              </tr>
+            ))
+            }
         </thead>
       </table>
     </div>
