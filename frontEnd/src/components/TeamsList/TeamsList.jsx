@@ -53,7 +53,7 @@ export default function TeamsList() {
 
       <div className="row" style={addTeamButtonStyle}>
         <div className="col text-center">
-          <button type="button" id="add-team-button" className="btn btn-shadow btn-outline-warning" href=""> { /* add team path */ }
+          <button type="button" id="add-team-button" className="btn btn-shadow btn-outline-warning">
             Add new team
           </button>
         </div>
@@ -80,7 +80,6 @@ export default function TeamsList() {
             title="Erase all teams and reload default teams"
             data-bs-toggle="modal"
             data-bs-target="#confirmationModal"
-            href="{{data.resetTeamsPath}}"
           >
             Reset Teams
           </button>
