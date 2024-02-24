@@ -90,7 +90,7 @@ export default function PlayersDataTable({ playersData }) {
                   ))
                 }
                 <td className="buttons-column" style={buttonsColumnStyle}>
-                  <button type="button" className="btn btn-outline-warning edit" onClick={enableRowEditing(player.id)} style={{ marginRight: '10px' }}>
+                  <button type="button" className="btn btn-outline-warning edit" onClick={enableRowEditing(player.id)} style={{ marginRight: '10px', display: editingRowKey === null ? 'inline' : 'none' }}>
                     edit
                   </button>
                   <button type="button" className="btn btn-outline-danger remove" data-bs-toggle="modal" data-bs-target="#confirmationModal">
