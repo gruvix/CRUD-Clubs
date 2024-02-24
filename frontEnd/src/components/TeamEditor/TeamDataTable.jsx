@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
+import TeamsAdapter from '../adapters/TeamsAdapter';
 
-export default function TeamDataTable({ teamData }) {
+export default function TeamDataTable({ teamData, teamId }) {
   const [rowsTeamData, setRowsTeamData] = React.useState([]);
   const [editingRowKey, setEditingRowKey] = React.useState(null);
   const [inputValue, setInputValue] = React.useState({});
+  const requestAdapter = new TeamsAdapter();
 
   const enableRowEditing = (key) => () => {
     setEditingRowKey(key);
@@ -12,6 +14,15 @@ export default function TeamDataTable({ teamData }) {
   };
   const disableRowEditing = () => () => {
     setEditingRowKey(null);
+  };
+  const handleRowUpdate = (key) => () => {
+    const updatedData = { [key]: [inputValue[key]] };
+    try {
+      requestAdapter.updateTeam(teamId, updatedData);
+      disableRowEditing();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -39,7 +50,7 @@ export default function TeamDataTable({ teamData }) {
                   <button type="button" className="btn btn-shadow btn-outline-warning edit" onClick={enableRowEditing(key)} style={{ display: editingRowKey === null ? 'inline' : 'none' }}>
                     edit
                   </button>
-                  <button type="button" className="btn btn-shadow btn-outline-success apply" onClick={disableRowEditing(key)} style={{ display: editingRowKey === key ? 'inline' : 'none' }} id={`apply-button-${key}`}>
+                  <button type="button" className="btn btn-shadow btn-outline-success apply" onClick={handleRowUpdate(key)} style={{ display: editingRowKey === key ? 'inline' : 'none' }} id={`apply-button-${key}`}>
                     apply
                   </button>
                 </td>
