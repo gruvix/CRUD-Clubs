@@ -10,9 +10,6 @@ export default function PlayersDataTable({ playersData }) {
     height: '410px',
     overflow: 'auto',
   };
-  const noDisplayStyle = {
-    display: 'none',
-  };
   const addPlayerButtonsCellStyle = {
     display: 'flex',
     minHeight: '80px',
@@ -37,10 +34,6 @@ export default function PlayersDataTable({ playersData }) {
     display: 'flex',
     minHeight: '42px',
   };
-  const applyButtonStyle = {
-    marginRight: '10px',
-    display: 'none',
-  };
   function updateInputValue(event, playerId, parameter) {
     setplayerInputValue({
       ...playerInputValue,
@@ -52,6 +45,9 @@ export default function PlayersDataTable({ playersData }) {
   const enableRowEditing = (playerId) => () => {
     setEditingRowKey(playerId);
   };
+  const disableRowEditing = () => () => {
+    setEditingRowKey(null);
+  }
 
   return (
     <div style={tableStyle}>
@@ -93,13 +89,13 @@ export default function PlayersDataTable({ playersData }) {
                   <button type="button" className="btn btn-outline-warning edit" onClick={enableRowEditing(player.id)} style={{ marginRight: '10px', display: editingRowKey === null ? 'inline' : 'none' }}>
                     edit
                   </button>
-                  <button type="button" className="btn btn-outline-danger remove" data-bs-toggle="modal" data-bs-target="#confirmationModal">
+                  <button type="button" className="btn btn-outline-danger remove" data-bs-toggle="modal" data-bs-target="#confirmationModal" style={{ display: editingRowKey === null ? 'inline' : 'none' }}>
                     remove
                   </button>
-                  <button type="button" className="btn btn-outline-success apply" style={applyButtonStyle}>
+                  <button type="button" className="btn btn-outline-success apply" style={{ display: editingRowKey === player.id ? 'inline' : 'none', marginRight: '10px' }}>
                     apply
                   </button>
-                  <button type="button" className="btn btn-outline-secondary cancel" style={noDisplayStyle}>
+                  <button type="button" className="btn btn-outline-secondary cancel" onClick={disableRowEditing()} style={{ display: editingRowKey === player.id ? 'inline' : 'none' }}>
                     cancel
                   </button>
                 </td>
