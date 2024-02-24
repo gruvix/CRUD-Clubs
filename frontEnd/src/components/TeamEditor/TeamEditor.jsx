@@ -89,7 +89,7 @@ export default function TeamEditor() {
             Team
           </strong>
           <div className="d-flex justify-content-center">
-            <TeamDataTable teamData={teamParameters} />
+            <TeamDataTable teamData={teamParameters} teamId={teamId} />
           </div>
         </div>
         <div className="col">
