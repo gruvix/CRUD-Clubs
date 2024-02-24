@@ -1,65 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
-async function createPlayersDataRows(playersData) {
-  const noDisplayStyle = {
-    display: 'none',
-  };
-  const buttonsColumnStyle = {
-    display: 'flex',
-    minHeight: '42px',
-  };
-  const editButtonStyle = {
-    marginRight: '10px',
-  };
-  const applyButtonStyle = {
-    marginRight: '10px',
-    display: 'none',
-  };
-  return playersData.map((player) => (
-    <tr className="table-dark table-bordered" data-id={player.id} key={player.id}>
-      <td>
-        <span>{player.name}</span>
-        <input type="text" className="form-control" value="" style={noDisplayStyle} data-parameter="name" />
-      </td>
-      <td>
-        <span>{player.position}</span>
-        <input type="text" className="form-control" value="" style={noDisplayStyle} data-parameter="position" />
-      </td>
-      <td>
-        <span>{player.nationality}</span>
-        <input type="text" className="form-control" value="" style={noDisplayStyle} data-parameter="nationality" />
-      </td>
-      <td className="buttons-column" style={buttonsColumnStyle}>
-        <button type="button" className="btn btn-outline-warning edit" style={editButtonStyle}>
-          edit
-        </button>
-        <button type="button" className="btn btn-outline-danger remove" data-bs-toggle="modal" data-bs-target="#confirmationModal">
-          remove
-        </button>
-        <button type="button" className="btn btn-outline-success apply" style={applyButtonStyle}>
-          apply
-        </button>
-        <button type="button" className="btn btn-outline-secondary cancel" style={noDisplayStyle}>
-          cancel
-        </button>
-      </td>
-    </tr>
-  ));
-}
 export default function PlayersDataTable({ playersData }) {
-  const [playersDataRows, setPlayersDataRows] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(true);
-  useEffect(() => {
-    const fetchRows = async () => {
-      try {
-        const rows = await createPlayersDataRows(playersData);
-        setPlayersDataRows(rows);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchRows();
-  }, [playersData]);
+  const [playerInputValue, setplayerInputValue] = React.useState({
+    name: {}, position: {}, nationality: {},
+  });
+  const [editingRowKey, setEditingRowKey] = React.useState(null);
 
   const tableStyle = {
     height: '410px',
@@ -88,31 +33,39 @@ export default function PlayersDataTable({ playersData }) {
     minWidth: '75px',
     display: 'none',
   };
-  //   {isLoading ? (
-  //     <tr>
-  //       <td colSpan="3">Loading players data...</td>
-  //     </tr>
-  //   ) : (
-  //     playersDataRows
-  //   )}
+  const buttonsColumnStyle = {
+    display: 'flex',
+    minHeight: '42px',
+  };
+  const applyButtonStyle = {
+    marginRight: '10px',
+    display: 'none',
+  };
+  function updateInputValue(event, playerId, parameter) {
+    setplayerInputValue({
+      ...playerInputValue,
+      [parameter]: {
+        ...playerInputValue[parameter], [playerId]: event.target.value,
+      },
+    });
+  }
+  const enableRowEditing = (playerId) => () => {
+    setEditingRowKey(playerId);
+  };
 
   return (
     <div style={tableStyle}>
       <table className="table" id="players-table">
         <thead>
           <tr className="table-dark" id="add-player-row" data-id="-1">
-            <td className="text-warning">
-              Name
-              <input type="text" className="form-control" value="" style={noDisplayStyle} data-parameter="name" />
-            </td>
-            <td className="text-warning">
-              Position
-              <input type="text" className="form-control" value="" style={noDisplayStyle} data-parameter="position" />
-            </td>
-            <td className="text-warning">
-              Nationality
-              <input type="text" className="form-control" value="" style={noDisplayStyle} data-parameter="nationality" />
-            </td>
+            {
+              Object.keys(playerInputValue).map((parameter) => (
+                <td className="text-warning" key={parameter}>
+                  {parameter}
+                  <input type="text" className="form-control" value="" style={{ display: editingRowKey === -1 ? 'inline' : 'none' }} data-parameter={parameter} />
+                </td>
+              ))
+            }
             <td style={addPlayerButtonsCellStyle}>
               <button type="button" className="btn btn-shadow btn-outline-warning" id="add-player-button" style={newPlayerButtonStyle}>
                 new player
@@ -125,7 +78,34 @@ export default function PlayersDataTable({ playersData }) {
               </button>
             </td>
           </tr>
-          {playersDataRows}
+          {
+            playersData.map((player) => (
+              <tr className="table-dark table-bordered" data-id={player.id} key={player.id}>
+                {
+                  Object.keys(playerInputValue).map((parameter) => (
+                    <td key={`${parameter}-${player.id}`}>
+                      <span style={{ display: editingRowKey === player.id ? 'none' : 'inline' }}>{player[parameter]}</span>
+                      <input type="text" className="form-control" value={playerInputValue[parameter][player.id]} onChange={(e) => updateInputValue(e, player.id, parameter)} style={{ display: editingRowKey === player.id ? 'inline' : 'none' }} />
+                    </td>
+                  ))
+                }
+                <td className="buttons-column" style={buttonsColumnStyle}>
+                  <button type="button" className="btn btn-outline-warning edit" onClick={enableRowEditing(player.id)} style={{ marginRight: '10px' }}>
+                    edit
+                  </button>
+                  <button type="button" className="btn btn-outline-danger remove" data-bs-toggle="modal" data-bs-target="#confirmationModal">
+                    remove
+                  </button>
+                  <button type="button" className="btn btn-outline-success apply" style={applyButtonStyle}>
+                    apply
+                  </button>
+                  <button type="button" className="btn btn-outline-secondary cancel" style={noDisplayStyle}>
+                    cancel
+                  </button>
+                </td>
+              </tr>
+            ))
+          }
         </thead>
       </table>
     </div>
