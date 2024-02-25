@@ -75,4 +75,24 @@ export default class APIAdapter {
       throw error;
     }
   }
+
+  async resetTeamsList() {
+    const response = await fetch(apiRequestPaths.resetAll, {
+      method: 'PUT',
+      credentials: 'include',
+    });
+    try {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      data.auth = true;
+      return data;
+    } catch (error) {
+      if (response.status === 401) {
+        return { auth: false };
+      }
+      throw error;
+    }
+  }
 }
