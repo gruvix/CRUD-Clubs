@@ -28,7 +28,8 @@ app.use(session({
   store: new FileStore(fileStoreOptions),
   secret: 'keyboard-cat',
   resave: false,
-  saveUninitialized: false,
+  saveUninitialized: true,
+  cookie: { sameSite: 'none', secure: false },
 }));
 app.use(cors(corsOptions));
 app.use((req, res, next) => {
