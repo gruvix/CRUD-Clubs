@@ -13,4 +13,6 @@ export const apiRequestPaths = {
   teams: `${BASE_API_URL}/user/teams`,
   team: `${BASE_API_URL}/user/team/:teamId`,
   userStatus: `${BASE_API_URL}/user/status`,
+  resetAll: `${BASE_API_URL}/user/reset/all`,
+  resetTeam: `${BASE_API_URL}/user/reset/:teamId`,
 };
