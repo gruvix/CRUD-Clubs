@@ -4,9 +4,9 @@ import TeamCrest from '../shared/TeamCrest.jsx';
 import ResetTeamButton from './ResetTeamButton.jsx';
 import { webAppPaths } from '../../paths.js';
 import TeamDataTable from './TeamDataTable.jsx';
-import TeamsAdapter from '../adapters/TeamsAdapter.js';
 import PlayersDataTable from './PlayersDataTable.jsx';
 import ConfirmationModal from '../shared/ConfirmationModal.jsx';
+import APIAdapter from '../adapters/APIAdapter.js';
 
 export default function TeamEditor() {
   const navigate = useNavigate();
@@ -14,7 +14,7 @@ export default function TeamEditor() {
   const [teamParameters, setTeamParameters] = React.useState({});
   const [otherTeamData, setOtherTeamData] = React.useState({});
   const [players, setPlayers] = React.useState([]);
-  const teamData = new TeamsAdapter();
+  const teamData = new APIAdapter();
   useEffect(() => {
     const updateTeamData = async () => {
       try {
