@@ -15,21 +15,21 @@ export default function TeamsList() {
   const [username, setUsername] = React.useState('');
   const [teamCards, setTeamCards] = React.useState('');
   const teamsData = new APIAdapter();
+  const updateTeamsData = async () => {
+    try {
+      teamsData.getTeamsData().then((data) => {
+        if (!data.auth) {
+          navigate(webAppPaths.home);
+        } else {
+          setUsername(data.username);
+          setTeamCards(createTeamCards(data.teams));
+        }
+      });
+    } catch (error) {
+      alert(error);
+    }
+  };
   useEffect(() => {
-    const updateTeamsData = async () => {
-      try {
-        teamsData.getTeamsData().then((data) => {
-          if (!data.auth) {
-            navigate(webAppPaths.home);
-          } else {
-            setUsername(data.username);
-            setTeamCards(createTeamCards(data.teams));
-          }
-        });
-      } catch (error) {
-        alert(error);
-      }
-    };
     updateTeamsData();
   }, []);
 
