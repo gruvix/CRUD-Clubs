@@ -2,7 +2,9 @@ const express = require('express');
 const { deleteUser, createUser } = require('../user');
 const { validateFile } = require('../utils');
 const { getUserTeamsListJSONPath } = require('../userPath');
-const { deleteTeam, cloneTeamFromDefault, copyTeamListTeam, hasTeamDefault } = require('../teamStorage');
+const {
+  deleteTeam, cloneTeamFromDefault, copyTeamListTeam, hasTeamDefault,
+} = require('../teamStorage');
 
 const router = express.Router();
 
