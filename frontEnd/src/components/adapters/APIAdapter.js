@@ -2,7 +2,7 @@
 import { apiRequestPaths } from '../../paths';
 import Team from './Team';
 
-export default class TeamsAdapter {
+export default class APIAdapter {
   async getTeamData(teamId) {
     const response = await fetch(apiRequestPaths.team.replace(':teamId', teamId), {
       method: 'GET',

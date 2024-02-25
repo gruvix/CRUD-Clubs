@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
-import TeamsAdapter from '../adapters/TeamsAdapter';
+import APIAdapter from '../adapters/APIAdapter';
 
 export default function TeamDataTable({ teamData, teamId }) {
   const [rowsTeamData, setRowsTeamData] = React.useState([]);
   const [editingRowKey, setEditingRowKey] = React.useState(null);
   const [inputValue, setInputValue] = React.useState({});
-  const requestAdapter = new TeamsAdapter();
+  const requestAdapter = new APIAdapter();
 
   const enableRowEditing = (key) => () => {
     setEditingRowKey(key);

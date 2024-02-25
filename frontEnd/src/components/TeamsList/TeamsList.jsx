@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import LogoutButton from './LogoutButton.jsx';
 import { webAppPaths } from '../../paths.js';
 import TeamCard from './TeamCard.jsx';
-import TeamsAdapter from '../adapters/TeamsAdapter.js';
+import APIAdapter from '../adapters/APIAdapter';
 import ConfirmationModal from '../shared/ConfirmationModal.jsx';
 
 function createTeamCards(teams) {
@@ -14,7 +14,7 @@ export default function TeamsList() {
   const navigate = useNavigate();
   const [username, setUsername] = React.useState('');
   const [teamCards, setTeamCards] = React.useState('');
-  const teamsData = new TeamsAdapter();
+  const teamsData = new APIAdapter();
   useEffect(() => {
     const updateTeamsData = async () => {
       try {
