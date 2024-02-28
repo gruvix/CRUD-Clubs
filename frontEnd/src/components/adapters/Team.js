@@ -22,3 +22,4 @@ export default class Team {
     this.players = teamData.squad.map((player) => new Player(player));
   }
 }
+export const teamParametersKeys = ['name', 'area', 'address', 'phone', 'website', 'email', 'venue'];
