@@ -8,9 +8,6 @@ import APIAdapter from '../adapters/APIAdapter';
 import ConfirmationModal from '../shared/ConfirmationModal.jsx';
 import LoadingSpinner from '../shared/LoadingSpinner.jsx';
 
-function createTeamCards(teams) {
-  return Object.keys(teams).map((key) => <TeamCard team={teams[key]} key={key} />);
-}
 export default function TeamsList() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = React.useState(true);
@@ -19,6 +16,7 @@ export default function TeamsList() {
   const [modalCallback, setModalCallback] = React.useState('');
   const [modalText, setModalText] = React.useState('');
   const request = new APIAdapter();
+
   const updateTeamsData = async () => {
     try {
       setIsLoading(true);
@@ -27,7 +25,7 @@ export default function TeamsList() {
           navigate(webAppPaths.home);
         } else {
           setUsername(data.username);
-          setTeamCards(createTeamCards(data.teams));
+          setTeamCards(data.teams);
           setIsLoading(false);
         }
       });
@@ -109,7 +107,7 @@ export default function TeamsList() {
         <div className="col">
           <div className="container">
             <div className="row row-cols-5 justify-content-center">
-              {isLoading ? (<LoadingSpinner style={{ marginTop: '10%', height: '20rem', width: '20rem' }} />) : teamCards }
+              {isLoading ? (<LoadingSpinner style={{ marginTop: '10%', height: '20rem', width: '20rem' }} />) : Object.keys(teamCards).map((key) => <TeamCard team={teamCards[key]} key={key} />) }
             </div>
           </div>
         </div>

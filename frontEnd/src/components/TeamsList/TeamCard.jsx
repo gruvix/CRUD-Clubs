@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import TeamCrest from '../shared/TeamCrest.jsx';
 import { webAppPaths } from '../../paths.js';
 
-export default function TeamCard({ team }) {
+export default function TeamCard({ team, deleteTeamCallback }) {
   const navigate = useNavigate();
   const cardBodyStyle = {
     alignSelf: 'center',
@@ -31,6 +31,7 @@ export default function TeamCard({ team }) {
           className="btn btn-outline-danger overlay-button-dark delete"
           data-bs-toggle="modal"
           data-bs-target="#confirmationModal"
+          onClick={() => deleteTeamCallback(team.id)}
         >
           delete
         </button>
