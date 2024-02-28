@@ -96,6 +96,26 @@ export default class APIAdapter {
     }
   }
 
+  async resetTeam(teamId) {
+    const response = await fetch(apiRequestPaths.resetTeam.replace(':teamId', teamId), {
+      method: 'PUT',
+      credentials: 'include',
+    });
+    try {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = response;
+      data.auth = true;
+      return data;
+    } catch (error) {
+      if (response.status === 401) {
+        return { auth: false };
+      }
+      throw error;
+    }
+  }
+
   async updatePlayer(teamId, newData) {
     const response = await fetch(apiRequestPaths.player.replace(':teamId', teamId), {
       method: 'PATCH',
