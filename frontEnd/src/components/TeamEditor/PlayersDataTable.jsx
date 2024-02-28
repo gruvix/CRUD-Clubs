@@ -55,7 +55,7 @@ export default function PlayersDataTable({ playersData, teamId, updateTeamCallba
     });
     setplayerInputValue(newPlayerInputValues);
   };
-  const disableRowEditing = () => () => {
+  const disableRowEditing = () => {
     setEditingRowKey(null);
   };
   const handleRowUpdate = (playerId) => () => {
@@ -123,7 +123,7 @@ export default function PlayersDataTable({ playersData, teamId, updateTeamCallba
                   <button type="button" className="btn btn-outline-success apply" onClick={() => handleRowUpdate(rowsPlayersData[player].id)()} style={{ display: editingRowKey === rowsPlayersData[player].id ? 'inline' : 'none', marginRight: '10px' }}>
                     apply
                   </button>
-                  <button type="button" className="btn btn-outline-secondary cancel" onClick={disableRowEditing()} style={{ display: editingRowKey === rowsPlayersData[player].id ? 'inline' : 'none' }}>
+                  <button type="button" className="btn btn-outline-secondary cancel" onClick={() => disableRowEditing()} style={{ display: editingRowKey === rowsPlayersData[player].id ? 'inline' : 'none' }}>
                     cancel
                   </button>
                 </td>
