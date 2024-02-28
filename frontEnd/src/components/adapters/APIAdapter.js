@@ -95,4 +95,28 @@ export default class APIAdapter {
       throw error;
     }
   }
+
+  async updatePlayer(teamId, newData) {
+    const response = await fetch(apiRequestPaths.player.replace(':teamId', teamId), {
+      method: 'PATCH',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newData),
+    });
+    try {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = response;
+      data.auth = true;
+      return data;
+    } catch (error) {
+      if (response.status === 401) {
+        return { auth: false };
+      }
+      throw error;
+    }
+  }
 }
