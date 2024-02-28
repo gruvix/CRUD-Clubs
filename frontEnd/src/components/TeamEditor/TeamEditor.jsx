@@ -14,10 +14,12 @@ export default function TeamEditor() {
   const [teamParameters, setTeamParameters] = React.useState({});
   const [otherTeamData, setOtherTeamData] = React.useState({});
   const [players, setPlayers] = React.useState([]);
-  const teamData = new APIAdapter();
+  const [modalCallback, setModalCallback] = React.useState('');
+  const [modalText, setModalText] = React.useState('');
+  const request = new APIAdapter();
   const updateTeamData = async () => {
     try {
-      teamData.getTeamData(teamId)
+      request.getTeamData(teamId)
         .then((data) => {
           if (!data.other.auth) {
             navigate(webAppPaths.home);
@@ -30,6 +32,15 @@ export default function TeamEditor() {
     } catch (error) {
       alert(error);
     }
+  };
+  const resetTeam = () => async () => {
+    request.resetTeam(teamId).then((data) => {
+      if (!data.auth) {
+        navigate(webAppPaths.home);
+      } else {
+        updateTeamData();
+      }
+    });
   };
   useEffect(() => {
     updateTeamData();
@@ -78,7 +89,13 @@ export default function TeamEditor() {
 
         <div className="col">
           <div className="text-end">
-            <ResetTeamButton id={teamId} hasDefault={otherTeamData.hasDefault} />
+            <ResetTeamButton
+              hasDefault={otherTeamData.hasDefault}
+              onClickCallback={() => {
+                setModalCallback(resetTeam);
+                setModalText('Are you sure you want to reset this team? All custom data will be lost and this action can not be undone');
+              }}
+            />
           </div>
         </div>
       </div>
@@ -101,12 +118,16 @@ export default function TeamEditor() {
             Players
           </strong>
           <div className="d-flex justify-content-center">
-            <PlayersDataTable playersData={players} teamId={teamId} updateTeamCallback={updateTeamData} />
+            <PlayersDataTable
+              playersData={players}
+              teamId={teamId}
+              updateTeamCallback={updateTeamData}
+            />
           </div>
         </div>
       </div>
       <input type="hidden" id="team-id" value={teamId} />
-      <ConfirmationModal />
+      <ConfirmationModal callback={modalCallback} confirmationText={modalText} />
     </div>
   );
 }
