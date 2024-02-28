@@ -42,7 +42,7 @@ export default class APIAdapter {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      const data = await response.json();
+      const data = response;
       data.auth = true;
       return data;
     } catch (error) {
@@ -85,7 +85,7 @@ export default class APIAdapter {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      const data = await response.json();
+      const data = response;
       data.auth = true;
       return data;
     } catch (error) {
