@@ -76,6 +76,26 @@ export default class APIAdapter {
     }
   }
 
+  async deleteTeam(teamId) {
+    const response = await fetch(apiRequestPaths.team.replace(':teamId', teamId), {
+      method: 'DELETE',
+      credentials: 'include',
+    });
+    try {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = response;
+      data.auth = true;
+      return data;
+    } catch (error) {
+      if (response.status === 401) {
+        return { auth: false };
+      }
+      throw error;
+    }
+  }
+
   async resetTeamsList() {
     const response = await fetch(apiRequestPaths.resetAll, {
       method: 'PUT',
