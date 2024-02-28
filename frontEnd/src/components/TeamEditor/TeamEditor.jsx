@@ -77,7 +77,12 @@ export default function TeamEditor() {
             Go back
           </button>
         </div>
-        {isLoading ? (<LoadingSpinner style={{ marginLeft: '10rem', marginTop: '10rem' }} />) : (
+        {isLoading ? (
+          <LoadingSpinner style={{
+            marginLeft: '10rem', marginTop: '10rem', width: '7rem', height: '7rem',
+          }}
+          />
+        ) : (
 
           <>
             <div className="col-4">
@@ -119,7 +124,12 @@ export default function TeamEditor() {
         )}
       </div>
       <div className="row" id="tables">
-        {isLoading ? (<LoadingSpinner style={{ marginLeft: '10rem', marginTop: '10rem' }} />) : (
+        {isLoading ? (
+          <LoadingSpinner style={{
+            marginLeft: '10rem', marginTop: '10rem', width: '10rem', height: '10rem',
+          }}
+          />
+        ) : (
           <div className="col">
             <strong className="d-flex justify-content-center text-warning table-title">
               Team
@@ -133,7 +143,12 @@ export default function TeamEditor() {
             </div>
           </div>
         )}
-        {isLoading ? (<LoadingSpinner style={{ marginLeft: '40rem', marginTop: '10rem' }} />) : (
+        {isLoading ? (
+          <LoadingSpinner style={{
+            marginLeft: '40rem', marginTop: '10rem', width: '10rem', height: '10rem',
+          }}
+          />
+        ) : (
 
           <div className="col">
             <strong className="d-flex justify-content-center text-warning table-title">
