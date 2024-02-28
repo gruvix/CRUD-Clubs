@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-export default function PlayersDataTable({ playersData }) {
+export default function PlayersDataTable({ playersData, teamId, updateTeamCallback }) {
   const [rowsPlayersData, setRowsPlayersData] = React.useState([]);
   const [playerInputValue, setplayerInputValue] = React.useState({
     name: {}, position: {}, nationality: {},

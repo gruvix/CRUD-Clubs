@@ -101,7 +101,7 @@ export default function TeamEditor() {
             Players
           </strong>
           <div className="d-flex justify-content-center">
-            <PlayersDataTable playersData={players} />
+            <PlayersDataTable playersData={players} teamId={teamId} updateTeamCallback={updateTeamData} />
           </div>
         </div>
       </div>
