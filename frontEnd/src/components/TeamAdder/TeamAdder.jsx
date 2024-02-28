@@ -44,7 +44,35 @@ export default function TeamAdder() {
             Players
           </strong>
           <div className="d-flex justify-content-center">
-            {/* {{> newTeamPlayersTable }} */}
+
+            <div style={{ height: '410px', overflow: 'auto' }}>
+              <table className="table" id="players-table">
+                <thead>
+                  <tr className="table-dark" id="add-player-row">
+                    <td className="text-warning">
+                      Name
+                    </td>
+                    <td className="text-warning">
+                      Position
+                    </td>
+                    <td className="text-warning">
+                      Nationality
+                    </td>
+                    <td style={{ display: 'flex', minHeight: '80px', paddingTop: '20px' }}>
+                      <button
+                        type="button"
+                        className="btn btn-shadow btn-outline-warning"
+                        id="add-player-button"
+                        style={{ maxHeight: '40px', minWidth: '120px' }}
+                      >
+                        Add player
+                      </button>
+                    </td>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+
           </div>
         </div>
       </div>
