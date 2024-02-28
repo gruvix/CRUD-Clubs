@@ -14,10 +14,10 @@ export default function TeamsList() {
   const navigate = useNavigate();
   const [username, setUsername] = React.useState('');
   const [teamCards, setTeamCards] = React.useState('');
-  const teamsData = new APIAdapter();
+  const request = new APIAdapter();
   const updateTeamsData = async () => {
     try {
-      teamsData.getTeamsData().then((data) => {
+      request.getTeamsData().then((data) => {
         if (!data.auth) {
           navigate(webAppPaths.home);
         } else {
