@@ -31,6 +31,15 @@ export default function TeamsList() {
       alert(error);
     }
   };
+  const resetTeams = async () => {
+    request.resetTeamsList().then((data) => {
+      if (!data.auth) {
+        navigate(webAppPaths.home);
+      } else {
+        updateTeamsData();
+      }
+    });
+  };
   useEffect(() => {
     updateTeamsData();
   }, []);
@@ -82,6 +91,10 @@ export default function TeamsList() {
             title="Erase all teams and reload default teams"
             data-bs-toggle="modal"
             data-bs-target="#confirmationModal"
+            onClick={() => {
+              setModalCallback(resetTeams);
+              setModalText('Are you sure you want to reset all teams? All custom data will be lost and this action can not be undone');
+            }}
           >
             Reset Teams
           </button>
