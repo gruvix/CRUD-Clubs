@@ -1,5 +1,5 @@
 class Team {
-  constructor(data, isDefault = false) {
+  constructor(data, isDefault = false, hasDefault = false) {
     this.name = data.name;
     if (isDefault) {
       this.area = data.area.name;
@@ -11,6 +11,7 @@ class Team {
     this.website = data.website;
     this.email = data.email;
     this.venue = data.venue;
+    this.hasDefault = hasDefault;
   }
 }
 

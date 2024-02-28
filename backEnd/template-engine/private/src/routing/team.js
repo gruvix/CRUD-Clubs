@@ -62,8 +62,7 @@ router.route('/:teamId')
     } else {
       players.push(new Player(team.squad));
     }
-
-    res.json(new TeamFullData(team, teamDefaultBool));
+    res.json(new TeamFullData(team, teamDefaultBool, hasTeamDefault(username, teamId)));
   })
   .patch((req, res) => {
     const { teamId } = req.params;
