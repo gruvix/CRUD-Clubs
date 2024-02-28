@@ -1,7 +1,7 @@
 import React from 'react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
-export default function ResetTeamButton({ teamId, hasDefault }) {
+export default function ResetTeamButton({ hasDefault, onClickCallback}) {
   if (hasDefault) {
     const resetTooltip = (props) => (
       <Tooltip {...props}>
@@ -23,6 +23,7 @@ export default function ResetTeamButton({ teamId, hasDefault }) {
           data-toggle="tooltip"
           data-placement="bottom"
           title="Reset the team to its default values"
+          onClick={() => onClickCallback()}
         >
           Reset to default
         </button>
