@@ -12,7 +12,7 @@ export default function TeamDataTable({ teamData, teamId }) {
     setInputValue({ ...inputValue, [key]: rowsTeamData[key] });
     document.getElementById(`input-field-${key}`).focus();
   };
-  const disableRowEditing = () => () => {
+  const disableRowEditing = () => {
     setEditingRowKey(null);
   };
   const handleRowUpdate = (key) => () => {
@@ -53,7 +53,7 @@ export default function TeamDataTable({ teamData, teamId }) {
                   <button type="button" className="btn btn-shadow btn-outline-success apply" onClick={handleRowUpdate(key)} style={{ display: editingRowKey === key ? 'inline' : 'none', marginRight: '10px' }} id={`apply-button-${key}`}>
                     apply
                   </button>
-                  <button type="button" className="btn btn-outline-secondary cancel" onClick={disableRowEditing()} style={{ display: editingRowKey === key ? 'inline' : 'none' }}>
+                  <button type="button" className="btn btn-outline-secondary cancel" onClick={() => disableRowEditing()} style={{ display: editingRowKey === key ? 'inline' : 'none' }}>
                     cancel
                   </button>
                 </td>
