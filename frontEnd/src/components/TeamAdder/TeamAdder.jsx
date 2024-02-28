@@ -1,4 +1,5 @@
 import React from 'react';
+import { teamParametersKeys } from '../adapters/Team';
 
 export default function TeamAdder() {
   return (
@@ -24,7 +25,18 @@ export default function TeamAdder() {
             Team
           </strong>
           <div className="d-flex justify-content-center">
-            {/* {{> newTeamTable team=data.team }} */}
+            <table className="table" id="team-table">
+              <thead>
+                {teamParametersKeys.map((key) => (
+                  <tr className="table-dark table-bordered">
+                    <td className="text-warning" style={{ textTransform: 'capitalize', paddingTop: '3.5%' }}>{key}</td>
+                    <td aria-label={key}>
+                      <input type="text" className="form-control" value="" />
+                    </td>
+                  </tr>
+                ))}
+              </thead>
+            </table>
           </div>
         </div>
         <div className="col">
