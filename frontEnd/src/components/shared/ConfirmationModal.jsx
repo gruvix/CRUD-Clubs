@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function ConfirmationModal() {
+export default function ConfirmationModal({ callback = () => {}, confirmationText }) {
   return (
     <div className="modal fade" id="confirmationModal" tabIndex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
       <div className="modal-dialog">
@@ -10,10 +10,10 @@ export default function ConfirmationModal() {
             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
           </div>
           <div className="modal-body">
-            <span id="modal-confirmation-text" />
+            <span id="modal-confirmation-text">{confirmationText}</span>
           </div>
           <div className="modal-footer">
-            <button type="button" className="btn btn-outline-success" id="confirmation-modal-button" data-bs-dismiss="modal">Confirm</button>
+            <button type="button" className="btn btn-outline-success" id="confirmation-modal-button" data-bs-dismiss="modal" onClick={() => callback()}>Confirm</button>
             <button type="button" className="btn btn-outline-dark" id="cancel-modal-button" data-bs-dismiss="modal">Cancel</button>
           </div>
         </div>
