@@ -2,6 +2,14 @@ import React from 'react';
 import { teamParametersKeys } from '../adapters/Team';
 
 export default function TeamAdder() {
+  const [playerSlots, setPlayerSlots] = React.useState([]);
+  function findNextAvailableSlot(slots) {
+    let nextSlot = 1;
+    while (slots.includes(nextSlot)) {
+      nextSlot += 1;
+    }
+    return nextSlot;
+  }
   return (
     <div className="container">
       <div className="row">
@@ -64,11 +72,37 @@ export default function TeamAdder() {
                         className="btn btn-shadow btn-outline-warning"
                         id="add-player-button"
                         style={{ maxHeight: '40px', minWidth: '120px' }}
+                        onClick={() => {
+                          const nextAvailableSlot = findNextAvailableSlot(playerSlots);
+                          setPlayerSlots([...playerSlots, nextAvailableSlot]);
+                        }}
                       >
                         Add player
                       </button>
                     </td>
                   </tr>
+                  {playerSlots.map((slot) => (
+                    <tr className="table-dark table-bordered player" key={slot}>
+                      <td aria-label="name">
+                        <input type="text" className="form-control" value="" data-parameter="name" />
+                      </td>
+                      <td aria-label="position">
+                        <input type="text" className="form-control" value="" data-parameter="position" />
+                      </td>
+                      <td aria-label="nationality">
+                        <input type="text" className="form-control" value="" data-parameter="nationality" />
+                      </td>
+                      <td className="buttons-column" style={{ display: 'flex', minHeight: '42px' }}>
+                        <button
+                          type="button"
+                          className="btn btn-outline-danger remove"
+                          onClick={() => setPlayerSlots(playerSlots.filter((s) => s !== slot))}
+                        >
+                          remove
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
                 </thead>
               </table>
             </div>
