@@ -31,7 +31,7 @@ export default function TeamCard({ team, deleteTeamCallback }) {
           className="btn btn-outline-danger overlay-button-dark delete"
           data-bs-toggle="modal"
           data-bs-target="#confirmationModal"
-          onClick={() => deleteTeamCallback(team.id)}
+          onClick={() => deleteTeamCallback(team.id, team.name)}
         >
           delete
         </button>

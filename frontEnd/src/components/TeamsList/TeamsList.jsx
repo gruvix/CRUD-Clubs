@@ -33,6 +33,19 @@ export default function TeamsList() {
       alert(error);
     }
   };
+  const deleteTeam = (teamId) => async () => {
+    request.deleteTeam(teamId).then((data) => {
+      if (!data.auth) {
+        navigate(webAppPaths.home);
+      } else {
+        updateTeamsData();
+      }
+    });
+  };
+  const setUpDeleteTeamModal = (teamId, teamName) => {
+    setModalCallback(() => deleteTeam(teamId));
+    setModalText(`Are you sure you want to delete team ${teamName}?`);
+  };
   const resetTeams = () => async () => {
     request.resetTeamsList().then((data) => {
       if (!data.auth) {
@@ -107,7 +120,15 @@ export default function TeamsList() {
         <div className="col">
           <div className="container">
             <div className="row row-cols-5 justify-content-center">
-              {isLoading ? (<LoadingSpinner style={{ marginTop: '10%', height: '20rem', width: '20rem' }} />) : Object.keys(teamCards).map((key) => <TeamCard team={teamCards[key]} key={key} />) }
+              {isLoading
+                ? (<LoadingSpinner style={{ marginTop: '10%', height: '20rem', width: '20rem' }} />)
+                : Object.keys(teamCards).map((key) => (
+                  <TeamCard
+                    team={teamCards[key]}
+                    key={key}
+                    deleteTeamCallback={setUpDeleteTeamModal}
+                  />
+                )) }
             </div>
           </div>
         </div>
