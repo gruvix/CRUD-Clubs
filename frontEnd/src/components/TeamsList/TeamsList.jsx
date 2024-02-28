@@ -31,7 +31,7 @@ export default function TeamsList() {
       alert(error);
     }
   };
-  const resetTeams = async () => {
+  const resetTeams = () => async () => {
     request.resetTeamsList().then((data) => {
       if (!data.auth) {
         navigate(webAppPaths.home);
