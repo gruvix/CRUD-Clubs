@@ -6,8 +6,9 @@ export default class Team {
       id: teamData.id,
       crestUrl: teamData.crestUrl,
       hasCustomCrest: teamData.hasCustomCrest,
-      lastUpdated: teamData.lastUpdated,
+      hasDefault: teamData.hasDefault,
       auth: teamData.auth,
+      lastUpdated: teamData.lastUpdated,
     };
     this.teamParameters = {
       name: teamData.name,
