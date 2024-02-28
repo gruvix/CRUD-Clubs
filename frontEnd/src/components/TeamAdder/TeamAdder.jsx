@@ -1,8 +1,11 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { teamParametersKeys } from '../adapters/Team';
+import { webAppPaths } from '../../paths';
 
 export default function TeamAdder() {
   const [playerSlots, setPlayerSlots] = React.useState([]);
+  const navigate = useNavigate();
   function findNextAvailableSlot(slots) {
     let nextSlot = 1;
     while (slots.includes(nextSlot)) {
@@ -18,9 +21,7 @@ export default function TeamAdder() {
             type="button"
             className="btn btn-shadow btn-outline-warning"
             style={{ marginTop: '25px' }}
-            id="back-to-teams-button"
-            data-bs-toggle="modal"
-            data-bs-target="#confirmationModal"
+            onClick={() => navigate(webAppPaths.teams)}
           >
             Go back
           </button>
