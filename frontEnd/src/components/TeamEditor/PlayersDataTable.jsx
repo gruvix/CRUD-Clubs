@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import APIAdapter from '../adapters/APIAdapter';
 
 export default function PlayersDataTable({ playersData, teamId, updateTeamCallback }) {
   const [rowsPlayersData, setRowsPlayersData] = React.useState([]);
@@ -6,6 +7,7 @@ export default function PlayersDataTable({ playersData, teamId, updateTeamCallba
     name: {}, position: {}, nationality: {},
   });
   const [editingRowKey, setEditingRowKey] = React.useState(null);
+  const requestAdapter = new APIAdapter();
 
   const tableStyle = {
     height: '410px',
@@ -56,6 +58,21 @@ export default function PlayersDataTable({ playersData, teamId, updateTeamCallba
   const disableRowEditing = () => () => {
     setEditingRowKey(null);
   };
+  const handleRowUpdate = (playerId) => () => {
+    const updatedData = {
+      id: playerId,
+      name: playerInputValue.name[playerId],
+      position: playerInputValue.position[playerId],
+      nationality: playerInputValue.nationality[playerId],
+    };
+    try {
+      requestAdapter.updatePlayer(teamId, updatedData);
+      disableRowEditing();
+      updateTeamCallback();
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     setRowsPlayersData(playersData);
   }, [playersData]);
@@ -103,7 +120,7 @@ export default function PlayersDataTable({ playersData, teamId, updateTeamCallba
                   <button type="button" className="btn btn-outline-danger remove" data-bs-toggle="modal" data-bs-target="#confirmationModal" style={{ display: editingRowKey === null ? 'inline' : 'none' }}>
                     remove
                   </button>
-                  <button type="button" className="btn btn-outline-success apply" style={{ display: editingRowKey === rowsPlayersData[player].id ? 'inline' : 'none', marginRight: '10px' }}>
+                  <button type="button" className="btn btn-outline-success apply" onClick={() => handleRowUpdate(rowsPlayersData[player].id)()} style={{ display: editingRowKey === rowsPlayersData[player].id ? 'inline' : 'none', marginRight: '10px' }}>
                     apply
                   </button>
                   <button type="button" className="btn btn-outline-secondary cancel" onClick={disableRowEditing()} style={{ display: editingRowKey === rowsPlayersData[player].id ? 'inline' : 'none' }}>
