@@ -15,23 +15,23 @@ export default function TeamEditor() {
   const [otherTeamData, setOtherTeamData] = React.useState({});
   const [players, setPlayers] = React.useState([]);
   const teamData = new APIAdapter();
+  const updateTeamData = async () => {
+    try {
+      teamData.getTeamData(teamId)
+        .then((data) => {
+          if (!data.other.auth) {
+            navigate(webAppPaths.home);
+          } else {
+            setTeamParameters(data.teamParameters);
+            setOtherTeamData(data.other);
+            setPlayers(data.players);
+          }
+        });
+    } catch (error) {
+      alert(error);
+    }
+  };
   useEffect(() => {
-    const updateTeamData = async () => {
-      try {
-        teamData.getTeamData(teamId)
-          .then((data) => {
-            if (!data.other.auth) {
-              navigate(webAppPaths.home);
-            } else {
-              setTeamParameters(data.teamParameters);
-              setOtherTeamData(data.other);
-              setPlayers(data.players);
-            }
-          });
-      } catch (error) {
-        alert(error);
-      }
-    };
     updateTeamData();
   }, []);
 
@@ -89,7 +89,11 @@ export default function TeamEditor() {
             Team
           </strong>
           <div className="d-flex justify-content-center">
-            <TeamDataTable teamData={teamParameters} teamId={teamId} />
+            <TeamDataTable
+              teamData={teamParameters}
+              teamId={teamId}
+              updateTeamCallback={updateTeamData}
+            />
           </div>
         </div>
         <div className="col">
