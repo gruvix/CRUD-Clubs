@@ -14,6 +14,8 @@ export default function TeamsList() {
   const navigate = useNavigate();
   const [username, setUsername] = React.useState('');
   const [teamCards, setTeamCards] = React.useState('');
+  const [modalCallback, setModalCallback] = React.useState('');
+  const [modalText, setModalText] = React.useState('');
   const request = new APIAdapter();
   const updateTeamsData = async () => {
     try {
@@ -95,7 +97,7 @@ export default function TeamsList() {
           </div>
         </div>
       </div>
-      <ConfirmationModal />
+      <ConfirmationModal callback={modalCallback} confirmationText={modalText} />
     </div>
   );
 }
