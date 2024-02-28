@@ -21,7 +21,7 @@ router.route('/:teamId')
   .patch((req, res) => {
     const { username } = req.session;
     const { teamId } = req.params;
-    const { player } = req.body;
+    const player = req.body;
     console.log(`User ${username} updated player ${player.id} in team ${teamId}`);
     try {
       updatePlayer(username, teamId, player);
