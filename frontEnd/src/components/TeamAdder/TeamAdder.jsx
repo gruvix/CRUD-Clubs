@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { teamParametersKeys } from '../adapters/Team';
 import { webAppPaths } from '../../paths';
+import ConfirmationModal from '../shared/ConfirmationModal.jsx';
 
 export default function TeamAdder() {
   const [playerSlots, setPlayerSlots] = React.useState([]);
@@ -21,7 +22,8 @@ export default function TeamAdder() {
             type="button"
             className="btn btn-shadow btn-outline-warning"
             style={{ marginTop: '25px' }}
-            onClick={() => navigate(webAppPaths.teams)}
+            data-bs-toggle="modal"
+            data-bs-target="#confirmationModal"
           >
             Go back
           </button>
@@ -158,7 +160,7 @@ export default function TeamAdder() {
           </button>
         </div>
       </div>
-      {/* {{> confirmationModal }} */}
+      <ConfirmationModal callback={() => navigate(webAppPaths.teams)} confirmationText="Are you sure you want to leave? all data will be lost" />
     </div>
   );
 }
