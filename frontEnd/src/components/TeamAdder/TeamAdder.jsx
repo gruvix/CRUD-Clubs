@@ -3,12 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import { teamParametersKeys } from '../adapters/Team';
 import { webAppPaths } from '../../paths';
 import ConfirmationModal from '../shared/ConfirmationModal.jsx';
+import { playerKeys } from '../adapters/Player';
 
 export default function TeamAdder() {
   const [playerSlots, setPlayerSlots] = React.useState([]);
   const [modalCallback, setModalCallback] = React.useState('');
   const [modalText, setModalText] = React.useState('');
   const [teamParameterInputs, setTeamParameterInputs] = React.useState({});
+  const [playerInputs, setPlayerInputs] = React.useState({});
+  const [teamCrestUrl, setTeamCrestUrl] = React.useState(null);
   const navigate = useNavigate();
   const returnToTeams = () => {
     navigate(webAppPaths.teams);
@@ -49,7 +52,7 @@ export default function TeamAdder() {
             <table className="table" id="team-table">
               <thead>
                 {teamParametersKeys.map((key) => (
-                  <tr className="table-dark table-bordered">
+                  <tr className="table-dark table-bordered" key={key}>
                     <td className="text-warning" style={{ textTransform: 'capitalize', paddingTop: '3.5%' }}>{key}</td>
                     <td aria-label={key}>
                       <input
@@ -103,15 +106,26 @@ export default function TeamAdder() {
                   </tr>
                   {playerSlots.map((slot) => (
                     <tr className="table-dark table-bordered player" key={slot}>
-                      <td aria-label="name">
-                        <input type="text" className="form-control" value="" data-parameter="name" />
-                      </td>
-                      <td aria-label="position">
-                        <input type="text" className="form-control" value="" data-parameter="position" />
-                      </td>
-                      <td aria-label="nationality">
-                        <input type="text" className="form-control" value="" data-parameter="nationality" />
-                      </td>
+                      {
+                        playerKeys.map((key) => (
+                          <td aria-label={key}>
+                            <input
+                              type="text"
+                              className="form-control"
+                              value={playerInputs[slot]?.[key] || ''}
+                              data-parameter={key}
+                              onChange={
+                                (e) => setPlayerInputs({
+                                  ...playerInputs,
+                                  [slot]: {
+                                    ...playerInputs[slot], [key]: e.target.value,
+                                  },
+                                })
+                              }
+                            />
+                          </td>
+                        ))
+                      }
                       <td className="buttons-column" style={{ display: 'flex', minHeight: '42px' }}>
                         <button
                           type="button"
