@@ -6,7 +6,12 @@ import ConfirmationModal from '../shared/ConfirmationModal.jsx';
 
 export default function TeamAdder() {
   const [playerSlots, setPlayerSlots] = React.useState([]);
+  const [modalCallback, setModalCallback] = React.useState('');
+  const [modalText, setModalText] = React.useState('');
   const navigate = useNavigate();
+  const returnToTeams = () => {
+    navigate(webAppPaths.teams);
+  };
   function findNextAvailableSlot(slots) {
     let nextSlot = 1;
     while (slots.includes(nextSlot)) {
@@ -24,6 +29,10 @@ export default function TeamAdder() {
             style={{ marginTop: '25px' }}
             data-bs-toggle="modal"
             data-bs-target="#confirmationModal"
+            onClick={() => {
+              setModalCallback(() => returnToTeams);
+              setModalText('Are you sure you want to go back? All data will be lost.');
+            }}
           >
             Go back
           </button>
@@ -160,7 +169,7 @@ export default function TeamAdder() {
           </button>
         </div>
       </div>
-      <ConfirmationModal callback={() => navigate(webAppPaths.teams)} confirmationText="Are you sure you want to leave? all data will be lost" />
+      <ConfirmationModal callback={modalCallback} confirmationText={modalText} />
     </div>
   );
 }
