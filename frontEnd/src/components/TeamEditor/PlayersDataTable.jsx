@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import APIAdapter from '../adapters/APIAdapter';
+import { playerKeys } from '../adapters/Player';
 
 export default function PlayersDataTable({ playersData, teamId, updateTeamCallback }) {
   const [rowsPlayersData, setRowsPlayersData] = React.useState([]);
-  const [playerInputValue, setplayerInputValue] = React.useState({
-    name: {}, position: {}, nationality: {},
-  });
+  const [playerInputValue, setplayerInputValue] = React.useState(
+    playerKeys.reduce((acc, key) => ({ ...acc, [key]: '' }), {}),
+  );
   const [editingRowKey, setEditingRowKey] = React.useState(null);
   const requestAdapter = new APIAdapter();
 
