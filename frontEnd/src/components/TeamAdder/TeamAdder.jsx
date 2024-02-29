@@ -8,6 +8,7 @@ export default function TeamAdder() {
   const [playerSlots, setPlayerSlots] = React.useState([]);
   const [modalCallback, setModalCallback] = React.useState('');
   const [modalText, setModalText] = React.useState('');
+  const [teamParameterInputs, setTeamParameterInputs] = React.useState({});
   const navigate = useNavigate();
   const returnToTeams = () => {
     navigate(webAppPaths.teams);
@@ -51,7 +52,14 @@ export default function TeamAdder() {
                   <tr className="table-dark table-bordered">
                     <td className="text-warning" style={{ textTransform: 'capitalize', paddingTop: '3.5%' }}>{key}</td>
                     <td aria-label={key}>
-                      <input type="text" className="form-control" value="" />
+                      <input
+                        onChange={(e) => {
+                          setTeamParameterInputs({ ...teamParameterInputs, [key]: e.target.value });
+                        }}
+                        type="text"
+                        className="form-control"
+                        value={teamParameterInputs[key]}
+                      />
                     </td>
                   </tr>
                 ))}
