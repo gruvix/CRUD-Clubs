@@ -6,3 +6,4 @@ export default class Player {
     this.nationality = playerData.nationality;
   }
 }
+export const playerKeys = ['name', 'position', 'nationality']; // id is not included as it is a hidden value
