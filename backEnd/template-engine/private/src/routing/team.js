@@ -4,23 +4,12 @@ const {
   validateTeam, isTeamDefault, getTeam, updateTeam, deleteTeam, addTeam, hasTeamDefault,
 } = require('../teamStorage');
 const Player = require('../../models/player');
-const Team = require('../../models/team');
-const { paths } = require('./paths');
 const { storage, imageFilter } = require('../multerConfig.js');
 const TeamFullData = require('../../models/teamFullData');
 
 const uploadImage = multer({ storage, fileFilter: imageFilter });
 const router = express.Router();
 router.route('/add')
-  .get((req, res) => {
-    res.render('newTeam', {
-      layout: 'main',
-      data: {
-        team: new Team({}),
-        addTeamPath: paths.addTeam,
-      },
-    });
-  })
   .post(uploadImage.single('image'), (req, res) => {
     const { username } = req.session;
     console.log(`User ${username} is adding a new team`);
