@@ -5,7 +5,7 @@ const {
 } = require('../teamStorage');
 const Player = require('../../models/player');
 const Team = require('../../models/team');
-const { redirectPaths, paths } = require('./paths');
+const { paths } = require('./paths');
 const { storage, imageFilter } = require('../multerConfig.js');
 const TeamFullData = require('../../models/teamFullData');
 
@@ -23,12 +23,13 @@ router.route('/add')
   })
   .post(uploadImage.single('image'), (req, res) => {
     const { username } = req.session;
+    console.log(`User ${username} is adding a new team`);
     const { teamData } = req.body;
     const { filename } = req.file;
     const team = JSON.parse(teamData);
     try {
       const id = addTeam(username, team, filename);
-      res.redirect(302, redirectPaths.generateTeamUrl(id));
+      res.status(200).send(id.toString());
     } catch (error) {
       console.log(`Error adding team: ${error}`);
       res.status(400).send('Error adding team');
