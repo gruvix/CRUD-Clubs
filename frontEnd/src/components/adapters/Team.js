@@ -1,12 +1,12 @@
+import { BASE_API_URL } from '../../paths';
 import Player from './Player';
 
 export default class Team {
   constructor(teamData) {
     this.other = {
       id: teamData.id,
-      crestUrl: teamData.crestUrl,
-      hasCustomCrest: teamData.hasCustomCrest,
       hasDefault: teamData.hasDefault,
+      crestUrl: teamData.hasCustomCrest ? `${BASE_API_URL}${teamData.crestUrl}` : teamData.crestUrl,
       lastUpdated: teamData.lastUpdated,
     };
     this.teamParameters = {
