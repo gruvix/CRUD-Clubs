@@ -1,6 +1,7 @@
 /* eslint-disable class-methods-use-this */
 import { apiRequestPaths, webAppPaths } from '../../paths';
 import Team from './Team';
+import TeamCard from './TeamCard';
 
 function responseRedirect(status) {
   if (status === 401) {
@@ -77,7 +78,11 @@ export default class APIAdapter {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      return data;
+      const teamsData = { teams: {} };
+      Object.keys(data.teams).forEach((key) => {
+        teamsData.teams[key] = new TeamCard(data.teams[key]);
+      });
+      return teamsData;
     } catch (error) {
       const redirect = responseRedirect(response.status);
       if (redirect) {
