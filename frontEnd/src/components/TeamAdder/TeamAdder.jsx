@@ -187,7 +187,14 @@ export default function TeamAdder() {
       </div>
       <div className="row">
         <div className="d-flex justify-content-center img-container">
-          <button type="button" className="btn btn-shadow btn-outline-warning" disabled={!canSubmitTeam} id="submit-team-button" style={{ fontSize: '150%' }}>
+          <button
+            type="button"
+            className="btn btn-shadow btn-outline-warning"
+            disabled={!canSubmitTeam}
+            id="submit-team-button"
+            style={{ fontSize: '150%' }}
+            onClick={() => submitTeam()}
+          >
             <span style={{ display: 'block' }}>
               Submit Team
             </span>
