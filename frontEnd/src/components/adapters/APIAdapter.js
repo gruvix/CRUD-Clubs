@@ -168,9 +168,6 @@ export default class APIAdapter {
     const response = await fetch(apiRequestPaths.addTeam, {
       method: 'POST',
       credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
       body: formData,
     });
     try {
