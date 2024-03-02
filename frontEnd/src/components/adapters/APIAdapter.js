@@ -159,4 +159,36 @@ export default class APIAdapter {
       throw error;
     }
   }
+
+  async addTeam(teamParameters, players, imageFile) {
+    const teamData = { ...teamParameters, squad: players };
+    console.log(teamData);
+    const formData = new FormData();
+    formData.append('image', imageFile);
+    formData.append('teamData', JSON.stringify(teamData));
+    console.log(formData);
+    const response = await fetch(apiRequestPaths.addTeam, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: formData,
+    });
+    try {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = {
+        id: response.id,
+        auth: true,
+      };
+      return data;
+    } catch (error) {
+      if (response.status === 401) {
+        return { auth: false };
+      }
+      throw error;
+    }
+  }
 }
