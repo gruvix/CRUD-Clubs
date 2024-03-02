@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { teamParametersKeys } from '../adapters/Team';
 import { webAppPaths } from '../../paths';
 import ConfirmationModal from '../shared/ConfirmationModal.jsx';
 import { playerKeys } from '../adapters/Player';
+import UploadImageButton from './UploadImageButton.jsx';
+import isImageTypeValid from '../shared/validateImage';
 
 export default function TeamAdder() {
   const [playerSlots, setPlayerSlots] = React.useState([]);
@@ -11,7 +13,8 @@ export default function TeamAdder() {
   const [modalText, setModalText] = React.useState('');
   const [teamParameterInputs, setTeamParameterInputs] = React.useState({});
   const [playerInputs, setPlayerInputs] = React.useState({});
-  const [teamCrestUrl, setTeamCrestUrl] = React.useState(null);
+  const [teamCrest, setTeamCrest] = React.useState(null);
+  const [canSubmitTeam, setCanSubmitTeam] = React.useState(false);
   const navigate = useNavigate();
   const returnToTeams = () => {
     navigate(webAppPaths.teams);
@@ -23,6 +26,17 @@ export default function TeamAdder() {
     }
     return nextSlot;
   }
+  const checkTeamSubmitability = () => {
+    if (teamParameterInputs.name && isImageTypeValid(teamCrest)) {
+      setCanSubmitTeam(true);
+    } else {
+      setCanSubmitTeam(false);
+    }
+  };
+  useEffect(() => {
+    checkTeamSubmitability();
+  }, [teamParameterInputs.name, teamCrest]);
+
   return (
     <div className="container">
       <div className="row">
@@ -146,45 +160,20 @@ export default function TeamAdder() {
       </div>
       <div className="row">
         <div className="d-flex justify-content-center img-container">
-          <button type="button" className="btn btn-shadow btn-outline-warning" id="upload-image-button" style={{ fontSize: '150%', marginBottom: '2%' }}>
-            <div>
-              <span style={{ display: 'block' }}>
-                Upload Crest
-              </span>
-              <span style={{ fontSize: '60%', display: 'block' }}>
-                jpeg / jpg / png / gif
-              </span>
-            </div>
-          </button>
-
-          <button type="button" className="btn btn-shadow btn-success" id="uploaded-image-button" style={{ fontSize: '150%', marginBottom: '2%', display: 'none' }}>
-            <div style={{ display: 'block' }}>
-              <div>
-                Selected file:
-              </div>
-              <span style={{ fontSize: '60%', display: 'block' }}>
-                image.png
-              </span>
-            </div>
-          </button>
-
-          <button type="button" className="btn btn-shadow btn-danger" id="invalid-image-button" style={{ fontSize: '150%', marginBottom: '2%', display: 'none' }}>
-            <div style={{ display: 'block' }}>
-              <div>
-                Selected file:
-              </div>
-              <span style={{ fontSize: '60%', display: 'block' }}>
-                INVALID FILE TYPE
-              </span>
-            </div>
-          </button>
-
-          <input type="file" id="image-input" style={{ display: 'none' }} />
+          <UploadImageButton teamCrest={teamCrest} />
+          <input
+            type="file"
+            id="upload-image-input"
+            style={{ display: 'none' }}
+            onChange={(e) => {
+              setTeamCrest(e.target.files[0]);
+            }}
+          />
         </div>
       </div>
       <div className="row">
         <div className="d-flex justify-content-center img-container">
-          <button type="button" className="btn btn-shadow btn-outline-warning" id="submit-team-button" style={{ fontSize: '150%' }}>
+          <button type="button" className="btn btn-shadow btn-outline-warning" disabled={!canSubmitTeam} id="submit-team-button" style={{ fontSize: '150%' }}>
             <span style={{ display: 'block' }}>
               Submit Team
             </span>
