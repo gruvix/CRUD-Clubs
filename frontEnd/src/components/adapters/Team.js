@@ -19,7 +19,11 @@ export default class Team {
       email: teamData.email,
       venue: teamData.venue,
     };
-    this.players = teamData.squad.map((player) => new Player(player));
+    if (!teamData.squad?.length) {
+      this.players = [];
+    } else {
+      this.players = teamData.squad.map((player) => new Player(player));
+    }
   }
 }
 export const teamParametersKeys = ['name', 'area', 'address', 'phone', 'website', 'email', 'venue'];
