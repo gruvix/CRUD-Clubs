@@ -21,8 +21,8 @@ export default function TeamsList() {
     try {
       setIsLoading(true);
       request.getTeamsData().then((data) => {
-        if (!data.auth) {
-          navigate(webAppPaths.home);
+        if (data.redirect) {
+          navigate(data.redirect);
         } else {
           setUsername(data.username);
           setTeamCards(data.teams);
@@ -35,8 +35,8 @@ export default function TeamsList() {
   };
   const deleteTeam = (teamId) => async () => {
     request.deleteTeam(teamId).then((data) => {
-      if (!data.auth) {
-        navigate(webAppPaths.home);
+      if (data.redirect) {
+        navigate(data.redirect);
       } else {
         updateTeamsData();
       }
@@ -48,8 +48,8 @@ export default function TeamsList() {
   };
   const resetTeams = () => async () => {
     request.resetTeamsList().then((data) => {
-      if (!data.auth) {
-        navigate(webAppPaths.home);
+      if (data.redirect) {
+        navigate(data.redirect);
       } else {
         updateTeamsData();
       }

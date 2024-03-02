@@ -25,8 +25,8 @@ export default function TeamEditor() {
       setIsLoading(true);
       request.getTeamData(teamId)
         .then((data) => {
-          if (!data.other.auth) {
-            navigate(webAppPaths.home);
+          if (data.redirect) {
+            navigate(data.redirect);
           } else {
             setTeamParameters(data.teamParameters);
             setOtherTeamData(data.other);
@@ -41,8 +41,8 @@ export default function TeamEditor() {
   };
   const resetTeam = () => async () => {
     request.resetTeam(teamId).then((data) => {
-      if (!data.auth) {
-        navigate(webAppPaths.home);
+      if (data.redirect) {
+        navigate(data.redirect);
       } else {
         updateTeamData();
       }

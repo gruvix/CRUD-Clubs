@@ -44,9 +44,9 @@ export default function TeamAdder() {
     }
     const adapter = new APIAdapter();
     adapter.addTeam(teamParameterInputs, playerInputs, teamCrest).then((data) => {
-      if (!data.auth) navigate(webAppPaths.home);
+      if (data.redirect) navigate(data.redirect);
       else {
-        navigate(webAppPaths.team.replace(':teamId', data.teamId));
+        throw new Error(`Unexpected response from server: ${data}`);
       }
     });
   };
