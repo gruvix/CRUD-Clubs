@@ -162,11 +162,9 @@ export default class APIAdapter {
 
   async addTeam(teamParameters, players, imageFile) {
     const teamData = { ...teamParameters, squad: players };
-    console.log(teamData);
     const formData = new FormData();
     formData.append('image', imageFile);
     formData.append('teamData', JSON.stringify(teamData));
-    console.log(formData);
     const response = await fetch(apiRequestPaths.addTeam, {
       method: 'POST',
       credentials: 'include',
