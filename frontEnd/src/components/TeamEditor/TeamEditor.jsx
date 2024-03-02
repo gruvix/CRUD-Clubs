@@ -89,7 +89,6 @@ export default function TeamEditor() {
               <div className="d-flex justify-content-center img-container">
                 <TeamCrest
                   teamCrest={teamCrestUrl}
-                  hasCustomCrest={otherTeamData.hasCustomCrest}
                   className="team-crest-image"
                 />
                 <button
