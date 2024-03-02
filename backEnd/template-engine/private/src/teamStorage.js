@@ -11,7 +11,7 @@ const {
   writeFile,
   deleteFile,
 } = require('./utils.js');
-const paths = require('./routing/paths.js');
+const { paths } = require('./routing/paths.js');
 
 function saveTeam(team, username) {
   try {
