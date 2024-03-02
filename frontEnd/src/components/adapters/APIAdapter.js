@@ -1,6 +1,16 @@
 /* eslint-disable class-methods-use-this */
-import { apiRequestPaths } from '../../paths';
+import { apiRequestPaths, webAppPaths } from '../../paths';
 import Team from './Team';
+
+function responseRedirect(status) {
+  if (status === 401) {
+    return { redirect: webAppPaths.home };
+  }
+  if (status === 404) {
+    return { redirect: `${webAppPaths.error}/404` };
+  }
+  return null;
+}
 
 export default class APIAdapter {
   async getTeamData(teamId) {
@@ -17,12 +27,13 @@ export default class APIAdapter {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      data.auth = true;
       const teamData = new Team(data);
+      teamData.redirect = null;
       return teamData;
     } catch (error) {
-      if (response.status === 401) {
-        return { other: { auth: false } };
+      const redirect = responseRedirect(response.status);
+      if (redirect) {
+        return redirect;
       }
       throw error;
     }
@@ -43,11 +54,11 @@ export default class APIAdapter {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = response;
-      data.auth = true;
       return data;
     } catch (error) {
-      if (response.status === 401) {
-        return { auth: false };
+      const redirect = responseRedirect(response.status);
+      if (redirect) {
+        return redirect;
       }
       throw error;
     }
@@ -66,11 +77,11 @@ export default class APIAdapter {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      data.auth = true;
       return data;
     } catch (error) {
-      if (response.status === 401) {
-        return { auth: false };
+      const redirect = responseRedirect(response.status);
+      if (redirect) {
+        return redirect;
       }
       throw error;
     }
@@ -86,11 +97,11 @@ export default class APIAdapter {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = response;
-      data.auth = true;
       return data;
     } catch (error) {
-      if (response.status === 401) {
-        return { auth: false };
+      const redirect = responseRedirect(response.status);
+      if (redirect) {
+        return redirect;
       }
       throw error;
     }
@@ -106,11 +117,11 @@ export default class APIAdapter {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = response;
-      data.auth = true;
       return data;
     } catch (error) {
-      if (response.status === 401) {
-        return { auth: false };
+      const redirect = responseRedirect(response.status);
+      if (redirect) {
+        return redirect;
       }
       throw error;
     }
@@ -126,11 +137,11 @@ export default class APIAdapter {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = response;
-      data.auth = true;
       return data;
     } catch (error) {
-      if (response.status === 401) {
-        return { auth: false };
+      const redirect = responseRedirect(response.status);
+      if (redirect) {
+        return redirect;
       }
       throw error;
     }
@@ -150,11 +161,11 @@ export default class APIAdapter {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = response;
-      data.auth = true;
       return data;
     } catch (error) {
-      if (response.status === 401) {
-        return { auth: false };
+      const redirect = responseRedirect(response.status);
+      if (redirect) {
+        return redirect;
       }
       throw error;
     }
@@ -176,12 +187,12 @@ export default class APIAdapter {
       }
       const data = {
         id: response.id,
-        auth: true,
       };
       return data;
     } catch (error) {
-      if (response.status === 401) {
-        return { auth: false };
+      const redirect = responseRedirect(response.status);
+      if (redirect) {
+        return redirect;
       }
       throw error;
     }
