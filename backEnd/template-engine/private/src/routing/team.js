@@ -42,7 +42,7 @@ router.route('/:teamId')
     const { username } = req.session;
     console.log(`User ${username} requested team ${teamId}`);
     if (!validateTeam(username, teamId)) {
-      res.redirect(`${redirectPaths.error}?keyword=Team-${teamId}-not-found&code=404`);
+      res.status(404).send();
       return;
     }
     let team;
