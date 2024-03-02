@@ -6,6 +6,7 @@ import ConfirmationModal from '../shared/ConfirmationModal.jsx';
 import { playerKeys } from '../adapters/Player';
 import UploadImageButton from './UploadImageButton.jsx';
 import isImageTypeValid from '../shared/validateImage';
+import APIAdapter from '../adapters/APIAdapter';
 
 export default function TeamAdder() {
   const [playerSlots, setPlayerSlots] = React.useState([]);
@@ -36,6 +37,19 @@ export default function TeamAdder() {
   useEffect(() => {
     checkTeamSubmitability();
   }, [teamParameterInputs.name, teamCrest]);
+  const submitTeam = () => {
+    if (!canSubmitTeam) {
+      alert('Error: please fill in a team name and upload a team image.');
+      return;
+    }
+    const adapter = new APIAdapter();
+    adapter.addTeam(teamParameterInputs, playerInputs, teamCrest).then((data) => {
+      if (!data.auth) navigate(webAppPaths.home);
+      else {
+        navigate(webAppPaths.team.replace(':teamId', data.teamId));
+      }
+    });
+  };
 
   return (
     <div className="container">
