@@ -8,6 +8,7 @@ import PlayersDataTable from './PlayersDataTable.jsx';
 import ConfirmationModal from '../shared/ConfirmationModal.jsx';
 import APIAdapter from '../adapters/APIAdapter.js';
 import LoadingSpinner from '../shared/LoadingSpinner.jsx';
+import isImageTypeValid from '../shared/validateImage.js';
 
 export default function TeamEditor() {
   const navigate = useNavigate();
@@ -37,6 +38,19 @@ export default function TeamEditor() {
         });
     } catch (error) {
       alert(error);
+    }
+  };
+  const handleImageUpdate = (image) => {
+    if (!isImageTypeValid(image)) {
+      alert('Error: invalid image type');
+    } else {
+      request.updateTeamCrest(teamId, image).then((data) => {
+        if (data.redirect) {
+          navigate(data.redirect);
+        } else {
+          setTeamCrestUrl(data);
+        }
+      });
     }
   };
   const resetTeam = () => async () => {
