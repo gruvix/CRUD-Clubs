@@ -1,16 +1,17 @@
+import * as lodash from 'lodash';
 import React, { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import './css/main.css';
-import { webAppPaths } from './src/paths.js';
-import Home from './src/components/Home/Home.jsx';
-import TeamEditor from './src/components/TeamEditor/TeamEditor.jsx';
-import TeamAdder from './src/components/TeamAdder/TeamAdder.jsx';
-import TeamsList from './src/components/TeamsList/TeamsList.jsx';
-import Error from './src/components/Error/Error.jsx';
-import NotFound from './src/components/NotFound.jsx';
+import { webAppPaths } from './paths.js';
+import Home from './components/Home/Home.jsx';
+import TeamEditor from './components/TeamEditor/TeamEditor.jsx';
+import TeamAdder from './components/TeamAdder/TeamAdder.jsx';
+import TeamsList from './components/TeamsList/TeamsList.jsx';
+import Error from './components/Error/Error.jsx';
+import NotFound from './components/NotFound.jsx';
 
 function App() {
   return (
@@ -34,3 +35,4 @@ root.render(
     <App />
   </StrictMode>,
 );
+
