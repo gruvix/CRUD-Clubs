@@ -200,4 +200,27 @@ export default class APIAdapter {
       throw error;
     }
   }
+
+  async updateTeamCrest(teamId, image) {
+    const formData = new FormData();
+    formData.append('image', image);
+    const response = await fetch(apiRequestPaths.updateCrest.replace(':teamId', teamId), {
+      method: 'PUT',
+      credentials: 'include',
+      body: formData,
+    });
+    try {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const newCrestUrl = await response.json();
+      return newCrestUrl;
+    } catch (error) {
+      const redirect = responseRedirect(response.status);
+      if (redirect) {
+        return redirect;
+      }
+      throw error;
+    }
+  }
 }
