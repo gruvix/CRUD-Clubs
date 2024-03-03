@@ -4,7 +4,7 @@ const { updateTeam } = require('../teamStorage');
 const { getUserCustomCrestFolderPath } = require('../userPath');
 const { validateFile } = require('../utils');
 const { storage, imageFilter } = require('../multerConfig.js');
-const paths = require('./paths');
+const { paths } = require('./paths');
 
 const uploadImage = multer({ storage, fileFilter: imageFilter });
 
