@@ -119,7 +119,14 @@ export default function TeamEditor() {
                     jpeg / jpg / png / gif
                   </span>
                 </button>
-                <input type="file" id="image-input" style={hiddenImageInputStyle} />
+                <input
+                  type="file"
+                  id="image-input"
+                  style={hiddenImageInputStyle}
+                  onChange={(e) => {
+                    handleImageUpdate(e.target.files[0]);
+                  }}
+                />
               </div>
             </div>
             <div className="col">
