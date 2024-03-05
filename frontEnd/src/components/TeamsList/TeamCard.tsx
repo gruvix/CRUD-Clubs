@@ -1,9 +1,15 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import TeamCrest from '../shared/TeamCrest.jsx';
+import TeamCrest from '../shared/TeamCrest';
 import { webAppPaths } from '../../paths.js';
+import TeamCardClass from '../adapters/TeamCard';
 
-export default function TeamCard({ team, deleteTeamCallback }) {
+interface TeamCardProps {
+  team: TeamCardClass;
+  deleteTeamCallback: (teamId: string | number, teamName: string) => void;
+}
+
+export default function TeamCard({ team, deleteTeamCallback }: TeamCardProps) {
   const navigate = useNavigate();
   const cardBodyStyle = {
     alignSelf: 'center',
@@ -12,7 +18,7 @@ export default function TeamCard({ team, deleteTeamCallback }) {
     marginRight: '10px',
   };
   return (
-    <div className="card card-container" data-isdefaultteam={team.hasDefault}>
+    <div className="card card-container">
       <div className="card-header">
         <h5 className="card-title team-card-title">{team.name}</h5>
       </div>
