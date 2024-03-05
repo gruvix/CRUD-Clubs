@@ -1,4 +1,4 @@
-export default function validateUsername(username) {
+export default function validateUsername(username: string) {
   const regexDefault = /^(?!default$).*$/;
   if (!regexDefault.test(username)) {
     return '"Default" is not available';
@@ -7,5 +7,5 @@ export default function validateUsername(username) {
   if (!regex.test(username)) {
     return 'Username may only contain letters';
   }
-  return false;
+  return null;
 }
