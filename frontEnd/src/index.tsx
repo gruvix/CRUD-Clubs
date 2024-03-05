@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import '../css/main.css';
 import { webAppPaths } from './paths.js';
-import Home from './components/Home/Home.jsx';
+import Home from './components/Home/Home';
 import TeamEditor from './components/TeamEditor/TeamEditor.jsx';
 import TeamAdder from './components/TeamAdder/TeamAdder.jsx';
 import TeamsList from './components/TeamsList/TeamsList.jsx';
