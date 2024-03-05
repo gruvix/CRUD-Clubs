@@ -1,27 +1,35 @@
-/* eslint-disable react/jsx-one-expression-per-line */
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import LogoutButton from './LogoutButton.jsx';
+import LogoutButton from './LogoutButton';
 import { webAppPaths } from '../../paths.js';
-import TeamCard from './TeamCard.jsx';
-import APIAdapter from '../adapters/APIAdapter';
-import ConfirmationModal from '../shared/ConfirmationModal.jsx';
-import LoadingSpinner from '../shared/LoadingSpinner.jsx';
+import TeamCardComponent from './TeamCard';
+import APIAdapter from '../adapters/APIAdapter.js';
+import ConfirmationModal from '../shared/ConfirmationModal';
+import LoadingSpinner from '../shared/LoadingSpinner';
+import TeamCard from '../adapters/TeamCard.js';
+
+interface TeamsData {
+  username: string;
+  teams: TeamCard[];
+}
+interface RedirectData {
+  redirect: string;
+}
 
 export default function TeamsList() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = React.useState(true);
   const [username, setUsername] = React.useState('');
-  const [teamCards, setTeamCards] = React.useState('');
-  const [modalCallback, setModalCallback] = React.useState('');
+  const [teamCards, setTeamCards] = React.useState([]);
+  const [modalCallback, setModalCallback] = React.useState(() => (): void => {});
   const [modalText, setModalText] = React.useState('');
   const request = new APIAdapter();
 
   const updateTeamsData = async () => {
     try {
       setIsLoading(true);
-      request.getTeamsData().then((data) => {
-        if (data.redirect) {
+      request.getTeamsData().then((data: TeamsData | RedirectData) => {
+        if ('redirect' in data) {
           navigate(data.redirect);
         } else {
           setUsername(data.username);
@@ -33,8 +41,8 @@ export default function TeamsList() {
       alert(error);
     }
   };
-  const deleteTeam = (teamId) => async () => {
-    request.deleteTeam(teamId).then((data) => {
+  const deleteTeam = (teamId: number) => async () => {
+    request.deleteTeam(teamId).then((data: RedirectData) => {
       if (data.redirect) {
         navigate(data.redirect);
       } else {
@@ -42,12 +50,12 @@ export default function TeamsList() {
       }
     });
   };
-  const setUpDeleteTeamModal = (teamId, teamName) => {
+  const setUpDeleteTeamModal = (teamId: number, teamName: string) => {
     setModalCallback(() => deleteTeam(teamId));
     setModalText(`Are you sure you want to delete team ${teamName}?`);
   };
   const resetTeams = () => async () => {
-    request.resetTeamsList().then((data) => {
+    request.resetTeamsList().then((data: RedirectData) => {
       if (data.redirect) {
         navigate(data.redirect);
       } else {
@@ -59,17 +67,11 @@ export default function TeamsList() {
     updateTeamsData();
   }, []);
 
-  const logOutButtonStyle = {
-    marginTop: '15px',
-  };
-  const addTeamButtonStyle = {
-    paddingButtom: '3%',
-  };
   return (
     <div className="container">
       <div className="row">
         <div className="col">
-          <LogoutButton style={logOutButtonStyle} text="Log out" />
+          <LogoutButton style={{ marginTop: '15px' }} text="Log out" />
           <span className="text-center teams-page-title">
             User:{' '}
             {username}
@@ -77,7 +79,7 @@ export default function TeamsList() {
         </div>
       </div>
 
-      <div className="row" style={addTeamButtonStyle}>
+      <div className="row" style={{ paddingBottom: '3%' }}>
         <div className="col text-center">
           <button type="button" id="add-team-button" className="btn btn-shadow btn-outline-warning" onClick={() => navigate(webAppPaths.addTeam)}>
             Add new team
@@ -122,9 +124,9 @@ export default function TeamsList() {
             <div className="row row-cols-5 justify-content-center">
               {isLoading
                 ? (<LoadingSpinner style={{ marginTop: '10%', height: '20rem', width: '20rem' }} />)
-                : Object.keys(teamCards).map((key) => (
-                  <TeamCard
-                    team={teamCards[key]}
+                : Object.keys(teamCards).map((key: string) => (
+                  <TeamCardComponent
+                    team={teamCards[Number(key)]}
                     key={key}
                     deleteTeamCallback={setUpDeleteTeamModal}
                   />
