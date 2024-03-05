@@ -50,7 +50,7 @@ export default function LoginButton() {
         onKeyDown={(e) => (e.key === 'Enter' ? handleLogin() : null)}
         onChange={(e) => setUsername(e.target.value)}
       />
-      <button type="button" id="enter-page-button" className="btn btn-outline-warning" href={apiRequestPaths.login} onClick={handleLogin}>
+      <button type="button" id="enter-page-button" className="btn btn-outline-warning" onClick={handleLogin}>
         Enter Page
       </button>
     </>
