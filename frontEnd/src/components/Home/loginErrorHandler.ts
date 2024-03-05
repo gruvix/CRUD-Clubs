@@ -1,4 +1,4 @@
-export default function loginErrorHandler(error) {
+export default function loginErrorHandler(error: Error | string) {
   const $errorBox = document.getElementById('username-error');
   $errorBox.textContent = String(error);
   $errorBox.classList.remove('username-error-hide');
