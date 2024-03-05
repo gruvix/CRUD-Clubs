@@ -6,12 +6,10 @@ import { apiRequestPaths, webAppPaths } from '../../paths';
 
 async function login(username: string) {
   const error = validateUsername(username);
-
-  if (!error) {
-    const loginPath = document
-      .getElementById('enter-page-button')
-      .getAttribute('href');
-    const response = await fetch(loginPath, {
+  if( error ) {
+    throw new Error(error);
+  }
+    const response = await fetch(apiRequestPaths.login, {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -23,8 +21,6 @@ async function login(username: string) {
     if (!response.ok) {
       throw new Error(`Login Failed - server response ${response.status}`);
     }
-  }
-  loginErrorHandler(error);
 }
 
 export default function LoginButton() {
