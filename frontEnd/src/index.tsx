@@ -6,11 +6,11 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import '../css/main.css';
 import { webAppPaths } from './paths.js';
 import Home from './components/Home/Home';
-import TeamEditor from './components/TeamEditor/TeamEditor.jsx';
-import TeamAdder from './components/TeamAdder/TeamAdder.jsx';
-import TeamsList from './components/TeamsList/TeamsList.jsx';
-import Error from './components/Error/Error.jsx';
-import NotFound from './components/NotFound.jsx';
+import TeamEditor from './components/TeamEditor/TeamEditor';
+import TeamAdder from './components/TeamAdder/TeamAdder';
+import TeamsList from './components/TeamsList/TeamsList';
+import Error from './components/Error/Error';
+import NotFound from './components/NotFound';
 
 function App() {
   return (
