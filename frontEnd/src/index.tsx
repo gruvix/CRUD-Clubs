@@ -1,4 +1,3 @@
-import * as lodash from 'lodash';
 import React, { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
