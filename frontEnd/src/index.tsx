@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import './css/main.css';
+import '../css/main.css';
 import { webAppPaths } from './paths.js';
 import Home from './components/Home/Home.jsx';
 import TeamEditor from './components/TeamEditor/TeamEditor.jsx';
