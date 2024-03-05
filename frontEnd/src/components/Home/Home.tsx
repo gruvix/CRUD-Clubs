@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import LoginButton from './LoginButton.jsx';
+import LoginButton from './LoginButton';
 import { apiRequestPaths, webAppPaths } from '../../paths.js';
 
 async function getAuthStatus() {
