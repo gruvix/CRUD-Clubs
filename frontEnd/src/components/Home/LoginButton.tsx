@@ -4,7 +4,7 @@ import validateUsername from './usernameValidation';
 import loginErrorHandler from './loginErrorHandler';
 import { apiRequestPaths, webAppPaths } from '../../paths';
 
-async function login(username) {
+async function login(username: string) {
   const error = validateUsername(username);
 
   if (!error) {
