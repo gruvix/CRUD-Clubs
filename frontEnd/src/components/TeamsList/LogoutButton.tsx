@@ -15,7 +15,7 @@ async function logout() {
   }
   throw new Error(`Logout Failed - server response ${response.status}`);
 }
-export default function LogoutButton({ style, text }) {
+export default function LogoutButton({ style, text }: { style?: React.CSSProperties; text: string }) {
   const navigate = useNavigate();
   const handleLogout = async () => {
     try {
