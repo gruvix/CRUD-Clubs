@@ -1,52 +1,37 @@
 import React, { useEffect } from 'react';
 import APIAdapter from '../adapters/APIAdapter';
-import { playerKeys } from '../adapters/Player';
+import Player, { playerKeys } from '../adapters/Player';
 
-export default function PlayersDataTable({ playersData, teamId, updateTeamCallback }) {
+interface PlayersDataTableProps {
+  playersData: Player[];
+  teamId: number;
+  updateTeamCallback: () => void;	
+}
+interface PlayerInputValueState {
+  [key: string]: {
+    [playerId: number]: string;
+  }
+}
+
+export default function PlayersDataTable({ playersData, teamId, updateTeamCallback }: PlayersDataTableProps): React.ReactElement {
   const [rowsPlayersData, setRowsPlayersData] = React.useState([]);
-  const [playerInputValue, setplayerInputValue] = React.useState(
-    playerKeys.reduce((acc, key) => ({ ...acc, [key]: '' }), {}),
+  const [playerInputValue, setplayerInputValue] = React.useState<PlayerInputValueState>(
+    playerKeys.reduce((acc, key) => ({ ...acc, [key]: {} }), {}),
   );
   const [editingRowKey, setEditingRowKey] = React.useState(null);
   const requestAdapter = new APIAdapter();
 
-  const tableStyle = {
-    height: '410px',
-    overflow: 'auto',
-  };
-  const addPlayerButtonsCellStyle = {
-    display: 'flex',
-    minHeight: '80px',
-    paddingTop: '20px',
-  };
-  const newPlayerButtonStyle = {
-    maxHeight: '40px',
-    minWidth: '120px',
-  };
-  const addPlayerButtonStyle = {
-    maxHeight: '40px',
-    minWidth: '50px',
-    marginRight: '10px',
-    display: 'none',
-  };
-  const cancelButtonStyle = {
-    maxHeight: '40px',
-    minWidth: '75px',
-    display: 'none',
-  };
-  const buttonsColumnStyle = {
-    display: 'flex',
-    minHeight: '42px',
-  };
-  function updateInputValue(event, playerId, parameter) {
-    setplayerInputValue({
-      ...playerInputValue,
+  function updateInputValue(event: React.ChangeEvent<HTMLInputElement>, playerId: number, parameter: string) {
+    setplayerInputValue((previousState) => ({
+      ...previousState,
       [parameter]: {
-        ...playerInputValue[parameter], [playerId]: event.target.value,
+        ...previousState[parameter],
+        [playerId]: event.target.value,
       },
-    });
+    }));
   }
-  const enableRowEditing = (playerId, player) => () => {
+  const enableRowEditing = (playerId: number, player) => () => {
+    console.log(player);
     setEditingRowKey(playerId);
     const newPlayerInputValues = {};
     Object.keys(playerInputValue).forEach((parameter) => {
@@ -59,7 +44,7 @@ export default function PlayersDataTable({ playersData, teamId, updateTeamCallba
   const disableRowEditing = () => {
     setEditingRowKey(null);
   };
-  const handleRowUpdate = (playerId) => () => {
+  const handleRowUpdate = (playerId: number) => () => {
     const updatedData = {
       id: playerId,
       name: playerInputValue.name[playerId],
@@ -79,7 +64,7 @@ export default function PlayersDataTable({ playersData, teamId, updateTeamCallba
   }, [playersData]);
 
   return (
-    <div style={tableStyle}>
+    <div style={{ height: '410px', overflow: 'auto' }}>
       <table className="table" id="players-table">
         <thead>
           <tr className="table-dark" id="add-player-row" data-id="-1">
@@ -91,14 +76,14 @@ export default function PlayersDataTable({ playersData, teamId, updateTeamCallba
                 </td>
               ))
             }
-            <td style={addPlayerButtonsCellStyle}>
-              <button type="button" className="btn btn-shadow btn-outline-warning" id="add-player-button" style={newPlayerButtonStyle}>
+            <td style={{ display: 'flex', minHeight: '80px', paddingTop: '20px' }}>
+              <button type="button" className="btn btn-shadow btn-outline-warning" id="add-player-button" style={{ maxHeight: '40px', minWidth: '120px' }}>
                 new player
               </button>
-              <button type="button" className="btn btn-shadow btn-outline-success" id="confirm-player-button" style={addPlayerButtonStyle}>
+              <button type="button" className="btn btn-shadow btn-outline-success" id="confirm-player-button" style={{ maxHeight: '40px', minWidth: '50px', marginRight: '10px', display: 'none' }}>
                 Add
               </button>
-              <button type="button" className="btn btn-shadow btn-outline-secondary" id="cancel-player-button" style={cancelButtonStyle}>
+              <button type="button" className="btn btn-shadow btn-outline-secondary" id="cancel-player-button" style={{ maxHeight: '40px', minWidth: '75px', display: 'none' }}>
                 Cancel
               </button>
             </td>
@@ -114,7 +99,7 @@ export default function PlayersDataTable({ playersData, teamId, updateTeamCallba
                     </td>
                   ))
                 }
-                <td className="buttons-column" style={buttonsColumnStyle}>
+                <td className="buttons-column" style={{ display: 'flex', minHeight: '42px' }}>
                   <button type="button" className="btn btn-outline-warning edit" onClick={enableRowEditing(rowsPlayersData[player].id, player)} style={{ marginRight: '10px', display: editingRowKey === null ? 'inline' : 'none' }}>
                     edit
                   </button>
