@@ -1,13 +1,19 @@
 import React, { useEffect } from 'react';
 import APIAdapter from '../adapters/APIAdapter';
+import { TeamParameters } from '../adapters/Team';
 
-export default function TeamDataTable({ teamData, teamId, updateTeamCallback }) {
-  const [rowsTeamData, setRowsTeamData] = React.useState([]);
+interface TeamDataTableProps {
+  teamData: TeamParameters;
+  teamId: number;
+  handleTeamDataUpdate: () => void;
+}
+export default function TeamDataTable({ teamData, teamId, handleTeamDataUpdate }: TeamDataTableProps): React.ReactElement {
+  const [rowsTeamData, setRowsTeamData] = React.useState<{ [key: string]: string | number }>({});
   const [editingRowKey, setEditingRowKey] = React.useState(null);
-  const [inputValue, setInputValue] = React.useState({});
+  const [inputValue, setInputValue] = React.useState<{ [key: string]: string | number }>({});
   const requestAdapter = new APIAdapter();
 
-  const enableRowEditing = (key) => () => {
+  const enableRowEditing = (key: string) => () => {
     setEditingRowKey(key);
     setInputValue({ ...inputValue, [key]: rowsTeamData[key] });
     document.getElementById(`input-field-${key}`).focus();
@@ -15,12 +21,12 @@ export default function TeamDataTable({ teamData, teamId, updateTeamCallback }) 
   const disableRowEditing = () => {
     setEditingRowKey(null);
   };
-  const handleRowUpdate = (key) => () => {
+  const handleRowUpdate = (key: string) => () => {
     const updatedData = { [key]: [inputValue[key]] };
     try {
       requestAdapter.updateTeam(teamId, updatedData);
       disableRowEditing();
-      updateTeamCallback();
+      handleTeamDataUpdate();
     } catch (error) {
       console.log(error);
     }
@@ -30,19 +36,14 @@ export default function TeamDataTable({ teamData, teamId, updateTeamCallback }) 
     setRowsTeamData(teamData);
   }, [teamData]);
 
-  const parameterKeyStyle = {
-    textTransform: 'capitalize',
-    paddingTop: '3.5%',
-  };
-
   return (
     <div>
       <table className="table" id="team-table">
         <thead>
           {
-            Object.keys(rowsTeamData).map((key) => (
+            Object.keys(rowsTeamData).map((key: string) => (
               <tr className="table-dark table-bordered" id={key} key={key}>
-                <td className="text-warning" style={parameterKeyStyle}>{key}</td>
+                <td className="text-warning" style={{ textTransform: 'capitalize', paddingTop: '3.5%' }}>{key}</td>
                 <td>
                   <span style={{ display: editingRowKey === key ? 'none' : 'inline' }}>{rowsTeamData[key]}</span>
                   <input type="text" className="form-control" value={inputValue[key]} style={{ display: editingRowKey === key ? 'inline' : 'none' }} id={`input-field-${key}`} onChange={(e) => setInputValue({ ...inputValue, [key]: e.target.value })} />
