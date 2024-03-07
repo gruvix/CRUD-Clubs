@@ -2,7 +2,23 @@ import { BASE_API_URL } from '../../paths';
 import Player from './Player';
 
 export default class Team {
-  constructor(teamData) {
+  other: {
+    id: number;
+    hasDefault: boolean;
+    crestUrl: string;
+    lastUpdated: string;
+  };
+  teamParameters: {
+    name: string;
+    area: string;
+    address: string;
+    phone: string | number;
+    website: string;
+    email: string;
+    venue: string;
+  };
+  players: Player[];
+  constructor(teamData: any) {
     this.other = {
       id: teamData.id,
       hasDefault: teamData.hasDefault,
@@ -21,8 +37,18 @@ export default class Team {
     if (!teamData.squad?.length) {
       this.players = [];
     } else {
-      this.players = teamData.squad.map((player) => new Player(player));
+      this.players = teamData.squad.map((player: string) => new Player(player));
     }
   }
 }
 export const teamParametersKeys = ['name', 'area', 'address', 'phone', 'website', 'email', 'venue'];
+export interface TeamParameters {
+  name: string;
+  area: string;
+  address: string;
+  phone: string | number;
+  website: string;
+  email: string;
+  venue: string;
+  [key: string]: string | number;
+}
