@@ -1,38 +1,33 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import TeamCrest from '../shared/TeamCrest.jsx';
-import ResetTeamButton from './ResetTeamButton.jsx';
+import TeamCrest from '../shared/TeamCrest';
+import ResetTeamButton from './ResetTeamButton';
 import { webAppPaths } from '../../paths.js';
-import TeamDataTable from './TeamDataTable.jsx';
-import PlayersDataTable from './PlayersDataTable.jsx';
-import ConfirmationModal from '../shared/ConfirmationModal.jsx';
-import APIAdapter from '../adapters/APIAdapter.js';
-import LoadingSpinner from '../shared/LoadingSpinner.jsx';
-import isImageTypeValid from '../shared/validateImage.js';
+import TeamDataTable from './TeamDataTable';
+import PlayersDataTable from './PlayersDataTable';
+import ConfirmationModal from '../shared/ConfirmationModal';
+import APIAdapter, { RedirectData } from '../adapters/APIAdapter';
+import LoadingSpinner from '../shared/LoadingSpinner';
+import isImageTypeValid from '../shared/validateImage';
+import Team from '../adapters/Team.js';
 
 export default function TeamEditor() {
   const navigate = useNavigate();
   const { teamId } = useParams();
   const [isLoading, setIsLoading] = React.useState(true);
-  const [teamParameters, setTeamParameters] = React.useState({});
-  const [otherTeamData, setOtherTeamData] = React.useState({});
-  const [players, setPlayers] = React.useState([]);
-  const [modalCallback, setModalCallback] = React.useState('');
+  const [teamData, setTeamData] = React.useState({} as Team);
+  const [modalCallback, setModalCallback] = React.useState(() => (): void => {});
   const [modalText, setModalText] = React.useState('');
-  const [teamCrestUrl, setTeamCrestUrl] = React.useState(null);
   const request = new APIAdapter();
   const updateTeamData = async () => {
     try {
       setIsLoading(true);
       request.getTeamData(teamId)
-        .then((data) => {
-          if (data.redirect) {
+        .then((data: RedirectData | Team) => {
+          if ('redirect' in data) {
             navigate(data.redirect);
           } else {
-            setTeamParameters(data.teamParameters);
-            setOtherTeamData(data.other);
-            setPlayers(data.players);
-            setTeamCrestUrl(data.other.crestUrl);
+            setTeamData(data);
             setIsLoading(false);
           }
         });
@@ -40,21 +35,21 @@ export default function TeamEditor() {
       alert(error);
     }
   };
-  const handleImageUpdate = (image) => {
+  const handleImageUpdate = (image: File) => {
     if (!isImageTypeValid(image)) {
       alert('Error: invalid image type');
     } else {
-      request.updateTeamCrest(teamId, image).then((data) => {
-        if (data.redirect) {
-          navigate(data.redirect);
+      request.updateTeamCrest(teamId, image).then((newCrestUrl) => {
+        if (newCrestUrl.redirect) {
+          navigate(newCrestUrl.redirect);
         } else {
-          setTeamCrestUrl(data);
+          setTeamData((previousState) => ({...previousState, other: {...previousState.other, crestUrl: newCrestUrl}}));
         }
       });
     }
   };
   const resetTeam = () => async () => {
-    request.resetTeam(teamId).then((data) => {
+    request.resetTeam(teamId).then((data: RedirectData) => {
       if (data.redirect) {
         navigate(data.redirect);
       } else {
@@ -66,28 +61,16 @@ export default function TeamEditor() {
     updateTeamData();
   }, []);
 
-  const goBackButtonStyle = {
-    marginTop: '25px',
-  };
-  const uploadImageSpanStyle = {
-    display: 'block',
-  };
-  const uploadImageButtonStyle = {
-    fontSize: '150%',
-  };
-  const imageAllowedTypesStyle = {
-    fontSize: '60%',
-    display: 'block',
-  };
-  const hiddenImageInputStyle = {
-    display: 'none',
-  };
-
   return (
     <div className="container">
       <div className="row">
         <div className="col-4">
-          <button type="button" className="btn btn-shadow btn-outline-warning" style={goBackButtonStyle} onClick={() => navigate(webAppPaths.teams)} id="back-to-teams-button">
+          <button
+            type="button"
+            className="btn btn-shadow btn-outline-warning"
+            style={{ marginTop: '25px' }}
+            onClick={() => navigate(webAppPaths.teams)}
+            id="back-to-teams-button">
             Go back
           </button>
         </div>
@@ -102,27 +85,27 @@ export default function TeamEditor() {
             <div className="col-4">
               <div className="d-flex justify-content-center img-container">
                 <TeamCrest
-                  teamCrest={teamCrestUrl}
+                  teamCrest={teamData.other.crestUrl}
                   className="team-crest-image"
                 />
                 <button
                   type="button"
                   className="btn btn-shadow overlay-button btn-outline-warning position-absolute top-50 start-50 translate-middle"
                   id="upload-image-button"
-                  style={uploadImageButtonStyle}
+                  style={{ fontSize: '150%' }}
                   onClick={() => document.getElementById('image-input').click()}
                 >
-                  <span style={uploadImageSpanStyle}>
+                  <span style={{ display: 'block' }}>
                     Upload new image
                   </span>
-                  <span style={imageAllowedTypesStyle}>
+                  <span style={{ fontSize: '60%', display: 'block' }}>
                     jpeg / jpg / png / gif
                   </span>
                 </button>
                 <input
                   type="file"
                   id="image-input"
-                  style={hiddenImageInputStyle}
+                  style={{ display: 'none' }}
                   onChange={(e) => {
                     handleImageUpdate(e.target.files[0]);
                   }}
@@ -131,13 +114,13 @@ export default function TeamEditor() {
             </div>
             <div className="col">
               <div className="text-end">
-                <ResetTeamButton
-                  hasDefault={otherTeamData.hasDefault}
+                {teamData.other && (<ResetTeamButton
+                  hasDefault={teamData.other.hasDefault}
                   onClickCallback={() => {
                     setModalCallback(resetTeam);
                     setModalText('Are you sure you want to reset this team? All custom data will be lost and this action can not be undone');
                   }}
-                />
+                />)}
               </div>
             </div>
           </>
@@ -156,9 +139,9 @@ export default function TeamEditor() {
             </strong>
             <div className="d-flex justify-content-center">
               <TeamDataTable
-                teamData={teamParameters}
-                teamId={teamId}
-                updateTeamCallback={updateTeamData}
+                teamData={teamData.teamParameters}
+                teamId={Number(teamId)}
+                handleTeamDataUpdate={updateTeamData}
               />
             </div>
           </div>
@@ -176,8 +159,8 @@ export default function TeamEditor() {
             </strong>
             <div className="d-flex justify-content-center">
               <PlayersDataTable
-                playersData={players}
-                teamId={teamId}
+                playersData={teamData.players}
+                teamId={Number(teamId)}
                 updateTeamCallback={updateTeamData}
               />
             </div>
