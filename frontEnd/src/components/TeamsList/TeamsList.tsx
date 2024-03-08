@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import LogoutButton from './LogoutButton';
 import { webAppPaths } from '../../paths.js';
 import TeamCardComponent from './TeamCard';
-import APIAdapter from '../adapters/APIAdapter.js';
+import APIAdapter, { RedirectData } from '../adapters/APIAdapter';
 import ConfirmationModal from '../shared/ConfirmationModal';
 import LoadingSpinner from '../shared/LoadingSpinner';
 import TeamCard from '../adapters/TeamCard.js';
@@ -12,9 +12,7 @@ interface TeamsData {
   username: string;
   teams: TeamCard[];
 }
-interface RedirectData {
-  redirect: string;
-}
+
 
 export default function TeamsList() {
   const navigate = useNavigate();
