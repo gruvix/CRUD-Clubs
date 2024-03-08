@@ -156,14 +156,14 @@ export default class APIAdapter {
     }
   }
 
-  async updatePlayer(teamId: number | string, newData: Player) {
+  async updatePlayer(teamId: number | string, playerData: Player) {
     const response = await fetch(apiRequestPaths.player(teamId), {
       method: 'PATCH',
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(newData),
+      body: JSON.stringify(playerData),
     });
     try {
       if (!response.ok) {
