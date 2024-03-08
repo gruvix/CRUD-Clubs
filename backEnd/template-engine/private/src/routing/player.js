@@ -7,8 +7,7 @@ router.route('/:teamId')
   .post((req, res) => {
     const { username } = req.session;
     const { teamId } = req.params;
-    const { player } = req.body;
-    console.log(`User ${username} added player ${player.name} to team ${teamId}`);
+    const player = req.body;
     try {
       const newId = addPlayer(username, teamId, player);
       console.log(`Added player ${newId} to team ${teamId}`);
