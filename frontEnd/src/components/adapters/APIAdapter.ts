@@ -204,6 +204,29 @@ export default class APIAdapter {
     }
   }
 
+  async removePlayer(teamId: number | string, playerId: number | string) {
+    const response = await fetch(apiRequestPaths.player(teamId), {
+      method: 'DELETE',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(playerId),
+    });
+    try {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return true;
+    } catch (error) {
+      const redirect = responseRedirect(response.status);
+      if (redirect) {
+        return redirect;
+      }
+      throw error;
+    }
+  }
+
   async addTeam(teamParameters: TeamParameters, players: Player[], imageFile: File) {
     const teamData = { ...teamParameters, squad: players };
     const formData = new FormData();
