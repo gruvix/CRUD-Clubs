@@ -6,10 +6,9 @@ import { useNavigate } from 'react-router-dom';
 interface PlayersDataTableProps {
   playersData: Player[];
   teamId: number;
-  updateTeamCallback: () => void;	
 }
 
-export default function PlayersDataTable({ playersData, teamId, updateTeamCallback }: PlayersDataTableProps): React.ReactElement {
+export default function PlayersDataTable({ playersData, teamId }: PlayersDataTableProps): React.ReactElement {
   const [playerRows, setPlayerRows] = React.useState([] as Player[]);
   const [playerInputRows, setPlayerInputRows] = React.useState([] as Player[]);
   const [editingRowKey, setEditingRowKey] = React.useState(null);
@@ -24,7 +23,7 @@ export default function PlayersDataTable({ playersData, teamId, updateTeamCallba
       },
     }));
   }
-  const enableRowEditing = (index: number) => () => {
+  const enableRowEditing = (index: number) => {
     setEditingRowKey(index);
     setPlayerInputRows((previousState) => ({
       ...previousState,
@@ -34,7 +33,12 @@ export default function PlayersDataTable({ playersData, teamId, updateTeamCallba
   const disableRowEditing = () => {
     setEditingRowKey(null);
   };
-  const handleRowUpdate = (index: number) => () => {
+  const updatePlayerRow = (index: number) => {
+    const newState = [...playerRows];
+    newState[index] = playerInputRows[index];
+    setPlayerRows(newState);
+  };
+  const handleRowUpdate = (index: number) => {
     const updatedPlayerData = new Player({
       ...playerInputRows[index], id: playerRows[index].id,
     });
@@ -44,7 +48,7 @@ export default function PlayersDataTable({ playersData, teamId, updateTeamCallba
           navigate(data.redirect);
       } else {
         disableRowEditing();
-        updateTeamCallback();
+        updatePlayerRow(index);
       }
       });
     } catch (error) {
@@ -52,10 +56,6 @@ export default function PlayersDataTable({ playersData, teamId, updateTeamCallba
     }
   };
   useEffect(() => {
-    // const updatedPlayerRows = [] as Player[];
-    // playersData.forEach((player) => {
-    //   updatedPlayerRows[player.id] = player;
-    // });
     setPlayerRows(playersData);
     setPlayerInputRows(playersData);
   }, [playersData]);
@@ -103,13 +103,13 @@ export default function PlayersDataTable({ playersData, teamId, updateTeamCallba
                   ))
                 }
                 <td className="buttons-column" style={{ display: 'flex', minHeight: '42px' }}>
-                  <button type="button" className="btn btn-outline-warning edit" onClick={enableRowEditing(index)} style={{ marginRight: '10px', display: editingRowKey === null ? 'inline' : 'none' }}>
+                  <button type="button" className="btn btn-outline-warning edit" onClick={() => enableRowEditing(index)} style={{ marginRight: '10px', display: editingRowKey === null ? 'inline' : 'none' }}>
                     edit
                   </button>
                   <button type="button" className="btn btn-outline-danger remove" data-bs-toggle="modal" data-bs-target="#confirmationModal" style={{ display: editingRowKey === null ? 'inline' : 'none' }}>
                     remove
                   </button>
-                  <button type="button" className="btn btn-outline-success apply" onClick={() => handleRowUpdate(index)()} style={{ display: editingRowKey === index ? 'inline' : 'none', marginRight: '10px' }}>
+                  <button type="button" className="btn btn-outline-success apply" onClick={() => handleRowUpdate(index)} style={{ display: editingRowKey === index ? 'inline' : 'none', marginRight: '10px' }}>
                     apply
                   </button>
                   <button type="button" className="btn btn-outline-secondary cancel" onClick={() => disableRowEditing()} style={{ display: editingRowKey === index ? 'inline' : 'none' }}>

@@ -161,7 +161,6 @@ export default function TeamEditor() {
               <PlayersDataTable
                 playersData={teamData.players}
                 teamId={Number(teamId)}
-                updateTeamCallback={updateTeamData}
               />
             </div>
           </div>
