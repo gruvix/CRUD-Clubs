@@ -141,7 +141,6 @@ export default function TeamEditor() {
               <TeamDataTable
                 teamData={teamData.teamParameters}
                 teamId={Number(teamId)}
-                handleTeamDataUpdate={updateTeamData}
               />
             </div>
           </div>

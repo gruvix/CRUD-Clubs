@@ -1,17 +1,18 @@
 import React, { useEffect } from 'react';
 import APIAdapter from '../adapters/APIAdapter';
 import { TeamParameters } from '../adapters/Team';
+import { useNavigate } from 'react-router-dom';
 
 interface TeamDataTableProps {
   teamData: TeamParameters;
   teamId: number;
-  handleTeamDataUpdate: () => void;
 }
-export default function TeamDataTable({ teamData, teamId, handleTeamDataUpdate }: TeamDataTableProps): React.ReactElement {
+export default function TeamDataTable({ teamData, teamId }: TeamDataTableProps): React.ReactElement {
   const [rowsTeamData, setRowsTeamData] = React.useState<{ [key: string]: string | number }>({});
   const [editingRowKey, setEditingRowKey] = React.useState(null);
   const [inputValue, setInputValue] = React.useState<{ [key: string]: string | number }>({});
   const requestAdapter = new APIAdapter();
+  const navigate = useNavigate();
 
   const enableRowEditing = (key: string) => () => {
     setEditingRowKey(key);
@@ -21,12 +22,22 @@ export default function TeamDataTable({ teamData, teamId, handleTeamDataUpdate }
   const disableRowEditing = () => {
     setEditingRowKey(null);
   };
+  const updateTeamRow = (key: string) => {
+    const newState = { ...rowsTeamData };
+    newState[key] = inputValue[key];
+    setRowsTeamData(newState);
+  };
   const handleRowUpdate = (key: string) => () => {
     const updatedData = { [key]: [inputValue[key]] };
     try {
-      requestAdapter.updateTeam(teamId, updatedData);
-      disableRowEditing();
-      handleTeamDataUpdate();
+      requestAdapter.updateTeam(teamId, updatedData).then((data) => {
+        if('redirect' in data){
+          navigate(data.redirect);
+        } else {
+          disableRowEditing();
+          updateTeamRow(key);
+        }
+      });
     } catch (error) {
       console.log(error);
     }
