@@ -156,7 +156,7 @@ export default function PlayersDataTable({ playersData, teamId }: PlayersDataTab
                   ))
                 }
                 <td className="buttons-column" style={{ display: 'flex', minHeight: '42px' }}>
-                  <button type="button" className="btn btn-outline-warning edit" onClick={() => enableRowEditing(index)} style={{ marginRight: '10px', display: editingRowKey === null ? 'inline' : 'none' }}>
+                  <button type="button" className="btn btn-outline-warning edit" onClick={() => enableRowEditing(index)} style={{ marginRight: '10px', display: editingRowKey !== index ? 'inline' : 'none' }}>
                     edit
                   </button>
                   <button type="button" className="btn btn-outline-danger remove" data-bs-toggle="modal" data-bs-target="#confirmationModal" style={{ display: editingRowKey === null ? 'inline' : 'none' }}>
