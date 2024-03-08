@@ -27,7 +27,7 @@ export default function TeamCard({ team, deleteTeamCallback }: TeamCardProps) {
         <button
           type="button"
           className="btn btn-outline-warning overlay-button-dark edit"
-          onClick={() => navigate(`${webAppPaths.team.replace(':teamId', team.id)}`)}
+          onClick={() => navigate(`${webAppPaths.team(team.id)}`)}
           style={editButtonStyle}
         >
           edit
