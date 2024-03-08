@@ -6,9 +6,11 @@ import { useNavigate } from 'react-router-dom';
 interface PlayersDataTableProps {
   playersData: Player[];
   teamId: number;
+  setModalCallback: (callback: () => void) => void;
+  setModalText: (text: string) => void;
 }
 
-export default function PlayersDataTable({ playersData, teamId }: PlayersDataTableProps): React.ReactElement {
+export default function PlayersDataTable({ playersData, teamId, setModalCallback, setModalText }: PlayersDataTableProps): React.ReactElement {
   const NEW_PLAYER_ROW_KEY = -1;
   const [playerRows, setPlayerRows] = React.useState([] as Player[]);
   const [playerInputRows, setPlayerInputRows] = React.useState([] as Player[]);
@@ -83,6 +85,10 @@ export default function PlayersDataTable({ playersData, teamId }: PlayersDataTab
       [parameter]: event.target.value,
     });
   };
+  const setModal = (index: number) => {
+    setModalCallback(() => () => removePlayer(index));
+    setModalText(`Are you sure you want to remove player ${playerRows[index].name}?`);
+  };
   useEffect(() => {
     setPlayerRows([...playersData]);
     setPlayerInputRows([...playersData]);
@@ -156,16 +162,36 @@ export default function PlayersDataTable({ playersData, teamId }: PlayersDataTab
                   ))
                 }
                 <td className="buttons-column" style={{ display: 'flex', minHeight: '42px' }}>
-                  <button type="button" className="btn btn-outline-warning edit" onClick={() => enableRowEditing(index)} style={{ marginRight: '10px', display: editingRowKey !== index ? 'inline' : 'none' }}>
+                  <button
+                    type="button"
+                    className="btn btn-outline-warning edit"
+                    onClick={() => enableRowEditing(index)}
+                    style={{ marginRight: '10px', display: editingRowKey !== index ? 'inline' : 'none' }}
+                  >
                     edit
                   </button>
-                  <button type="button" className="btn btn-outline-danger remove" data-bs-toggle="modal" data-bs-target="#confirmationModal" style={{ display: editingRowKey === null ? 'inline' : 'none' }}>
+                  <button
+                    type="button"
+                    className="btn btn-outline-danger remove"
+                    data-bs-toggle="modal" data-bs-target="#confirmationModal"
+                    style={{ display: editingRowKey !== index ? 'inline' : 'none' }}
+                    onClick={() => { setModal(index); }}
+                  >
                     remove
                   </button>
-                  <button type="button" className="btn btn-outline-success apply" onClick={() => handleRowUpdate(index)} style={{ display: editingRowKey === index ? 'inline' : 'none', marginRight: '10px' }}>
+                  <button type="button"
+                    className="btn btn-outline-success apply"
+                    onClick={() => handleRowUpdate(index)}
+                    style={{ display: editingRowKey === index ? 'inline' : 'none', marginRight: '10px' }}
+                  >
                     apply
                   </button>
-                  <button type="button" className="btn btn-outline-secondary cancel" onClick={() => disableRowEditing()} style={{ display: editingRowKey === index ? 'inline' : 'none' }}>
+                  <button
+                    type="button"
+                    className="btn btn-outline-secondary cancel"
+                    onClick={() => disableRowEditing()}
+                    style={{ display: editingRowKey === index ? 'inline' : 'none' }}
+                  >
                     cancel
                   </button>
                 </td>

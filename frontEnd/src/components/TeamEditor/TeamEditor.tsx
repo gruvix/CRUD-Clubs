@@ -160,6 +160,8 @@ export default function TeamEditor() {
               <PlayersDataTable
                 playersData={teamData.players}
                 teamId={Number(teamId)}
+                setModalCallback = {setModalCallback}
+                setModalText = {setModalText}
               />
             </div>
           </div>
