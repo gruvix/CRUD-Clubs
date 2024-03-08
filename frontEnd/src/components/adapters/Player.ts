@@ -1,5 +1,11 @@
 export default class Player {
-  constructor(playerData) {
+  id: number;
+  name: string;
+  position: string;
+  nationality: string;
+  [key: string]: string | number;
+  
+  constructor(playerData: any) {
     this.id = playerData.id;
     this.name = playerData.name;
     this.position = playerData.position ? playerData.position : playerData.role;
