@@ -219,7 +219,7 @@ export default class APIAdapter {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const newTeamId = await response.json();
-      return { redirect: webAppPaths.team.replace(':teamId', newTeamId) };
+      return { redirect: webAppPaths.team(newTeamId) };
     } catch (error) {
       const redirect = responseRedirect(response.status);
       if (redirect) {
