@@ -27,10 +27,11 @@ export default function PlayersDataTable({ playersData, teamId }: PlayersDataTab
   }
   const enableRowEditing = (index: number) => {
     setEditingRowKey(index);
-    setPlayerInputRows((previousState) => ({
-      ...previousState,
-      [index]: playerRows[index],
-    }));
+    if(index === NEW_PLAYER_ROW_KEY) {
+      setNewPlayerRow({} as Player);
+    } else {
+      setPlayerInputRows([...playerRows]);
+    }
   };
   const disableRowEditing = () => {
     setEditingRowKey(null);
