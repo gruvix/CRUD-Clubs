@@ -1,9 +1,10 @@
 /* eslint-disable class-methods-use-this */
 import { apiRequestPaths, webAppPaths } from '../../paths';
-import Team from './Team';
+import Player from './Player';
+import Team, { TeamParameters } from './Team';
 import TeamCard from './TeamCard';
 
-function responseRedirect(status) {
+function responseRedirect(status: number) {
   if (status === 401) {
     return { redirect: webAppPaths.home };
   }
@@ -13,9 +14,13 @@ function responseRedirect(status) {
   return null;
 }
 
+export interface RedirectData {
+  redirect: string;
+}
+
 export default class APIAdapter {
-  async getTeamData(teamId) {
-    const response = await fetch(apiRequestPaths.team.replace(':teamId', teamId), {
+  async getTeamData(teamId: number | string) {
+    const response = await fetch(apiRequestPaths.team(teamId), {
       method: 'GET',
       credentials: 'include',
       headers: {
@@ -29,7 +34,6 @@ export default class APIAdapter {
       }
       const data = await response.json();
       const teamData = new Team(data);
-      teamData.redirect = null;
       return teamData;
     } catch (error) {
       const redirect = responseRedirect(response.status);
@@ -40,8 +44,8 @@ export default class APIAdapter {
     }
   }
 
-  async updateTeam(teamId, newData) {
-    const response = await fetch(apiRequestPaths.team.replace(':teamId', teamId), {
+  async updateTeam(teamId: number | string, newData: {[key: string]: (string | number)[]}) {
+    const response = await fetch(apiRequestPaths.team(teamId), {
       method: 'PATCH',
       credentials: 'include',
       headers: {
@@ -78,7 +82,7 @@ export default class APIAdapter {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      const teamsData = { teams: {} };
+      const teamsData = { teams: {} as any };
       Object.keys(data.teams).forEach((key) => {
         teamsData.teams[key] = new TeamCard(data.teams[key]);
       });
@@ -92,8 +96,8 @@ export default class APIAdapter {
     }
   }
 
-  async deleteTeam(teamId) {
-    const response = await fetch(apiRequestPaths.team.replace(':teamId', teamId), {
+  async deleteTeam(teamId: number | string) {
+    const response = await fetch(apiRequestPaths.team(teamId), {
       method: 'DELETE',
       credentials: 'include',
     });
@@ -132,8 +136,8 @@ export default class APIAdapter {
     }
   }
 
-  async resetTeam(teamId) {
-    const response = await fetch(apiRequestPaths.resetTeam.replace(':teamId', teamId), {
+  async resetTeam(teamId: number | string) {
+    const response = await fetch(apiRequestPaths.resetTeam(teamId), {
       method: 'PUT',
       credentials: 'include',
     });
@@ -152,8 +156,8 @@ export default class APIAdapter {
     }
   }
 
-  async updatePlayer(teamId, newData) {
-    const response = await fetch(apiRequestPaths.player.replace(':teamId', teamId), {
+  async updatePlayer(teamId: number | string, newData: Player) {
+    const response = await fetch(apiRequestPaths.player(teamId), {
       method: 'PATCH',
       credentials: 'include',
       headers: {
@@ -176,7 +180,7 @@ export default class APIAdapter {
     }
   }
 
-  async addTeam(teamParameters, players, imageFile) {
+  async addTeam(teamParameters: TeamParameters, players: Player[], imageFile: File) {
     const teamData = { ...teamParameters, squad: players };
     const formData = new FormData();
     formData.append('image', imageFile);
@@ -201,10 +205,10 @@ export default class APIAdapter {
     }
   }
 
-  async updateTeamCrest(teamId, image) {
+  async updateTeamCrest(teamId: number | string, image: File) {
     const formData = new FormData();
     formData.append('image', image);
-    const response = await fetch(apiRequestPaths.updateCrest.replace(':teamId', teamId), {
+    const response = await fetch(apiRequestPaths.updateCrest(teamId), {
       method: 'PUT',
       credentials: 'include',
       body: formData,
