@@ -3,7 +3,7 @@ export const BASE_API_URL = 'http://localhost:3000';
 export const webAppPaths = {
   home: '/',
   teams: '/user/teams',
-  team: '/user/team/:teamId',
+  team: (teamId) => `/user/team/${teamId}`,
   addTeam: '/user/team/add',
   error: '/error',
 };
