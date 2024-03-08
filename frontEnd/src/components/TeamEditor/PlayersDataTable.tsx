@@ -1,75 +1,71 @@
 import React, { useEffect } from 'react';
-import APIAdapter from '../adapters/APIAdapter';
+import APIAdapter, { RedirectData } from '../adapters/APIAdapter';
 import Player, { playerKeys } from '../adapters/Player';
+import { useNavigate } from 'react-router-dom';
 
 interface PlayersDataTableProps {
   playersData: Player[];
   teamId: number;
   updateTeamCallback: () => void;	
 }
-interface PlayerInputValueState {
-  [key: string]: {
-    [playerId: number]: string;
-  }
-}
 
 export default function PlayersDataTable({ playersData, teamId, updateTeamCallback }: PlayersDataTableProps): React.ReactElement {
-  const [rowsPlayersData, setRowsPlayersData] = React.useState([]);
-  const [playerInputValue, setplayerInputValue] = React.useState<PlayerInputValueState>(
-    playerKeys.reduce((acc, key) => ({ ...acc, [key]: {} }), {}),
-  );
+  const [playerRows, setPlayerRows] = React.useState([] as Player[]);
+  const [playerInputRows, setPlayerInputRows] = React.useState([] as Player[]);
   const [editingRowKey, setEditingRowKey] = React.useState(null);
+  const navigate = useNavigate();
   const requestAdapter = new APIAdapter();
-
-  function updateInputValue(event: React.ChangeEvent<HTMLInputElement>, playerId: number, parameter: string) {
-    setplayerInputValue((previousState) => ({
+  function updateInputValue(event: React.ChangeEvent<HTMLInputElement>, index: number, parameter: string) {
+    setPlayerInputRows((previousState) => ({
       ...previousState,
-      [parameter]: {
-        ...previousState[parameter],
-        [playerId]: event.target.value,
+      [index]: {
+        ...previousState[index],
+        [parameter]: event.target.value,
       },
     }));
   }
-  const enableRowEditing = (playerId: number, player) => () => {
-    console.log(player);
-    setEditingRowKey(playerId);
-    const newPlayerInputValues = {};
-    Object.keys(playerInputValue).forEach((parameter) => {
-      newPlayerInputValues[parameter] = {
-        ...playerInputValue[parameter], [playerId]: rowsPlayersData[player][parameter],
-      };
-    });
-    setplayerInputValue(newPlayerInputValues);
+  const enableRowEditing = (index: number) => () => {
+    setEditingRowKey(index);
+    setPlayerInputRows((previousState) => ({
+      ...previousState,
+      [index]: playerRows[index],
+    }));
   };
   const disableRowEditing = () => {
     setEditingRowKey(null);
   };
-  const handleRowUpdate = (playerId: number) => () => {
-    const updatedData = {
-      id: playerId,
-      name: playerInputValue.name[playerId],
-      position: playerInputValue.position[playerId],
-      nationality: playerInputValue.nationality[playerId],
-    };
+  const handleRowUpdate = (index: number) => () => {
+    const updatedPlayerData = new Player({
+      ...playerInputRows[index], id: playerRows[index].id,
+    });
     try {
-      requestAdapter.updatePlayer(teamId, updatedData);
-      disableRowEditing();
-      updateTeamCallback();
+      requestAdapter.updatePlayer(teamId, updatedPlayerData).then((data: RedirectData) => {
+        if('redirect' in data) {
+          navigate(data.redirect);
+      } else {
+        disableRowEditing();
+        updateTeamCallback();
+      }
+      });
     } catch (error) {
-      console.log(error);
+      alert(error);
     }
   };
   useEffect(() => {
-    setRowsPlayersData(playersData);
+    // const updatedPlayerRows = [] as Player[];
+    // playersData.forEach((player) => {
+    //   updatedPlayerRows[player.id] = player;
+    // });
+    setPlayerRows(playersData);
+    setPlayerInputRows(playersData);
   }, [playersData]);
-
   return (
     <div style={{ height: '410px', overflow: 'auto' }}>
       <table className="table" id="players-table">
         <thead>
           <tr className="table-dark" id="add-player-row" data-id="-1">
             {
-              Object.keys(playerInputValue).map((parameter) => (
+              playerKeys.map((parameter) => (
                 <td className="text-warning" key={parameter}>
                   {parameter}
                   <input type="text" className="form-control" value="" style={{ display: editingRowKey === -1 ? 'inline' : 'none' }} data-parameter={parameter} />
@@ -89,32 +85,41 @@ export default function PlayersDataTable({ playersData, teamId, updateTeamCallba
             </td>
           </tr>
           {
-            Object.keys(rowsPlayersData).map((player) => (
-              <tr className="table-dark table-bordered" data-id={rowsPlayersData[player].id} key={rowsPlayersData[player].id}>
+            <>
+            {
+            playerRows.map((player, index) => (
+              <tr className="table-dark table-bordered" key={player.id}>
                 {
-                  Object.keys(playerInputValue).map((parameter) => (
-                    <td key={`${parameter}-${rowsPlayersData[player].id}`}>
-                      <span style={{ display: editingRowKey === rowsPlayersData[player].id ? 'none' : 'inline' }}>{rowsPlayersData[player][parameter]}</span>
-                      <input type="text" className="form-control" value={playerInputValue[parameter][rowsPlayersData[player].id]} onChange={(e) => updateInputValue(e, rowsPlayersData[player].id, parameter)} style={{ display: editingRowKey === rowsPlayersData[player].id ? 'inline' : 'none' }} />
+                  playerKeys.map((parameter) => (
+                    <td key={`${parameter}-${player.id}`}>
+                      <span style={{ display: editingRowKey === index ? 'none' : 'inline' }}>{player[parameter]}</span>
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={playerInputRows[index][parameter]} onChange={(e) => updateInputValue(e, index, parameter)}
+                        style={{ display: editingRowKey === index ? 'inline' : 'none' }}
+                      />
                     </td>
                   ))
                 }
                 <td className="buttons-column" style={{ display: 'flex', minHeight: '42px' }}>
-                  <button type="button" className="btn btn-outline-warning edit" onClick={enableRowEditing(rowsPlayersData[player].id, player)} style={{ marginRight: '10px', display: editingRowKey === null ? 'inline' : 'none' }}>
+                  <button type="button" className="btn btn-outline-warning edit" onClick={enableRowEditing(index)} style={{ marginRight: '10px', display: editingRowKey === null ? 'inline' : 'none' }}>
                     edit
                   </button>
                   <button type="button" className="btn btn-outline-danger remove" data-bs-toggle="modal" data-bs-target="#confirmationModal" style={{ display: editingRowKey === null ? 'inline' : 'none' }}>
                     remove
                   </button>
-                  <button type="button" className="btn btn-outline-success apply" onClick={() => handleRowUpdate(rowsPlayersData[player].id)()} style={{ display: editingRowKey === rowsPlayersData[player].id ? 'inline' : 'none', marginRight: '10px' }}>
+                  <button type="button" className="btn btn-outline-success apply" onClick={() => handleRowUpdate(index)()} style={{ display: editingRowKey === index ? 'inline' : 'none', marginRight: '10px' }}>
                     apply
                   </button>
-                  <button type="button" className="btn btn-outline-secondary cancel" onClick={() => disableRowEditing()} style={{ display: editingRowKey === rowsPlayersData[player].id ? 'inline' : 'none' }}>
+                  <button type="button" className="btn btn-outline-secondary cancel" onClick={() => disableRowEditing()} style={{ display: editingRowKey === index ? 'inline' : 'none' }}>
                     cancel
                   </button>
                 </td>
               </tr>
-            ))
+              ))
+              }
+             </>
           }
         </thead>
       </table>
