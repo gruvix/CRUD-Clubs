@@ -43,15 +43,6 @@ router.route('/:teamId')
     } else {
       team = getTeam(username, teamId);
     }
-
-    const players = [];
-    if (Array.isArray(team.squad)) {
-      team.squad.forEach((player) => {
-        players.push(new Player(player));
-      });
-    } else {
-      players.push(new Player(team.squad));
-    }
     res.json(new TeamFullData(team, teamDefaultBool, hasTeamDefault(username, teamId)));
   })
   .patch((req, res) => {

@@ -8,6 +8,7 @@ class TeamFullData extends Team {
     this.squad = data.squad;
     this.hasCustomCrest = data.hasCustomCrest;
     this.lastUpdated = data.lastUpdated;
+    this.squad = data.squad;
   }
 }
 
