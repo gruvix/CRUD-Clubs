@@ -204,14 +204,14 @@ export default class APIAdapter {
     }
   }
 
-  async removePlayer(teamId: number | string, playerId: number | string) {
+  async removePlayer(teamId: number, playerId: number) {
     const response = await fetch(apiRequestPaths.player(teamId), {
       method: 'DELETE',
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(playerId),
+      body: JSON.stringify({ playerId }),
     });
     try {
       if (!response.ok) {
