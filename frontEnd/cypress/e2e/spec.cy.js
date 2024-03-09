@@ -32,13 +32,13 @@ describe('test login', () => {
   it('should show an error indicating that the username may only contain letters', () => {
     cy.get('#username').type('123').get('#enter-page-button').click()
       .get('#username-error')
-      .should('contain', 'Username may only contain letters');
+      .should('contain', 'Error: Username may only contain letters');
   });
 
   it('should show an error indicating that the username may not be "Default"', () => {
     cy.get('#username').type('Default').get('#enter-page-button').click()
       .get('#username-error')
-      .should('contain', '"Default" is not available');
+      .should('contain', 'Error: "Default" is not available');
   });
 
   it('should login with "test"', () => {
