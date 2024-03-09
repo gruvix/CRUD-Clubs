@@ -116,7 +116,7 @@ export default function TeamEditor() {
               <div className="text-end">
                 {teamData.other && (<ResetTeamButton
                   hasDefault={teamData.other.hasDefault}
-                  onClickCallback={() => {
+                  onClickCallback={() => () => {
                     setModalCallback(resetTeam);
                     setModalText('Are you sure you want to reset this team? All custom data will be lost and this action can not be undone');
                   }}
