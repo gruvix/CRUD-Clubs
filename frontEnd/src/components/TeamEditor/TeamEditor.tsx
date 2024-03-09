@@ -11,7 +11,7 @@ import LoadingSpinner from '../shared/LoadingSpinner';
 import isImageTypeValid from '../shared/validateImage';
 import Team from '../adapters/Team.js';
 
-export default function TeamEditor() {
+export default function TeamEditor(): React.ReactElement {
   const navigate = useNavigate();
   const { teamId } = useParams();
   const [isLoading, setIsLoading] = React.useState(true);

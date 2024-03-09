@@ -14,7 +14,7 @@ interface TeamsData {
 }
 
 
-export default function TeamsList() {
+export default function TeamsList(): React.ReactElement {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = React.useState(true);
   const [username, setUsername] = React.useState('');
