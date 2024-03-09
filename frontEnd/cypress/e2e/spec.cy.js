@@ -1,15 +1,16 @@
 /// <reference types="cypress" />
-import paths from '../../template-engine/private/src/routing/paths.js';
+
+import { apiRequestPaths, webAppPaths } from "../../src/paths";
 
 const TEST_USER = 'cypress';
-const BASE_URL = 'http://localhost:8000';
+const BASE_URL = 'http://localhost:8080';
 const MODAL_APPEAR_DELAY = 500;
 const TEST_TEAM_ID = 57;
-const TEST_TEAM_PATH = `${paths.team}/${TEST_TEAM_ID}`;
-const TEST_TEAM_PLAYER_PATH = `${paths.player}/${TEST_TEAM_ID}`;
-const CUSTOM_CREST_UPLOAD_PATH = `${paths.crest}/${TEST_TEAM_ID}`;
-const TEST_TEAM_EXPECTED_IMG_SRC = `${paths.crest}/${TEST_TEAM_ID}/${TEST_TEAM_ID}.jpg`;
-const LOGIN_PATH = `${paths.login}`;
+const TEST_TEAM_PATH = webAppPaths.team(TEST_TEAM_ID);
+const TEST_TEAM_PLAYER_PATH = apiRequestPaths.player(TEST_TEAM_ID);
+const CUSTOM_CREST_UPLOAD_PATH = apiRequestPaths.updateCrest(TEST_TEAM_ID);
+const TEST_TEAM_EXPECTED_IMG_SRC = `${apiRequestPaths.updateCrest(TEST_TEAM_ID)}/${TEST_TEAM_ID}.jpg`;
+const LOGIN_PATH = apiRequestPaths.login;
 
 function generateRandomString(length = 5) {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
