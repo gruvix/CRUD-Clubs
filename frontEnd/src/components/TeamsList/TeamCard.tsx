@@ -11,24 +11,18 @@ interface TeamCardProps {
 
 export default function TeamCard({ team, deleteTeamCallback }: TeamCardProps) {
   const navigate = useNavigate();
-  const cardBodyStyle = {
-    alignSelf: 'center',
-  };
-  const editButtonStyle = {
-    marginRight: '10px',
-  };
   return (
     <div className="card card-container">
       <div className="card-header">
         <h5 className="card-title team-card-title">{team.name}</h5>
       </div>
       <TeamCrest teamCrest={team.crestUrl} className="list-team-crest-image" />
-      <div className="card-body" style={cardBodyStyle} id={team.id}>
+      <div className="card-body" style={{ alignSelf: 'center' }} id={team.id}>
         <button
           type="button"
           className="btn btn-outline-warning overlay-button-dark edit"
           onClick={() => navigate(`${webAppPaths.team(team.id)}`)}
-          style={editButtonStyle}
+          style={{ marginRight: '10px' }}
         >
           edit
         </button>
