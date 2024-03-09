@@ -4,7 +4,7 @@
   "description": "crud app splitted in front end and back ends servers, front end serves react UX while backend serves all user related data",
   "main": "NA",
   "scripts": {
-    "test": "cd frontEnd && cypress open",
+    "test": "cd frontEnd && npm run test",
     "startLinux": "gnome-terminal --tab -- bash -c \"cd frontEnd && npm run start\" & gnome-terminal --tab -- bash -c \"cd backEnd && npm run dev:templateNodemon\"",
     "startWindows": "start cmd /k \"cd frontEnd && npm run start\" & start cmd /k \"cd backEnd && npm run dev:templateNodemon\""
   },
