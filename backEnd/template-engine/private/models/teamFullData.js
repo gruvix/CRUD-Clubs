@@ -6,7 +6,7 @@ class TeamFullData extends Team {
     this.id = data.id;
     this.crestUrl = data.crestUrl;
     this.squad = data.squad;
-    this.hasCustomCrest = true;
+    this.hasCustomCrest = data.hasCustomCrest;
     this.lastUpdated = data.lastUpdated;
   }
 }
