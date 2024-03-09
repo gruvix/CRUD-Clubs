@@ -1,5 +1,5 @@
 export default function validateUsername(username: string) {
-  const regexDefault = /^(?!default$).*$/;
+  const regexDefault = /^(?!default$).*$/i;
   if (!regexDefault.test(username)) {
     return '"Default" is not available';
   }
