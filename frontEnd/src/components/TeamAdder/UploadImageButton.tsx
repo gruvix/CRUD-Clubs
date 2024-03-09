@@ -1,7 +1,7 @@
 import React from 'react';
 import isImageTypeValid from '../shared/validateImage';
 
-export default function UploadImageButton({ teamCrest }) {
+export default function UploadImageButton({ teamCrest }: { teamCrest: File }): React.ReactElement {
   if (!teamCrest) {
     return (
       <button
