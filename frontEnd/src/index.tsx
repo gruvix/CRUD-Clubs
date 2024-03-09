@@ -18,7 +18,7 @@ function App() {
       <Routes>
         <Route path={webAppPaths.home} element={<Home />} />
         <Route path={webAppPaths.teams} element={<TeamsList />} />
-        <Route path={webAppPaths.team} element={<TeamEditor />} />
+        <Route path={webAppPaths.team(':teamId')} element={<TeamEditor />} />
         <Route path={webAppPaths.addTeam} element={<TeamAdder />} />
         <Route path={webAppPaths.error} element={<Error />} />
         <Route path="*" element={<NotFound />} />
