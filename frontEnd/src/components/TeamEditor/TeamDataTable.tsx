@@ -7,10 +7,13 @@ interface TeamDataTableProps {
   teamData: TeamParameters;
   teamId: number;
 }
+interface TeamDataRows {
+  [key: string]: string | number;
+}
 export default function TeamDataTable({ teamData, teamId }: TeamDataTableProps): React.ReactElement {
-  const [rowsTeamData, setRowsTeamData] = React.useState<{ [key: string]: string | number }>({});
+  const [rowsTeamData, setRowsTeamData] = React.useState<TeamDataRows>({});
   const [editingRowKey, setEditingRowKey] = React.useState(null);
-  const [inputValue, setInputValue] = React.useState<{ [key: string]: string | number }>({});
+  const [inputValue, setInputValue] = React.useState<TeamDataRows>({});
   const requestAdapter = new APIAdapter();
   const navigate = useNavigate();
 

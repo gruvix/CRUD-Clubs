@@ -238,8 +238,8 @@ function findNextFreeTeamId(username) {
       return nextFreeId;
     }
     nextFreeId = sortedTeams[index].id + 1;
-    console.log(`Next free team ID: ${nextFreeId}`);
   }
+  console.log(`New team ID: ${nextFreeId}`);
   return nextFreeId;
 }
 function addTeamToTeamlist(newTeam, username) {
@@ -250,14 +250,17 @@ function addTeamToTeamlist(newTeam, username) {
 }
 function addTeam(username, teamData, imageFileName) {
   try {
-    const team = new TeamFullData(teamData);
-    const teamId = findNextFreeTeamId(username);
-    team.id = teamId;
-    team.lastUpdated = getDate();
-    team.crestUrl = paths.generateCustomCrestUrl(teamId, imageFileName);
+    const id = findNextFreeTeamId(username);
+    const team = new TeamFullData({
+      ...teamData,
+      id,
+      lastUpdated: getDate(),
+      crestUrl: paths.generateCustomCrestUrl(id, imageFileName),
+      hasCustomCrest: true,
+    });
     saveTeam(team, username);
     addTeamToTeamlist(team, username);
-    return teamId;
+    return id;
   } catch (error) {
     throw new Error(error);
   }
