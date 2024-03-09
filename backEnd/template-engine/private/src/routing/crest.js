@@ -22,7 +22,7 @@ router.put('/:teamId', uploadImage.single('image'), (req, res) => {
     hasCustomCrest: true,
   };
   updateTeam(newData, username, teamId);
-  res.status(200).send(crestUrl);
+  res.status(200).json(crestUrl);
 });
 
 router.get('/:teamId/:filename', (req, res) => {

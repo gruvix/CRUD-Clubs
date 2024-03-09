@@ -1,5 +1,5 @@
 /* eslint-disable class-methods-use-this */
-import { apiRequestPaths, webAppPaths } from '../../paths';
+import { BASE_API_URL, apiRequestPaths, webAppPaths } from '../../paths';
 import Player from './Player';
 import Team, { TeamParameters } from './Team';
 import TeamCard from './TeamCard';
@@ -264,7 +264,7 @@ export default class APIAdapter {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      const newCrestUrl = await response.json();
+      const newCrestUrl = BASE_API_URL + await response.json();
       return newCrestUrl;
     } catch (error) {
       const redirect = responseRedirect(response.status);

@@ -40,7 +40,7 @@ export default function TeamEditor() {
       alert('Error: invalid image type');
     } else {
       request.updateTeamCrest(teamId, image).then((newCrestUrl) => {
-        if (newCrestUrl.redirect) {
+        if (typeof newCrestUrl === 'object' && 'redirect' in newCrestUrl) {
           navigate(newCrestUrl.redirect);
         } else {
           setTeamData((previousState) => ({...previousState, other: {...previousState.other, crestUrl: newCrestUrl}}));
