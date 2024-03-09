@@ -1,26 +1,27 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { teamParametersKeys } from '../adapters/Team';
+import Team, { TeamParameters, teamParametersKeys } from '../adapters/Team';
 import { webAppPaths } from '../../paths';
-import ConfirmationModal from '../shared/ConfirmationModal.jsx';
-import { playerKeys } from '../adapters/Player';
-import UploadImageButton from './UploadImageButton.jsx';
+import ConfirmationModal from '../shared/ConfirmationModal';
+import Player, { playerKeys } from '../adapters/Player';
+import UploadImageButton from './UploadImageButton';
 import isImageTypeValid from '../shared/validateImage';
 import APIAdapter from '../adapters/APIAdapter';
 
+
 export default function TeamAdder() {
   const [playerSlots, setPlayerSlots] = React.useState([]);
-  const [modalCallback, setModalCallback] = React.useState('');
+  const [modalCallback, setModalCallback] = React.useState(() => (): void => {});
   const [modalText, setModalText] = React.useState('');
-  const [teamParameterInputs, setTeamParameterInputs] = React.useState({});
-  const [playerInputs, setPlayerInputs] = React.useState({});
-  const [teamCrest, setTeamCrest] = React.useState(null);
+  const [teamParameterInputs, setTeamParameterInputs] = React.useState({} as TeamParameters);
+  const [playerInputs, setPlayerInputs] = React.useState<Player[]>([]);
+  const [teamCrest, setTeamCrest] = React.useState<File>(null);
   const [canSubmitTeam, setCanSubmitTeam] = React.useState(false);
   const navigate = useNavigate();
   const returnToTeams = () => {
     navigate(webAppPaths.teams);
   };
-  function findNextAvailableSlot(slots) {
+  function findNextAvailableSlot(slots: number[]) {
     let nextSlot = 1;
     while (slots.includes(nextSlot)) {
       nextSlot += 1;
@@ -136,7 +137,7 @@ export default function TeamAdder() {
                     <tr className="table-dark table-bordered player" key={slot}>
                       {
                         playerKeys.map((key) => (
-                          <td aria-label={key}>
+                          <td key={key}>
                             <input
                               type="text"
                               className="form-control"
