@@ -18,7 +18,7 @@ export default function PlayersDataTable({ playersData, teamId, setModalCallback
   const [newPlayerRow, setNewPlayerRow] = React.useState({} as Player);
   const navigate = useNavigate();
   const requestAdapter = new APIAdapter();
-  function updateInputValue(event: React.ChangeEvent<HTMLInputElement>, index: number, parameter: string) {
+  const updateInputValue = (event: React.ChangeEvent<HTMLInputElement>, index: number, parameter: string) => {
     setPlayerInputRows((previousState) => ({
       ...previousState,
       [index]: {
@@ -26,7 +26,7 @@ export default function PlayersDataTable({ playersData, teamId, setModalCallback
         [parameter]: event.target.value,
       },
     }));
-  }
+  };
   const enableRowEditing = (index: number) => {
     setEditingRowKey(index);
     if(index === NEW_PLAYER_ROW_KEY) {
