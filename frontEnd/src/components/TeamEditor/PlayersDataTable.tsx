@@ -85,6 +85,19 @@ export default function PlayersDataTable({ playersData, teamId, setModalCallback
       [parameter]: event.target.value,
     });
   };
+  const removePlayer = (index: number) => {
+    try {
+      requestAdapter.removePlayer(teamId, playerRows[index].id).then((data) => {
+        if (typeof data === 'object' && 'redirect' in data) {
+          navigate(data.redirect);
+        } else if (data) {
+          setPlayerRows((previousState) => previousState.filter((_, i) => i !== index));
+        }
+      });
+    } catch (error) {
+      alert(error);
+    }
+  };
   const setModal = (index: number) => {
     setModalCallback(() => () => removePlayer(index));
     setModalText(`Are you sure you want to remove player ${playerRows[index].name}?`);
