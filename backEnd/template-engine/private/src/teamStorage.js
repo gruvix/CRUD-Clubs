@@ -193,7 +193,11 @@ function addPlayer(username, teamId, playerData) {
     const team = originalTeam;
     const id = findNextFreePlayerId(team.squad);
     player.id = id;
-    team.squad.unshift(player);
+    if (!team.squad.length) {
+      team.squad.push(player);
+    } else {
+      team.squad.unshift(player);
+    }
     console.log('Adding player to team', teamId);
     saveTeam(team, username);
     return id;
