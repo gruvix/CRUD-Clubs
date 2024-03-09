@@ -17,8 +17,5 @@
   "bugs": {
     "url": "https://github.com/gruvix/CRUD-Clubs/issues"
   },
-  "homepage": "https://github.com/gruvix/CRUD-Clubs/tree/dev_split#readme",
-  "devDependencies": {
-    "cypress": "^13.6.6"
-  }
+  "homepage": "https://github.com/gruvix/CRUD-Clubs/tree/dev_split#readme"
 }
