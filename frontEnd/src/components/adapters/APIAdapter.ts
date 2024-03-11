@@ -228,7 +228,11 @@ export default class APIAdapter {
   }
 
   async addTeam(teamParameters: TeamParameters, players: Player[], imageFile: File) {
-    const teamData = { ...teamParameters, squad: players };
+    const squad = [] as object[];
+    Object.keys(players).forEach((player, index) => {
+      squad.push({ ...players[Number(player)], id: index });
+    });
+    const teamData = { ...teamParameters, squad };
     const formData = new FormData();
     formData.append('image', imageFile);
     formData.append('teamData', JSON.stringify(teamData));
