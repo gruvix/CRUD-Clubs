@@ -13,9 +13,11 @@ interface TeamsData {
   teams: TeamCard[];
 }
 
-
 export default function TeamsList(): React.ReactElement {
   const navigate = useNavigate();
+  const [searchOption, setSearchOption] = React.useState('All teams');
+  const [searchPattern, setSearchPattern] = React.useState('');
+  const [shouldTeamShow, setShouldTeamShow] = React.useState<boolean[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [username, setUsername] = React.useState('');
   const [teamCards, setTeamCards] = React.useState<TeamCard[]>({} as TeamCard[]);
@@ -122,11 +124,12 @@ export default function TeamsList(): React.ReactElement {
             <div className="row row-cols-5 justify-content-center">
               {isLoading
                 ? (<LoadingSpinner style={{ marginTop: '10%', height: '20rem', width: '20rem' }} />)
-                : Object.keys(teamCards).map((key: string) => (
+                : Object.keys(teamCards).map((key: string, index) => (
                   <TeamCardComponent
                     team={teamCards[Number(key)]}
                     key={key}
                     deleteTeamCallback={setUpDeleteTeamModal}
+                    visibility={shouldTeamShow[index]}
                   />
                 )) }
             </div>
