@@ -18,7 +18,7 @@ export default function TeamsList(): React.ReactElement {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = React.useState(true);
   const [username, setUsername] = React.useState('');
-  const [teamCards, setTeamCards] = React.useState([]);
+  const [teamCards, setTeamCards] = React.useState<TeamCard[]>({} as TeamCard[]);
   const [modalCallback, setModalCallback] = React.useState(() => (): void => {});
   const [modalText, setModalText] = React.useState('');
   const request = new APIAdapter();
