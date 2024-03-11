@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Team, { TeamParameters, teamParametersKeys } from '../adapters/Team';
+import { TeamParameters, teamParametersKeys } from '../adapters/Team';
 import { webAppPaths } from '../../paths';
 import ConfirmationModal from '../shared/ConfirmationModal';
 import Player, { playerKeys } from '../adapters/Player';
