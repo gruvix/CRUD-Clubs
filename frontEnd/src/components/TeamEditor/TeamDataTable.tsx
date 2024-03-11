@@ -18,7 +18,7 @@ export default function TeamDataTable({ teamData, teamId }: TeamDataTableProps):
   const requestAdapter = new APIAdapter();
   const navigate = useNavigate();
 
-  const enableRowEditing = (key: string) => () => {
+  const enableRowEditing = (key: string) => {
     setEditingRowKey(key);
     setInputValue({ ...inputValue, [key]: rowsTeamData[key] });
   };
@@ -30,7 +30,7 @@ export default function TeamDataTable({ teamData, teamId }: TeamDataTableProps):
     newState[key] = inputValue[key];
     setRowsTeamData(newState);
   };
-  const handleRowUpdate = (key: string) => () => {
+  const handleRowUpdate = (key: string) => {
     const updatedData = { [key]: [inputValue[key]] };
     try {
       requestAdapter.updateTeam(teamId, updatedData).then((data) => {
@@ -73,13 +73,14 @@ export default function TeamDataTable({ teamData, teamId }: TeamDataTableProps):
                     style={{ display: editingRowKey === key ? 'inline' : 'none' }}
                     id={`input-field-${key}`}
                     onChange={(e) => setInputValue({ ...inputValue, [key]: e.target.value })}
+                    onKeyDown={(e) => (e.key === 'Enter' ? handleRowUpdate(key) : null)}
                   />
                 </td>
                 <td>
-                  <button type="button" className="btn btn-shadow btn-outline-warning edit" onClick={enableRowEditing(key)} style={{ display: editingRowKey === null ? 'inline' : 'none' }}>
+                  <button type="button" className="btn btn-shadow btn-outline-warning edit" onClick={() => enableRowEditing(key)} style={{ display: editingRowKey === null ? 'inline' : 'none' }}>
                     edit
                   </button>
-                  <button type="button" className="btn btn-shadow btn-outline-success apply" onClick={handleRowUpdate(key)} style={{ display: editingRowKey === key ? 'inline' : 'none', marginRight: '10px' }} id={`apply-button-${key}`}>
+                  <button type="button" className="btn btn-shadow btn-outline-success apply" onClick={() => handleRowUpdate(key)} style={{ display: editingRowKey === key ? 'inline' : 'none', marginRight: '10px' }} id={`apply-button-${key}`}>
                     apply
                   </button>
                   <button type="button" className="btn btn-outline-secondary cancel" onClick={() => disableRowEditing()} style={{ display: editingRowKey === key ? 'inline' : 'none' }}>
