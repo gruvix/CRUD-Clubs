@@ -66,6 +66,21 @@ export default function TeamsList(): React.ReactElement {
   useEffect(() => {
     updateTeamsData();
   }, []);
+  useEffect(() => {
+    setShouldTeamShow(Object.keys(teamCards).map((teamIndex: string) => {
+      const team  = teamCards[Number(teamIndex)];
+      if ( team.name.toLowerCase().includes(searchPattern.toLowerCase()) ) {
+        switch (searchOption) {
+          case 'All teams':
+            return true;
+          case 'Default teams':
+            return team.isDefault;
+          case 'Custom teams':
+            return !team.isDefault;            
+        }
+      }
+    }));
+  }, [searchPattern, searchOption, teamCards]);
 
   return (
     <div className="container">
