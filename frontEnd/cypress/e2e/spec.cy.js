@@ -84,8 +84,10 @@ describe('test the team editor page with the first team', () => {
   beforeEach(() => {
     cy.visit(BASE_URL);
     cy.intercept('POST', LOGIN_PATH).as('login');
+    cy.intercept('GET', apiRequestPaths.teams).as('teams');
     cy.get('#username').type(TEST_USER).get('#enter-page-button').click();
     cy.wait('@login');
+    cy.wait('@teams');
     cy.get('#search-options-button').click();
     cy.get('#search-options').contains('Default teams').click();
     cy.get('.card').filter(':visible').find('.edit').first()
