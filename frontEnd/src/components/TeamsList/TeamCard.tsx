@@ -6,18 +6,19 @@ import TeamCardClass from '../adapters/TeamCard';
 
 interface TeamCardProps {
   team: TeamCardClass;
+  visibility: boolean;
   deleteTeamCallback: (teamId: string | number, teamName: string) => void;
 }
 
-export default function TeamCard({ team, deleteTeamCallback }: TeamCardProps) {
+export default function TeamCard({ team, visibility, deleteTeamCallback  }: TeamCardProps) {
   const navigate = useNavigate();
   return (
-    <div className="card card-container">
+    <div className="card card-container" style={ visibility? { display: 'flex'} : { display: 'none' } }>
       <div className="card-header">
         <h5 className="card-title team-card-title">{team.name}</h5>
       </div>
       <TeamCrest teamCrest={team.crestUrl} className="list-team-crest-image" />
-      <div className="card-body" style={{ alignSelf: 'center' }} id={team.id}>
+      <div className="card-body" style={{ alignSelf: 'center' }} id={team.id.toString()}>
         <button
           type="button"
           className="btn btn-outline-warning overlay-button-dark edit"
