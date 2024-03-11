@@ -168,6 +168,8 @@ export default function TeamEditor(): React.ReactElement {
         )}
       </div>
       <ConfirmationModal callback={modalCallback} confirmationText={modalText} />
+      <input id='team-id' type='hidden' value={teamId}>
+      </input>
     </div>
   );
 }
