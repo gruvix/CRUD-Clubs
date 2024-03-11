@@ -244,7 +244,7 @@ describe('test add team', () => {
     });
     cy.intercept(`${CUSTOM_CREST_UPLOAD_PATH}`).as('uploadImage');
     cy.fixture('crest.jpg').then((fileContent) => {
-      cy.get('#image-input').selectFile({
+      cy.get('#upload-image-input').selectFile({
         contents: Cypress.Buffer.from(JSON.stringify(fileContent)),
         fileName: 'crest.jpg',
       }, { force: true });
