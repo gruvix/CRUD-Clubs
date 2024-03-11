@@ -104,7 +104,14 @@ export default function TeamsList(): React.ReactElement {
               <li><span data-search-option="default" className="dropdown-item">Default teams</span></li>
               <li><span data-search-option="custom" className="dropdown-item">Custom teams</span></li>
             </ul>
-            <input id="search-input" type="text" className="form-control" aria-label="Text input with dropdown button" placeholder="Search teams..." />
+            <input
+              id="search-input"
+              type="text" className="form-control"
+              aria-label="Text input with dropdown button"
+              value={searchPattern}
+              placeholder="Search teams..."
+              onChange={(e) => setSearchPattern(e.target.value)}
+            />
           </div>
         </div>
 
