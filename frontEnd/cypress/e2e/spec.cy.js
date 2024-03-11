@@ -1,3 +1,5 @@
+/* eslint-disable cypress/no-unnecessary-waiting */
+/* eslint-disable cypress/unsafe-to-chain-command */
 /// <reference types="cypress" />
 
 import { apiRequestPaths, webAppPaths } from "../../src/paths";
