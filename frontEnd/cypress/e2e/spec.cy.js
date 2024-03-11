@@ -89,7 +89,7 @@ describe('test the team editor page with the first team', () => {
     cy.wait('@login');
     cy.wait('@teams');
     cy.get('#search-options-button').click();
-    cy.get('#search-options').contains('Default teams').click();
+    cy.get('#search-options').contains('Default teams').click({ force: true });
     cy.get('.card').filter(':visible').find('.edit').first()
       .click();
   });
@@ -224,7 +224,7 @@ describe('test add team', () => {
     cy.get('#username').type(TEST_USER).get('#enter-page-button').click();
     cy.wait('@login');
     cy.get('#search-options-button').click();
-    cy.get('#search-options').contains('Custom teams').click();
+    cy.get('#search-options').contains('Custom teams').click( { force: true } );
     cy.get('#add-team-button').click();
   });
 
