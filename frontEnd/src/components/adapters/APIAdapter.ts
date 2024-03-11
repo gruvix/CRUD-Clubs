@@ -82,9 +82,9 @@ export default class APIAdapter {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      const teamsData = { teams: {} as any, username: data.username as string };
+      const teamsData = { teams: {} as TeamCard[], username: data.username as string };
       Object.keys(data.teams).forEach((key) => {
-        teamsData.teams[key] = new TeamCard(data.teams[key]);
+        teamsData.teams[Number(key)] = new TeamCard(data.teams[key]);
       });
       return teamsData;
     } catch (error) {
