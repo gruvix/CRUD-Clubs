@@ -159,7 +159,7 @@ export default function PlayersDataTable({ playersData, teamId, setModalCallback
             <>
             {
             playerRows.map((player, index) => (
-              <tr className="table-dark table-bordered" key={player.id}>
+              <tr className="table-dark table-bordered" key={player.id} data-id={player.id}>
                 {
                   playerKeys.map((parameter) => (
                     <td key={`${parameter}-${player.id}`}>
