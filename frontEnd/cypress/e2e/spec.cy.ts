@@ -129,7 +129,7 @@ describe('test the team editor page with the first team', () => {
     cy.intercept(`${CUSTOM_CREST_UPLOAD_PATH}`).as('uploadImage');
     cy.fixture('crest.jpg').then((fileContent) => {
       cy.get('#image-input').selectFile({
-        contents: Cypress.Buffer(fileContent),
+        contents: new Cypress.Buffer(fileContent),
         fileName: 'crest.jpg',
       }, { force: true });
     });
@@ -150,7 +150,7 @@ describe('test the player editor with the first team', () => {
     cy.get('#players-table .edit').then(($editButtons) => {
       const playersAmount = $editButtons.length;
       const randomIndex = Math.floor(Math.random() * playersAmount);
-      const randomStrings = [];
+      const randomStrings = [] as string[];
       cy.get('#players-table').find('[data-id]').then(($playerRows) => {
         cy.wrap($playerRows[randomIndex]).invoke('attr', 'data-id').then((value) => {
           const randomPlayerId = value;
@@ -175,7 +175,7 @@ describe('test the player editor with the first team', () => {
   });
   it('adds a player to the team and shows it', () => {
     cy.intercept(TEST_TEAM_PLAYER_PATH).as('addPlayer');
-    const randomStrings = [];
+    const randomStrings = [] as string[];
     cy.get('#add-player-button').click();
     cy.get('#add-player-row').find('input').each(($input, index) => {
       const randomString = generateRandomString();
@@ -229,13 +229,13 @@ describe('test add team', () => {
   });
 
   it('adds a team', () => {
-    const teamFields = [];
+    const teamFields = [] as string[];
     cy.get('#team-table input').each(($input) => {
       const randomString = generateRandomString();
       teamFields.push(randomString);
       cy.wrap($input).clear().type(randomString);
     });
-    const playerFields = [];
+    const playerFields = [] as string[];
     cy.get('#add-player-button').click().click().click();
     cy.get('#players-table input').each(($input) => {
       const randomString = generateRandomString();
