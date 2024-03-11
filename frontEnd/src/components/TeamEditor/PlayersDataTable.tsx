@@ -177,6 +177,7 @@ export default function PlayersDataTable({ playersData, teamId, setModalCallback
                         value={playerInputRows[index][parameter]}
                         onChange={(e) => updateInputValue(e, index, parameter)}
                         style={{ display: editingRowKey === index ? 'inline' : 'none' }}
+                        onKeyDown={(e) => (e.key === 'Enter' ? handleRowUpdate(index) : null)}
                       />
                     </td>
                   ))
