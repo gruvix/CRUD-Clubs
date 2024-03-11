@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import APIAdapter, { RedirectData } from '../adapters/APIAdapter';
 import Player, { playerKeys } from '../adapters/Player';
 import { useNavigate } from 'react-router-dom';
@@ -16,6 +16,7 @@ export default function PlayersDataTable({ playersData, teamId, setModalCallback
   const [playerInputRows, setPlayerInputRows] = React.useState([] as Player[]);
   const [editingRowKey, setEditingRowKey] = React.useState(null);
   const [newPlayerRow, setNewPlayerRow] = React.useState({} as Player);
+  const inputReferece = useRef(null);
   const navigate = useNavigate();
   const requestAdapter = new APIAdapter();
   const updateInputValue = (event: React.ChangeEvent<HTMLInputElement>, index: number, parameter: string) => {
@@ -102,6 +103,10 @@ export default function PlayersDataTable({ playersData, teamId, setModalCallback
     setModalCallback(() => () => removePlayer(index));
     setModalText(`Are you sure you want to remove player ${playerRows[index].name}?`);
   };
+  const handleInputFocus = (event: React.ChangeEvent<HTMLInputElement> ) => event.target.select();
+  useEffect(() => {
+    inputReferece.current?.focus();
+  }, [editingRowKey]);
   useEffect(() => {
     setPlayerRows([...playersData]);
     setPlayerInputRows([...playersData]);
@@ -161,10 +166,12 @@ export default function PlayersDataTable({ playersData, teamId, setModalCallback
             playerRows.map((player, index) => (
               <tr className="table-dark table-bordered" key={player.id} data-id={player.id}>
                 {
-                  playerKeys.map((parameter) => (
+                  playerKeys.map((parameter, keysIndex) => (
                     <td key={`${parameter}-${player.id}`}>
                       <span style={{ display: editingRowKey === index ? 'none' : 'inline' }}>{player[parameter]}</span>
                       <input
+                        ref={editingRowKey === index  && keysIndex === 0 ? inputReferece : null}
+                        onFocus={handleInputFocus}
                         type="text"
                         className="form-control"
                         value={playerInputRows[index][parameter]}
