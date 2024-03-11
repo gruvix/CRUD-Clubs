@@ -88,11 +88,21 @@ export default function TeamsList(): React.ReactElement {
 
         <div className="col text-center">
           <div className="input-group mb-3">
-            <button className="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="search-options-button">All teams</button>
-            <ul className="dropdown-menu" id="search-options">
-              <li><span className="dropdown-item">All teams</span></li>
-              <li><span className="dropdown-item">Default teams</span></li>
-              <li><span className="dropdown-item">Custom teams</span></li>
+            <button
+              className="btn btn-outline-secondary dropdown-toggle"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              id="search-options-button">{searchOption}
+            </button>
+            <ul
+              className="dropdown-menu"
+              id="search-options"
+              onClick={(e) => setSearchOption('textContent' in e.target ? e.target.textContent as string : 'All teams')}
+            >
+              <li><span data-search-option="all" className="dropdown-item">All teams</span></li>
+              <li><span data-search-option="default" className="dropdown-item">Default teams</span></li>
+              <li><span data-search-option="custom" className="dropdown-item">Custom teams</span></li>
             </ul>
             <input id="search-input" type="text" className="form-control" aria-label="Text input with dropdown button" placeholder="Search teams..." />
           </div>
