@@ -67,9 +67,9 @@ export default function TeamsList(): React.ReactElement {
     updateTeamsData();
   }, []);
   useEffect(() => {
-    setShouldTeamShow(Object.keys(teamCards).map((teamIndex: string) => {
+    setShouldTeamShow(Object.keys(teamCards).map((teamIndex) => {
       const team  = teamCards[Number(teamIndex)];
-      if ( team.name.toLowerCase().includes(searchPattern.toLowerCase()) ) {
+      if ( team.name.toString().toLowerCase().includes(searchPattern.toLowerCase()) ) {
         switch (searchOption) {
           case 'All teams':
             return true;
@@ -108,7 +108,8 @@ export default function TeamsList(): React.ReactElement {
               type="button"
               data-bs-toggle="dropdown"
               aria-expanded="false"
-              id="search-options-button">{searchOption}
+              id="search-options-button">
+              {searchOption}
             </button>
             <ul
               className="dropdown-menu"
