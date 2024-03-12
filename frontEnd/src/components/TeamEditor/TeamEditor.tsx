@@ -22,7 +22,7 @@ export default function TeamEditor(): React.ReactElement {
   const updateTeamData = async () => {
     try {
       setIsLoading(true);
-      request.getTeamData(teamId)
+      request.getTeam(teamId)
         .then((data: RedirectData | Team) => {
           if ('redirect' in data) {
             navigate(data.redirect);
