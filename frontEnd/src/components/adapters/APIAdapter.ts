@@ -1,5 +1,6 @@
 /* eslint-disable class-methods-use-this */
 import { BASE_API_URL, apiRequestPaths, webAppPaths } from '../../paths';
+import validateUsername from '../shared/usernameValidation';
 import Player from './Player';
 import Team, { TeamParameters } from './Team';
 import TeamCard from './TeamCard';
@@ -19,6 +20,41 @@ export interface RedirectData {
 }
 
 export default class APIAdapter {
+  async login(username: string) {
+    const error = validateUsername(username);
+    if (error) {
+      throw new Error(error);
+    }
+    const response = await fetch(apiRequestPaths.login, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username }),
+    });
+    if (!response.ok) {
+      throw new Error(`Login failed with status: ${response.status}`);
+    }
+  }
+  async getUserStatus() {
+    const response = await fetch(apiRequestPaths.userStatus, {
+      method: 'GET',
+      credentials: 'include',
+    });
+    try {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return true;
+    } catch (error) {
+      const redirect = responseRedirect(response.status);
+      if (redirect) {
+        return false;//this function works different to other adapter unAuthorized status returns, since its job is to get the login status
+      }
+      throw error;
+    }
+  }
   async getTeam(teamId: number | string) {
     const response = await fetch(apiRequestPaths.team(teamId), {
       method: 'GET',
@@ -39,24 +75,6 @@ export default class APIAdapter {
       const redirect = responseRedirect(response.status);
       if (redirect) {
         return redirect;
-      }
-      throw error;
-    }
-  }
-  async getUserStatus() {
-    const response = await fetch(apiRequestPaths.userStatus, {
-      method: 'GET',
-      credentials: 'include',
-    });
-    try {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      return true;
-    } catch (error) {
-      const redirect = responseRedirect(response.status);
-      if (redirect) {
-        return false;//this function works different to other adapter unAuthorized status returns, since its job is to get the login status
       }
       throw error;
     }
