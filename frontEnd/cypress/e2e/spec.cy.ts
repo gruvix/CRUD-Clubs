@@ -25,8 +25,8 @@ function generateRandomString(length = 5) {
 
   return result;
 }
-function customCrestPath(teamId: number, fileExtension: string) {
-  return `${BASE_URL}/user/customCrest/${teamId}/${teamId}.${fileExtension}`;
+function customCrestPath(teamId: number | string, fileExtension: string) {
+  return `${BASE_API_URL}/user/customCrest/${teamId}/${teamId}.${fileExtension}`;
 } 
 
 describe('test login', () => {
@@ -259,7 +259,7 @@ describe('test add team', () => {
     cy.get('#players-table span').each(($spanField, index) => {
       cy.wrap($spanField).should('contain', playerFields[index]);
     });
-    cy.get('#team-id').invoke('val').then((teamId) => {
+    cy.get('#team-id').invoke('val').then((teamId: string | number) => {
       const expectedNewTeamImgSrc = customCrestPath(teamId, 'jpg');
       cy.get('#team-crest').should('have.attr', 'src', expectedNewTeamImgSrc);
     });
