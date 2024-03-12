@@ -43,6 +43,24 @@ export default class APIAdapter {
       throw error;
     }
   }
+  async getUserStatus() {
+    const response = await fetch(apiRequestPaths.userStatus, {
+      method: 'GET',
+      credentials: 'include',
+    });
+    try {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return true;
+    } catch (error) {
+      const redirect = responseRedirect(response.status);
+      if (redirect) {
+        return false;//this function works different to other adapter unAuthorized status returns, since its job is to get the login status
+      }
+      throw error;
+    }
+  }
   async updateTeam(teamId: number | string, newData: {[key: string]: (string | number)[]}) {
     const response = await fetch(apiRequestPaths.team(teamId), {
       method: 'PATCH',
