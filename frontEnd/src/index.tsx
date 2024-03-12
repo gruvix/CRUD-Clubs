@@ -5,7 +5,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "../css/main.css";
 import { webAppPaths } from "./paths.js";
-import LandingPage from "./components/Home/LandingPage";
 import Login from "./components/Home/Login";
 import TeamEditor from "./components/TeamEditor/TeamEditor";
 import TeamAdder from "./components/TeamAdder/TeamAdder";
