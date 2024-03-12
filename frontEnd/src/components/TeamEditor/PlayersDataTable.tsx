@@ -1,7 +1,7 @@
-import React, { useEffect, useRef } from 'react';
-import APIAdapter, { RedirectData } from '../adapters/APIAdapter';
-import Player, { playerKeys } from '../adapters/Player';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useRef } from "react";
+import APIAdapter, { RedirectData } from "../adapters/APIAdapter";
+import Player, { playerKeys } from "../adapters/Player";
+import { useNavigate } from "react-router-dom";
 
 interface PlayersDataTableProps {
   playersData: Player[];
@@ -10,7 +10,12 @@ interface PlayersDataTableProps {
   setModalText: (text: string) => void;
 }
 
-export default function PlayersDataTable({ playersData, teamId, setModalCallback, setModalText }: PlayersDataTableProps): React.ReactElement {
+export default function PlayersDataTable({
+  playersData,
+  teamId,
+  setModalCallback,
+  setModalText,
+}: PlayersDataTableProps): React.ReactElement {
   const NEW_PLAYER_ROW_KEY = -1;
   const [playerRows, setPlayerRows] = React.useState([] as Player[]);
   const [playerInputRows, setPlayerInputRows] = React.useState([] as Player[]);
@@ -19,7 +24,11 @@ export default function PlayersDataTable({ playersData, teamId, setModalCallback
   const inputReferece = useRef(null);
   const navigate = useNavigate();
   const requestAdapter = new APIAdapter();
-  const updateInputValue = (event: React.ChangeEvent<HTMLInputElement>, index: number, parameter: string) => {
+  const updateInputValue = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    index: number,
+    parameter: string,
+  ) => {
     setPlayerInputRows((previousState) => ({
       ...previousState,
       [index]: {
@@ -30,7 +39,7 @@ export default function PlayersDataTable({ playersData, teamId, setModalCallback
   };
   const enableRowEditing = (index: number) => {
     setEditingRowKey(index);
-    if(index === NEW_PLAYER_ROW_KEY) {
+    if (index === NEW_PLAYER_ROW_KEY) {
       setNewPlayerRow({} as Player);
     } else {
       setPlayerInputRows([...playerRows]);
@@ -46,30 +55,33 @@ export default function PlayersDataTable({ playersData, teamId, setModalCallback
   };
   const handleRowUpdate = (index: number) => {
     const updatedPlayerData = new Player({
-      ...playerInputRows[index], id: playerRows[index].id,
+      ...playerInputRows[index],
+      id: playerRows[index].id,
     });
     try {
-      requestAdapter.updatePlayer(teamId, updatedPlayerData).then((data: RedirectData) => {
-        if('redirect' in data) {
-          navigate(data.redirect);
-      } else {
-        disableRowEditing();
-        updatePlayerRow(index);
-      }
-      });
+      requestAdapter
+        .updatePlayer(teamId, updatedPlayerData)
+        .then((data: RedirectData) => {
+          if ("redirect" in data) {
+            navigate(data.redirect);
+          } else {
+            disableRowEditing();
+            updatePlayerRow(index);
+          }
+        });
     } catch (error) {
       alert(error);
     }
   };
   const addPlayerRow = (newId: number) => {
-    const newPlayerData = new Player({...newPlayerRow, id: newId});
+    const newPlayerData = new Player({ ...newPlayerRow, id: newId });
     setPlayerRows((previousState) => [newPlayerData, ...previousState]);
     setPlayerInputRows((previousState) => [...previousState, newPlayerData]);
   };
   const handleNewPlayer = () => {
     try {
       requestAdapter.addPlayer(teamId, newPlayerRow).then((data) => {
-        if (typeof data === 'object' && 'redirect' in data) {
+        if (typeof data === "object" && "redirect" in data) {
           navigate(data.redirect);
         } else {
           disableRowEditing();
@@ -80,7 +92,10 @@ export default function PlayersDataTable({ playersData, teamId, setModalCallback
       alert(error);
     }
   };
-  const updateNewPlayerInput = (event: React.ChangeEvent<HTMLInputElement>, parameter: string) => {
+  const updateNewPlayerInput = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    parameter: string,
+  ) => {
     setNewPlayerRow({
       ...newPlayerRow,
       [parameter]: event.target.value,
@@ -89,10 +104,12 @@ export default function PlayersDataTable({ playersData, teamId, setModalCallback
   const removePlayer = (index: number) => {
     try {
       requestAdapter.removePlayer(teamId, playerRows[index].id).then((data) => {
-        if (typeof data === 'object' && 'redirect' in data) {
+        if (typeof data === "object" && "redirect" in data) {
           navigate(data.redirect);
         } else if (data) {
-          setPlayerRows((previousState) => previousState.filter((_, i) => i !== index));
+          setPlayerRows((previousState) =>
+            previousState.filter((_, i) => i !== index),
+          );
         }
       });
     } catch (error) {
@@ -101,9 +118,12 @@ export default function PlayersDataTable({ playersData, teamId, setModalCallback
   };
   const setModal = (index: number) => {
     setModalCallback(() => () => removePlayer(index));
-    setModalText(`Are you sure you want to remove player ${playerRows[index].name}?`);
+    setModalText(
+      `Are you sure you want to remove player ${playerRows[index].name}?`,
+    );
   };
-  const handleInputFocus = (event: React.ChangeEvent<HTMLInputElement> ) => event.target.select();
+  const handleInputFocus = (event: React.ChangeEvent<HTMLInputElement>) =>
+    event.target.select();
   useEffect(() => {
     inputReferece.current?.focus();
   }, [editingRowKey]);
@@ -112,30 +132,38 @@ export default function PlayersDataTable({ playersData, teamId, setModalCallback
     setPlayerInputRows([...playersData]);
   }, [playersData]);
   return (
-    <div style={{ height: '410px', overflow: 'auto' }}>
+    <div style={{ height: "410px", overflow: "auto" }}>
       <table className="table" id="players-table">
         <thead>
           <tr className="table-dark" id="add-player-row">
-            {
-              playerKeys.map((parameter) => (
-                <td className="text-warning" key={parameter}>
-                  {parameter}
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={newPlayerRow[parameter]}
-                    style={{ display: editingRowKey === NEW_PLAYER_ROW_KEY ? 'inline' : 'none' }}
-                    onChange={(event) => updateNewPlayerInput(event, parameter)}
-                  />
-                </td>
-              ))
-            }
-            <td style={{ display: 'flex', minHeight: '80px', paddingTop: '20px' }}>
+            {playerKeys.map((parameter) => (
+              <td className="text-warning" key={parameter}>
+                {parameter}
+                <input
+                  type="text"
+                  className="form-control"
+                  value={newPlayerRow[parameter]}
+                  style={{
+                    display:
+                      editingRowKey === NEW_PLAYER_ROW_KEY ? "inline" : "none",
+                  }}
+                  onChange={(event) => updateNewPlayerInput(event, parameter)}
+                />
+              </td>
+            ))}
+            <td
+              style={{ display: "flex", minHeight: "80px", paddingTop: "20px" }}
+            >
               <button
                 type="button"
                 className="btn btn-shadow btn-outline-warning"
                 id="add-player-button"
-                style={{ maxHeight: '40px', minWidth: '120px', display: editingRowKey !== NEW_PLAYER_ROW_KEY ? 'inline' : 'none' }}
+                style={{
+                  maxHeight: "40px",
+                  minWidth: "120px",
+                  display:
+                    editingRowKey !== NEW_PLAYER_ROW_KEY ? "inline" : "none",
+                }}
                 onClick={() => enableRowEditing(NEW_PLAYER_ROW_KEY)}
               >
                 new player
@@ -144,7 +172,13 @@ export default function PlayersDataTable({ playersData, teamId, setModalCallback
                 type="button"
                 className="btn btn-shadow btn-outline-success"
                 id="confirm-player-button"
-                style={{ maxHeight: '40px', minWidth: '50px', marginRight: '10px', display: editingRowKey === NEW_PLAYER_ROW_KEY ? 'inline' : 'none' }}
+                style={{
+                  maxHeight: "40px",
+                  minWidth: "50px",
+                  marginRight: "10px",
+                  display:
+                    editingRowKey === NEW_PLAYER_ROW_KEY ? "inline" : "none",
+                }}
                 onClick={() => handleNewPlayer()}
               >
                 Add
@@ -153,7 +187,12 @@ export default function PlayersDataTable({ playersData, teamId, setModalCallback
                 type="button"
                 className="btn btn-shadow btn-outline-secondary"
                 id="cancel-player-button"
-                style={{ maxHeight: '40px', minWidth: '75px', display: editingRowKey === NEW_PLAYER_ROW_KEY ? 'inline' : 'none' }}
+                style={{
+                  maxHeight: "40px",
+                  minWidth: "75px",
+                  display:
+                    editingRowKey === NEW_PLAYER_ROW_KEY ? "inline" : "none",
+                }}
                 onClick={disableRowEditing}
               >
                 Cancel
@@ -162,64 +201,93 @@ export default function PlayersDataTable({ playersData, teamId, setModalCallback
           </tr>
           {
             <>
-            {
-            playerRows.map((player, index) => (
-              <tr className="table-dark table-bordered" key={player.id} data-id={player.id}>
-                {
-                  playerKeys.map((parameter, keysIndex) => (
+              {playerRows.map((player, index) => (
+                <tr
+                  className="table-dark table-bordered"
+                  key={player.id}
+                  data-id={player.id}
+                >
+                  {playerKeys.map((parameter, keysIndex) => (
                     <td key={`${parameter}-${player.id}`}>
-                      <span style={{ display: editingRowKey === index ? 'none' : 'inline' }}>{player[parameter]}</span>
+                      <span
+                        style={{
+                          display: editingRowKey === index ? "none" : "inline",
+                        }}
+                      >
+                        {player[parameter]}
+                      </span>
                       <input
-                        ref={editingRowKey === index  && keysIndex === 0 ? inputReferece : null}
+                        ref={
+                          editingRowKey === index && keysIndex === 0
+                            ? inputReferece
+                            : null
+                        }
                         onFocus={handleInputFocus}
                         type="text"
                         className="form-control"
                         value={playerInputRows[index][parameter]}
                         onChange={(e) => updateInputValue(e, index, parameter)}
-                        style={{ display: editingRowKey === index ? 'inline' : 'none' }}
-                        onKeyDown={(e) => (e.key === 'Enter' ? handleRowUpdate(index) : null)}
+                        style={{
+                          display: editingRowKey === index ? "inline" : "none",
+                        }}
+                        onKeyDown={(e) =>
+                          e.key === "Enter" ? handleRowUpdate(index) : null
+                        }
                       />
                     </td>
-                  ))
-                }
-                <td className="buttons-column" style={{ display: 'flex', minHeight: '42px' }}>
-                  <button
-                    type="button"
-                    className="btn btn-outline-warning edit"
-                    onClick={() => enableRowEditing(index)}
-                    style={{ marginRight: '10px', display: editingRowKey !== index ? 'inline' : 'none' }}
+                  ))}
+                  <td
+                    className="buttons-column"
+                    style={{ display: "flex", minHeight: "42px" }}
                   >
-                    edit
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-outline-danger remove"
-                    data-bs-toggle="modal" data-bs-target="#confirmationModal"
-                    style={{ display: editingRowKey !== index ? 'inline' : 'none' }}
-                    onClick={() => { setModal(index); }}
-                  >
-                    remove
-                  </button>
-                  <button type="button"
-                    className="btn btn-outline-success apply"
-                    onClick={() => handleRowUpdate(index)}
-                    style={{ display: editingRowKey === index ? 'inline' : 'none', marginRight: '10px' }}
-                  >
-                    apply
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-outline-secondary cancel"
-                    onClick={() => disableRowEditing()}
-                    style={{ display: editingRowKey === index ? 'inline' : 'none' }}
-                  >
-                    cancel
-                  </button>
-                </td>
-              </tr>
-              ))
-              }
-             </>
+                    <button
+                      type="button"
+                      className="btn btn-outline-warning edit"
+                      onClick={() => enableRowEditing(index)}
+                      style={{
+                        marginRight: "10px",
+                        display: editingRowKey !== index ? "inline" : "none",
+                      }}
+                    >
+                      edit
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-outline-danger remove"
+                      data-bs-toggle="modal"
+                      data-bs-target="#confirmationModal"
+                      style={{
+                        display: editingRowKey !== index ? "inline" : "none",
+                      }}
+                      onClick={() => setModal(index)}
+                    >
+                      remove
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-outline-success apply"
+                      onClick={() => handleRowUpdate(index)}
+                      style={{
+                        display: editingRowKey === index ? "inline" : "none",
+                        marginRight: "10px",
+                      }}
+                    >
+                      apply
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-outline-secondary cancel"
+                      onClick={() => disableRowEditing()}
+                      style={{
+                        display: editingRowKey === index ? "inline" : "none",
+                      }}
+                    >
+                      cancel
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </>
           }
         </thead>
       </table>
