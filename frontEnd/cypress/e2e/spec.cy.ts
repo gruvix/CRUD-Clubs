@@ -2,10 +2,10 @@
 /* eslint-disable cypress/unsafe-to-chain-command */
 /// <reference types="cypress" />
 
-import { apiRequestPaths, webAppPaths } from "../../src/paths";
+import { BASE_API_URL, apiRequestPaths, webAppPaths } from "../../src/paths";
 
 const TEST_USER = 'cypress';
-const BASE_URL = 'http://localhost:8080';
+const WEB_APP_BASE_URL = 'http://localhost:8080';
 const MODAL_APPEAR_DELAY = 500;
 const TEST_TEAM_ID = 57;
 const TEST_TEAM_PATH = webAppPaths.team(TEST_TEAM_ID);
@@ -31,7 +31,7 @@ function customCrestPath(teamId: number | string, fileExtension: string) {
 
 describe('test login', () => {
   beforeEach(() => {
-    cy.visit(BASE_URL);
+    cy.visit(WEB_APP_BASE_URL);
   });
 
   it('should show an error indicating that the username may only contain letters', () => {
@@ -53,7 +53,7 @@ describe('test login', () => {
 
 describe('test teams view page', () => {
   beforeEach(() => {
-    cy.visit(BASE_URL);
+    cy.visit(WEB_APP_BASE_URL);
     cy.intercept('POST', LOGIN_PATH).as('login');
     cy.get('#username').type(TEST_USER).get('#enter-page-button').click();
     cy.wait('@login');
@@ -85,7 +85,7 @@ describe('test teams view page', () => {
 });
 describe('test the team editor page with the first team', () => {
   beforeEach(() => {
-    cy.visit(BASE_URL);
+    cy.visit(WEB_APP_BASE_URL);
     cy.intercept('POST', LOGIN_PATH).as('login');
     cy.intercept('GET', apiRequestPaths.teams).as('teams');
     cy.get('#username').type(TEST_USER).get('#enter-page-button').click();
@@ -108,7 +108,7 @@ describe('test the team editor page with the first team', () => {
           cy.wrap($applyButton[index]).click();
         });
     });
-    cy.visit(BASE_URL).get('.team-card-title').first().should('contain', randomString);
+    cy.visit(WEB_APP_BASE_URL).get('.team-card-title').first().should('contain', randomString);
     cy.get('.edit').first().click();
     cy.get('#team-table span').each(($spanField) => {
       cy.wrap($spanField).should('contain', randomString);
@@ -121,7 +121,7 @@ describe('test the team editor page with the first team', () => {
     cy.get('#team-table input').first().type(randomString).get('#team-table .apply')
       .first()
       .click();
-    cy.visit(BASE_URL + TEST_TEAM_PATH);
+    cy.visit(WEB_APP_BASE_URL + TEST_TEAM_PATH);
     cy.get('#team-table span').first().should('contain', randomString);
     cy.get('#reset-team-button').click().wait(MODAL_APPEAR_DELAY);
     cy.get('#confirmation-modal-button').click();
@@ -141,7 +141,7 @@ describe('test the team editor page with the first team', () => {
 });
 describe('test the player editor with the first team', () => {
   beforeEach(() => {
-    cy.visit(BASE_URL);
+    cy.visit(WEB_APP_BASE_URL);
     cy.intercept('POST', LOGIN_PATH).as('login');
     cy.get('#username').type(TEST_USER).get('#enter-page-button').click();
     cy.wait('@login');
@@ -167,7 +167,7 @@ describe('test the player editor with the first team', () => {
 
           cy.get(playerGetString).find('.apply')
             .click();
-          cy.visit(BASE_URL + TEST_TEAM_PATH).wait('@editPlayer');
+          cy.visit(WEB_APP_BASE_URL + TEST_TEAM_PATH).wait('@editPlayer');
           cy.get(playerGetString).find('span')
             .each(($spanField, index) => {
               cy.wrap($spanField).should('contain', randomStrings[index]);
@@ -222,7 +222,7 @@ describe('test the player editor with the first team', () => {
 });
 describe('test add team', () => {
   beforeEach(() => {
-    cy.visit(BASE_URL);
+    cy.visit(WEB_APP_BASE_URL);
     cy.intercept('POST', LOGIN_PATH).as('login');
     cy.get('#username').type(TEST_USER).get('#enter-page-button').click();
     cy.wait('@login');
