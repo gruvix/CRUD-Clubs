@@ -11,12 +11,14 @@ import TeamAdder from './components/TeamAdder/TeamAdder';
 import TeamsList from './components/TeamsList/TeamsList';
 import Error from './components/Error/Error';
 import NotFound from './components/NotFound';
+import UserChecker from './components/Home/UserChecker';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path={webAppPaths.home} element={<Home />} />
+        <Route path={webAppPaths.user} element={<UserChecker />} />
         <Route path={webAppPaths.teams} element={<TeamsList />} />
         <Route path={webAppPaths.team(':teamId')} element={<TeamEditor />} />
         <Route path={webAppPaths.addTeam} element={<TeamAdder />} />
