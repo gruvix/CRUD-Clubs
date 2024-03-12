@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import LoginButton from "./LoginButton";
 import APIAdapter from "../adapters/APIAdapter";
 
-export default function UserChecker() {
+export default function Login() {
   const request = new APIAdapter();
   const navigate = useNavigate();
 
@@ -18,6 +18,7 @@ export default function UserChecker() {
   };
 
   useEffect(() => {
+    console.log('checking login status...');
     checkLogin();
   }, []);
 
