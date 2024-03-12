@@ -19,7 +19,7 @@ export interface RedirectData {
 }
 
 export default class APIAdapter {
-  async getTeamData(teamId: number | string) {
+  async getTeam(teamId: number | string) {
     const response = await fetch(apiRequestPaths.team(teamId), {
       method: 'GET',
       credentials: 'include',
@@ -43,7 +43,6 @@ export default class APIAdapter {
       throw error;
     }
   }
-
   async updateTeam(teamId: number | string, newData: {[key: string]: (string | number)[]}) {
     const response = await fetch(apiRequestPaths.team(teamId), {
       method: 'PATCH',
@@ -68,8 +67,7 @@ export default class APIAdapter {
       throw error;
     }
   }
-
-  async getTeamsData() {
+  async getTeams() {
     const response = await fetch(apiRequestPaths.teams, {
       method: 'get',
       credentials: 'include',
@@ -95,7 +93,6 @@ export default class APIAdapter {
       throw error;
     }
   }
-
   async deleteTeam(teamId: number | string) {
     const response = await fetch(apiRequestPaths.team(teamId), {
       method: 'DELETE',
@@ -115,7 +112,6 @@ export default class APIAdapter {
       throw error;
     }
   }
-
   async resetTeamsList() {
     const response = await fetch(apiRequestPaths.resetAll, {
       method: 'PUT',
@@ -135,7 +131,6 @@ export default class APIAdapter {
       throw error;
     }
   }
-
   async resetTeam(teamId: number | string) {
     const response = await fetch(apiRequestPaths.resetTeam(teamId), {
       method: 'PUT',
@@ -155,7 +150,6 @@ export default class APIAdapter {
       throw error;
     }
   }
-
   async updatePlayer(teamId: number | string, playerData: Player) {
     const response = await fetch(apiRequestPaths.player(teamId), {
       method: 'PATCH',
@@ -179,7 +173,6 @@ export default class APIAdapter {
       throw error;
     }
   }
-
   async addPlayer(teamId: number | string, playerData: Player) {
     const response = await fetch(apiRequestPaths.player(teamId), {
       method: 'POST',
@@ -203,7 +196,6 @@ export default class APIAdapter {
       throw error;
     }
   }
-
   async removePlayer(teamId: number, playerId: number) {
     const response = await fetch(apiRequestPaths.player(teamId), {
       method: 'DELETE',
@@ -226,7 +218,6 @@ export default class APIAdapter {
       throw error;
     }
   }
-
   async addTeam(teamParameters: TeamParameters, players: Player[], imageFile: File) {
     const squad = [] as object[];
     Object.keys(players).forEach((player, index) => {
@@ -255,7 +246,6 @@ export default class APIAdapter {
       throw error;
     }
   }
-
   async updateTeamCrest(teamId: number | string, image: File) {
     const formData = new FormData();
     formData.append('image', image);

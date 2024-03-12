@@ -28,7 +28,7 @@ export default function TeamsList(): React.ReactElement {
   const updateTeamsData = async () => {
     try {
       setIsLoading(true);
-      request.getTeamsData().then((data: TeamsData | RedirectData) => {
+      request.getTeams().then((data: TeamsData | RedirectData) => {
         if ('redirect' in data) {
           navigate(data.redirect);
         } else {
