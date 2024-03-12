@@ -3,26 +3,33 @@ import { webAppPaths } from "../../paths";
 import { useNavigate } from "react-router-dom";
 import LoginButton from "./LoginButton";
 import APIAdapter from "../adapters/APIAdapter";
+import LoadingSpinner from "../shared/LoadingSpinner";
 
 export default function Login() {
-  const request = new APIAdapter();
+  const [isLoading, setIsLoading] = React.useState(true);
   const navigate = useNavigate();
+  const request = new APIAdapter();
 
-  const checkLogin = async () => {
+  const handleLoginCheck = async () => {
     try {
       const isLoggedIn = await request.getUserStatus();
       if (isLoggedIn) navigate(webAppPaths.teams);
+      else setIsLoading(false);
     } catch {
       alert("Error: could not check login status");
     }
   };
-
   useEffect(() => {
-    console.log('checking login status...');
-    checkLogin();
+    handleLoginCheck();
   }, []);
 
-  return (
+  return isLoading ? (
+    <div className="d-flex justify-content-center">
+      <LoadingSpinner
+        style={{ marginTop: "20%", width: "15rem", height: "15rem" }}
+      />
+    </div>
+  ) : (
     <div className="container">
       <div className="row justify-content-center align-items-center">
         <div className="col-md-6">
