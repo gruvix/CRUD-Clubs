@@ -33,7 +33,7 @@ app.use(session({
 }));
 app.use(cors(corsOptions));
 app.use((req, res, next) => {
-  const allowedPaths = /^\/user(?!\/(login))(\/\w+)*/;
+  const allowedPaths = /^\/user(?!\/(login|status))(\/\w+)*/;
   if (allowedPaths.test(req.path)) {
     ensureLoggedIn(req, res, next);
   } else {
