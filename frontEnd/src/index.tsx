@@ -17,8 +17,8 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path={webAppPaths.home} element={<Home />} />
-        <Route path={webAppPaths.user} element={<UserChecker />} />
+        <Route path={webAppPaths.home} element={<Navigate to={webAppPaths.user} />} />
+        <Route path={webAppPaths.user} element={<Login />} />
         <Route path={webAppPaths.teams} element={<TeamsList />} />
         <Route path={webAppPaths.team(':teamId')} element={<TeamEditor />} />
         <Route path={webAppPaths.addTeam} element={<TeamAdder />} />
