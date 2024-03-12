@@ -32,7 +32,7 @@ export default function ResetTeamButton({ hasDefault, onClickCallback}: ResetTea
         id="reset-team-button"
         className={buttonClassName}
         style={{ marginTop: '25px', pointerEvents: 'auto' }}
-        data-bs-toggle="modal"
+        data-bs-toggle={hasDefault? "modal" : null}
         data-bs-target="#confirmationModal"
         data-toggle="tooltip"
         data-placement="bottom"
