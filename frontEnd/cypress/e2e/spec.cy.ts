@@ -25,6 +25,9 @@ function generateRandomString(length = 5) {
 
   return result;
 }
+function customCrestPath(teamId: number, fileExtension: string) {
+  return `${BASE_URL}/user/customCrest/${teamId}/${teamId}.${fileExtension}`;
+} 
 
 describe('test login', () => {
   beforeEach(() => {
@@ -257,7 +260,7 @@ describe('test add team', () => {
       cy.wrap($spanField).should('contain', playerFields[index]);
     });
     cy.get('#team-id').invoke('val').then((teamId) => {
-      const expectedNewTeamImgSrc = `${BASE_URL}${paths.crest}/${teamId}/${teamId}.jpg`;
+      const expectedNewTeamImgSrc = customCrestPath(teamId, 'jpg');
       cy.get('#team-crest').should('have.attr', 'src', expectedNewTeamImgSrc);
     });
     cy.get('#reset-team-button').should('has.class', 'disabled');
