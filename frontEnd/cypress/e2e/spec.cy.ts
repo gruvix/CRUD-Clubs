@@ -108,7 +108,7 @@ describe('test the team editor page with the first team', () => {
           cy.wrap($applyButton[index]).click();
         });
     });
-    cy.visit(WEB_APP_BASE_URL).get('.team-card-title').first().should('contain', randomString);
+    cy.visit(WEB_APP_BASE_URL + webAppPaths.teams).get('.team-card-title').first().should('contain', randomString);
     cy.get('.edit').first().click();
     cy.get('#team-table span').each(($spanField) => {
       cy.wrap($spanField).should('contain', randomString);
