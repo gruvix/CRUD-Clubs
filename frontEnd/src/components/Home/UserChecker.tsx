@@ -9,7 +9,7 @@ export default function UserChecker() {
   const navigate = useNavigate();
 
   const checkLogin = async () => {
-    try{ 
+    try {
       const isLoggedIn = await request.getUserStatus();
       if (isLoggedIn) navigate(webAppPaths.teams);
     } catch {
