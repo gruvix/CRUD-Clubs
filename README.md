@@ -110,9 +110,8 @@ There's a disabled test for removing all players from a team, but it lacks any a
 
 ### Limited Security:
 
-    The app lacks mechanisms to prevent unauthorized access or data manipulation:
-        User requests are not validated to ensure they only modify their own data.
-        Password protection is not implemented, making accounts vulnerable to unauthorized access.
+    The app lacks mechanisms to prevent unauthorized access or data manipulation since 
+    password protection is not implemented, making accounts vulnerable to unauthorized access.
 
 ### Inconsistent Error Handling:
 
