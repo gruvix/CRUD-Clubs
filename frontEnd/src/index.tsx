@@ -21,7 +21,7 @@ function App() {
         <Route path={webAppPaths.teams} element={<TeamsList />} />
         <Route path={webAppPaths.team(":teamId")} element={<TeamEditor />} />
         <Route path={webAppPaths.addTeam} element={<TeamAdder />} />
-        <Route path={webAppPaths.error} element={<Error />} />
+        <Route path={webAppPaths.error(":errorCode")} element={<Error />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
