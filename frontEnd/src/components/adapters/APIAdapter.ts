@@ -1,8 +1,8 @@
-import { BASE_API_URL, apiRequestPaths, webAppPaths } from '../../paths';
-import validateUsername from '../shared/usernameValidation';
-import Player from './Player';
-import Team, { TeamParameters } from './Team';
-import TeamCard from './TeamCard';
+import { BASE_API_URL, apiRequestPaths, webAppPaths } from "../../paths";
+import validateUsername from "../shared/usernameValidation";
+import Player from "./Player";
+import Team, { TeamParameters } from "./Team";
+import TeamCard from "./TeamCard";
 
 function responseRedirect(status: number) {
   if (status === 401) {
@@ -25,10 +25,10 @@ export default class APIAdapter {
       throw new Error(error);
     }
     const response = await fetch(apiRequestPaths.login, {
-      method: 'POST',
-      credentials: 'include',
+      method: "POST",
+      credentials: "include",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ username }),
     });
@@ -38,8 +38,8 @@ export default class APIAdapter {
   }
   async getUserStatus() {
     const response = await fetch(apiRequestPaths.userStatus, {
-      method: 'GET',
-      credentials: 'include',
+      method: "GET",
+      credentials: "include",
     });
     try {
       if (!response.ok) {
@@ -49,17 +49,17 @@ export default class APIAdapter {
     } catch (error) {
       const redirect = responseRedirect(response.status);
       if (redirect) {
-        return false;//this function works different to other adapter unAuthorized status returns, since its job is to get the login status
+        return false; //this function works different to other adapter unAuthorized status returns, since its job is to get the login status
       }
       throw error;
     }
   }
   async getTeam(teamId: number | string) {
     const response = await fetch(apiRequestPaths.team(teamId), {
-      method: 'GET',
-      credentials: 'include',
+      method: "GET",
+      credentials: "include",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     });
 
@@ -78,12 +78,15 @@ export default class APIAdapter {
       throw error;
     }
   }
-  async updateTeam(teamId: number | string, newData: {[key: string]: (string | number)[]}) {
+  async updateTeam(
+    teamId: number | string,
+    newData: { [key: string]: (string | number)[] },
+  ) {
     const response = await fetch(apiRequestPaths.team(teamId), {
-      method: 'PATCH',
-      credentials: 'include',
+      method: "PATCH",
+      credentials: "include",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(newData),
     });
@@ -104,10 +107,10 @@ export default class APIAdapter {
   }
   async getTeams() {
     const response = await fetch(apiRequestPaths.teams, {
-      method: 'get',
-      credentials: 'include',
+      method: "get",
+      credentials: "include",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     });
     try {
@@ -115,7 +118,10 @@ export default class APIAdapter {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      const teamsData = { teams: {} as TeamCard[], username: data.username as string };
+      const teamsData = {
+        teams: {} as TeamCard[],
+        username: data.username as string,
+      };
       Object.keys(data.teams).forEach((key) => {
         teamsData.teams[Number(key)] = new TeamCard(data.teams[key]);
       });
@@ -130,8 +136,8 @@ export default class APIAdapter {
   }
   async deleteTeam(teamId: number | string) {
     const response = await fetch(apiRequestPaths.team(teamId), {
-      method: 'DELETE',
-      credentials: 'include',
+      method: "DELETE",
+      credentials: "include",
     });
     try {
       if (!response.ok) {
@@ -149,8 +155,8 @@ export default class APIAdapter {
   }
   async resetTeamsList() {
     const response = await fetch(apiRequestPaths.resetAll, {
-      method: 'PUT',
-      credentials: 'include',
+      method: "PUT",
+      credentials: "include",
     });
     try {
       if (!response.ok) {
@@ -168,8 +174,8 @@ export default class APIAdapter {
   }
   async resetTeam(teamId: number | string) {
     const response = await fetch(apiRequestPaths.resetTeam(teamId), {
-      method: 'PUT',
-      credentials: 'include',
+      method: "PUT",
+      credentials: "include",
     });
     try {
       if (!response.ok) {
@@ -187,10 +193,10 @@ export default class APIAdapter {
   }
   async updatePlayer(teamId: number | string, playerData: Player) {
     const response = await fetch(apiRequestPaths.player(teamId), {
-      method: 'PATCH',
-      credentials: 'include',
+      method: "PATCH",
+      credentials: "include",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(playerData),
     });
@@ -210,10 +216,10 @@ export default class APIAdapter {
   }
   async addPlayer(teamId: number | string, playerData: Player) {
     const response = await fetch(apiRequestPaths.player(teamId), {
-      method: 'POST',
-      credentials: 'include',
+      method: "POST",
+      credentials: "include",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(playerData),
     });
@@ -233,10 +239,10 @@ export default class APIAdapter {
   }
   async removePlayer(teamId: number, playerId: number) {
     const response = await fetch(apiRequestPaths.player(teamId), {
-      method: 'DELETE',
-      credentials: 'include',
+      method: "DELETE",
+      credentials: "include",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ playerId }),
     });
@@ -253,18 +259,22 @@ export default class APIAdapter {
       throw error;
     }
   }
-  async addTeam(teamParameters: TeamParameters, players: Player[], imageFile: File) {
+  async addTeam(
+    teamParameters: TeamParameters,
+    players: Player[],
+    imageFile: File,
+  ) {
     const squad = [] as object[];
     Object.keys(players).forEach((player, index) => {
       squad.push({ ...players[Number(player)], id: index });
     });
     const teamData = { ...teamParameters, squad };
     const formData = new FormData();
-    formData.append('image', imageFile);
-    formData.append('teamData', JSON.stringify(teamData));
+    formData.append("image", imageFile);
+    formData.append("teamData", JSON.stringify(teamData));
     const response = await fetch(apiRequestPaths.addTeam, {
-      method: 'POST',
-      credentials: 'include',
+      method: "POST",
+      credentials: "include",
       body: formData,
     });
     try {
@@ -283,17 +293,17 @@ export default class APIAdapter {
   }
   async updateTeamCrest(teamId: number | string, image: File) {
     const formData = new FormData();
-    formData.append('image', image);
+    formData.append("image", image);
     const response = await fetch(apiRequestPaths.updateCrest(teamId), {
-      method: 'PUT',
-      credentials: 'include',
+      method: "PUT",
+      credentials: "include",
       body: formData,
     });
     try {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      const newCrestUrl = BASE_API_URL + await response.json();
+      const newCrestUrl = BASE_API_URL + (await response.json());
       return newCrestUrl;
     } catch (error) {
       const redirect = responseRedirect(response.status);
