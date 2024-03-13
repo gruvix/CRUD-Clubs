@@ -27,7 +27,7 @@ export default class Team {
     };
     this.teamParameters = {
       name: teamData.name,
-      area: typeof teamData.area === 'object' ? teamData.area.name : teamData.area,
+      area: teamData.area,
       address: teamData.address,
       phone: teamData.phone,
       website: teamData.website,
