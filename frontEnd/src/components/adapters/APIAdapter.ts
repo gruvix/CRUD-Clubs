@@ -1,4 +1,3 @@
-/* eslint-disable class-methods-use-this */
 import { BASE_API_URL, apiRequestPaths, webAppPaths } from '../../paths';
 import validateUsername from '../shared/usernameValidation';
 import Player from './Player';
