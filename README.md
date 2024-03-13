@@ -19,32 +19,48 @@
 
 ## Technologies
 
-    Express
-    Multer
-    jQuery
-    Bootstrap
-    Cypress
-    session-file-store
-    body-parser
+    FrontEnd:
+    - React
+    - Bootstrap
+    - WebPack
+    - TypeScript
+
+    BackEnd:
+    - Express
+    - Multer
+    - session-file-store
+    - body-parser
+
+    Tests:
+    - Cypress
+    - Jest
+
+    Other:
+    - Eslint
+    - Prettier
     
 ## How to use
 
+-Have [Node.js](https://nodejs.org/en) installed
+
 -Install dependencies `npm install`
 
--Run the server `npm run dev:templateNodemon`
+-Run the server:
+    If running from Windows: `npm run startWindows`
+    If running from Linux: `npm run startLinux` (uses gnome, it's currently un-tested, feedback is appreciated)
 
-The server will run on port 8000.
+The server will run on port 8080.
 
--Access from a web browser to `localhost:8000`
+-Access from a web browser to `localhost:8080`
 
--Login with any name with only letters
+-Login with any username
 
 -Do stuff, see [Team and Player Management](#team-management)
 
 For test runs see [Tests](#tests)
 
 ## Access URLs
-Main address: `localhost:8000`
+Main address: `localhost:8080`
 
 Homepage: `/` (GET)
 
@@ -72,11 +88,9 @@ Error page: `/error` (GET)
 
 ## Tests <a name="tests"></a>
 
--Install dependencies `npm install`
+-Run the servers
 
--Run the server `npm run dev:templateNodemon`
-
--Run cypress `npm run dev:cypress`
+-Run cypress `npm run test`
 
 -Select end to end testing
 
