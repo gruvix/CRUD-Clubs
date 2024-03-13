@@ -142,7 +142,7 @@ export default function PlayersDataTable({
                 <input
                   type="text"
                   className="form-control"
-                  value={newPlayerRow[parameter]}
+                  value={newPlayerRow[parameter]? newPlayerRow[parameter] : ""}
                   style={{
                     display:
                       editingRowKey === NEW_PLAYER_ROW_KEY ? "inline" : "none",
@@ -225,7 +225,7 @@ export default function PlayersDataTable({
                         onFocus={handleInputFocus}
                         type="text"
                         className="form-control"
-                        value={playerInputRows[index][parameter]}
+                        value={playerInputRows[index][parameter]? playerInputRows[index][parameter] : ""}
                         onChange={(e) => updateInputValue(e, index, parameter)}
                         style={{
                           display: editingRowKey === index ? "inline" : "none",

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import APIAdapter from "../adapters/APIAdapter";
-import { TeamParameters } from "../adapters/Team";
+import { TeamParameters, teamParametersKeys } from "../adapters/Team";
 import { useNavigate } from "react-router-dom";
 
 interface TeamDataTableProps {
@@ -29,8 +29,7 @@ export default function TeamDataTable({
     setEditingRowKey(null);
   };
   const updateTeamRow = (key: string) => {
-    const newState = { ...rowsTeamData };
-    newState[key] = inputValue[key];
+    const newState = { ...rowsTeamData, [key]: inputValue[key] };
     setRowsTeamData(newState);
   };
   const handleRowUpdate = (key: string) => {
@@ -82,7 +81,7 @@ export default function TeamDataTable({
                   onFocus={handleInputFocus}
                   type="text"
                   className="form-control"
-                  value={inputValue[key]}
+                  value={inputValue[key]? inputValue[key] : ""}
                   style={{ display: editingRowKey === key ? "inline" : "none" }}
                   id={`input-field-${key}`}
                   onChange={(e) =>
