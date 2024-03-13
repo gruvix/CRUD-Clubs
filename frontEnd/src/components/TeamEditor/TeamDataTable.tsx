@@ -56,6 +56,7 @@ export default function TeamDataTable({
 
   useEffect(() => {
     setRowsTeamData(teamData);
+    setInputValue({ ...rowsTeamData });
   }, [teamData]);
 
   return (
