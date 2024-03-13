@@ -46,8 +46,10 @@
 -Install dependencies `npm install`
 
 -Run the server:
-    If running from Windows: `npm run startWindows`
-    If running from Linux: `npm run startLinux` (uses gnome, it's currently un-tested, feedback is appreciated)
+
+If running from Windows: `npm run startWindows`
+
+If running from Linux: `npm run startLinux` (uses gnome, it's currently un-tested, feedback is appreciated)
 
 The server will run on port 8080.
 
