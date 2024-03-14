@@ -1,3 +1,5 @@
+import { NextFunction, Request, Response } from "express";
+
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
@@ -30,7 +32,7 @@ app.use(session({
   cookie: { sameSite: 'none', secure: false },
 }));
 app.use(cors(corsOptions));
-app.use((req, res, next) => {
+app.use((req: Request, res: Response, next: NextFunction) => {
   const allowedPaths = /^\/user(?!\/(login|status))(\/\w+)*/;
   if (allowedPaths.test(req.path)) {
     ensureLoggedIn(req, res, next);
