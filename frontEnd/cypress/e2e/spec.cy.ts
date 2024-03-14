@@ -26,6 +26,13 @@ function generateRandomString(length = 5) {
 
   return result;
 }
+function filterTeams(filterOption: string = "Default teams", ) {
+  cy.get("#search-options-button").click();
+  cy.get("#search-options").contains(filterOption).click({ force: true });
+}
+function selectFirstVisibleTeam() {
+  cy.get(".card").filter(":visible").find(".edit").first().click();
+}
 function customCrestPath(teamId: number | string, fileExtension: string) {
   return `${BASE_API_URL}/user/customCrest/${teamId}/${teamId}.${fileExtension}`;
 }
