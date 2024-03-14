@@ -21,7 +21,6 @@ const corsOptions = {
   origin: CLIENT_BASE_URL,
   credentials: true,
 };
-//app.use(express.static(path.join(__dirname, 'src', 'userData')));
 const fileStoreOptions = { path: path.join(__dirname, 'src', 'sessions'), ttl: 60 * 60 * 24 * 7, logFn: () => {} };
 app.use(session({
   store: new FileStore(fileStoreOptions),
