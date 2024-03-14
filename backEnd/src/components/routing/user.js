@@ -1,5 +1,7 @@
 const express = require('express');
 const { validateUsername } = require('../auth');
+const { validateFile } = require('../utils');
+const { getUserTeamsListJSONPath } = require('../userPath');
 
 const router = express.Router();
 
@@ -18,6 +20,12 @@ router.post('/login', (req, res) => {
   if (error) {
     res.status(400).send(error);
     return;
+  }
+  if (!validateFile(getUserTeamsListJSONPath(username))) {
+    console.log(`User not found, creating new user "${username}"`);
+    try {
+      createUser(username);
+    } catch (error) { res.status(500).send(error); }
   }
   req.session.username = username.toLowerCase();
   console.log(`User '${username}' logged in`);
