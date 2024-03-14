@@ -126,16 +126,19 @@ describe("test the team editor page with the first team", () => {
           cy.wrap($applyButton[index]).click();
         });
     });
-    cy.visit(WEB_APP_BASE_URL + webAppPaths.teams)
-      .get(".team-card-title")
+    cy.wait("@updateTeam");
+    cy.wait(1000);
+    cy.visit(WEB_APP_BASE_URL);
+    filterTeams();
+    cy.get(".team-card-title")
+      .filter(":visible")
       .first()
       .should("contain", randomString);
-    cy.get(".edit").first().click();
+    selectFirstVisibleTeam();
     cy.get("#team-table span").each(($spanField) => {
       cy.wrap($spanField).should("contain", randomString);
     });
   });
-
   it("edits and then resets a default team", () => {
     const randomString = generateRandomString();
     cy.get("#team-table .edit").first().click();
@@ -145,7 +148,10 @@ describe("test the team editor page with the first team", () => {
       .get("#team-table .apply")
       .first()
       .click();
-    cy.visit(WEB_APP_BASE_URL + TEST_TEAM_PATH);
+    cy.wait("@updateTeam");
+    cy.visit(WEB_APP_BASE_URL);
+    filterTeams();
+    selectFirstVisibleTeam();
     cy.get("#team-table span").first().should("contain", randomString);
     cy.get("#reset-team-button").click().wait(MODAL_APPEAR_DELAY);
     cy.get("#confirmation-modal-button").click();
