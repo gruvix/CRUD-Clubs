@@ -126,5 +126,3 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-backEnd/template-engine/private/sessions
-backEnd/template-engine/private/userData

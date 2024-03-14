@@ -3,9 +3,8 @@ const multer = require('multer');
 const {
   validateTeam, isTeamDefault, getTeam, updateTeam, deleteTeam, addTeam, hasTeamDefault,
 } = require('../teamStorage');
-const Player = require('../../models/player');
 const { storage, imageFilter } = require('../multerConfig.js');
-const TeamFullData = require('../../models/teamFullData');
+const TeamFullData = require('../models/teamFullData');
 
 const uploadImage = multer({ storage, fileFilter: imageFilter });
 const router = express.Router();

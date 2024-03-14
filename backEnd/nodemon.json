@@ -1,3 +1,3 @@
 {
-    "ignore": ["**/private/userData/**", "**/private/sessions/**"]
+    "ignore": ["**/userData/**", "**/sessions/**"]
 }

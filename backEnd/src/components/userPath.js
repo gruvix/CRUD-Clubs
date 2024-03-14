@@ -1,10 +1,12 @@
 /* eslint-disable max-len */
+const path = require('path');
 /**
  * @param {string} username - username of the user
  * @returns the path to the root folder of the user E.g. ./private/userData/USERNAME
  */
 function getUserRootPath(username) {
-  return `./private/userData/${username}`;
+  const projectRoot = __dirname;
+  return path.join(projectRoot, '..', 'userData', username);
 }
 /**
  * @param {string} username - username of the user
