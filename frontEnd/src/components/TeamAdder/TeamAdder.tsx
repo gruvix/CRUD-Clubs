@@ -90,7 +90,7 @@ export default function TeamAdder() {
                         }}
                         type="text"
                         className="form-control"
-                        value={teamParameterInputs[key]}
+                        value={teamParameterInputs[key]? teamParameterInputs[key] : ''}
                       />
                     </td>
                   </tr>
