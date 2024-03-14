@@ -5,8 +5,8 @@
   "main": "NA",
   "scripts": {
     "test": "cd frontEnd && npm run test",
-    "startLinux": "gnome-terminal --tab -- bash -c \"cd frontEnd && npm run start\" & gnome-terminal --tab -- bash -c \"cd backEnd && npm run dev:templateNodemon\"",
-    "startWindows": "start cmd /k \"cd frontEnd && npm run start\" & start cmd /k \"cd backEnd && npm run dev:templateNodemon\""
+    "startLinux": "gnome-terminal --tab -- bash -c \"cd frontEnd && npm run start\" & gnome-terminal --tab -- bash -c \"cd backEnd && npm run start\"",
+    "startWindows": "start cmd /k \"cd frontEnd && npm run start\" & start cmd /k \"cd backEnd && npm run start\""
   },
   "repository": {
     "type": "git",
