@@ -209,7 +209,11 @@ describe("test the player editor with the first default team", () => {
                 });
 
               cy.get(playerGetString).find(".apply").click();
-
+              cy.get(playerGetString)
+                .find("span")
+                .each(($spanField, index) => {
+                  cy.wrap($spanField).should("contain", randomStrings[index]);
+                });
               cy.visit(WEB_APP_BASE_URL + TEST_TEAM_PATH).wait("@editPlayer");
               cy.get(playerGetString)
                 .find("span")
