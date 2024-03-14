@@ -4,12 +4,6 @@ const { getUserRootPath, getUserTeamsFolderPath, getUserCustomCrestFolderPath } 
 
 function createUser(username) {
   try {
-    console.log(`Creating new user ${username}`);
-    console.log(getUserRootPath(username));
-    console.log(getUserTeamsFolderPath(username));
-    console.log(getUserCustomCrestFolderPath(username));
-
-
     createFolder(getUserRootPath(username));
     createFolder(getUserTeamsFolderPath(username));
     createFolder(getUserCustomCrestFolderPath(username));
