@@ -8,7 +8,6 @@ const TEST_USER = "cypress";
 const WEB_APP_BASE_URL = "http://localhost:8080";
 const MODAL_APPEAR_DELAY = 500;
 const TEST_TEAM_ID = 57;
-const TEST_TEAM_NAME = "Arsenal FC";
 const TEST_TEAM_PATH = webAppPaths.team(TEST_TEAM_ID);
 const TEST_TEAM_PLAYER_PATH = apiRequestPaths.player(TEST_TEAM_ID);
 const CUSTOM_CREST_UPLOAD_PATH = apiRequestPaths.updateCrest(TEST_TEAM_ID);
