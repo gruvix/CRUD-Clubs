@@ -1,19 +1,13 @@
-const TeamListTeam = require('./models/teamListTeam');
-const SquadTeam = require('./models/squadTeam');
-const Player = require('./models/player');
-const TeamFullData = require('./models/teamFullData');
-const {
-  getUserTeamJSONPath,
-  getUserTeamsListJSONPath,
-} = require('./userPath.js');
-const {
-  readFile,
-  writeFile,
-  deleteFile,
-} = require('./utils.js');
-const { paths } = require('./routing/paths.js');
+import TeamListTeam from "./models/teamListTeam";
+import SquadTeam from "./models/squadTeam";
+import Player from "./models/player";
+import TeamFullData from "./models/teamFullData";
+import { getUserTeamJSONPath, getUserTeamsListJSONPath } from "./userPath.js";
+import { readFile, writeFile, deleteFile } from "./utils.js";
+import { paths } from "./routing/paths.js";
 
-function saveTeam(team, username) {
+interface PlayerData {[key: string]: string | number}
+function saveTeam(team: TeamFullData , username: string) {
   try {
     const targetPath = getUserTeamJSONPath(username, team.id);
     console.log(`Saving team ${team.id} to ${username} on ${targetPath}`);
@@ -23,7 +17,7 @@ function saveTeam(team, username) {
     throw new Error(writeError);
   }
 }
-function isTeamDefault(username, teamId) {
+export function isTeamDefault(username: string, teamId: number | string) {
   const teamsListPath = getUserTeamsListJSONPath(username);
   const teams = readFile(teamsListPath);
   const team = teams[teamId];
@@ -32,7 +26,7 @@ function isTeamDefault(username, teamId) {
   }
   return false;
 }
-function hasTeamDefault(username, teamId) {
+export function hasTeamDefault(username: string, teamId: number | string) {
   const teamsListPath = getUserTeamsListJSONPath(username);
   const teams = readFile(teamsListPath);
   const team = teams[teamId];
@@ -42,7 +36,7 @@ function hasTeamDefault(username, teamId) {
  * gets a teams list by username
  * @param {string} username
  */
-function getTeamsList(username) {
+export function getTeamsList(username: string) {
   return readFile(getUserTeamsListJSONPath(username));
 }
 /**
@@ -50,7 +44,7 @@ function getTeamsList(username) {
  * @param {string} username
  * @param {Number} teamId
  */
-function getTeam(username, teamId) {
+export function getTeam(username: string, teamId: number | string) {
   try {
     const teamPath = getUserTeamJSONPath(username, teamId);
     const team = readFile(teamPath);
@@ -65,19 +59,21 @@ function getTeam(username, teamId) {
  * @param {string} parameter - teamlist parameter to be updated
  * @param {any} value - new value of parameter
  */
-function updateTeamlistParameter(username, teamId, parameter, value) {
+function updateTeamlistParameter(username: string, teamId: number | string, parameter: string, value: string | number | boolean) {
   const teamsPath = getUserTeamsListJSONPath(username);
   const teams = readFile(teamsPath);
   teams[teamId][parameter] = value;
   writeFile(teamsPath, JSON.stringify(teams));
 }
-function copyTeamListTeam(sourceUser, targetUser, teamId) {
+export function copyTeamListTeam(sourceUser: string, targetUser: string, teamId: string | number) {
   const sourceTeamsPath = getUserTeamsListJSONPath(sourceUser);
   const targetTeamsPath = getUserTeamsListJSONPath(targetUser);
   const userTeams = readFile(targetTeamsPath);
   const defaultTeams = readFile(sourceTeamsPath);
 
-  const newTeam = Object.values(defaultTeams).find((team) => team.id === Number(teamId));
+  const newTeam = Object.values(defaultTeams).find(
+    (team) => team.id === Number(teamId)
+  );
   try {
     userTeams[teamId] = new TeamListTeam(newTeam);
     writeFile(targetTeamsPath, JSON.stringify(userTeams));
@@ -85,7 +81,7 @@ function copyTeamListTeam(sourceUser, targetUser, teamId) {
     throw new Error(copyError);
   }
 }
-function copyTeamList(sourceUser, targetUser) {
+export function copyTeamList(sourceUser: string, targetUser: string) {
   const defaultTeamsPath = getUserTeamsListJSONPath(sourceUser);
   const teams = readFile(defaultTeamsPath);
   const teamPrepared = {};
@@ -99,20 +95,19 @@ function copyTeamList(sourceUser, targetUser) {
     throw new Error(creationError);
   }
 }
-function deleteTeamFromTeamlist(username, teamId) {
+function deleteTeamFromTeamlist(username: string, teamId: number | string) {
   const teamsPath = getUserTeamsListJSONPath(username);
   const teams = readFile(teamsPath);
   delete teams[teamId];
   writeFile(teamsPath, JSON.stringify(teams));
 }
 /**
- * @param {string} sourceUser - username of copy source folder
  * @param {string} targetUser - username of copy target folder
  * @param {Number} teamId - id of the team to be copied
  */
-function cloneTeamFromDefault(targetUser, teamId) {
+export function cloneTeamFromDefault(targetUser: string, teamId: number | string) {
   try {
-    const DEFAULT_USER = 'default';
+    const DEFAULT_USER = "default";
     const team = getTeam(DEFAULT_USER, teamId);
     const teamClone = new SquadTeam(team, true);
     saveTeam(teamClone, targetUser);
@@ -120,12 +115,17 @@ function cloneTeamFromDefault(targetUser, teamId) {
     throw new Error(copyError);
   }
 }
-function defaultTeamCheck(username, teamId) {
+function defaultTeamCheck(username: string, teamId: number | string) {
   try {
     if (isTeamDefault(username, teamId)) {
       cloneTeamFromDefault(username, teamId);
-      const DEFAULT_TEAMLIST_PARAMETER = 'isDefault';
-      updateTeamlistParameter(username, teamId, DEFAULT_TEAMLIST_PARAMETER, false);
+      const DEFAULT_TEAMLIST_PARAMETER = "isDefault";
+      updateTeamlistParameter(
+        username,
+        teamId,
+        DEFAULT_TEAMLIST_PARAMETER,
+        false
+      );
     }
   } catch (error) {
     throw new Error(error);
@@ -138,11 +138,11 @@ function getDate() {
   const now = new Date();
   return now.toISOString();
 }
-function updateTeam(newData, username, teamId) {
+export function updateTeam(newData: {[key: string]: string | number | boolean}, username: string, teamId: number | string) {
   const updatedData = newData;
   defaultTeamCheck(username, teamId);
   updatedData.lastUpdated = getDate();
-  TeamListTeam.properties().forEach((key) => {
+  TeamListTeam.properties().forEach((key: string) => {
     if (updatedData[key] !== undefined) {
       updateTeamlistParameter(username, teamId, key, updatedData[key]);
     }
@@ -151,7 +151,7 @@ function updateTeam(newData, username, teamId) {
   Object.assign(team, updatedData);
   saveTeam(team, username);
 }
-function validateTeam(username, teamId) {
+export function validateTeam(username: string, teamId: number | string) {
   const teamsPath = getUserTeamsListJSONPath(username);
   const teamsData = readFile(teamsPath);
   if (!teamsData[teamId]) {
@@ -160,12 +160,12 @@ function validateTeam(username, teamId) {
   return teamsData[teamId];
 }
 
-function deleteTeam(username, teamId) {
+export function deleteTeam(username: string, teamId: number | string) {
   const teamPath = getUserTeamJSONPath(username, teamId);
   deleteFile(teamPath);
   deleteTeamFromTeamlist(username, teamId);
 }
-function findNextFreePlayerId(players) {
+function findNextFreePlayerId(players: Player[]) {
   const sortedPlayers = [...players].sort((a, b) => a.id - b.id);
 
   let nextFreeId = 0;
@@ -185,7 +185,7 @@ function findNextFreePlayerId(players) {
  * @param {JSON} playerData - id of the team to be copied
  * @returns {Number} - id of the new player
  */
-function addPlayer(username, teamId, playerData) {
+export function addPlayer(username: string, teamId: number | string, playerData: PlayerData ) {
   try {
     defaultTeamCheck(username, teamId);
     const player = new Player(playerData);
@@ -198,41 +198,44 @@ function addPlayer(username, teamId, playerData) {
     } else {
       team.squad.unshift(player);
     }
-    console.log('Adding player to team', teamId);
+    console.log("Adding player to team", teamId);
     saveTeam(team, username);
     return id;
   } catch (error) {
     throw new Error(error);
   }
 }
-function updatePlayer(username, teamId, player) {
+export function updatePlayer(username: string, teamId: number | string, player: PlayerData) {
   try {
     defaultTeamCheck(username, teamId);
     const team = getTeam(username, teamId);
     console.log(`Updating player ${player.id} in team ${teamId}`);
-    const playerIndex = team.squad
-      .findIndex((squadPlayer) => Number(squadPlayer.id) === Number(player.id));
+    const playerIndex = team.squad.findIndex(
+      (squadPlayer: PlayerData) => Number(squadPlayer.id) === Number(player.id)
+    );
     if (playerIndex !== -1) {
       team.squad[playerIndex] = player;
       saveTeam(team, username);
     } else {
-      throw new Error('Player not found');
+      throw new Error("Player not found");
     }
   } catch (error) {
     throw new Error(error);
   }
 }
-function removePlayer(username, teamId, playerId) {
+export function removePlayer(username: string, teamId: number | string, playerId: string | number) {
   try {
     defaultTeamCheck(username, teamId);
     const team = getTeam(username, teamId);
-    team.squad = team.squad.filter((player) => Number(player.id) !== Number(playerId));
+    team.squad = team.squad.filter(
+      (player: PlayerData) => Number(player.id) !== Number(playerId)
+    );
     saveTeam(team, username);
   } catch (error) {
     throw new Error(error);
   }
 }
-function findNextFreeTeamId(username) {
+function findNextFreeTeamId(username: string) {
   const teamsPath = getUserTeamsListJSONPath(username);
   const teamsData = readFile(teamsPath);
   const sortedTeams = Object.values(teamsData).sort((a, b) => a.id - b.id);
@@ -246,13 +249,13 @@ function findNextFreeTeamId(username) {
   console.log(`New team ID: ${nextFreeId}`);
   return nextFreeId;
 }
-function addTeamToTeamlist(newTeam, username) {
+function addTeamToTeamlist(newTeam: TeamFullData, username: string) {
   const userTeamsPath = getUserTeamsListJSONPath(username);
   const userTeams = readFile(userTeamsPath);
   userTeams[newTeam.id] = new TeamListTeam(newTeam, true, false, false);
   writeFile(userTeamsPath, JSON.stringify(userTeams));
 }
-function addTeam(username, teamData, imageFileName) {
+export function addTeam(username: string, teamData: any, imageFileName: string) {
   try {
     const id = findNextFreeTeamId(username);
     const team = new TeamFullData({
@@ -261,6 +264,8 @@ function addTeam(username, teamData, imageFileName) {
       lastUpdated: getDate(),
       crestUrl: paths.generateCustomCrestUrl(id, imageFileName),
       hasCustomCrest: true,
+      isDefault: false,
+      hasDefault: false,
     });
     saveTeam(team, username);
     addTeamToTeamlist(team, username);
@@ -269,21 +274,3 @@ function addTeam(username, teamData, imageFileName) {
     throw new Error(error);
   }
 }
-
-module.exports = {
-  cloneTeamFromDefault,
-  isTeamDefault,
-  hasTeamDefault,
-  getTeam,
-  getTeamsList,
-  copyTeamListTeam,
-  copyTeamList,
-  updateTeam,
-  deleteTeam,
-  validateTeam,
-  addPlayer,
-  updatePlayer,
-  removePlayer,
-  addTeam,
-  findNextFreeTeamId,
-};
