@@ -5,13 +5,12 @@ import { getUserCustomCrestFolderPath } from "../userPath";
 import { validateFile } from "../utils";
 import { storage, imageFilter } from "../multerConfig";
 import { paths } from "./paths";
-import use from "../interfaces/use";
 
 const uploadImage = multer({ storage, fileFilter: imageFilter });
 
 const router = express.Router();
 
-router.put("/:teamId", uploadImage.single("image"), ({req, res}: use) => {
+router.put("/:teamId", uploadImage.single("image"), (req: any, res: any) => {
   const { username } = req.session;
   const { teamId } = req.params;
   const { filename } = req.file;
@@ -26,10 +25,10 @@ router.put("/:teamId", uploadImage.single("image"), ({req, res}: use) => {
   res.status(200).json(crestUrl);
 });
 
-router.get("/:teamId/:filename", ({req, res}: use) => {
+router.get("/:teamId/:filename", (req: any, res: any) => {
   const { username } = req.session;
   const { teamId, filename } = req.params;
-  const imgPath = `${getUserCustomCrestFolderPath(username, teamId)}/${filename}`;
+  const imgPath = `${getUserCustomCrestFolderPath(username)}/${filename}`;
   console.log("sending img path: ", imgPath);
   if (!validateFile(imgPath)) {
     res.status(404).send("Crest not found");

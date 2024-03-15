@@ -16,12 +16,12 @@ const imageFilter = (
   cb(null, true);
 };
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
+  destination: (req: any, file, cb) => {
     const { username } = req.session;
     const userCrestsFolderPath = `${getUserCustomCrestFolderPath(username)}`;
     cb(null, userCrestsFolderPath);
   },
-  filename: (req, file, cb) => {
+  filename: (req: any, file, cb) => {
     let { teamId } = req.params;
     if (!teamId) {
       const { username } = req.session;

@@ -1,5 +1,3 @@
-import use from "../interfaces/use";
-
 import express from "express";
 import { deleteUser, createUser } from "../user";
 import { validateFile } from "../utils";
@@ -8,7 +6,7 @@ import { deleteTeam, cloneTeamFromDefault, copyTeamListTeam, hasTeamDefault } fr
 
 const router = express.Router();
 
-router.put("/all", ({req, res}: use) => {
+router.put("/all", (req: any, res: any) => {
   const { username } = req.session;
   console.log(`Resetting user ${username}`);
   try {
@@ -22,7 +20,7 @@ router.put("/all", ({req, res}: use) => {
   }
 });
 
-router.put("/:teamId", ({req, res}: use) => {
+router.put("/:teamId", (req: any, res: any) => {
   const { username } = req.session;
   const { teamId } = req.params;
   console.log(`Resetting team ${teamId} from ${username}`);

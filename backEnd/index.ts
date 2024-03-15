@@ -13,8 +13,6 @@ import userSessionRoutes from './src/components/routing/user';
 import teamCrestRoutes from './src/components/routing/crest';
 import { paths, CLIENT_BASE_URL } from './src/components/routing/paths';
 import { ensureLoggedIn } from './src/components/auth';
-import use from "./src/components/interfaces/use";
-
 
 const PORT = 3000;
 const app = express();
@@ -31,10 +29,10 @@ app.use(session({
   cookie: { sameSite: 'none', secure: false },
 }));
 app.use(cors(corsOptions));
-app.use(({req, res, next}: use) => {
+app.use(( req: any, res: Response, next: NextFunction ) => {
   const allowedPaths = /^\/user(?!\/(login|status))(\/\w+)*/;
   if (allowedPaths.test(req.path)) {
-    ensureLoggedIn({req, res, next});
+    ensureLoggedIn( req, res, next );
   } else {
     next();
   }

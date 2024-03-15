@@ -1,7 +1,6 @@
-import express, { Router } from 'express';
+import express, { Response, Router } from 'express';
 import { getTeamsList } from '../teamStorage';
 import TeamExtended from "../models/TeamExtended";
-import use from '../interfaces/use';
 
 interface TeamsData {
   username: string;
@@ -10,7 +9,7 @@ interface TeamsData {
 
 const router: Router = express.Router();
 
-router.get('', ({req, res}: use) => {
+router.get('', ( req: any, res: Response) => {
   const { username } = req.session;
   const data: TeamsData = {
     username,

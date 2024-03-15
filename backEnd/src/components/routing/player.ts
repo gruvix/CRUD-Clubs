@@ -1,11 +1,10 @@
 import express from 'express';
 import { addPlayer, updatePlayer, removePlayer } from '../teamStorage';
-import use from "../interfaces/use";
 
 const router = express.Router();
 
 router.route('/:teamId')
-  .post(({req, res}: use) => {
+  .post((req: any, res: any) => {
     const { username } = req.session;
     const { teamId } = req.params;
     const player = req.body;
@@ -18,7 +17,7 @@ router.route('/:teamId')
       res.status(400).send('Error adding player to team');
     }
   })
-  .patch(({req, res}: use) => {
+  .patch((req: any, res: any) => {
     const { username } = req.session;
     const { teamId } = req.params;
     const player = req.body;
@@ -31,7 +30,7 @@ router.route('/:teamId')
       res.status(400).send('Error updating player in team');
     }
   })
-  .delete(({req, res}: use) => {
+  .delete((req: any, res: any) => {
     const { username } = req.session;
     const { teamId } = req.params;
     const { playerId } = req.body;
