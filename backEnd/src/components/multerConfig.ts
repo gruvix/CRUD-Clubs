@@ -1,12 +1,17 @@
-const multer = require('multer');
-const path = require('path');
-const { getUserCustomCrestFolderPath } = require('./userPath.js');
-const { findNextFreeTeamId } = require('./teamStorage.js');
+import multer, { FileFilterCallback } from "multer";
+import path from "path";
+import { getUserCustomCrestFolderPath } from "./userPath";
+import { findNextFreeTeamId } from "./teamStorage";
+import { Request } from "express";
 
-const imageFilter = (req, file, cb) => {
-  const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+const imageFilter = (
+  req: Request,
+  file: Express.Multer.File,
+  cb: FileFilterCallback
+) => {
+  const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
   if (!allowedTypes.includes(file.mimetype)) {
-    return cb(new Error(`User tried to upload invalid image: ${file.mimetype}`), false);
+    return cb(null, false);
   }
   cb(null, true);
 };
@@ -27,4 +32,4 @@ const storage = multer.diskStorage({
   },
 });
 
-module.exports = { imageFilter, storage };
+export default { imageFilter, storage };
