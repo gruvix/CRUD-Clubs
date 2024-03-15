@@ -31,12 +31,7 @@ export function validateFile(filePath: string) {
 export function createFolder(folderPath: string) {
   try {
     if (!fs.existsSync(folderPath)) {
-      fs.mkdirSync(folderPath, (createFolderError: any) => {
-        if (createFolderError) {
-          console.log(createFolderError);
-        }
-        console.log("User folder created");
-      });
+      fs.mkdirSync(folderPath);
     }
   } catch (err) {
     throw err;
