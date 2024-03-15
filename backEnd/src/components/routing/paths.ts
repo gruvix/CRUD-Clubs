@@ -18,7 +18,7 @@ const paths = {
   resetSingle: `${resetPath}`,
   login: `${USER_PATH}/login`,
   logout: `${USER_PATH}/logout`,
-  generateCustomCrestUrl: (teamId, filename) => `${crestPath}/${teamId}/${filename}`,
+  generateCustomCrestUrl: (teamId: number | string, filename: string) => `${crestPath}/${teamId}/${filename}`,
 };
 
 module.exports = { paths, CLIENT_BASE_URL };
