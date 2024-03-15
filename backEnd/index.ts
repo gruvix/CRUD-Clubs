@@ -25,7 +25,7 @@ const corsOptions = {
 };
 const fileStoreOptions = { path: path.join(__dirname, 'src', 'sessions'), ttl: 60 * 60 * 24 * 7, logFn: () => {} };
 app.use(session({
-  store: new FileStore(fileStoreOptions),
+  store: new (FileStore.default as any)(fileStoreOptions),
   secret: 'keyboard-cat',
   resave: false,
   saveUninitialized: true,
