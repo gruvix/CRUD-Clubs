@@ -3,6 +3,7 @@ import { validateUsername } from '../auth';
 import { validateFile } from '../utils';
 import { getUserTeamsListJSONPath } from '../userPath';
 import use from '../interfaces/use';
+import { createUser } from '../user';
 
 const router: Router = express.Router();
 
