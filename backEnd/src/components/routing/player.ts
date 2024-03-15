@@ -1,10 +1,11 @@
-const express = require('express');
-const { addPlayer, updatePlayer, removePlayer } = require('../teamStorage');
+import express from 'express';
+import { addPlayer, updatePlayer, removePlayer } from '../teamStorage';
+import use from "../interfaces/use";
 
 const router = express.Router();
 
 router.route('/:teamId')
-  .post((req, res) => {
+  .post(({req, res}: use) => {
     const { username } = req.session;
     const { teamId } = req.params;
     const player = req.body;
@@ -17,7 +18,7 @@ router.route('/:teamId')
       res.status(400).send('Error adding player to team');
     }
   })
-  .patch((req, res) => {
+  .patch(({req, res}: use) => {
     const { username } = req.session;
     const { teamId } = req.params;
     const player = req.body;
@@ -30,7 +31,7 @@ router.route('/:teamId')
       res.status(400).send('Error updating player in team');
     }
   })
-  .delete((req, res) => {
+  .delete(({req, res}: use) => {
     const { username } = req.session;
     const { teamId } = req.params;
     const { playerId } = req.body;
@@ -43,4 +44,4 @@ router.route('/:teamId')
     }
   });
 
-module.exports = router;
+export default router;
