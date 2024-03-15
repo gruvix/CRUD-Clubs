@@ -1,11 +1,12 @@
-const express = require('express');
-const { validateUsername } = require('../auth');
-const { validateFile } = require('../utils');
-const { getUserTeamsListJSONPath } = require('../userPath');
+import express, { Router } from 'express';
+import { validateUsername } from '../auth';
+import { validateFile } from '../utils';
+import { getUserTeamsListJSONPath } from '../userPath';
+import use from '../interfaces/use';
 
-const router = express.Router();
+const router: Router = express.Router();
 
-router.get('/status', (req, res) => {
+router.get('/status', ({req, res}: use) => {
   const { username } = req.session;
   console.log(`User ${username} is requesting login status`);
   if (username) {
@@ -14,7 +15,7 @@ router.get('/status', (req, res) => {
     res.status(401).send();
   }
 });
-router.post('/login', (req, res) => {
+router.post('/login', ({req, res}: use) => {
   const { username } = req.body;
   const error = validateUsername(username);
   if (error) {
@@ -31,7 +32,7 @@ router.post('/login', (req, res) => {
   console.log(`User '${username}' logged in`);
   res.status(200).send();
 });
-router.post('/logout', (req, res) => {
+router.post('/logout', ({req, res}: use) => {
   const { username } = req.session;
   try {
     req.session.destroy();
@@ -42,4 +43,4 @@ router.post('/logout', (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;
