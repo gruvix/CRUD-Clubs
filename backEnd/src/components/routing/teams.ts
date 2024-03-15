@@ -1,11 +1,11 @@
 import express, { Router } from 'express';
 import { getTeamsList } from '../teamStorage';
-import TeamFullData from "../models/teamFullData";
+import TeamExtended from "../models/TeamExtended";
 import use from '../interfaces/use';
 
 interface TeamsData {
   username: string;
-  teams: TeamFullData[];
+  teams: TeamExtended[];
 }
 
 const router: Router = express.Router();

@@ -2,7 +2,7 @@ import express from 'express';
 import multer from 'multer';
 import { validateTeam, isTeamDefault, getTeam, updateTeam, deleteTeam, addTeam, hasTeamDefault } from '../teamStorage';
 import { storage, imageFilter } from '../multerConfig';
-import TeamFullData from '../models/teamFullData';
+import TeamExtended from '../models/TeamExtended';
 import use from "../interfaces/use";
 
 const uploadImage = multer({ storage, fileFilter: imageFilter });
@@ -41,7 +41,7 @@ router.route('/:teamId')
     } else {
       team = getTeam(username, teamId);
     }
-    res.json(new TeamFullData(team, teamDefaultBool, hasTeamDefault(username, teamId)));
+    res.json(new TeamExtended(team, teamDefaultBool, hasTeamDefault(username, teamId)));
   })
   .patch(({req, res}: use) => {
     const { teamId } = req.params;
