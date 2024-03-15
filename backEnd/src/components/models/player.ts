@@ -1,5 +1,6 @@
-class Player {
-  constructor(data) {
+export default class Player {
+  [key: string]: string | number;
+  constructor(data: {[key: string]: string | number}) {
     this.id = data.id;
     this.name = data.name;
     this.position = data.position;
@@ -9,5 +10,3 @@ class Player {
     this.role = data.role;
   }
 }
-
-module.exports = Player;
