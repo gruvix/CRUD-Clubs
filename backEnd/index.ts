@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import express from "express";
 
 import path from 'path';
 import bodyParser from 'body-parser';
@@ -32,10 +32,10 @@ app.use(session({
   cookie: { sameSite: 'none', secure: false },
 }));
 app.use(cors(corsOptions));
-app.use((req: Request, res: Response, next: NextFunction) => {
+app.use(({req, res, next}: use) => {
   const allowedPaths = /^\/user(?!\/(login|status))(\/\w+)*/;
   if (allowedPaths.test(req.path)) {
-    ensureLoggedIn(req, res, next);
+    ensureLoggedIn({req, res, next});
   } else {
     next();
   }
