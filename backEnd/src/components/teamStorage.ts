@@ -94,13 +94,13 @@ export function copyTeamListTeam(
 export function copyTeamList(sourceUser: string, targetUser: string) {
   const defaultTeamsPath = getUserTeamsListJSONPath(sourceUser);
   const teams = readFile(defaultTeamsPath);
-  const teamPrepared = {};
   teams.forEach((team) => {
-    teamPrepared[team.id] = new TeamListTeam(team);
+  const teamsParsed = {};
+    teamsParsed[team.id] = new TeamListTeam(team);
   });
   try {
     const teamsPath = getUserTeamsListJSONPath(targetUser);
-    writeFile(teamsPath, JSON.stringify(teamPrepared));
+    writeFile(teamsPath, JSON.stringify(teamsParsed));
   } catch (creationError) {
     throw creationError;
   }
