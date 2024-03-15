@@ -1,17 +1,14 @@
-const express = require("express");
-const { deleteUser, createUser } = require("../user");
-const { validateFile } = require("../utils");
-const { getUserTeamsListJSONPath } = require("../userPath");
-const {
-  deleteTeam,
-  cloneTeamFromDefault,
-  copyTeamListTeam,
-  hasTeamDefault,
-} = require("../teamStorage");
+import use from "../interfaces/use";
+
+import express from "express";
+import { deleteUser, createUser } from "../user";
+import { validateFile } from "../utils";
+import { getUserTeamsListJSONPath } from "../userPath";
+import { deleteTeam, cloneTeamFromDefault, copyTeamListTeam, hasTeamDefault } from "../teamStorage";
 
 const router = express.Router();
 
-router.put("/all", (req, res) => {
+router.put("/all", ({req, res}: use) => {
   const { username } = req.session;
   console.log(`Resetting user ${username}`);
   try {
@@ -25,7 +22,7 @@ router.put("/all", (req, res) => {
   }
 });
 
-router.put("/:teamId", (req, res) => {
+router.put("/:teamId", ({req, res}: use) => {
   const { username } = req.session;
   const { teamId } = req.params;
   console.log(`Resetting team ${teamId} from ${username}`);
@@ -44,4 +41,4 @@ router.put("/:teamId", (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;
