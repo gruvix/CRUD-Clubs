@@ -21,4 +21,4 @@ const paths = {
   generateCustomCrestUrl: (teamId: number | string, filename: string) => `${crestPath}/${teamId}/${filename}`,
 };
 
-module.exports = { paths, CLIENT_BASE_URL };
+export { paths, CLIENT_BASE_URL };
