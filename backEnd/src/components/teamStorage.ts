@@ -1,5 +1,4 @@
 import TeamListTeam from "./models/TeamListTeam";
-import SquadTeam from "./models/SquadTeam";
 import Player from "./models/Player";
 import TeamExtended from "./models/TeamExtended";
 import { getUserTeamJSONPath, getUserTeamsListJSONPath } from "./userPath.js";
@@ -123,7 +122,7 @@ export function cloneTeamFromDefault(
   try {
     const DEFAULT_USER = "default";
     const team = getTeam(DEFAULT_USER, teamId);
-    const teamClone = new SquadTeam(team, true);
+    const teamClone = new TeamExtended(team);
     saveTeam(teamClone, targetUser);
   } catch (copyError) {
     throw copyError;
