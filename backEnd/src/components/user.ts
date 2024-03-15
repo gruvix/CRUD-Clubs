@@ -1,8 +1,8 @@
-const { copyTeamList } = require('./teamStorage');
-const { createFolder, deleteFile } = require('./utils');
-const { getUserRootPath, getUserTeamsFolderPath, getUserCustomCrestFolderPath } = require('./userPath');
+import { copyTeamList } from './teamStorage';
+import { createFolder, deleteFile } from './utils';
+import { getUserRootPath, getUserTeamsFolderPath, getUserCustomCrestFolderPath } from './userPath';
 
-function createUser(username) {
+function createUser(username: string) {
   try {
     createFolder(getUserRootPath(username));
     createFolder(getUserTeamsFolderPath(username));
@@ -13,7 +13,7 @@ function createUser(username) {
     throw new Error('Failed to create new user: ' + e);
   }
 }
-function deleteUser(username) {
+function deleteUser(username: string) {
   try {
     deleteFile(getUserRootPath(username));
   } catch {
@@ -21,4 +21,4 @@ function deleteUser(username) {
   }
 }
 
-module.exports = { createUser, deleteUser };
+export default { createUser, deleteUser };
