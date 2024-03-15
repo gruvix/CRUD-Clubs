@@ -6,8 +6,10 @@ import { getUserTeamJSONPath, getUserTeamsListJSONPath } from "./userPath.js";
 import { readFile, writeFile, deleteFile } from "./utils.js";
 import { paths } from "./routing/paths.js";
 
-interface PlayerData {[key: string]: string | number}
-function saveTeam(team: TeamFullData , username: string) {
+interface PlayerData {
+  [key: string]: string | number;
+}
+function saveTeam(team: TeamFullData, username: string) {
   try {
     const targetPath = getUserTeamJSONPath(username, team.id);
     console.log(`Saving team ${team.id} to ${username} on ${targetPath}`);
@@ -59,13 +61,22 @@ export function getTeam(username: string, teamId: number | string) {
  * @param {string} parameter - teamlist parameter to be updated
  * @param {any} value - new value of parameter
  */
-function updateTeamlistParameter(username: string, teamId: number | string, parameter: string, value: string | number | boolean) {
+function updateTeamlistParameter(
+  username: string,
+  teamId: number | string,
+  parameter: string,
+  value: string | number | boolean
+) {
   const teamsPath = getUserTeamsListJSONPath(username);
   const teams = readFile(teamsPath);
   teams[teamId][parameter] = value;
   writeFile(teamsPath, JSON.stringify(teams));
 }
-export function copyTeamListTeam(sourceUser: string, targetUser: string, teamId: string | number) {
+export function copyTeamListTeam(
+  sourceUser: string,
+  targetUser: string,
+  teamId: string | number
+) {
   const sourceTeamsPath = getUserTeamsListJSONPath(sourceUser);
   const targetTeamsPath = getUserTeamsListJSONPath(targetUser);
   const userTeams = readFile(targetTeamsPath);
@@ -105,7 +116,10 @@ function deleteTeamFromTeamlist(username: string, teamId: number | string) {
  * @param {string} targetUser - username of copy target folder
  * @param {Number} teamId - id of the team to be copied
  */
-export function cloneTeamFromDefault(targetUser: string, teamId: number | string) {
+export function cloneTeamFromDefault(
+  targetUser: string,
+  teamId: number | string
+) {
   try {
     const DEFAULT_USER = "default";
     const team = getTeam(DEFAULT_USER, teamId);
@@ -138,7 +152,11 @@ function getDate() {
   const now = new Date();
   return now.toISOString();
 }
-export function updateTeam(newData: {[key: string]: string | number | boolean}, username: string, teamId: number | string) {
+export function updateTeam(
+  newData: { [key: string]: string | number | boolean },
+  username: string,
+  teamId: number | string
+) {
   const updatedData = newData;
   defaultTeamCheck(username, teamId);
   updatedData.lastUpdated = getDate();
@@ -185,7 +203,11 @@ function findNextFreePlayerId(players: Player[]) {
  * @param {JSON} playerData - id of the team to be copied
  * @returns {Number} - id of the new player
  */
-export function addPlayer(username: string, teamId: number | string, playerData: PlayerData ) {
+export function addPlayer(
+  username: string,
+  teamId: number | string,
+  playerData: PlayerData
+) {
   try {
     defaultTeamCheck(username, teamId);
     const player = new Player(playerData);
@@ -205,7 +227,11 @@ export function addPlayer(username: string, teamId: number | string, playerData:
     throw new Error(error);
   }
 }
-export function updatePlayer(username: string, teamId: number | string, player: PlayerData) {
+export function updatePlayer(
+  username: string,
+  teamId: number | string,
+  player: PlayerData
+) {
   try {
     defaultTeamCheck(username, teamId);
     const team = getTeam(username, teamId);
@@ -223,7 +249,11 @@ export function updatePlayer(username: string, teamId: number | string, player: 
     throw new Error(error);
   }
 }
-export function removePlayer(username: string, teamId: number | string, playerId: string | number) {
+export function removePlayer(
+  username: string,
+  teamId: number | string,
+  playerId: string | number
+) {
   try {
     defaultTeamCheck(username, teamId);
     const team = getTeam(username, teamId);
@@ -255,7 +285,11 @@ function addTeamToTeamlist(newTeam: TeamFullData, username: string) {
   userTeams[newTeam.id] = new TeamListTeam(newTeam, true, false, false);
   writeFile(userTeamsPath, JSON.stringify(userTeams));
 }
-export function addTeam(username: string, teamData: any, imageFileName: string) {
+export function addTeam(
+  username: string,
+  teamData: any,
+  imageFileName: string
+) {
   try {
     const id = findNextFreeTeamId(username);
     const team = new TeamFullData({
