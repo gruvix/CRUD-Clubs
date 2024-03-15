@@ -1,9 +1,9 @@
 import TeamListTeam from "./models/TeamListTeam";
 import Player from "./models/Player";
 import TeamExtended from "./models/TeamExtended";
-import { getUserTeamJSONPath, getUserTeamsListJSONPath } from "./userPath.js";
-import { readFile, writeFile, deleteFile } from "./utils.js";
-import { paths } from "./routing/paths.js";
+import { getUserTeamJSONPath, getUserTeamsListJSONPath } from "./userPath";
+import { readFile, writeFile, deleteFile } from "./utils";
+import { paths } from "./routing/paths";
 
 interface PlayerData {
   [key: string]: string | number;
@@ -79,11 +79,11 @@ export function copyTeamListTeam(
   const sourceTeamsPath = getUserTeamsListJSONPath(sourceUser);
   const targetTeamsPath = getUserTeamsListJSONPath(targetUser);
   const userTeams = readFile(targetTeamsPath);
-  const defaultTeams = readFile(sourceTeamsPath);
+  const defaultTeams: TeamListTeam[] = readFile(sourceTeamsPath);
 
-  const newTeam = Object.values(defaultTeams).find(
-    (team) => team.id === Number(teamId)
-  );
+  const newTeam: TeamListTeam = Object.values(defaultTeams).find(
+    (team: TeamListTeam) => team.id === Number(teamId)
+  ) as TeamListTeam;
   try {
     userTeams[teamId] = new TeamListTeam(newTeam);
     writeFile(targetTeamsPath, JSON.stringify(userTeams));
@@ -94,8 +94,8 @@ export function copyTeamListTeam(
 export function copyTeamList(sourceUser: string, targetUser: string) {
   const defaultTeamsPath = getUserTeamsListJSONPath(sourceUser);
   const teams = readFile(defaultTeamsPath);
-  teams.forEach((team) => {
-  const teamsParsed = {};
+  const teamsParsed: { [key: string]: TeamListTeam } = {};
+  teams.forEach((team: TeamListTeam) => {
     teamsParsed[team.id] = new TeamListTeam(team);
   });
   try {
@@ -182,8 +182,8 @@ export function deleteTeam(username: string, teamId: number | string) {
   deleteFile(teamPath);
   deleteTeamFromTeamlist(username, teamId);
 }
-function findNextFreePlayerId(players: Player[]) {
-  const sortedPlayers = [...players].sort((a, b) => a.id - b.id);
+function findNextFreePlayerId(players: Player[]): number {
+  const sortedPlayers = [...players].sort((a: Player, b: Player) => a.id - b.id);
 
   let nextFreeId = 0;
 
@@ -205,7 +205,7 @@ function findNextFreePlayerId(players: Player[]) {
 export function addPlayer(
   username: string,
   teamId: number | string,
-  playerData: PlayerData
+  playerData: Player
 ) {
   try {
     defaultTeamCheck(username, teamId);
@@ -266,8 +266,8 @@ export function removePlayer(
 }
 function findNextFreeTeamId(username: string) {
   const teamsPath = getUserTeamsListJSONPath(username);
-  const teamsData = readFile(teamsPath);
-  const sortedTeams = Object.values(teamsData).sort((a, b) => a.id - b.id);
+  const teamsData: TeamListTeam[] = readFile(teamsPath);
+  const sortedTeams = Object.values(teamsData).sort((a: TeamListTeam, b: TeamListTeam) => a.id - b.id);
   let nextFreeId = 0;
   for (let index = 0; index < sortedTeams.length; index += 1) {
     if (sortedTeams[index].id > nextFreeId) {
@@ -281,7 +281,7 @@ function findNextFreeTeamId(username: string) {
 function addTeamToTeamlist(newTeam: TeamExtended, username: string) {
   const userTeamsPath = getUserTeamsListJSONPath(username);
   const userTeams = readFile(userTeamsPath);
-  userTeams[newTeam.id] = new TeamListTeam(newTeam, true, false, false);
+  userTeams[newTeam.id] = new TeamListTeam(newTeam as unknown as TeamListTeam, true, false, false);
   writeFile(userTeamsPath, JSON.stringify(userTeams));
 }
 export function addTeam(
