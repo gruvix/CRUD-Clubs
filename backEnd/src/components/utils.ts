@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs from "fs";
 
 export function deleteFile(userPath: string) {
   fs.rmSync(userPath, { recursive: true, force: true });
@@ -14,10 +14,10 @@ export function writeFile(targetPath: string, content: any) {
  */
 export function readFile(targetPath: string) {
   try {
-    const content = JSON.parse(fs.readFileSync(targetPath, 'utf-8'));
+    const content = JSON.parse(fs.readFileSync(targetPath, "utf-8"));
     return content;
   } catch (err) {
-    throw new Error(err);
+    throw err;
   }
 }
 export function validateFile(filePath: string) {
@@ -35,10 +35,10 @@ export function createFolder(folderPath: string) {
         if (createFolderError) {
           console.log(createFolderError);
         }
-        console.log('User folder created');
+        console.log("User folder created");
       });
     }
   } catch (err) {
-    throw new Error(err);
+    throw err;
   }
 }

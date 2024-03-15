@@ -16,7 +16,7 @@ function saveTeam(team: TeamFullData, username: string) {
     const content = JSON.stringify(team);
     writeFile(targetPath, content);
   } catch (writeError) {
-    throw new Error(writeError);
+    throw writeError;
   }
 }
 export function isTeamDefault(username: string, teamId: number | string) {
@@ -52,7 +52,7 @@ export function getTeam(username: string, teamId: number | string) {
     const team = readFile(teamPath);
     return team;
   } catch (error) {
-    throw new Error(error);
+    throw error;
   }
 }
 /**
@@ -89,7 +89,7 @@ export function copyTeamListTeam(
     userTeams[teamId] = new TeamListTeam(newTeam);
     writeFile(targetTeamsPath, JSON.stringify(userTeams));
   } catch (copyError) {
-    throw new Error(copyError);
+    throw copyError;
   }
 }
 export function copyTeamList(sourceUser: string, targetUser: string) {
@@ -103,7 +103,7 @@ export function copyTeamList(sourceUser: string, targetUser: string) {
     const teamsPath = getUserTeamsListJSONPath(targetUser);
     writeFile(teamsPath, JSON.stringify(teamPrepared));
   } catch (creationError) {
-    throw new Error(creationError);
+    throw creationError;
   }
 }
 function deleteTeamFromTeamlist(username: string, teamId: number | string) {
@@ -126,7 +126,7 @@ export function cloneTeamFromDefault(
     const teamClone = new SquadTeam(team, true);
     saveTeam(teamClone, targetUser);
   } catch (copyError) {
-    throw new Error(copyError);
+    throw copyError;
   }
 }
 function defaultTeamCheck(username: string, teamId: number | string) {
@@ -142,7 +142,7 @@ function defaultTeamCheck(username: string, teamId: number | string) {
       );
     }
   } catch (error) {
-    throw new Error(error);
+    throw error;
   }
 }
 /**
@@ -224,7 +224,7 @@ export function addPlayer(
     saveTeam(team, username);
     return id;
   } catch (error) {
-    throw new Error(error);
+    throw error;
   }
 }
 export function updatePlayer(
@@ -246,7 +246,7 @@ export function updatePlayer(
       throw new Error("Player not found");
     }
   } catch (error) {
-    throw new Error(error);
+    throw error;
   }
 }
 export function removePlayer(
@@ -262,7 +262,7 @@ export function removePlayer(
     );
     saveTeam(team, username);
   } catch (error) {
-    throw new Error(error);
+    throw error;
   }
 }
 function findNextFreeTeamId(username: string) {
@@ -305,6 +305,6 @@ export function addTeam(
     addTeamToTeamlist(team, username);
     return id;
   } catch (error) {
-    throw new Error(error);
+    throw error;
   }
 }
