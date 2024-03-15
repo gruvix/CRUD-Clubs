@@ -1,7 +1,7 @@
-import TeamListTeam from "./models/teamListTeam";
-import SquadTeam from "./models/squadTeam";
-import Player from "./models/player";
-import TeamFullData from "./models/teamFullData";
+import TeamListTeam from "./models/TeamListTeam";
+import SquadTeam from "./models/SquadTeam";
+import Player from "./models/Player";
+import TeamExtended from "./models/TeamExtended";
 import { getUserTeamJSONPath, getUserTeamsListJSONPath } from "./userPath.js";
 import { readFile, writeFile, deleteFile } from "./utils.js";
 import { paths } from "./routing/paths.js";
@@ -9,7 +9,7 @@ import { paths } from "./routing/paths.js";
 interface PlayerData {
   [key: string]: string | number;
 }
-function saveTeam(team: TeamFullData, username: string) {
+function saveTeam(team: TeamExtended, username: string) {
   try {
     const targetPath = getUserTeamJSONPath(username, team.id);
     console.log(`Saving team ${team.id} to ${username} on ${targetPath}`);
@@ -279,7 +279,7 @@ function findNextFreeTeamId(username: string) {
   console.log(`New team ID: ${nextFreeId}`);
   return nextFreeId;
 }
-function addTeamToTeamlist(newTeam: TeamFullData, username: string) {
+function addTeamToTeamlist(newTeam: TeamExtended, username: string) {
   const userTeamsPath = getUserTeamsListJSONPath(username);
   const userTeams = readFile(userTeamsPath);
   userTeams[newTeam.id] = new TeamListTeam(newTeam, true, false, false);
@@ -292,7 +292,7 @@ export function addTeam(
 ) {
   try {
     const id = findNextFreeTeamId(username);
-    const team = new TeamFullData({
+    const team = new TeamExtended({
       ...teamData,
       id,
       lastUpdated: getDate(),
