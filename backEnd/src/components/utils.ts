@@ -1,18 +1,18 @@
-const fs = require('fs');
+import fs from 'fs';
 
-function deleteFile(userPath) {
+export function deleteFile(userPath: string) {
   fs.rmSync(userPath, { recursive: true, force: true });
 }
-function copyFile(sourcePath, targetPath) {
+export function copyFile(sourcePath: string, targetPath: string) {
   fs.copyFileSync(sourcePath, targetPath);
 }
-function writeFile(targetPath, content) {
+export function writeFile(targetPath: string, content: any) {
   fs.writeFileSync(targetPath, content);
 }
 /**
  * @returns - JSON object
  */
-function readFile(targetPath) {
+export function readFile(targetPath: string) {
   try {
     const content = JSON.parse(fs.readFileSync(targetPath, 'utf-8'));
     return content;
@@ -20,7 +20,7 @@ function readFile(targetPath) {
     throw new Error(err);
   }
 }
-function validateFile(filePath) {
+export function validateFile(filePath: string) {
   try {
     fs.accessSync(filePath, fs.constants.F_OK);
     return true;
@@ -28,10 +28,10 @@ function validateFile(filePath) {
     return false;
   }
 }
-function createFolder(folderPath) {
+export function createFolder(folderPath: string) {
   try {
     if (!fs.existsSync(folderPath)) {
-      fs.mkdirSync(folderPath, (createFolderError) => {
+      fs.mkdirSync(folderPath, (createFolderError: any) => {
         if (createFolderError) {
           console.log(createFolderError);
         }
@@ -42,11 +42,3 @@ function createFolder(folderPath) {
     throw new Error(err);
   }
 }
-module.exports = {
-  deleteFile,
-  copyFile,
-  writeFile,
-  readFile,
-  validateFile,
-  createFolder,
-};
