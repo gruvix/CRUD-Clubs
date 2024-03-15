@@ -10,7 +10,6 @@ import teamRoutes from './src/components/routing/team';
 import playerRoutes from './src/components/routing/player';
 import resetRoutes from './src/components/routing/reset';
 import userSessionRoutes from './src/components/routing/user';
-import errorRoutes from './src/components/routing/error';
 import teamCrestRoutes from './src/components/routing/crest';
 import { paths, CLIENT_BASE_URL } from './src/components/routing/paths';
 import { ensureLoggedIn } from './src/components/auth';
@@ -48,7 +47,6 @@ app.use(paths.team, teamRoutes);
 app.use(paths.reset, resetRoutes);
 app.use(paths.user, userSessionRoutes);
 app.use(paths.crest, teamCrestRoutes);
-app.use(paths.error, errorRoutes);
 
 app.listen(PORT);
 console.log(`Listening on port ${PORT}`);
