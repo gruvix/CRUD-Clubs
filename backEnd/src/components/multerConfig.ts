@@ -25,7 +25,7 @@ const storage = multer.diskStorage({
     let { teamId } = req.params;
     if (!teamId) {
       const { username } = req.session;
-      teamId = findNextFreeTeamId(username);
+      teamId = findNextFreeTeamId(username).toString();
     }
     const filename = `${teamId}${path.extname(file.originalname)}`;
     cb(null, filename);
