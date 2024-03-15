@@ -1,16 +1,17 @@
-const express = require("express");
-const multer = require("multer");
-const { updateTeam } = require("../teamStorage");
-const { getUserCustomCrestFolderPath } = require("../userPath");
-const { validateFile } = require("../utils");
-const { storage, imageFilter } = require("../multerConfig.js");
-const { paths } = require("./paths");
+import express from "express";
+import multer from "multer";
+import { updateTeam } from "../teamStorage";
+import { getUserCustomCrestFolderPath } from "../userPath";
+import { validateFile } from "../utils";
+import { storage, imageFilter } from "../multerConfig";
+import { paths } from "./paths";
+import use from "../interfaces/use";
 
 const uploadImage = multer({ storage, fileFilter: imageFilter });
 
 const router = express.Router();
 
-router.put("/:teamId", uploadImage.single("image"), (req, res) => {
+router.put("/:teamId", uploadImage.single("image"), ({req, res}: use) => {
   const { username } = req.session;
   const { teamId } = req.params;
   const { filename } = req.file;
@@ -25,7 +26,7 @@ router.put("/:teamId", uploadImage.single("image"), (req, res) => {
   res.status(200).json(crestUrl);
 });
 
-router.get("/:teamId/:filename", (req, res) => {
+router.get("/:teamId/:filename", ({req, res}: use) => {
   const { username } = req.session;
   const { teamId, filename } = req.params;
   const imgPath = `${getUserCustomCrestFolderPath(username, teamId)}/${filename}`;
@@ -37,4 +38,4 @@ router.get("/:teamId/:filename", (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;
