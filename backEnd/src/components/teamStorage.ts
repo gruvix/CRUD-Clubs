@@ -264,7 +264,7 @@ export function removePlayer(
     throw error;
   }
 }
-function findNextFreeTeamId(username: string) {
+export function findNextFreeTeamId(username: string) {
   const teamsPath = getUserTeamsListJSONPath(username);
   const teamsData: TeamListTeam[] = readFile(teamsPath);
   const sortedTeams = Object.values(teamsData).sort((a: TeamListTeam, b: TeamListTeam) => a.id - b.id);
