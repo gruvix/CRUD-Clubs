@@ -1,21 +1,21 @@
 import { NextFunction, Request, Response } from "express";
 
-const express = require('express');
-const path = require('path');
-const bodyParser = require('body-parser');
-const session = require('express-session');
-const cors = require('cors');
-const FileStore = require('session-file-store')(session);
-const teamsRoutes = require('./src/components/routing/teams.js');
-const teamRoutes = require('./src/components/routing/team.js');
-const playerRoutes = require('./src/components/routing/player.js');
-const resetRoutes = require('./src/components/routing/reset.js');
-const userSessionRoutes = require('./src/components/routing/user.js');
-const errorRoutes = require('./src/components/routing/error.js');
-const teamCrestRoutes = require('./src/components/routing/crest.js');
-const { paths, CLIENT_BASE_URL } = require('./src/components/routing/paths.js');
+import path from 'path';
+import bodyParser from 'body-parser';
+import session from 'express-session';
+import cors from 'cors';
+import * as FileStore from 'session-file-store';
+import teamsRoutes from './src/components/routing/teams';
+import teamRoutes from './src/components/routing/team';
+import playerRoutes from './src/components/routing/player';
+import resetRoutes from './src/components/routing/reset';
+import userSessionRoutes from './src/components/routing/user';
+import errorRoutes from './src/components/routing/error';
+import teamCrestRoutes from './src/components/routing/crest';
+import { paths, CLIENT_BASE_URL } from './src/components/routing/paths';
+import { ensureLoggedIn } from './src/components/auth';
+import use from "./src/components/interfaces/use";
 
-const { ensureLoggedIn } = require('./src/components/auth.js');
 
 const PORT = 3000;
 const app = express();
