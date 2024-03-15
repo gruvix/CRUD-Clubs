@@ -68,4 +68,4 @@ router.route('/:teamId')
     }
   });
 
-module.exports = router;
+export default router;
