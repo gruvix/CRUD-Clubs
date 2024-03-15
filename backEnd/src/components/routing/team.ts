@@ -1,15 +1,14 @@
-const express = require('express');
-const multer = require('multer');
-const {
-  validateTeam, isTeamDefault, getTeam, updateTeam, deleteTeam, addTeam, hasTeamDefault,
-} = require('../teamStorage');
-const { storage, imageFilter } = require('../multerConfig.js');
-const TeamFullData = require('../models/teamFullData');
+import express from 'express';
+import multer from 'multer';
+import { validateTeam, isTeamDefault, getTeam, updateTeam, deleteTeam, addTeam, hasTeamDefault } from '../teamStorage';
+import { storage, imageFilter } from '../multerConfig';
+import TeamFullData from '../models/teamFullData';
+import use from "../interfaces/use";
 
 const uploadImage = multer({ storage, fileFilter: imageFilter });
 const router = express.Router();
 router.route('/add')
-  .post(uploadImage.single('image'), (req, res) => {
+  .post(uploadImage.single('image'), ({req, res}: use) => {
     const { username } = req.session;
     console.log(`User ${username} is adding a new team`);
     const { teamData } = req.body;
@@ -25,7 +24,7 @@ router.route('/add')
   });
 
 router.route('/:teamId')
-  .get((req, res) => {
+  .get(({req, res}: use) => {
     const { teamId } = req.params;
     const { username } = req.session;
     console.log(`User ${username} requested team ${teamId}`);
@@ -44,7 +43,7 @@ router.route('/:teamId')
     }
     res.json(new TeamFullData(team, teamDefaultBool, hasTeamDefault(username, teamId)));
   })
-  .patch((req, res) => {
+  .patch(({req, res}: use) => {
     const { teamId } = req.params;
     const { username } = req.session;
     console.log(`User ${username} updated team ${teamId}`);
@@ -58,7 +57,7 @@ router.route('/:teamId')
       res.status(400).send('Error updating team parameter');
     }
   })
-  .delete((req, res) => {
+  .delete(({req, res}: use) => {
     const { username } = req.session;
     const { teamId } = req.params;
     try {
