@@ -1,5 +1,5 @@
-import Player from "./Player.js";
-import Team, { TeamData } from "./Team.js";
+import Player from "./Player";
+import Team, { TeamData } from "./Team";
 
 export default class TeamExtended extends Team {
   id: string | number;
