@@ -7,7 +7,15 @@ class TeamListTeam {
   hasDefault: boolean;
   lastUpdated: string;
   constructor(
-    team: { name: string; id: number; crestUrl: string; hasCustomCrest: boolean; isDefault: boolean; hasDefault: boolean; lastUpdated: string },
+    team: {
+      name: string;
+      id: number;
+      crestUrl: string;
+      hasCustomCrest: boolean;
+      isDefault: boolean;
+      hasDefault: boolean;
+      lastUpdated: string;
+    },
     customCrest = false,
     isDefault = true,
     hasDefault = true
