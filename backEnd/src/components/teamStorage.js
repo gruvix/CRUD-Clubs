@@ -1,7 +1,7 @@
-const TeamListTeam = require('./models/teamListTeam.js');
-const SquadTeam = require('./models/squadTeam.js');
-const Player = require('./models/player.js');
-const TeamFullData = require('./models/teamFullData.js');
+const TeamListTeam = require('./models/teamListTeam');
+const SquadTeam = require('./models/squadTeam');
+const Player = require('./models/player');
+const TeamFullData = require('./models/teamFullData');
 const {
   getUserTeamJSONPath,
   getUserTeamsListJSONPath,
