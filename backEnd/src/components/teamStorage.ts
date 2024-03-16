@@ -5,9 +5,6 @@ import { getUserTeamJSONPath, getUserTeamsListJSONPath } from "./userPath";
 import { readFile, writeFile, deleteFile } from "./utils";
 import { paths } from "./routing/paths";
 
-interface PlayerData {
-  [key: string]: string | number;
-}
 function saveTeam(team: TeamExtended, username: string) {
   try {
     const targetPath = getUserTeamJSONPath(username, team.id);
@@ -229,14 +226,14 @@ export function addPlayer(
 export function updatePlayer(
   username: string,
   teamId: number | string,
-  player: PlayerData
+  player: Player
 ) {
   try {
     defaultTeamCheck(username, teamId);
     const team = getTeam(username, teamId);
     console.log(`Updating player ${player.id} in team ${teamId}`);
     const playerIndex = team.squad.findIndex(
-      (squadPlayer: PlayerData) => Number(squadPlayer.id) === Number(player.id)
+      (squadPlayer: Player) => Number(squadPlayer.id) === Number(player.id)
     );
     if (playerIndex !== -1) {
       team.squad[playerIndex] = player;
@@ -257,7 +254,7 @@ export function removePlayer(
     defaultTeamCheck(username, teamId);
     const team = getTeam(username, teamId);
     team.squad = team.squad.filter(
-      (player: PlayerData) => Number(player.id) !== Number(playerId)
+      (player: Player) => Number(player.id) !== Number(playerId)
     );
     saveTeam(team, username);
   } catch (error) {
