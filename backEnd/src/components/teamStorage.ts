@@ -294,7 +294,7 @@ export function addTeam(
       hasCustomCrest: true,
       isDefault: false,
       hasDefault: false,
-    });
+    });// Replace TeamExtended with custom class that stores team in original (default) format
     saveTeam(team, username);
     addTeamToTeamlist(team, username);
     return id;
