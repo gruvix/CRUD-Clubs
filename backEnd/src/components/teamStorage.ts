@@ -206,8 +206,7 @@ export function addPlayer(
   try {
     defaultTeamCheck(username, teamId);
     const player = new Player(playerData);
-    const originalTeam = getTeam(username, teamId);
-    const team = originalTeam;
+    const team = getTeam(username, teamId);
     const id = findNextFreePlayerId(team.squad);
     player.id = id;
     if (!team.squad.length) {
