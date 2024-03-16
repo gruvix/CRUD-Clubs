@@ -45,7 +45,7 @@ export function getTeamsList(username: string) {
 export function getTeam(username: string, teamId: number | string) {
   try {
     const teamPath = getUserTeamJSONPath(username, teamId);
-    const team = readFile(teamPath);
+    const team = new TeamExtended(readFile(teamPath));
     return team;
   } catch (error) {
     throw error;
@@ -119,8 +119,7 @@ export function cloneTeamFromDefault(
   try {
     const DEFAULT_USER = "default";
     const team = getTeam(DEFAULT_USER, teamId);
-    const teamClone = new TeamExtended(team);
-    saveTeam(teamClone, targetUser);
+    saveTeam(team, targetUser);
   } catch (copyError) {
     throw copyError;
   }
