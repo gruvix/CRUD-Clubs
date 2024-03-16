@@ -82,13 +82,17 @@ export default class APIAdapter {
     teamId: number | string,
     newData: { [key: string]: (string | number)[] },
   ) {
+    const parsedData = {} as TeamParameters;
+    for (const [key, value] of Object.entries(newData)) {
+      parsedData[key] = value[0];
+    }
     const response = await fetch(apiRequestPaths.team(teamId), {
       method: "PATCH",
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(newData),
+      body: JSON.stringify(parsedData),
     });
 
     try {
