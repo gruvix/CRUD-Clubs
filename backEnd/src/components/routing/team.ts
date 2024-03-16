@@ -62,7 +62,6 @@ router
     const { teamId } = req.params;
     const { username } = req.session;
     console.log(`User ${username} updated team ${teamId}`);
-
     try {
       const updatedData = req.body;
       updateTeam(updatedData, username, teamId);
