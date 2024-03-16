@@ -21,8 +21,9 @@ const corsOptions = {
 };
 const fileStoreOptions = {
   path: path.join(__dirname, "src", "sessions"),
-  ttl: 60 * 60 * 24 * 7,
+  ttl: 60 * 60 * 24,
   logFn: () => {},
+  reapInterval: 60 * 60,
 };
 const FileStore = createFileStore(session);
 app.use(
@@ -31,14 +32,14 @@ app.use(
     secret: "keyboard-cat",
     resave: false,
     saveUninitialized: true,
-    cookie: { sameSite: "none", secure: false },
+    cookie: { maxAge: 60 * 60 * 24, sameSite: "none", secure: false },
   })
 );
 app.use(cors(corsOptions));
-app.use(( req: any, res: Response, next: NextFunction ) => {
+app.use((req: any, res: Response, next: NextFunction) => {
   const allowedPaths = /^\/user(?!\/(login|status))(\/\w+)*/;
   if (allowedPaths.test(req.path)) {
-    ensureLoggedIn( req, res, next );
+    ensureLoggedIn(req, res, next);
   } else {
     next();
   }
