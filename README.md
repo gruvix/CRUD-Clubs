@@ -11,15 +11,14 @@
     Reset: Set a specific team back to its default state, clearing customised information.
     Reset All: Reset all your teams to their default states, starting fresh.
 
-![User teams page overview](user_overview.png)
-![Add team page](add_team.png)
-
 ### Player Management:
     
     Add: Assign players to specific teams, providing their names, positions, and country of origin.
     Edit: Modify player information within a team.
     Remove: Take players out of specific teams.
 
+![User teams page overview](user_overview.png)
+![Add team page](add_team.png)
 ![User specific team page overview](team_overview.png)
 
 ## Technologies
