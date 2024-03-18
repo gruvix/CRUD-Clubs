@@ -62,33 +62,6 @@ The server will run on port 8080.
 
 For test runs see [Tests](#tests)
 
-## Access URLs
-Main address: `localhost:8080`
-
-Homepage: `/` (GET)
-
-Login: `/user/login` (POST)
-
-Logout: `/user/logout` (POST)
-
-Teams list: `/user/teams` (GET)
-
-Team details: `/user/team/:teamId` (GET, PATCH, PUT, DELETE)
-
-Player editing: `/user/player/:teamId` (POST, PATCH, DELETE)
-
-Add a team: `/user/team/add` (GET, POST)
-
-Reset a team: `/user/reset/:teamId` (PUT) 
-
-Reset all teams: `/user/reset/all` (PUT)
-
-Upload crest image: `/user/customCrest/:teamId` (PUT)
-
-Get crest image: `/user/customCrest/:teamId/:filename` (GET)
-
-Error page: `/error` (GET)
-
 ## Tests <a name="tests"></a>
 
 -Run the servers
