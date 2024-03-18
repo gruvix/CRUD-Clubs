@@ -30,6 +30,7 @@
     - Multer
     - session-file-store
     - body-parser
+    - TypeScript
 
     Tests:
     - Cypress
