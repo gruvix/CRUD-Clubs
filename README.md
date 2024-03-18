@@ -17,6 +17,7 @@
     Edit: Modify player information within a team.
     Remove: Take players out of specific teams.
 
+
 ![User teams page overview](user_overview.png)
 ![Add team page](add_team.png)
 ![User specific team page overview](team_overview.png)
@@ -38,7 +39,6 @@
 
     Tests:
     - Cypress
-    - Jest
 
     Other:
     - Eslint
