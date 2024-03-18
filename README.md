@@ -113,6 +113,13 @@ There's a disabled test for removing all players from a team, but it lacks any a
     include exploring database integration (e.g., SQLite, MongoDB) to enhance scalability,
     performance, and data management capabilities.
 
+### Incomplete TypeScript integration for Middleware Requests
+
+    Due to complexities in typing middleware request objects, they are currently typed as 'any'.
+    This circumvents TypeScript's benefits for these specific components. Future work involves
+    investigating solutions to accurately type middleware requests, ensuring complete TypeScript
+    coverage across the application
+
 ## Credits
 [Javascript Course Argentina Programa](https://argentinaprograma.com/)
 
