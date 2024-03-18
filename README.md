@@ -107,6 +107,12 @@ There's a disabled test for removing all players from a team, but it lacks any a
 
     This application lacks unit tests focused on individual functions and logic components
 
+### Simple File Storage Solution
+
+    The application currently uses file-based JSON storage. Future development plans could 
+    include exploring database integration (e.g., SQLite, MongoDB) to enhance scalability,
+    performance, and data management capabilities.
+
 ## Credits
 [Javascript Course Argentina Programa](https://argentinaprograma.com/)
 
