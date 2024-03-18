@@ -59,7 +59,9 @@ If running from Linux: `npm run startLinux` (uses gnome, it's currently un-teste
 
 The server will run on port 8080.
 
--Access from a web browser to `localhost:8080`
+2 windows will popup - one for WebPack and the other one for Express
+
+After that a web browser should open with the app, if not, access from a web browser to `localhost:8080`
 
 -Login with any username
 
