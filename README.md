@@ -1,4 +1,4 @@
-# Football teams CRUD proyect
+# Football teams CRUD project
 
 ## Expanded Description of Key Features: <a name="team-management"></a>
 
