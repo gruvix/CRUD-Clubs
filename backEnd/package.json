@@ -24,7 +24,6 @@
   "name": "crud-clubs",
   "description": "Football Clubs App",
   "version": "1.0.0",
-  "main": "index.js",
   "dependencies": {
     "@nestjs/common": "^10.3.4",
     "@nestjs/core": "^10.3.4",
@@ -43,6 +42,7 @@
     "start:cmd": "cmd /k \"nest start --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "rootDir": "src",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/gruvix/CRUD-Clubs.git"
