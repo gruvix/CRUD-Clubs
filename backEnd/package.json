@@ -39,7 +39,7 @@
   },
   "scripts": {
     "start": "nest start --watch",
-    "start:cmd": "cmd /k \"nest start --watch",
+    "start:cmd": "start cmd /k \"nest start --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "rootDir": "src",
