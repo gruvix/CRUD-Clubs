@@ -40,7 +40,8 @@
     "session-file-store": "^1.5.0"
   },
   "scripts": {
-    "start": "nodemon --config nodemon.json index.ts",
+    "start:express": "nodemon --config nodemon.json index.ts",
+    "start:nest": "cd src nest start --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
