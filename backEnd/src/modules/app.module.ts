@@ -3,6 +3,7 @@ import { AppController } from '../controllers/app.controller';
 import { AppService } from '../services/app.service';
 import { TeamsController } from 'src/controllers/teams.controller';
 import { SessionModule } from 'nestjs-session';
+import { UserController } from 'src/controllers/user.controller';
 
 @Module({
   imports: [
@@ -15,7 +16,7 @@ import { SessionModule } from 'nestjs-session';
       },
     }),
   ],
-  controllers: [AppController, TeamsController],
+  controllers: [AppController, TeamsController, UserController],
   providers: [AppService],
 })
 export class AppModule {}
