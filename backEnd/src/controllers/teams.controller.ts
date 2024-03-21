@@ -10,12 +10,12 @@ interface TeamsData {
 @Controller('teams')
 export class TeamsController {
   @Get()
-  getTeamsList(@Req() req: any, @Res() res: Response): JSON {
+  getTeamsList(@Req() req: any, @Res() res: Response): TeamsData {
     const { username } = req.session;
     const data: TeamsData = {
       username, //Create custom endpoint to get username, remove username from other requests
       teams: getTeamsList(username),
     };
-    return res.json(data);
+    return data;
   }
 }
