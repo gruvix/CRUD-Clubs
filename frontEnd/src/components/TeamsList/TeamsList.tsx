@@ -88,8 +88,7 @@ export default function TeamsList(): React.ReactElement {
         <div className="col">
           <LogoutButton style={{ marginTop: '15px' }} text="Log out" />
           <span className="text-center teams-page-title">
-            User:{' '}
-            {username}
+            User: <div id="username">{username}</div>
           </span>
         </div>
       </div>
