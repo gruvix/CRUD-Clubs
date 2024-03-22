@@ -18,11 +18,9 @@ export class UserController {
     if ( success ) {
       request.session.username = data.username;
       console.log(`User ${data.username} logged in`);
-      response.status(200).send();
-      //return;
+      return;
     } else {
-      response.status(400).send('Failed to login user');
-      //return { statusCode: 400, message: 'Failed to login user' + success };
+      throw new HttpException('Failed to login user', HttpStatus.BAD_REQUEST);
     }
   }
 }
