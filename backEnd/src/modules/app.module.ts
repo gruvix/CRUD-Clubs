@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from '../controllers/app.controller';
-import { AppService } from '../services/app.service';
 import { TeamsController } from 'src/controllers/teams.controller';
 import { SessionModule } from 'nestjs-session';
 import { UserController } from 'src/controllers/user.controller';
@@ -17,7 +15,7 @@ import { UserService } from 'src/services/user.service';
       },
     }),
   ],
-  controllers: [AppController, TeamsController, UserController],
-  providers: [AppService, UserService],
+  controllers: [TeamsController, UserController],
+  providers: [UserService],
 })
 export class AppModule {}
