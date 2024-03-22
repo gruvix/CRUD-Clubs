@@ -36,7 +36,7 @@ export class UserController {
   }
   @Delete()
   logout(@Req() request: Request & { session: any }) {
-    console.log(`User ${request.session.username} logged out`);
-    request.session.username = undefined;
+    console.log(`User ${request.session.username} is logging out`);
+    request.session.destroy();
   }
 }
