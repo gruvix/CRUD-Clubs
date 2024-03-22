@@ -14,5 +14,17 @@ export class UserController {
     }
     return username;
   }
+  @Post('login')
+  login(@Req() request: Request & { session: any }, @Res() response: Response, @Body() data: {username: string}) {
+    const success = this.userService.handleUserLogin(data.username);
+    if ( success ) {
+      request.session.username = data.username;
+      console.log(`User ${data.username} logged in`);
+      response.status(200).send();
+      //return;
+    } else {
+      response.status(400).send('Failed to login user');
+      //return { statusCode: 400, message: 'Failed to login user' + success };
+    }
   }
 }
