@@ -4,6 +4,7 @@ import { AppService } from '../services/app.service';
 import { TeamsController } from 'src/controllers/teams.controller';
 import { SessionModule } from 'nestjs-session';
 import { UserController } from 'src/controllers/user.controller';
+import { UserService } from 'src/services/user.service';
 
 @Module({
   imports: [
@@ -17,6 +18,6 @@ import { UserController } from 'src/controllers/user.controller';
     }),
   ],
   controllers: [AppController, TeamsController, UserController],
-  providers: [AppService],
+  providers: [AppService, UserService],
 })
 export class AppModule {}
