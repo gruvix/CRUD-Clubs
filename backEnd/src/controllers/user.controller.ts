@@ -1,9 +1,9 @@
 import {
   Controller,
   Get,
-  Req,
-  Res,
   Post,
+  Delete,
+  Req,
   Body,
   HttpException,
   HttpStatus,
@@ -33,5 +33,10 @@ export class UserController {
     } else {
       throw new HttpException('Failed to login user', HttpStatus.BAD_REQUEST);
     }
+  }
+  @Delete()
+  logout(@Req() request: Request & { session: any }) {
+    console.log(`User ${request.session.username} logged out`);
+    request.session.username = undefined;
   }
 }
