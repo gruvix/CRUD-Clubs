@@ -8,7 +8,6 @@ import { join } from "path";
 export function getUserRootPath(username: string) {
   const projectRoot = existsSync(join(__dirname, "..", "userData", username)) ? join(__dirname, '..') : process.cwd();
   const path = join(projectRoot, "src", "userData", username);
-  console.log('returns: ' + path)
   return path;
 }
 /**
