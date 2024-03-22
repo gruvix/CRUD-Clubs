@@ -10,7 +10,7 @@ interface TeamsData {
 @Controller('user/teams')
 export class TeamsController {
   @Get()
-  getTeamsList(@Req() req: Request & { session: any }, @Res() res: Response): TeamsData {
+  getTeamsList(@Req() req: Request & { session: any }): TeamsData {
     const { username } = req.session;
     console.log(`User ${username} requested teams list`);
     const data: TeamsData = {
