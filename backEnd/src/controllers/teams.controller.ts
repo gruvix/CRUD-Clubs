@@ -7,7 +7,7 @@ interface TeamsData {
   teams: TeamExtended[];
 }
 
-@Controller('teams')
+@Controller('user/teams')
 export class TeamsController {
   @Get()
   getTeamsList(@Req() req: Request & { session: any }, @Res() res: Response): TeamsData {
