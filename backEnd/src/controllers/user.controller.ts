@@ -1,10 +1,19 @@
-import { Controller, Get, Req, Res, Session, Post, Body, HttpCode, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Req,
+  Res,
+  Post,
+  Body,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { Response } from 'express';
 import { UserService } from 'src/services/user.service';
 
 @Controller('user')
 export class UserController {
-    constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) {}
   @Get()
   async getUserStatus(@Req() req: Request & { session: any }) {
     if (!(await this.userService.isLoggedIn(req))) {
@@ -13,9 +22,12 @@ export class UserController {
     return;
   }
   @Post('login')
-  login(@Req() request: Request & { session: any }, @Res() response: Response, @Body() data: {username: string}) {
+  login(
+    @Req() request: Request & { session: any },
+    @Body() data: { username: string },
+  ) {
     const success = this.userService.handleUserLogin(data.username);
-    if ( success ) {
+    if (success) {
       request.session.username = data.username;
       console.log(`User ${data.username} logged in`);
       return;
