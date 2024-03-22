@@ -8,7 +8,6 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
-import { Response } from 'express';
 import { UserService } from 'src/services/user.service';
 
 @Controller('user')
