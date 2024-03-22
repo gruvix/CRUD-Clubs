@@ -1,4 +1,4 @@
-import { Controller, Get, Req, Res, Session, Post, Body, HttpCode } from '@nestjs/common';
+import { Controller, Get, Req, Res, Session, Post, Body, HttpCode, HttpException, HttpStatus } from '@nestjs/common';
 import { Response } from 'express';
 import { UserService } from 'src/services/user.service';
 
@@ -10,7 +10,7 @@ export class UserController {
     const username = await this.userService.isLoggedIn(req);
     console.log(`User ${username} is retrieving user status`);
     if( !username ) {
-       return { statusCode: 401, message: 'Unauthorized' };
+      throw new HttpException('Not logged in', HttpStatus.UNAUTHORIZED);
     }
     return username;
   }
