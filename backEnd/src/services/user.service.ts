@@ -11,12 +11,16 @@ function userExists(username: string): boolean | Error {
   }
   return true;
 }
+function getUsername(req: Request & { session: any }): Promise<string> {
+  return req.session.username;
+}
 
 @Injectable()
 export class UserService {
 
-  async getUsername(req: Request & { session: any }): Promise<string> {
-    return req.session.username;
+  async isLoggedIn(req: Request & { session: any }): Promise<boolean> {
+    const username = await getUsername(req);
+    return !!username;
   }
 
   async handleUserLogin(username: string) {
