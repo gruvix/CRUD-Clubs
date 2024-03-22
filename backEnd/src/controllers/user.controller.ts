@@ -7,7 +7,7 @@ export class UserController {
     constructor(private readonly userService: UserService) {}
   @Get()
   async getUserStatus(@Req() req: Request & { session: any }) {
-    const username = await this.userService.getUsername(req);
+    const username = await this.userService.isLoggedIn(req);
     console.log(`User ${username} is retrieving user status`);
     if( !username ) {
        return { statusCode: 401, message: 'Unauthorized' };
