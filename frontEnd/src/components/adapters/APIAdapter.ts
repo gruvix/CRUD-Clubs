@@ -11,9 +11,9 @@ function responseRedirect(status: number) {
     case 403:
       return { redirect: webAppPaths.home };
     case 404:
-      return { redirect: `${webAppPaths.error}/404` };
+      return { redirect: `${webAppPaths.error(404)}` };
     case 500:
-      return { redirect: `${webAppPaths.error}/500` };
+      return { redirect: `${webAppPaths.error(500)}` };
     default:
       return null;
   }
