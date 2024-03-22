@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { TeamsController } from 'src/controllers/teams.controller';
 import { SessionModule } from 'nestjs-session';
-import { UserController } from 'src/controllers/user.controller';
 import { UserService } from 'src/services/user.service';
+import { TeamsController } from 'src/controllers/teams.controller';
+import { UserController } from 'src/controllers/user.controller';
 
 @Module({
   imports: [
