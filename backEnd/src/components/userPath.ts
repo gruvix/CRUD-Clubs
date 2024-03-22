@@ -1,12 +1,15 @@
 /* eslint-disable max-len */
-import path from "path";
+import { existsSync } from "fs";
+import { join } from "path";
 /**
  * @param {string} username - username of the user
- * @returns the path to the root folder of the user E.g. ./private/userData/USERNAME
+ * @returns the path to the root folder of the user E.g. ROOT/src/userData/USERNAME
  */
 export function getUserRootPath(username: string) {
-  const projectRoot = __dirname;
-  return path.join(projectRoot, "..", "userData", username);
+  const projectRoot = existsSync(join(__dirname, "..", "userData", username)) ? join(__dirname, '..') : process.cwd();
+  const path = join(projectRoot, "src", "userData", username);
+  console.log('returns: ' + path)
+  return path;
 }
 /**
  * @param {string} username - username of the user
