@@ -10,6 +10,11 @@ export function getUserRootPath(username: string) {
   const path = join(projectRoot, "src", "userData", username);
   return path;
 }
+export function getSessionsFolderPath() {
+  const projectRoot = existsSync(join(__dirname, "..", "sessions")) ? join(__dirname, '..') : process.cwd();
+  const path = join(projectRoot, "src", "sessions");
+  return path;
+}
 /**
  * @param {string} username - username of the user
  * @param {boolean} fullpath - if true, return the full path to the teams.json file of the user, if false, return the relative path
