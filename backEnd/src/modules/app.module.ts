@@ -1,11 +1,13 @@
 import { Module } from '@nestjs/common';
 import { SessionModule } from 'nestjs-session';
-import { UserService } from 'src/services/user.service';
-import { TeamsController } from 'src/controllers/teams.controller';
-import { UserController } from 'src/controllers/user.controller';
 import * as session from 'express-session';
 import * as FileStore from 'session-file-store';
 import { getSessionsFolderPath } from 'src/components/userPath';
+import { UserController } from 'src/controllers/user.controller';
+import { UserService } from 'src/services/user.service';
+import { TeamsController } from 'src/controllers/teams.controller';
+import { TeamController } from 'src/controllers/team.controller';
+import { TeamService } from 'src/services/team.service';
 
 @Module({
   imports: [
@@ -24,7 +26,7 @@ import { getSessionsFolderPath } from 'src/components/userPath';
       },
     }),
   ],
-  controllers: [TeamsController, UserController],
-  providers: [UserService],
+  controllers: [UserController, TeamsController, TeamController],
+  providers: [UserService, TeamService],
 })
 export class AppModule {}
