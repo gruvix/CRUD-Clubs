@@ -7,12 +7,10 @@ export class UserController {
     constructor(private readonly userService: UserService) {}
   @Get()
   async getUserStatus(@Req() req: Request & { session: any }) {
-    const username = await this.userService.isLoggedIn(req);
-    console.log(`User ${username} is retrieving user status`);
-    if( !username ) {
+    if (!(await this.userService.isLoggedIn(req))) {
       throw new HttpException('Not logged in', HttpStatus.UNAUTHORIZED);
     }
-    return username;
+    return;
   }
   @Post('login')
   login(@Req() request: Request & { session: any }, @Res() response: Response, @Body() data: {username: string}) {
