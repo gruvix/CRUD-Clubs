@@ -1,6 +1,6 @@
 # Football teams CRUD project
 
-## Expanded Description of Key Features: <a name="teamManagement"></a>
+## Expanded Description of Key Features: <a name="team-management"></a>
 
 ### Team Management:
 
@@ -11,76 +11,68 @@
     Reset: Set a specific team back to its default state, clearing customised information.
     Reset All: Reset all your teams to their default states, starting fresh.
 
-![User teams page overview](user_overview.png)
-
 ### Player Management:
     
     Add: Assign players to specific teams, providing their names, positions, and country of origin.
     Edit: Modify player information within a team.
     Remove: Take players out of specific teams.
 
+
+![User teams page overview](user_overview.png)
+![Add team page](add_team.png)
 ![User specific team page overview](team_overview.png)
 
 ## Technologies
 
-    Express
-    Multer
-    jQuery
-    Bootstrap
-    Cypress
-    session-file-store
-    body-parser
+    FrontEnd:
+    - React
+    - Bootstrap
+    - WebPack
+    - TypeScript
+
+    BackEnd:
+    - Express
+    - Multer
+    - session-file-store
+    - body-parser
+    - TypeScript
+
+    Tests:
+    - Cypress
+
+    Other:
+    - Eslint
+    - Prettier
     
 ## How to use
 
+-Have [Node.js](https://nodejs.org/en) installed
+
 -Install dependencies `npm install`
 
--Run the server `npm run dev:templateNodemon`
+-Run the server:
 
-The server will run on port 8000.
+If running from Windows: `npm run startWindows`
 
--Access from a web browser to `localhost:8000`
+If running from Linux: `npm run startLinux` (uses gnome, it's currently un-tested, feedback is appreciated)
 
--Login with any name with only letters
+The server will run on port 8080.
 
--Do stuff, see [Team and Player Management](#teamManagement)
+2 windows will popup - one for WebPack and the other one for Express
+
+After that a web browser should open with the app, if not, access from a web browser to `localhost:8080`
+
+-Login with any username
+
+-Do stuff, see [Team and Player Management](#team-management)
 
 For test runs see [Tests](#tests)
 
-## Access URLs
-Main address: `localhost:8000`
-
-Homepage: `/` (GET)
-
-Login: `/user/login` (POST)
-
-Logout: `/user/logout` (POST)
-
-Teams list: `/user/teams` (GET)
-
-Team details: `/user/team/:teamId` (GET, PATCH, PUT, DELETE)
-
-Player editing: `/user/player/:teamId` (POST, PATCH, DELETE)
-
-Add a team: `/user/team/add` (GET, POST)
-
-Reset a team: `/user/reset/:teamId` (PUT) 
-
-Reset all teams: `/user/reset/all` (PUT)
-
-Upload crest image: `/user/customCrest/:teamId` (PUT)
-
-Get crest image: `/user/customCrest/:teamId/:filename` (GET)
-
-Error page: `/error` (GET)
-
 ## Tests <a name="tests"></a>
 
--Install dependencies `npm install`
+-Run the servers
 
--Run the server `npm run dev:templateNodemon`
-
--Run cypress `npm run dev:cypress`
+-Run cypress `npm run test`
 
 -Select end to end testing
 
@@ -100,9 +92,8 @@ There's a disabled test for removing all players from a team, but it lacks any a
 
 ### Limited Security:
 
-    The app lacks mechanisms to prevent unauthorized access or data manipulation:
-        User requests are not validated to ensure they only modify their own data.
-        Password protection is not implemented, making accounts vulnerable to unauthorized access.
+    The app lacks mechanisms to prevent unauthorized access or data manipulation since 
+    password protection is not implemented, making accounts vulnerable to unauthorized access.
 
 ### Inconsistent Error Handling:
 
@@ -120,7 +111,20 @@ There's a disabled test for removing all players from a team, but it lacks any a
 
 ### Limited Test Coverage: absence of Unit Tests
 
-    This application lacks unit tests focused on individiaul functions and logic components
+    This application lacks unit tests focused on individual functions and logic components
+
+### Simple File Storage Solution
+
+    The application currently uses file-based JSON storage. Future development plans could 
+    include exploring database integration (e.g., SQLite, MongoDB) to enhance scalability,
+    performance, and data management capabilities.
+
+### Incomplete TypeScript integration for Middleware Requests
+
+    Due to complexities in typing middleware request objects, they are currently typed as 'any'.
+    This circumvents TypeScript's benefits for these specific components. Future work involves
+    investigating solutions to accurately type middleware requests, ensuring complete TypeScript
+    coverage across the application
 
 ## Credits
 [Javascript Course Argentina Programa](https://argentinaprograma.com/)
