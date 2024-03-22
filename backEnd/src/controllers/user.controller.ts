@@ -1,13 +1,18 @@
-import { Controller, Get, Req, Res, Session } from '@nestjs/common';
-import TeamExtended from 'src/components/models/TeamExtended';
-import { getTeamsList } from 'src/components/teamStorage';
+import { Controller, Get, Req, Res, Session, Post, Body, HttpCode } from '@nestjs/common';
+import { Response } from 'express';
+import { UserService } from 'src/services/user.service';
 
 @Controller('user')
 export class UserController {
-  @Get('status')
-  getTeamsList(@Req() req: any, @Res() res: Response, @Session() session: any) {
-    const { username } = session;
-    //Implement username retrieval, return username
-    return true;
+    constructor(private readonly userService: UserService) {}
+  @Get()
+  async getUserStatus(@Req() req: Request & { session: any }) {
+    const username = await this.userService.getUsername(req);
+    console.log(`User ${username} is retrieving user status`);
+    if( !username ) {
+       return { statusCode: 401, message: 'Unauthorized' };
+    }
+    return username;
+  }
   }
 }
