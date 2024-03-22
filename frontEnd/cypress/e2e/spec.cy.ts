@@ -63,6 +63,13 @@ describe("test login", () => {
     cy.get("#username").type(TEST_USER).get("#enter-page-button").click();
     cy.get("#username").should("have.text", TEST_USER);
   });
+
+  it('should login then visit login page and get redirected to user page', () => {
+    cy.get("#username").type(TEST_USER).get("#enter-page-button").click();
+    cy.get("#username").should("have.text", TEST_USER);
+    cy.visit(WEB_APP_BASE_URL);
+    cy.get("#username").should("have.text", TEST_USER);
+  });
 });
 
 describe("test teams view page", () => {
