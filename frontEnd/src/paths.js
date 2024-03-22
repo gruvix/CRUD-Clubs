@@ -16,7 +16,7 @@ export const apiRequestPaths = {
   addTeam: `${BASE_API_URL}/user/team/add`,
   player: (teamId) => `${BASE_API_URL}/user/player/${teamId}`,
   updateCrest: (teamId) => `${BASE_API_URL}/user/customCrest/${teamId}`,
-  userStatus: `${BASE_API_URL}/user/status`,
+  user: `${BASE_API_URL}/user`,
   resetAll: `${BASE_API_URL}/user/reset/all`,
   resetTeam: (teamId) => `${BASE_API_URL}/user/reset/${teamId}`,
 };
