@@ -12,7 +12,7 @@ const TEST_TEAM_PATH = webAppPaths.team(TEST_TEAM_ID);
 const TEST_TEAM_PLAYER_PATH = apiRequestPaths.player(TEST_TEAM_ID);
 const CUSTOM_CREST_UPLOAD_PATH = apiRequestPaths.updateCrest(TEST_TEAM_ID);
 const TEST_TEAM_EXPECTED_IMG_SRC = `${apiRequestPaths.updateCrest(TEST_TEAM_ID)}/${TEST_TEAM_ID}.jpg`;
-const LOGIN_PATH = apiRequestPaths.login;
+const LOGIN_PATH = apiRequestPaths.user;
 
 function generateRandomString(length = 5) {
   const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";

@@ -29,7 +29,7 @@ export default class APIAdapter {
     if (error) {
       throw new Error(error);
     }
-    const response = await fetch(apiRequestPaths.login, {
+    const response = await fetch(apiRequestPaths.user, {
       method: "POST",
       credentials: "include",
       headers: {

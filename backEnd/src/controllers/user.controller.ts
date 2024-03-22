@@ -20,7 +20,7 @@ export class UserController {
     }
     return;
   }
-  @Post('login')
+  @Post()
   login(
     @Req() request: Request & { session: any },
     @Body() data: { username: string },

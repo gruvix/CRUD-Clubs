@@ -9,8 +9,6 @@ export const webAppPaths = {
   error: (code) => `/error/${code}`,
 };
 export const apiRequestPaths = {
-  login: `${BASE_API_URL}/user/login`,
-  logout: `${BASE_API_URL}/user/logout`,
   teams: `${BASE_API_URL}/user/teams`,
   team: (teamId) => `${BASE_API_URL}/user/team/${teamId}`,
   addTeam: `${BASE_API_URL}/user/team/add`,
