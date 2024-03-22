@@ -12,6 +12,7 @@ export class TeamsController {
   @Get()
   getTeamsList(@Req() req: Request & { session: any }, @Res() res: Response): TeamsData {
     const { username } = req.session;
+    console.log(`User ${username} requested teams list`);
     const data: TeamsData = {
       username, //Create custom endpoint to get username, remove username from other requests
       teams: getTeamsList(username),
