@@ -1,4 +1,4 @@
-import fs from "fs";
+import * as fs from "fs";
 
 export function deleteFile(userPath: string) {
   fs.rmSync(userPath, { recursive: true, force: true });
