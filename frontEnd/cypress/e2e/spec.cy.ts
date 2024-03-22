@@ -61,6 +61,7 @@ describe("test login", () => {
 
   it('should login with "test"', () => {
     cy.get("#username").type(TEST_USER).get("#enter-page-button").click();
+    cy.get("#username").should("have.text", TEST_USER);
   });
 });
 
