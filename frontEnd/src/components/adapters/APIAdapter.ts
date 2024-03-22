@@ -40,7 +40,7 @@ export default class APIAdapter {
     }
   }
   async getUserStatus() {
-    const response = await fetch(apiRequestPaths.userStatus, {
+    const response = await fetch(apiRequestPaths.user, {
       method: "GET",
       credentials: "include",
     });
