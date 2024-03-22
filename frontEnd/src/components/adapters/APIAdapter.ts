@@ -5,13 +5,16 @@ import Team, { TeamParameters } from "./Team";
 import TeamCard from "./TeamCard";
 
 function responseRedirect(status: number) {
-  if (status === 401) {
-    return { redirect: webAppPaths.home };
+  switch (status) {
+    case 401:
+      return { redirect: webAppPaths.home };
+    case 404:
+      return { redirect: `${webAppPaths.error}/404` };
+    case 500:
+      return { redirect: `${webAppPaths.error}/500` };
+    default:
+      return null;
   }
-  if (status === 404) {
-    return { redirect: `${webAppPaths.error}/404` };
-  }
-  return null;
 }
 
 export interface RedirectData {
