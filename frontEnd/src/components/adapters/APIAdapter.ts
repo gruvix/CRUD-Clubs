@@ -41,6 +41,15 @@ export default class APIAdapter {
       throw new Error(`Login failed with status: ${response.status}`);
     }
   }
+  async logout() {
+    const response = await fetch(apiRequestPaths.user, {
+      method: "DELETE",
+      credentials: "include",
+    });
+    if (!response.ok) {
+      throw new Error(`Logout failed with status: ${response.status}`);
+    }
+  }
   async getUserStatus() {
     const response = await fetch(apiRequestPaths.user, {
       method: "GET",
