@@ -8,13 +8,14 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
+import CustomRequest from 'src/components/models/CustomRequest.interface';
 import UserService from 'src/services/user.service';
 
 @Controller('user')
 export default class UserController {
   constructor(private readonly userService: UserService) {}
   @Get()
-  async getUserStatus(@Req() req: Request & { session: any }) {
+  async getUserStatus(@Req() req: CustomRequest) {
     if (!(await this.userService.isLoggedIn(req))) {
       throw new HttpException('Not logged in', HttpStatus.UNAUTHORIZED);
     }
@@ -22,7 +23,7 @@ export default class UserController {
   }
   @Post()
   login(
-    @Req() request: Request & { session: any },
+    @Req() request: CustomRequest,
     @Body() data: { username: string },
   ) {
     const success = this.userService.handleUserLogin(data.username);
@@ -35,7 +36,7 @@ export default class UserController {
     }
   }
   @Delete()
-  logout(@Req() request: Request & { session: any }) {
+  logout(@Req() request: CustomRequest) {
     console.log(`User ${request.session.username} is logging out`);
     request.session.destroy();
   }

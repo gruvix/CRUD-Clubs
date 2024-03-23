@@ -7,6 +7,7 @@ import {
   Body,
   UseGuards,
 } from '@nestjs/common';
+import CustomRequest from 'src/components/models/CustomRequest.interface';
 import TeamData from 'src/components/models/TeamData.interface';
 import TeamExtended from 'src/components/models/TeamExtended';
 import { AuthGuard } from 'src/guards/auth.guard';
@@ -19,7 +20,7 @@ export default class TeamController {
 
   @Get(':teamId')
   getTeam(
-    @Req() req: Request & { session: any },
+    @Req() req: CustomRequest,
     @Param() params: any,
   ): TeamExtended {
     const { username } = req.session;
@@ -33,7 +34,7 @@ export default class TeamController {
 
   @Patch(':teamId')
   updateTeam(
-    @Req() req: Request & { session: any },
+    @Req() req: CustomRequest,
     @Param() params: any,
     @Body() data: TeamData,
   ) {

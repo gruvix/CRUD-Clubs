@@ -1,4 +1,5 @@
 import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import CustomRequest from 'src/components/models/CustomRequest.interface';
 import TeamExtended from 'src/components/models/TeamExtended';
 import { AuthGuard } from 'src/guards/auth.guard';
 import TeamsService from 'src/services/teams.service';
@@ -14,7 +15,7 @@ export default class TeamsController {
 
   @Get()
   @UseGuards(AuthGuard)
-  getTeamsList(@Req() req: Request & { session: any }): TeamsData {
+  getTeamsList(@Req() req: CustomRequest): TeamsData {
     const { username } = req.session;
     console.log(`User ${username} requested teams list`);
     const data: TeamsData = {

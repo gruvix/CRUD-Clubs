@@ -19,7 +19,7 @@ export default class PlayerController {
 
   @Post()
   addPlayer(
-    @Req() req: Request & { session: any },
+    @Req() req: CustomRequest,
     @Param() params: any,
     @Body() data: Player,
   ) {
@@ -31,7 +31,7 @@ export default class PlayerController {
 
   @Patch()
   updatePlayer(
-    @Req() req: Request & { session: any },
+    @Req() req: CustomRequest,
     @Param() params: any,
     @Body() data: Player,
   ) {
