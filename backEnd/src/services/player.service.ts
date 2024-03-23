@@ -10,9 +10,6 @@ import {
 export default class PlayerService {
   newPlayer(username: string, teamId: string | number, player: Player) {
     let newId: number;
-    if (!validateTeam(username, teamId)) {
-      throw new HttpException('Team not found', HttpStatus.BAD_REQUEST);
-    }
     try {
       newId = addPlayer(username, teamId, player);
     } catch {
@@ -23,9 +20,6 @@ export default class PlayerService {
     }
   }
   updatePlayerData(username: string, teamId: string | number, newData: Player) {
-    if (!validateTeam(username, teamId)) {
-      throw new HttpException('Team not found', HttpStatus.BAD_REQUEST);
-    }
     try {
       updatePlayer(username, teamId, newData);
     } catch {

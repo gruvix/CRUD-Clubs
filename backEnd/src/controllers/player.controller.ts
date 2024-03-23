@@ -10,9 +10,10 @@ import {
 import CustomRequest from 'src/components/models/CustomRequest.interface';
 import Player from 'src/components/models/Player';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { TeamGuard } from 'src/guards/team.guard';
 import PlayerService from 'src/services/player.service';
 
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, TeamGuard)
 @Controller('user/team/:teamId/player')
 export default class PlayerController {
   constructor(private readonly playerService: PlayerService) {}

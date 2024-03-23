@@ -11,9 +11,6 @@ import {
 @Injectable()
 export default class TeamService {
   getTeamData(username: string, teamId: string | number): TeamExtended {
-    if (!validateTeam(username, teamId)) {
-      return null;
-    }
     let team: TeamExtended;
     const teamDefaultBool = isTeamDefault(username, teamId);
     try {
@@ -38,9 +35,6 @@ export default class TeamService {
     teamId: string | number,
     newData: { [key: string]: string | number | boolean },
   ) {
-    if (!validateTeam(username, teamId)) {
-      throw new HttpException('Team not found', HttpStatus.BAD_REQUEST);
-    }
     try {
       updateTeam(newData, username, teamId);
     } catch {

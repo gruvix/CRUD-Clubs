@@ -11,9 +11,10 @@ import CustomRequest from 'src/components/models/CustomRequest.interface';
 import TeamData from 'src/components/models/TeamData.interface';
 import TeamExtended from 'src/components/models/TeamExtended';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { TeamGuard } from 'src/guards/team.guard';
 import TeamService from 'src/services/team.service';
 
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, TeamGuard)
 @Controller('user/team')
 export default class TeamController {
   constructor(private readonly teamService: TeamService) {}
