@@ -1,5 +1,5 @@
 import express, { Router, Request, Response } from 'express';
-import { validateUsername } from '../backEnd/src/components/auth';
+import { validateUsername } from '../backEnd/src/components/userValidation';
 import { validateFile } from '../backEnd/src/components/Adapters/storage/dataStorage';
 import { getUserTeamsListJSONPath } from '../backEnd/src/components/Adapters/storage/userPath';
 import { createUser } from '../backEnd/src/components/Adapters/user.adapter';

@@ -1,6 +1,6 @@
 
 import { Injectable } from '@nestjs/common';
-import { validateUsername } from 'src/components/auth';
+import { validateUsername } from 'src/components/userValidation';
 import { createUser } from 'src/components/Adapters/user.adapter';
 import { getUserTeamsListJSONPath } from 'src/components/Adapters/storage/userPath';
 import { validateFile } from 'src/components/Adapters/storage/dataStorage';
