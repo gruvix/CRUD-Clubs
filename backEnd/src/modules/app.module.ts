@@ -6,6 +6,7 @@ import { getSessionsFolderPath } from 'src/components/userPath';
 import { UserController } from 'src/controllers/user.controller';
 import { UserService } from 'src/services/user.service';
 import { TeamsController } from 'src/controllers/teams.controller';
+import { TeamsService } from 'src/services/teams.service';
 import { TeamController } from 'src/controllers/team.controller';
 import { TeamService } from 'src/services/team.service';
 
@@ -27,6 +28,6 @@ import { TeamService } from 'src/services/team.service';
     }),
   ],
   controllers: [UserController, TeamsController, TeamController],
-  providers: [UserService, TeamService],
+  providers: [UserService, TeamsService, TeamService],
 })
 export class AppModule {}
