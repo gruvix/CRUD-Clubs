@@ -38,6 +38,10 @@ export default class UserController {
   @Delete()
   logout(@Req() request: CustomRequest) {
     console.log(`User ${request.session.username} is logging out`);
-    request.session.destroy();
+    request.session.destroy((error) => {
+      if (error) {
+        throw new HttpException('Failed to logout', HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+    });
   }
 }
