@@ -1,6 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import TeamExtended from 'src/components/models/TeamExtended';
-import { getTeam, hasTeamDefault, isTeamDefault, validateTeam } from 'src/components/teamStorage';
+import {
+  getTeam,
+  hasTeamDefault,
+  isTeamDefault,
+  updateTeam,
+  validateTeam,
+} from 'src/components/teamStorage';
 
 @Injectable()
 export class TeamService {
@@ -21,5 +27,21 @@ export class TeamService {
         isDefault: teamDefaultBool,
         hasDefault: hasTeamDefault(username, teamId),
       });
+  updateTeamData(
+    username: string,
+    teamId: string | number,
+    newData: { [key: string]: string | number | boolean },
+  ) {
+    if (!validateTeam(username, teamId)) {
+      throw new HttpException('Team not found', HttpStatus.BAD_REQUEST);
+    }
+    try {
+      updateTeam(newData, username, teamId);
+    } catch {
+      throw new HttpException(
+        'Server failed to update team',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }
