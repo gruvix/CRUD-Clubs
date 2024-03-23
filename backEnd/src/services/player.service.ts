@@ -8,7 +8,7 @@ import {
 
 @Injectable()
 export default class PlayerService {
-  newPlayer(username: string, teamId: string | number, player: Player) {
+  newPlayer(username: string, teamId: string | number, player: Player): number | Error {
     let newId: number;
     try {
       newId = addPlayer(username, teamId, player);
@@ -18,6 +18,7 @@ export default class PlayerService {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
+    return newId? newId : new Error('Failed to add player, unkown server error');
   }
   updatePlayerData(username: string, teamId: string | number, newData: Player) {
     try {
