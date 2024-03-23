@@ -9,7 +9,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import CustomRequest from 'src/components/models/CustomRequest.interface';
-import UserService from 'src/services/user.service';
+import UserService from 'src/components/services/user.service';
 
 @Controller('user')
 export default class UserController {
@@ -22,10 +22,7 @@ export default class UserController {
     return;
   }
   @Post()
-  login(
-    @Req() request: CustomRequest,
-    @Body() data: { username: string },
-  ) {
+  login(@Req() request: CustomRequest, @Body() data: { username: string }) {
     const success = this.userService.handleUserLogin(data.username);
     if (success) {
       request.session.username = data.username;
@@ -40,7 +37,10 @@ export default class UserController {
     console.log(`User ${request.session.username} is logging out`);
     request.session.destroy((error) => {
       if (error) {
-        throw new HttpException('Failed to logout', HttpStatus.INTERNAL_SERVER_ERROR);
+        throw new HttpException(
+          'Failed to logout',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
       }
     });
   }

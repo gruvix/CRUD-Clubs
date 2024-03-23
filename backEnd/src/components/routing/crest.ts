@@ -1,9 +1,9 @@
 import express from "express";
 import multer from "multer";
-import { updateTeam } from "../teamStorage";
-import { getUserCustomCrestFolderPath } from "../userPath";
-import { validateFile } from "../utils";
-import { storage, imageFilter } from "../multerConfig";
+import { updateTeam } from "../Adapters/teamStorage.adapter";
+import { getUserCustomCrestFolderPath } from "../Adapters/storage/userPath";
+import { validateFile } from "../Adapters/storage/dataStorage";
+import { storage, imageFilter } from "../Adapters/storage/multerConfig";
 import { paths } from "./paths";
 
 const uploadImage = multer({ storage, fileFilter: imageFilter });

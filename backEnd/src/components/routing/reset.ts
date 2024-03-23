@@ -1,8 +1,8 @@
 import express from "express";
-import { deleteUser, createUser } from "../user";
-import { validateFile } from "../utils";
-import { getUserTeamsListJSONPath } from "../userPath";
-import { deleteTeam, cloneTeamFromDefault, copyTeamListTeam, hasTeamDefault } from "../teamStorage";
+import { deleteUser, createUser } from "../Adapters/user.adapter";
+import { validateFile } from "../Adapters/storage/dataStorage";
+import { getUserTeamsListJSONPath } from "../Adapters/storage/userPath";
+import { deleteTeam, cloneTeamFromDefault, copyTeamListTeam, hasTeamDefault } from "../Adapters/teamStorage.adapter";
 
 const router = express.Router();
 

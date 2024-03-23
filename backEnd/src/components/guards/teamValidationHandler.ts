@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
-import { validateTeam } from 'src/components/teamStorage';
+import { validateTeam } from 'src/components/Adapters/teamStorage.adapter';
 
 export default function handleTeamValidation(
   username: string,

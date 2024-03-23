@@ -1,7 +1,7 @@
 import multer, { FileFilterCallback } from "multer";
 import path from "path";
 import { getUserCustomCrestFolderPath } from "./userPath";
-import { findNextFreeTeamId } from "./teamStorage";
+import { findNextFreeTeamId } from "../teamStorage.adapter";
 import { Request } from "express";
 
 const imageFilter = (

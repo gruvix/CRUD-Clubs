@@ -8,8 +8,8 @@ import {
   deleteTeam,
   addTeam,
   hasTeamDefault,
-} from "../teamStorage";
-import { storage, imageFilter } from "../multerConfig";
+} from "../Adapters/teamStorage.adapter";
+import { storage, imageFilter } from "../Adapters/storage/multerConfig";
 import TeamExtended from "../models/TeamExtended";
 
 const uploadImage = multer({ storage, fileFilter: imageFilter });

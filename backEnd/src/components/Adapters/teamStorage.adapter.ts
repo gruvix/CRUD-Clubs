@@ -1,9 +1,9 @@
-import TeamListTeam from "./models/TeamListTeam";
-import Player from "./models/Player";
-import TeamExtended from "./models/TeamExtended";
-import { getUserTeamJSONPath, getUserTeamsListJSONPath } from "./userPath";
-import { readFile, writeFile, deleteFile } from "./utils";
-import { paths } from "./routing/paths";
+import TeamListTeam from '../models/TeamListTeam';
+import Player from '../models/Player';
+import TeamExtended from '../models/TeamExtended';
+import { getUserTeamJSONPath, getUserTeamsListJSONPath } from './storage/userPath';
+import { readFile, writeFile, deleteFile } from './storage/dataStorage';
+import { paths } from '../routing/paths';
 
 function saveTeam(team: TeamExtended, username: string) {
   try {
@@ -61,7 +61,7 @@ function updateTeamlistParameter(
   username: string,
   teamId: number | string,
   parameter: string,
-  value: string | number | boolean
+  value: string | number | boolean,
 ) {
   const teamsPath = getUserTeamsListJSONPath(username);
   const teams = readFile(teamsPath);
@@ -71,7 +71,7 @@ function updateTeamlistParameter(
 export function copyTeamListTeam(
   sourceUser: string,
   targetUser: string,
-  teamId: string | number
+  teamId: string | number,
 ) {
   const sourceTeamsPath = getUserTeamsListJSONPath(sourceUser);
   const targetTeamsPath = getUserTeamsListJSONPath(targetUser);
@@ -79,7 +79,7 @@ export function copyTeamListTeam(
   const defaultTeams: TeamListTeam[] = readFile(sourceTeamsPath);
 
   const newTeam: TeamListTeam = Object.values(defaultTeams).find(
-    (team: TeamListTeam) => team.id === Number(teamId)
+    (team: TeamListTeam) => team.id === Number(teamId),
   ) as TeamListTeam;
   try {
     userTeams[teamId] = new TeamListTeam(newTeam);
@@ -114,10 +114,10 @@ function deleteTeamFromTeamlist(username: string, teamId: number | string) {
  */
 export function cloneTeamFromDefault(
   targetUser: string,
-  teamId: number | string
+  teamId: number | string,
 ) {
   try {
-    const DEFAULT_USER = "default";
+    const DEFAULT_USER = 'default';
     const team = getTeam(DEFAULT_USER, teamId);
     saveTeam(team, targetUser);
   } catch (copyError) {
@@ -128,12 +128,12 @@ function defaultTeamCheck(username: string, teamId: number | string) {
   try {
     if (isTeamDefault(username, teamId)) {
       cloneTeamFromDefault(username, teamId);
-      const DEFAULT_TEAMLIST_PARAMETER = "isDefault";
+      const DEFAULT_TEAMLIST_PARAMETER = 'isDefault';
       updateTeamlistParameter(
         username,
         teamId,
         DEFAULT_TEAMLIST_PARAMETER,
-        false
+        false,
       );
     }
   } catch (error) {
@@ -150,7 +150,7 @@ function getDate() {
 export function updateTeam(
   newData: { [key: string]: string | number | boolean },
   username: string,
-  teamId: number | string
+  teamId: number | string,
 ) {
   const updatedData = newData;
   defaultTeamCheck(username, teamId);
@@ -179,7 +179,9 @@ export function deleteTeam(username: string, teamId: number | string) {
   deleteTeamFromTeamlist(username, teamId);
 }
 function findNextFreePlayerId(players: Player[]): number {
-  const sortedPlayers = [...players].sort((a: Player, b: Player) => a.id - b.id);
+  const sortedPlayers = [...players].sort(
+    (a: Player, b: Player) => a.id - b.id,
+  );
 
   let nextFreeId = 0;
 
@@ -201,7 +203,7 @@ function findNextFreePlayerId(players: Player[]): number {
 export function addPlayer(
   username: string,
   teamId: number | string,
-  playerData: Player
+  playerData: Player,
 ) {
   try {
     defaultTeamCheck(username, teamId);
@@ -214,7 +216,7 @@ export function addPlayer(
     } else {
       team.squad.unshift(player);
     }
-    console.log("Adding player to team", teamId);
+    console.log('Adding player to team', teamId);
     saveTeam(team, username);
     return id;
   } catch (error) {
@@ -224,20 +226,20 @@ export function addPlayer(
 export function updatePlayer(
   username: string,
   teamId: number | string,
-  player: Player
+  player: Player,
 ) {
   try {
     defaultTeamCheck(username, teamId);
     const team = getTeam(username, teamId);
     console.log(`Updating player ${player.id} in team ${teamId}`);
     const playerIndex = team.squad.findIndex(
-      (squadPlayer: Player) => Number(squadPlayer.id) === Number(player.id)
+      (squadPlayer: Player) => Number(squadPlayer.id) === Number(player.id),
     );
     if (playerIndex !== -1) {
       team.squad[playerIndex] = player;
       saveTeam(team, username);
     } else {
-      throw new Error("Player not found");
+      throw new Error('Player not found');
     }
   } catch (error) {
     throw error;
@@ -246,13 +248,13 @@ export function updatePlayer(
 export function removePlayer(
   username: string,
   teamId: number | string,
-  playerId: string | number
+  playerId: string | number,
 ) {
   try {
     defaultTeamCheck(username, teamId);
     const team = getTeam(username, teamId);
     team.squad = team.squad.filter(
-      (player: Player) => Number(player.id) !== Number(playerId)
+      (player: Player) => Number(player.id) !== Number(playerId),
     );
     saveTeam(team, username);
   } catch (error) {
@@ -262,7 +264,9 @@ export function removePlayer(
 export function findNextFreeTeamId(username: string) {
   const teamsPath = getUserTeamsListJSONPath(username);
   const teamsData: TeamListTeam[] = readFile(teamsPath);
-  const sortedTeams = Object.values(teamsData).sort((a: TeamListTeam, b: TeamListTeam) => a.id - b.id);
+  const sortedTeams = Object.values(teamsData).sort(
+    (a: TeamListTeam, b: TeamListTeam) => a.id - b.id,
+  );
   let nextFreeId = 0;
   for (let index = 0; index < sortedTeams.length; index += 1) {
     if (sortedTeams[index].id > nextFreeId) {
@@ -276,13 +280,18 @@ export function findNextFreeTeamId(username: string) {
 function addTeamToTeamlist(newTeam: TeamExtended, username: string) {
   const userTeamsPath = getUserTeamsListJSONPath(username);
   const userTeams = readFile(userTeamsPath);
-  userTeams[newTeam.id] = new TeamListTeam(newTeam as unknown as TeamListTeam, true, false, false);
+  userTeams[newTeam.id] = new TeamListTeam(
+    newTeam as unknown as TeamListTeam,
+    true,
+    false,
+    false,
+  );
   writeFile(userTeamsPath, JSON.stringify(userTeams));
 }
 export function addTeam(
   username: string,
   teamData: any,
-  imageFileName: string
+  imageFileName: string,
 ) {
   try {
     const id = findNextFreeTeamId(username);
@@ -294,7 +303,7 @@ export function addTeam(
       hasCustomCrest: true,
       isDefault: false,
       hasDefault: false,
-    });// Replace TeamExtended with custom class that stores team in original (default) format
+    }); // Replace TeamExtended with custom class that stores team in original (default) format
     saveTeam(team, username);
     addTeamToTeamlist(team, username);
     return id;

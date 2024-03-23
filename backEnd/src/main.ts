@@ -1,5 +1,5 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './modules/app.module';
+import { AppModule } from './components/modules/app.module';
 import { CLIENT_BASE_URL } from "./components/routing/paths";
 
 const corsOptions = {

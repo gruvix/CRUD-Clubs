@@ -2,15 +2,15 @@ import { Module } from '@nestjs/common';
 import { SessionModule } from 'nestjs-session';
 import * as session from 'express-session';
 import * as FileStore from 'session-file-store';
-import { getSessionsFolderPath } from 'src/components/userPath';
-import PlayerService from 'src/services/player.service';
-import UserController from 'src/controllers/user.controller';
-import TeamsController from 'src/controllers/teams.controller';
-import TeamController from 'src/controllers/team.controller';
-import PlayerController from 'src/controllers/player.controller';
-import TeamService from 'src/services/team.service';
-import TeamsService from 'src/services/teams.service';
-import UserService from 'src/services/user.service';
+import { getSessionsFolderPath } from 'src/components/Adapters/storage/userPath';
+import PlayerService from 'src/components/services/player.service';
+import UserController from 'src/components/controllers/user.controller';
+import TeamsController from 'src/components/controllers/teams.controller';
+import TeamController from 'src/components/controllers/team.controller';
+import PlayerController from 'src/components/controllers/player.controller';
+import TeamService from 'src/components/services/team.service';
+import TeamsService from 'src/components/services/teams.service';
+import UserService from 'src/components/services/user.service';
 
 @Module({
   imports: [

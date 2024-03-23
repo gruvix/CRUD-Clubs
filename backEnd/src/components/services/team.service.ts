@@ -6,7 +6,7 @@ import {
   isTeamDefault,
   updateTeam,
   validateTeam,
-} from 'src/components/teamStorage';
+} from 'src/components/Adapters/teamStorage.adapter';
 
 @Injectable()
 export default class TeamService {

@@ -1,8 +1,8 @@
 import express, { Router, Request, Response } from 'express';
 import { validateUsername } from '../auth';
-import { validateFile } from '../utils';
-import { getUserTeamsListJSONPath } from '../userPath';
-import { createUser } from '../user';
+import { validateFile } from '../Adapters/storage/dataStorage';
+import { getUserTeamsListJSONPath } from '../Adapters/storage/userPath';
+import { createUser } from '../Adapters/user.adapter';
 
 const router: Router = express.Router();
 

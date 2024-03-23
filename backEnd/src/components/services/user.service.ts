@@ -1,9 +1,9 @@
 
 import { Injectable } from '@nestjs/common';
 import { validateUsername } from 'src/components/auth';
-import { createUser } from 'src/components/user';
-import { getUserTeamsListJSONPath } from 'src/components/userPath';
-import { validateFile } from 'src/components/utils';
+import { createUser } from 'src/components/Adapters/user.adapter';
+import { getUserTeamsListJSONPath } from 'src/components/Adapters/storage/userPath';
+import { validateFile } from 'src/components/Adapters/storage/dataStorage';
 
 function userExists(username: string): boolean | Error {
   if (!validateFile(getUserTeamsListJSONPath(username))) {

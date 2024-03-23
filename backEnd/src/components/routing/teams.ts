@@ -1,5 +1,5 @@
 import express, { Response, Router } from 'express';
-import { getTeamsList } from '../teamStorage';
+import { getTeamsList } from '../Adapters/teamStorage.adapter';
 import TeamExtended from "../models/TeamExtended";
 
 interface TeamsData {

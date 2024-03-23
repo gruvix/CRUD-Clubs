@@ -1,6 +1,6 @@
-import { copyTeamList } from './teamStorage';
-import { createFolder, deleteFile } from './utils';
-import { getUserRootPath, getUserTeamsFolderPath, getUserCustomCrestFolderPath } from './userPath';
+import { copyTeamList } from './teamStorage.adapter';
+import { createFolder, deleteFile } from './storage/dataStorage';
+import { getUserRootPath, getUserTeamsFolderPath, getUserCustomCrestFolderPath } from './storage/userPath';
 
 export function createUser(username: string) {
   try {

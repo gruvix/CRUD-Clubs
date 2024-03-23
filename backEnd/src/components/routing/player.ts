@@ -1,5 +1,5 @@
 import express from 'express';
-import { addPlayer, updatePlayer, removePlayer } from '../teamStorage';
+import { addPlayer, updatePlayer, removePlayer } from '../Adapters/teamStorage.adapter';
 
 const router = express.Router();
 

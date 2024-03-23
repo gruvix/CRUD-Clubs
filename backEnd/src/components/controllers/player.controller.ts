@@ -10,9 +10,9 @@ import {
 } from '@nestjs/common';
 import CustomRequest from 'src/components/models/CustomRequest.interface';
 import Player from 'src/components/models/Player';
-import { AuthGuard } from 'src/guards/auth.guard';
-import { TeamGuard } from 'src/guards/team.guard';
-import PlayerService from 'src/services/player.service';
+import { AuthGuard } from 'src/components/guards/auth.guard';
+import { TeamGuard } from 'src/components/guards/team.guard';
+import PlayerService from 'src/components/services/player.service';
 
 @UseGuards(AuthGuard, TeamGuard)
 @Controller('user/team/:teamId/player')
@@ -49,7 +49,6 @@ export default class PlayerController {
     @Body() data: { playerId: number },
   ) {
     const { playerId } = data;
-    console.log(playerId)
     const { username } = req.session;
     console.log(`User ${username} is deleting team ${params.teamId}'s player ${playerId}`);
     this.playerService.removePlayer(username, params.teamId, playerId);
