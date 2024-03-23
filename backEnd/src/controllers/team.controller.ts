@@ -3,12 +3,12 @@ import TeamExtended from 'src/components/models/TeamExtended';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { TeamService } from 'src/services/team.service';
 
+@UseGuards(AuthGuard)
 @Controller('user/team')
 export class TeamController {
   constructor(private readonly teamService: TeamService) {}
 
   @Get(':teamId')
-  @UseGuards(AuthGuard)
   getTeam(@Req() req: Request & { session: any }, @Param() params: any): TeamExtended {
     const { username } = req.session;
     console.log(`User ${username} requested team ${params.teamId}`);
