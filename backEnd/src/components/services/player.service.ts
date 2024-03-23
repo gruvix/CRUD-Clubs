@@ -1,12 +1,8 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import Player from 'src/components/models/Player';
-import {
-  addPlayer,
-  removePlayer,
-  updatePlayer,
-  validateTeam,
-} from 'src/components/Adapters/teamStorage.adapter';
+import TeamStorageAdapter from '../Adapters/teamStorage.adapter';
 
+const storage = new TeamStorageAdapter();
 @Injectable()
 export default class PlayerService {
   addPlayer(
@@ -16,7 +12,7 @@ export default class PlayerService {
   ): number | Error {
     let newId: number;
     try {
-      newId = addPlayer(username, teamId, player);
+      newId = storage.addPlayer(username, teamId, player);
     } catch {
       throw new HttpException(
         'Server failed to add player',
@@ -29,7 +25,7 @@ export default class PlayerService {
   }
   updatePlayer(username: string, teamId: string | number, newData: Player) {
     try {
-      updatePlayer(username, teamId, newData);
+      storage.updatePlayer(username, teamId, newData);
     } catch {
       throw new HttpException(
         'Server failed to update player',
@@ -43,7 +39,7 @@ export default class PlayerService {
     playerId: string | number,
   ) {
     try {
-      removePlayer(username, teamId, playerId);
+      storage.removePlayer(username, teamId, playerId);
     } catch {
       throw new HttpException(
         'Server failed to remove player',
