@@ -5,8 +5,8 @@
 ![User teams page overview](user_overview.png)
 
 This project serves as a playground for exploring web development concepts.
-It started with basic Express/Handlebars structure, but to practice frontend skills, i
-introduced React and WebPack.
+It started with basic Express/Handlebars structure, but to practice full-stack skills, i
+introduced React and WebPack for the frontend, NestJs for the backend, and Typescript in both ends.
 I'm currently enhancing modularity with NestJs and hexagonal architecture on the backend
 Future plans include transitioning to NextJs and expanding test coverage with Jest
 
