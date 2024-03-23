@@ -29,7 +29,7 @@ import Player from 'src/components/models/Player';
     }
 
     @Patch()
-    updateTeam(
+    updatePlayer(
       @Req() req: Request & { session: any },
       @Param() params: any,
       @Body() data: Player,
