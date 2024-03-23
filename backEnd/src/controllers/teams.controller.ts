@@ -1,7 +1,7 @@
 import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import TeamExtended from 'src/components/models/TeamExtended';
 import { AuthGuard } from 'src/guards/auth.guard';
-import { TeamsService } from 'src/services/teams.service';
+import TeamsService from 'src/services/teams.service';
 
 interface TeamsData {
   username: string;
@@ -9,7 +9,7 @@ interface TeamsData {
 }
 
 @Controller('user/teams')
-export class TeamsController {
+export default class TeamsController {
   constructor(private readonly teamsService: TeamsService) {}
 
   @Get()

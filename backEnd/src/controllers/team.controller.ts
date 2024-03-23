@@ -10,11 +10,11 @@ import {
 import TeamData from 'src/components/models/TeamData.interface';
 import TeamExtended from 'src/components/models/TeamExtended';
 import { AuthGuard } from 'src/guards/auth.guard';
-import { TeamService } from 'src/services/team.service';
+import TeamService from 'src/services/team.service';
 
 @UseGuards(AuthGuard)
 @Controller('user/team')
-export class TeamController {
+export default class TeamController {
   constructor(private readonly teamService: TeamService) {}
 
   @Get(':teamId')

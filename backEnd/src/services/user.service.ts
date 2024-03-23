@@ -16,7 +16,7 @@ function getUsername(req: Request & { session: any }): Promise<string> {
 }
 
 @Injectable()
-export class UserService {
+export default class UserService {
 
   async isLoggedIn(req: Request & { session: any }): Promise<boolean> {
     const username = await getUsername(req);

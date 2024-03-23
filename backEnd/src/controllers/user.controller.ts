@@ -8,10 +8,10 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
-import { UserService } from 'src/services/user.service';
+import UserService from 'src/services/user.service';
 
 @Controller('user')
-export class UserController {
+export default class UserController {
   constructor(private readonly userService: UserService) {}
   @Get()
   async getUserStatus(@Req() req: Request & { session: any }) {

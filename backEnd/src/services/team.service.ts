@@ -9,7 +9,7 @@ import {
 } from 'src/components/teamStorage';
 
 @Injectable()
-export class TeamService {
+export default class TeamService {
   getTeamData(username: string, teamId: string | number): TeamExtended {
     if (!validateTeam(username, teamId)) {
       return null;

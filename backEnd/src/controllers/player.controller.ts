@@ -12,7 +12,7 @@ import Player from 'src/components/models/Player';
   
   @UseGuards(AuthGuard)
   @Controller('user/team/:teamId/player')
-  export class PlayerController {
+  export default class PlayerController {
     constructor(private readonly playerService: PlayerService) {}
 
     @Patch()
