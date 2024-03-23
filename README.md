@@ -47,6 +47,16 @@
     - Eslint
     - Prettier
 
+
+## Architecture
+
+This project follows a hexagonal architecture pattern. This promotes a clean separation of concerns,
+making the core application logic independent from external systems like the UI and database
+
+See the diagram below for a visual representation of the application's structure:
+
+![Architecture Diagram](app_hex.png)
+
 ## How to use
 
 -Have [Node.js](https://nodejs.org/en) installed
