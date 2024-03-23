@@ -12,21 +12,27 @@ import {
 export class TeamService {
   getTeamData(username: string, teamId: string | number): TeamExtended {
     if (!validateTeam(username, teamId)) {
-        return null;
-      }
-      let team: TeamExtended;
-      const teamDefaultBool = isTeamDefault(username, teamId);
+      return null;
+    }
+    let team: TeamExtended;
+    const teamDefaultBool = isTeamDefault(username, teamId);
+    try {
       if (teamDefaultBool) {
-        const defaultUsername = "default";
+        const defaultUsername = 'default';
         team = getTeam(defaultUsername, teamId);
       } else {
         team = getTeam(username, teamId);
       }
-      return new TeamExtended({
-        ...team,
-        isDefault: teamDefaultBool,
-        hasDefault: hasTeamDefault(username, teamId),
-      });
+    } catch (error) {
+      throw new HttpException('Failed to get team' + error, HttpStatus.BAD_REQUEST);
+    }
+    return new TeamExtended({
+      ...team,
+      isDefault: teamDefaultBool,
+      hasDefault: hasTeamDefault(username, teamId),
+    });
+  }
+
   updateTeamData(
     username: string,
     teamId: string | number,
