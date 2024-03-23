@@ -1,8 +1,13 @@
-# Football teams CRUD proyect
+# Football teams CRUD project
+
+## About the Project
+
+![User teams page overview](user_overview.png)
+
 
 ## Expanded Description of Key Features: <a name="team-management"></a>
 
-### Team Management:
+### Team Management
 
     Create: Add new teams with customized names, properties, and logos (image upload supported).
     Read: View a list of your user-specific teams with basic information and optional filtering.
@@ -11,14 +16,12 @@
     Reset: Set a specific team back to its default state, clearing customised information.
     Reset All: Reset all your teams to their default states, starting fresh.
 
-### Player Management:
-    
+### Player Management
+
     Add: Assign players to specific teams, providing their names, positions, and country of origin.
     Edit: Modify player information within a team.
     Remove: Take players out of specific teams.
 
-
-![User teams page overview](user_overview.png)
 ![Add team page](add_team.png)
 ![User specific team page overview](team_overview.png)
 
@@ -43,7 +46,7 @@
     Other:
     - Eslint
     - Prettier
-    
+
 ## How to use
 
 -Have [Node.js](https://nodejs.org/en) installed
@@ -82,20 +85,20 @@ For test runs see [Tests](#tests)
 
 There's a disabled test for removing all players from a team, but it lacks any assertions
 
-## Known Limitations:
+## Known Limitations
 
-### Inefficient Team Updates:
+### Inefficient Team Updates
 
     Currently, updating teams involves multiple filesystem read/write operations, which can
     impact performance, especially for large datasets. Future improvements could explore a
     database-driven approach for more efficient data management.
 
-### Limited Security:
+### Limited Security
 
-    The app lacks mechanisms to prevent unauthorized access or data manipulation since 
+    The app lacks mechanisms to prevent unauthorized access or data manipulation since
     password protection is not implemented, making accounts vulnerable to unauthorized access.
 
-### Inconsistent Error Handling:
+### Inconsistent Error Handling
 
     Lacks a standardized approach for managing errors.
     Relies primarily on try-catch blocks with console logging or throwing errors.
@@ -115,7 +118,7 @@ There's a disabled test for removing all players from a team, but it lacks any a
 
 ### Simple File Storage Solution
 
-    The application currently uses file-based JSON storage. Future development plans could 
+    The application currently uses file-based JSON storage. Future development plans could
     include exploring database integration (e.g., SQLite, MongoDB) to enhance scalability,
     performance, and data management capabilities.
 
@@ -127,6 +130,7 @@ There's a disabled test for removing all players from a team, but it lacks any a
     coverage across the application
 
 ## Credits
+
 [Javascript Course Argentina Programa](https://argentinaprograma.com/)
 
 [Course video for this proyect](https://www.youtube.com/watch?v=8LxxQeNCu4U&list=PLs73pLtDNXD893LSF8fP-EfZbGWMECmnc&index=17)
