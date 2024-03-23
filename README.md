@@ -113,20 +113,6 @@ There's a disabled test for removing all players from a team, but it lacks any a
     The app lacks mechanisms to prevent unauthorized access or data manipulation since
     password protection is not implemented, making accounts vulnerable to unauthorized access.
 
-### Inconsistent Error Handling
-
-    Lacks a standardized approach for managing errors.
-    Relies primarily on try-catch blocks with console logging or throwing errors.
-    User-facing errors are communicated via basic alerts, potentially limiting clarity and guidance.
-    Future improvements could implement a centralized error handling mechanism for consistent
-    logging, user-friendly messages, and potential recovery actions.
-
-### Potential Image Misnaming During Team Creation
-
-    Because how Multer's storage settings generate a provisional team ID when receiving an image
-    without team id, if any errors or delays occur between Multer's ID generation and the endpoint's
-    team creation, the generated ID might not match the final team ID
-
 ### Limited Test Coverage: absence of Unit Tests
 
     This application lacks unit tests focused on individual functions and logic components
@@ -136,13 +122,6 @@ There's a disabled test for removing all players from a team, but it lacks any a
     The application currently uses file-based JSON storage. Future development plans could
     include exploring database integration (e.g., SQLite, MongoDB) to enhance scalability,
     performance, and data management capabilities.
-
-### Incomplete TypeScript integration for Middleware Requests
-
-    Due to complexities in typing middleware request objects, they are currently typed as 'any'.
-    This circumvents TypeScript's benefits for these specific components. Future work involves
-    investigating solutions to accurately type middleware requests, ensuring complete TypeScript
-    coverage across the application
 
 ## Credits
 
