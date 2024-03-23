@@ -2,13 +2,18 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import Player from 'src/components/models/Player';
 import {
   addPlayer,
+  removePlayer,
   updatePlayer,
   validateTeam,
 } from 'src/components/teamStorage';
 
 @Injectable()
 export default class PlayerService {
-  newPlayer(username: string, teamId: string | number, player: Player): number | Error {
+  addPlayer(
+    username: string,
+    teamId: string | number,
+    player: Player,
+  ): number | Error {
     let newId: number;
     try {
       newId = addPlayer(username, teamId, player);
@@ -18,9 +23,11 @@ export default class PlayerService {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
-    return newId? newId : new Error('Failed to add player, unkown server error');
+    return newId
+      ? newId
+      : new Error('Failed to add player, unkown server error');
   }
-  updatePlayerData(username: string, teamId: string | number, newData: Player) {
+  updatePlayer(username: string, teamId: string | number, newData: Player) {
     try {
       updatePlayer(username, teamId, newData);
     } catch {

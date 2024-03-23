@@ -26,7 +26,7 @@ export default class PlayerController {
   ) {
     const { username } = req.session;
     console.log(`User ${username} is adding player to team ${params.teamId}`);
-    const newId = this.playerService.newPlayer(username, params.teamId, data);
+    const newId = this.playerService.addPlayer(username, params.teamId, data);
     return newId;
   }
 
@@ -38,6 +38,6 @@ export default class PlayerController {
   ) {
     const { username } = req.session;
     console.log(`User ${username} is updating team ${params.teamId}`);
-    this.playerService.updatePlayerData(username, params.teamId, data);
+    this.playerService.updatePlayer(username, params.teamId, data);
   }
 }
