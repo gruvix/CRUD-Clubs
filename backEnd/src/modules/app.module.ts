@@ -23,7 +23,7 @@ import { TeamService } from 'src/services/team.service';
         secret: 'keyboard-cat',
         resave: false,
         saveUninitialized: true,
-        cookie: { maxAge: 60 * 60 * 24, sameSite: 'none', secure: false },
+        cookie: { maxAge: 1000 * 60 * 60 * 24, sameSite: 'strict', secure: false },
       },
     }),
   ],
