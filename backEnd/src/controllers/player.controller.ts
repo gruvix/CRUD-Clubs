@@ -6,6 +6,7 @@ import {
   Body,
   UseGuards,
   Post,
+  Delete,
 } from '@nestjs/common';
 import CustomRequest from 'src/components/models/CustomRequest.interface';
 import Player from 'src/components/models/Player';
@@ -22,11 +23,11 @@ export default class PlayerController {
   addPlayer(
     @Req() req: CustomRequest,
     @Param() params: any,
-    @Body() data: Player,
+    @Body() newPlayer: Player,
   ) {
     const { username } = req.session;
     console.log(`User ${username} is adding player to team ${params.teamId}`);
-    const newId = this.playerService.addPlayer(username, params.teamId, data);
+    const newId = this.playerService.addPlayer(username, params.teamId, newPlayer);
     return newId;
   }
 
@@ -34,10 +35,23 @@ export default class PlayerController {
   updatePlayer(
     @Req() req: CustomRequest,
     @Param() params: any,
-    @Body() data: Player,
+    @Body() playerData: Player,
   ) {
     const { username } = req.session;
-    console.log(`User ${username} is updating team ${params.teamId}`);
-    this.playerService.updatePlayer(username, params.teamId, data);
+    console.log(`User ${username} is updating team ${params.teamId}'s player ${playerData.id}`);
+    this.playerService.updatePlayer(username, params.teamId, playerData);
+  }
+
+  @Delete()
+  deletePlayer(
+    @Req() req: CustomRequest,
+    @Param() params: any,
+    @Body() data: { playerId: number },
+  ) {
+    const { playerId } = data;
+    console.log(playerId)
+    const { username } = req.session;
+    console.log(`User ${username} is deleting team ${params.teamId}'s player ${playerId}`);
+    this.playerService.removePlayer(username, params.teamId, playerId);
   }
 }
