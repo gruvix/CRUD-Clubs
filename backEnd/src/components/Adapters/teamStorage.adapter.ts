@@ -2,11 +2,11 @@ import TeamListTeam from '../models/TeamListTeam';
 import Player from '../models/Player';
 import TeamExtended from '../models/TeamExtended';
 import {
+  generateCustomCrestUrl,
   getUserTeamJSONPath,
   getUserTeamsListJSONPath,
 } from './storage/userPath';
 import { readFile, writeFile, deleteFile } from './storage/dataStorage';
-import { paths } from '../paths';
 
 function saveTeam(team: TeamExtended, username: string) {
   try {
@@ -289,7 +289,7 @@ export default class TeamStorageAdapter {
         ...teamData,
         id,
         lastUpdated: getDate(),
-        crestUrl: paths.generateCustomCrestUrl(id, imageFileName),
+        crestUrl: generateCustomCrestUrl(id, imageFileName),
         hasCustomCrest: true,
         isDefault: false,
         hasDefault: false,

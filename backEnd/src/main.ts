@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './components/modules/app.module';
-import { CLIENT_BASE_URL } from "./components/paths";
 
+const CLIENT_BASE_URL = 'http://localhost:8080';
 const corsOptions = {
   origin: CLIENT_BASE_URL,
   credentials: true,
