@@ -37,4 +37,18 @@ export default class PlayerService {
       );
     }
   }
+  removePlayer(
+    username: string,
+    teamId: string | number,
+    playerId: string | number,
+  ) {
+    try {
+      removePlayer(username, teamId, playerId);
+    } catch {
+      throw new HttpException(
+        'Server failed to remove player',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
 }
