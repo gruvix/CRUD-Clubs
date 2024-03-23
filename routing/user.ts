@@ -1,8 +1,8 @@
 import express, { Router, Request, Response } from 'express';
-import { validateUsername } from '../auth';
-import { validateFile } from '../Adapters/storage/dataStorage';
-import { getUserTeamsListJSONPath } from '../Adapters/storage/userPath';
-import { createUser } from '../Adapters/user.adapter';
+import { validateUsername } from '../backEnd/src/components/auth';
+import { validateFile } from '../backEnd/src/components/Adapters/storage/dataStorage';
+import { getUserTeamsListJSONPath } from '../backEnd/src/components/Adapters/storage/userPath';
+import { createUser } from '../backEnd/src/components/Adapters/user.adapter';
 
 const router: Router = express.Router();
 

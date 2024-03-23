@@ -8,9 +8,9 @@ import {
   deleteTeam,
   addTeam,
   hasTeamDefault,
-} from "../Adapters/teamStorage.adapter";
-import { storage, imageFilter } from "../Adapters/storage/multerConfig";
-import TeamExtended from "../models/TeamExtended";
+} from "../backEnd/src/components/Adapters/teamStorage.adapter";
+import { storage, imageFilter } from "../backEnd/src/components/Adapters/storage/multerConfig";
+import TeamExtended from "../backEnd/src/components/models/TeamExtended";
 
 const uploadImage = multer({ storage, fileFilter: imageFilter });
 const router = express.Router();
