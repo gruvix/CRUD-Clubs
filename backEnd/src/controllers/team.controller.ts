@@ -1,4 +1,13 @@
-import { Controller, Param, Get, Req, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Patch,
+  Get,
+  Req,
+  Param,
+  Body,
+  UseGuards,
+} from '@nestjs/common';
+import TeamData from 'src/components/models/TeamData.interface';
 import TeamExtended from 'src/components/models/TeamExtended';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { TeamService } from 'src/services/team.service';
@@ -9,10 +18,16 @@ export class TeamController {
   constructor(private readonly teamService: TeamService) {}
 
   @Get(':teamId')
-  getTeam(@Req() req: Request & { session: any }, @Param() params: any): TeamExtended {
+  getTeam(
+    @Req() req: Request & { session: any },
+    @Param() params: any,
+  ): TeamExtended {
     const { username } = req.session;
     console.log(`User ${username} requested team ${params.teamId}`);
-    const data: TeamExtended = this.teamService.getTeamData(username, params.teamId);
+    const data: TeamExtended = this.teamService.getTeamData(
+      username,
+      params.teamId,
+    );
     return data;
   }
 
