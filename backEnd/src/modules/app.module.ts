@@ -10,6 +10,7 @@ import { TeamsService } from 'src/services/teams.service';
 import { TeamController } from 'src/controllers/team.controller';
 import { TeamService } from 'src/services/team.service';
 import { PlayerController } from 'src/controllers/player.controller';
+import PlayerService from 'src/services/player.service';
 
 @Module({
   imports: [
@@ -28,7 +29,7 @@ import { PlayerController } from 'src/controllers/player.controller';
       },
     }),
   ],
-  providers: [UserService, TeamsService, TeamService],
   controllers: [UserController, TeamsController, TeamController, PlayerController],
+  providers: [UserService, TeamsService, TeamService, PlayerService],
 })
 export class AppModule {}
