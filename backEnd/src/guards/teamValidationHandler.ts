@@ -6,7 +6,7 @@ export default function handleTeamValidation(
   teamId: number | string,
 ): null | Error {
   if (!validateTeam(username, teamId)) {
-    throw new HttpException('Team not found', HttpStatus.BAD_REQUEST);
+    throw new HttpException('Team not found', HttpStatus.NOT_FOUND);
   }
   return null;
 }
