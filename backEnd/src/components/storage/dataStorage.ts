@@ -12,7 +12,7 @@ export function writeFile(targetPath: string, content: any) {
 /**
  * @returns - JSON object
  */
-export function readFile(targetPath: string) {
+export function readJSONFile(targetPath: string) {
   try {
     const content = JSON.parse(fs.readFileSync(targetPath, "utf-8"));
     return content;
