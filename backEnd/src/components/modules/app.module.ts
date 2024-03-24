@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { SessionModule } from 'nestjs-session';
 import * as session from 'express-session';
 import * as FileStore from 'session-file-store';
-import { getSessionsFolderPath } from 'src/components/Adapters/storage/userPath';
+import { getSessionsFolderPath } from 'src/components/storage/userPath';
 import PlayerService from 'src/components/services/player.service';
 import UserController from 'src/components/controllers/user.controller';
 import TeamsController from 'src/components/controllers/teams.controller';

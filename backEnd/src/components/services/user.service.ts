@@ -2,8 +2,8 @@
 import { Injectable } from '@nestjs/common';
 import { validateUsername } from 'src/components/userValidation';
 import { createUser } from 'src/components/Adapters/userStorage.adapter';
-import { getUserTeamsListJSONPath } from 'src/components/Adapters/storage/userPath';
-import { validateFile } from 'src/components/Adapters/storage/dataStorage';
+import { getUserTeamsListJSONPath } from 'src/components/storage/userPath';
+import { validateFile } from 'src/components/storage/dataStorage';
 import CustomRequest from '../models/CustomRequest.interface';
 
 function userExists(username: string): boolean | Error {

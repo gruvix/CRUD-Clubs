@@ -1,5 +1,5 @@
-import { createFolder, deleteFile } from './storage/dataStorage';
-import { getUserRootPath, getUserTeamsFolderPath, getUserCustomCrestFolderPath } from './storage/userPath';
+import { createFolder, deleteFile } from '../storage/dataStorage';
+import { getUserRootPath, getUserTeamsFolderPath, getUserCustomCrestFolderPath } from '../storage/userPath';
 import TeamStorageAdapter from './teamStorage.adapter';
 
 const teamStorage = new TeamStorageAdapter();

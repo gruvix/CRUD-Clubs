@@ -5,8 +5,8 @@ import {
   generateCustomCrestUrl,
   getUserTeamJSONPath,
   getUserTeamsListJSONPath,
-} from './storage/userPath';
-import { readFile, writeFile, deleteFile } from './storage/dataStorage';
+} from '../storage/userPath';
+import { readFile, writeFile, deleteFile } from '../storage/dataStorage';
 
 function saveTeam(team: TeamExtended, username: string) {
   try {
