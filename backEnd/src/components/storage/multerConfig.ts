@@ -20,7 +20,6 @@ const imageFilter = (
 const adapter = new TeamStorageAdapter();
 const storage = multer.diskStorage({
   destination: (req: any, file, cb) => {
-    console.log('destination called');
     const { username } = req.session;
     const userCrestsFolderPath = `${getUserCustomCrestFolderPath(username)}`;
     cb(null, userCrestsFolderPath);
