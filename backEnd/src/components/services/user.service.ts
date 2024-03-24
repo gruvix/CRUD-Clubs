@@ -1,7 +1,7 @@
 
 import { Injectable } from '@nestjs/common';
 import { validateUsername } from 'src/components/userValidation';
-import { createUser } from 'src/components/Adapters/user.adapter';
+import { createUser } from 'src/components/Adapters/userStorage.adapter';
 import { getUserTeamsListJSONPath } from 'src/components/Adapters/storage/userPath';
 import { validateFile } from 'src/components/Adapters/storage/dataStorage';
 import CustomRequest from '../models/CustomRequest.interface';
