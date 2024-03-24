@@ -36,4 +36,15 @@ export default class TeamService {
       );
     }
   }
+
+  deleteTeam(username: string, teamId: string | number) {
+    try {
+      storage.deleteTeam(username, teamId);
+    } catch {
+      throw new HttpException(
+        'Server failed to delete team',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
 }
