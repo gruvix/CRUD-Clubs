@@ -8,7 +8,6 @@ import {
   UploadedFile,
 } from '@nestjs/common';
 import CustomRequest from 'src/components/models/CustomRequest.interface';
-import TeamData from 'src/components/models/TeamData.interface';
 import { AuthGuard } from 'src/components/guards/auth.guard';
 import TeamService from 'src/components/services/team.service';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -23,11 +22,12 @@ export default class NewTeamController {
   @UseInterceptors(FileInterceptor('image', multerOptions))
   addTeam(
     @Req() req: CustomRequest,
-    @Body() teamData: TeamData,
+    @Body() body: {teamData: string},
     @UploadedFile() image: Express.Multer.File,
   ) {
     const { username } = req.session;
-    console.log(`User ${username} is adding new team`);
-    return this.teamService.addTeam(username, teamData, image.filename);
+    const parsedTeamData = JSON.parse(body.teamData);
+    console.log(`User ${username} is adding the new team "${parsedTeamData.name}"`);
+    return this.teamService.addTeam(username, parsedTeamData, image.filename);
   }
 }
