@@ -120,7 +120,7 @@ export default class TeamStorageAdapter {
    * @param {string} username
    * @param {Number} teamId
    */
-  getTeam(username: string, teamId: number | string) {
+  getTeam(username: string, teamId: number | string): TeamExtended {
     try {
       const teamPath = getUserTeamJSONPath(username, teamId);
       const team = new TeamExtended(readJSONFile(teamPath));
