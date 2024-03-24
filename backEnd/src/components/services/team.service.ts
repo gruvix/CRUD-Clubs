@@ -5,6 +5,19 @@ const storage = new TeamStorageAdapter();
 
 @Injectable()
 export default class TeamService {
+  addTeam(username: string, teamData: any, imageFileName: string) {
+    try {
+      const id = storage.addTeam(username, teamData, imageFileName);
+      return id;
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(
+        'Failed to add team' + error,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
   getTeamData(username: string, teamId: string | number): TeamExtended {
     let team: TeamExtended;
     const teamDefaultBool = storage.isTeamDefault(username, teamId);
