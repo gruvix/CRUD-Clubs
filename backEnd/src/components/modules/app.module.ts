@@ -12,6 +12,8 @@ import TeamService from 'src/components/services/team.service';
 import TeamsService from 'src/components/services/teams.service';
 import UserService from 'src/components/services/user.service';
 import NewTeamController from '../controllers/newTeam.controller';
+import CrestController from '../controllers/crest.controller';
+import CrestService from '../services/crest.service';
 
 @Module({
   imports: [
@@ -40,7 +42,8 @@ import NewTeamController from '../controllers/newTeam.controller';
     TeamController,
     PlayerController,
     NewTeamController,
+    CrestController,
   ],
-  providers: [UserService, TeamsService, TeamService, PlayerService],
+  providers: [UserService, TeamsService, TeamService, PlayerService, CrestService],
 })
 export class AppModule {}
