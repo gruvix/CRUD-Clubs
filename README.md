@@ -39,10 +39,8 @@ Future plans include transitioning to NextJs and expanding test coverage with Je
     - TypeScript
 
     BackEnd:
-    - Express
-    - Multer
+    - NestJs (with Express)
     - session-file-store
-    - body-parser
     - TypeScript
 
     Tests:
