@@ -19,8 +19,8 @@ function getUsername(req: CustomRequest): string {
 @Injectable()
 export default class UserService {
 
-  async isLoggedIn(req: CustomRequest): Promise<boolean> {
-    const username = await getUsername(req);
+  isLoggedIn(req: CustomRequest): boolean {
+    const username = getUsername(req);
     return !!username;
   }
 
