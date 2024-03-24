@@ -10,10 +10,11 @@ export default class TeamService {
     const teamDefaultBool = storage.isTeamDefault(username, teamId);
     try {
       let sourceUserName = 'default';
-      !teamDefaultBool?  sourceUserName = username : null;
+      !teamDefaultBool ? (sourceUserName = username) : null;
       team = storage.getTeam(sourceUserName, teamId);
     } catch (error) {
-      throw new HttpException('Failed to get team' + error, HttpStatus.BAD_REQUEST);
+      console.log(error);
+      throw new HttpException('Failed to get team', HttpStatus.BAD_REQUEST);
     }
     return new TeamExtended({
       ...team,
@@ -29,7 +30,8 @@ export default class TeamService {
   ) {
     try {
       storage.updateTeam(newData, username, teamId);
-    } catch {
+    } catch (error) {
+      console.log(error);
       throw new HttpException(
         'Server failed to update team',
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -40,7 +42,8 @@ export default class TeamService {
   deleteTeam(username: string, teamId: string | number) {
     try {
       storage.deleteTeam(username, teamId);
-    } catch {
+    } catch (error) {
+      console.log(error);
       throw new HttpException(
         'Server failed to delete team',
         HttpStatus.INTERNAL_SERVER_ERROR,
