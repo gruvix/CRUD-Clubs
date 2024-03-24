@@ -11,6 +11,7 @@ import PlayerController from 'src/components/controllers/player.controller';
 import TeamService from 'src/components/services/team.service';
 import TeamsService from 'src/components/services/teams.service';
 import UserService from 'src/components/services/user.service';
+import NewTeamController from '../controllers/newTeam.controller';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import UserService from 'src/components/services/user.service';
     TeamsController,
     TeamController,
     PlayerController,
+    NewTeamController,
   ],
   providers: [UserService, TeamsService, TeamService, PlayerService],
 })
