@@ -4,6 +4,7 @@ import { validateUsername } from 'src/components/userValidation';
 import { createUser } from 'src/components/Adapters/user.adapter';
 import { getUserTeamsListJSONPath } from 'src/components/Adapters/storage/userPath';
 import { validateFile } from 'src/components/Adapters/storage/dataStorage';
+import CustomRequest from '../models/CustomRequest.interface';
 
 function userExists(username: string): boolean | Error {
   if (!validateFile(getUserTeamsListJSONPath(username))) {
@@ -11,14 +12,14 @@ function userExists(username: string): boolean | Error {
   }
   return true;
 }
-function getUsername(req: Request & { session: any }): Promise<string> {
+function getUsername(req: CustomRequest): string {
   return req.session.username;
 }
 
 @Injectable()
 export default class UserService {
 
-  async isLoggedIn(req: Request & { session: any }): Promise<boolean> {
+  async isLoggedIn(req: CustomRequest): Promise<boolean> {
     const username = await getUsername(req);
     return !!username;
   }
