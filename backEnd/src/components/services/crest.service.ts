@@ -13,7 +13,7 @@ export default class CrestService {
         return crestStorage.getCrest(username, fileName);
     }
     updateCrest(username: string, teamId: number | string, filename: string): string {
-        crestStorage.deleteOldCrests(username, teamId, filename);
+        crestStorage.deleteOldCrest(username, teamId, filename);
         const crestUrl = generateCustomCrestUrl(teamId, filename);
         const newData = {
             crestUrl,
