@@ -9,6 +9,14 @@ export function copyFile(sourcePath: string, targetPath: string) {
 export function writeFile(targetPath: string, content: any) {
   fs.writeFileSync(targetPath, content);
 }
+export function readFile(targetPath: string) {
+  try {
+    const content = fs.readFileSync(targetPath);
+    return content;
+  } catch (err) {
+    throw err;
+  }
+}
 /**
  * @returns - JSON object
  */
