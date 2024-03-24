@@ -6,6 +6,7 @@ import {
   Param,
   Body,
   UseGuards,
+  Delete,
 } from '@nestjs/common';
 import CustomRequest from 'src/components/models/CustomRequest.interface';
 import TeamData from 'src/components/models/TeamData.interface';
@@ -39,5 +40,12 @@ export default class TeamController {
     console.log(`User ${username} is updating team ${teamId}`);
     this.teamService.updateTeamData(username, teamId, data);
   }
+
+  @Delete(':teamId')
+  deleteTeam(@Req() req: CustomRequest, @Param() params: any) {
+    const { username } = req.session;
+    const { teamId } = params;
+    console.log(`User ${username} is deleting team ${teamId}`);
+    this.teamService.deleteTeam(username, teamId);
   }
 }
