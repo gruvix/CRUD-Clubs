@@ -28,5 +28,8 @@ export default class UserStorageAdapter {
     }
     return true;
   }
+  resetUser(username: string) {
+    this.deleteUser(username);
+    this.createUser(username);
   }
 }
