@@ -14,6 +14,15 @@ export default class TeamService {
       throw new HttpException(
         'Failed to add team' + error,
         HttpStatus.INTERNAL_SERVER_ERROR,
+  resetTeam(username: string, teamId: string | number) {
+    try {
+      storage.resetTeam(username, teamId);
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(
+        'Server failed to reset team',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        error,
       );
     }
   }
