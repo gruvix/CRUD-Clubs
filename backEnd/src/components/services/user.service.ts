@@ -6,12 +6,6 @@ import { getUserTeamsListJSONPath } from 'src/components/storage/userPath';
 import { validateFile } from 'src/components/storage/dataStorage';
 import CustomRequest from '../models/CustomRequest.interface';
 
-function userExists(username: string): boolean | Error {
-  if (!validateFile(getUserTeamsListJSONPath(username))) {
-    return false
-  }
-  return true;
-}
 const userStorage = new UserStorageAdapter();
 function getUsername(req: CustomRequest): string {
   return req.session.username;
@@ -30,7 +24,7 @@ export default class UserService {
     if (error) {
       throw error;
     }
-    const exists = userExists(username);
+    const exists = userStorage.userExists(username);
     if (!exists) {
       try {
         console.log('user not found, creating new user');

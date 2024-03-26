@@ -22,5 +22,11 @@ export default class UserStorageAdapter {
       throw new Error('Failed to delete user');
     }
   }
+  userExists(username: string): boolean | Error {
+    if (!validateFile(getUserTeamsListJSONPath(username))) {
+      return false
+    }
+    return true;
+  }
   }
 }
