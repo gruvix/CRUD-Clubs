@@ -48,4 +48,12 @@ export default class TeamController {
     console.log(`User ${username} is deleting team ${teamId}`);
     this.teamService.deleteTeam(username, teamId);
   }
+
+  @Put()
+  resetTeam(@Req() req: CustomRequest, @Param() params: any) {
+    const { username } = req.session;
+    const { teamId } = params;
+    console.log(`User ${username} is resetting team ${teamId}`);
+    this.teamService.resetTeam(username, teamId);
+  }
 }
