@@ -28,6 +28,7 @@ export default class TeamsController {
   @Put()
   resetTeamsList(@Req() req: CustomRequest) {
     const { username } = req.session;
+    console.log(`User ${username} requested teams list reset`);
     try {
       this.teamsService.resetTeamsList(username);
     } catch (error) {
