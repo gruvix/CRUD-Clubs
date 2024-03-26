@@ -1,7 +1,7 @@
 
 import { Injectable } from '@nestjs/common';
 import { validateUsername } from 'src/components/userValidation';
-import { createUser } from 'src/components/Adapters/userStorage.adapter';
+import UserStorageAdapter from 'src/components/Adapters/userStorage.adapter';
 import { getUserTeamsListJSONPath } from 'src/components/storage/userPath';
 import { validateFile } from 'src/components/storage/dataStorage';
 import CustomRequest from '../models/CustomRequest.interface';
@@ -12,6 +12,7 @@ function userExists(username: string): boolean | Error {
   }
   return true;
 }
+const userStorage = new UserStorageAdapter();
 function getUsername(req: CustomRequest): string {
   return req.session.username;
 }
@@ -33,7 +34,7 @@ export default class UserService {
     if (!exists) {
       try {
         console.log('user not found, creating new user');
-        createUser(username);
+        userStorage.createUser(username);
         return true;
       } catch (error) {
         throw error;
