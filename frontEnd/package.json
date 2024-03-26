@@ -4,8 +4,9 @@
   "description": "Front end part of the CRUD clubs proyect part 2",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --mode development --open",
-    "build": "webpack --mode production",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
     "test": "cypress open"
   },
   "author": "Timothy",
