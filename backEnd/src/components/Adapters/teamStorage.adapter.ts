@@ -8,6 +8,20 @@ import {
 } from '../storage/userPath';
 import { readJSONFile, writeFile, deleteFile } from '../storage/dataStorage';
 
+/**
+ * gets a team from storage by id and username
+ * @param {string} username
+ * @param {Number} teamId
+ */
+function readTeamFile(username: string, teamId: number | string): TeamExtended {
+  try {
+    const teamPath = getUserTeamJSONPath(username, teamId);
+    const team = new TeamExtended(readJSONFile(teamPath));
+    return team;
+  } catch (error) {
+    throw error;
+  }
+}
 function saveTeam(team: TeamExtended, username: string) {
   try {
     const targetPath = getUserTeamJSONPath(username, team.id);
@@ -76,6 +90,12 @@ function findNextFreePlayerId(players: Player[]): number {
   }
   return nextFreeId;
 }
+function hasTeamDefault(username: string, teamId: number | string) {
+  const teamsListPath = getUserTeamsListJSONPath(username);
+  const teams = readJSONFile(teamsListPath);
+  const team = teams[teamId];
+  return team.hasDefault;
+}
 export default class TeamStorageAdapter {
   private defaultTeamCheck(username: string, teamId: number | string) {
     try {
@@ -102,12 +122,6 @@ export default class TeamStorageAdapter {
     }
     return false;
   }
-  hasTeamDefault(username: string, teamId: number | string) {
-    const teamsListPath = getUserTeamsListJSONPath(username);
-    const teams = readJSONFile(teamsListPath);
-    const team = teams[teamId];
-    return team.hasDefault;
-  }
   /**
    * gets a teams list by username
    * @param {string} username
@@ -115,21 +129,21 @@ export default class TeamStorageAdapter {
   getTeamsList(username: string) {
     return readJSONFile(getUserTeamsListJSONPath(username));
   }
-  /**
-   * gets a team by id and username
-   * @param {string} username
-   * @param {Number} teamId
-   */
   getTeam(username: string, teamId: number | string): TeamExtended {
+    const teamDefaultBool = this.isTeamDefault(username, teamId);
     try {
-      const teamPath = getUserTeamJSONPath(username, teamId);
-      const team = new TeamExtended(readJSONFile(teamPath));
+      let sourceUserName = 'default';
+      !teamDefaultBool ? (sourceUserName = username) : null;
+      const team = new TeamExtended({
+        ...readTeamFile(sourceUserName, teamId),
+        isDefault: teamDefaultBool,
+        hasDefault: hasTeamDefault(username, teamId),
+      });
       return team;
     } catch (error) {
       throw error;
     }
   }
-
   copyTeamListTeam(
     sourceUser: string,
     targetUser: string,
@@ -171,7 +185,7 @@ export default class TeamStorageAdapter {
   cloneTeamFromDefault(targetUser: string, teamId: number | string) {
     try {
       const DEFAULT_USER = 'default';
-      const team = this.getTeam(DEFAULT_USER, teamId);
+      const team = readTeamFile(DEFAULT_USER, teamId);
       saveTeam(team, targetUser);
     } catch (copyError) {
       throw copyError;
@@ -190,7 +204,7 @@ export default class TeamStorageAdapter {
         updateTeamlistParameter(username, teamId, key, updatedData[key]);
       }
     });
-    const team = this.getTeam(username, teamId);
+    const team = readTeamFile(username, teamId);
     Object.assign(team, updatedData);
     saveTeam(team, username);
   }
@@ -213,11 +227,15 @@ export default class TeamStorageAdapter {
    * @param {JSON} playerData - id of the team to be copied
    * @returns {Number} - id of the new player
    */
-  addPlayer(username: string, teamId: number | string, playerData: Player): number {
+  addPlayer(
+    username: string,
+    teamId: number | string,
+    playerData: Player,
+  ): number {
     try {
       this.defaultTeamCheck(username, teamId);
       const player = new Player(playerData);
-      const team = this.getTeam(username, teamId);
+      const team = readTeamFile(username, teamId);
       const id = findNextFreePlayerId(team.squad);
       player.id = id;
       if (!team.squad.length) {
@@ -235,7 +253,7 @@ export default class TeamStorageAdapter {
   updatePlayer(username: string, teamId: number | string, player: Player) {
     try {
       this.defaultTeamCheck(username, teamId);
-      const team = this.getTeam(username, teamId);
+      const team = readTeamFile(username, teamId);
       console.log(`Updating player ${player.id} in team ${teamId}`);
       const playerIndex = team.squad.findIndex(
         (squadPlayer: Player) => Number(squadPlayer.id) === Number(player.id),
@@ -257,7 +275,7 @@ export default class TeamStorageAdapter {
   ) {
     try {
       this.defaultTeamCheck(username, teamId);
-      const team = this.getTeam(username, teamId);
+      const team = readTeamFile(username, teamId);
       team.squad = team.squad.filter(
         (player: Player) => Number(player.id) !== Number(playerId),
       );
