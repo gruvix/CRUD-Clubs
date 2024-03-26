@@ -56,7 +56,7 @@ function deleteTeamFromTeamlist(username: string, teamId: number | string) {
 /**
  * @returns {string} - Returns current date in ISOS string format
  */
-function getDate() {
+function getDate(): string {
   const now = new Date();
   return now.toISOString();
 }
@@ -213,7 +213,7 @@ export default class TeamStorageAdapter {
    * @param {JSON} playerData - id of the team to be copied
    * @returns {Number} - id of the new player
    */
-  addPlayer(username: string, teamId: number | string, playerData: Player) {
+  addPlayer(username: string, teamId: number | string, playerData: Player): number {
     try {
       this.defaultTeamCheck(username, teamId);
       const player = new Player(playerData);
