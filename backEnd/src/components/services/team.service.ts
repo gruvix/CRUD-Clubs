@@ -12,8 +12,13 @@ export default class TeamService {
     } catch (error) {
       console.log(error);
       throw new HttpException(
-        'Failed to add team' + error,
+        'Failed to add team',
         HttpStatus.INTERNAL_SERVER_ERROR,
+        error,
+      );
+    }
+  }
+
   resetTeam(username: string, teamId: string | number) {
     try {
       storage.resetTeam(username, teamId);
@@ -32,7 +37,11 @@ export default class TeamService {
       return storage.getTeam(username, teamId);
     } catch (error) {
       console.log(error);
-      throw new HttpException('Failed to get team', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'Failed to get team',
+        HttpStatus.BAD_REQUEST,
+        error,
+      );
     }
   }
 
@@ -48,6 +57,7 @@ export default class TeamService {
       throw new HttpException(
         'Server failed to update team',
         HttpStatus.INTERNAL_SERVER_ERROR,
+        error,
       );
     }
   }
@@ -60,6 +70,7 @@ export default class TeamService {
       throw new HttpException(
         'Server failed to delete team',
         HttpStatus.INTERNAL_SERVER_ERROR,
+        error,
       );
     }
   }
