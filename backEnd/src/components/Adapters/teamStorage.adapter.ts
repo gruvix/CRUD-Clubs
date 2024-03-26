@@ -319,4 +319,13 @@ export default class TeamStorageAdapter {
       throw error;
     }
   }
+  resetTeam(username: string, teamId: number | string) {
+    if (!this.isTeamDefault(username, teamId)) {
+      throw new Error('Team is not resettable');
+    }
+    this.deleteTeam(username, teamId);
+    const defaultUsername = 'default';
+    this.cloneTeamFromDefault(username, teamId);
+    this.copyTeamListTeam(defaultUsername, username, teamId);
+  }
 }
