@@ -19,21 +19,12 @@ export default class TeamService {
   }
 
   getTeamData(username: string, teamId: string | number): TeamExtended {
-    let team: TeamExtended;
-    const teamDefaultBool = storage.isTeamDefault(username, teamId);
     try {
-      let sourceUserName = 'default';
-      !teamDefaultBool ? (sourceUserName = username) : null;
-      team = storage.getTeam(sourceUserName, teamId);
+      return storage.getTeam(username, teamId);
     } catch (error) {
       console.log(error);
       throw new HttpException('Failed to get team', HttpStatus.BAD_REQUEST);
     }
-    return new TeamExtended({
-      ...team,
-      isDefault: teamDefaultBool,
-      hasDefault: storage.hasTeamDefault(username, teamId),
-    });
   }
 
   updateTeamData(
