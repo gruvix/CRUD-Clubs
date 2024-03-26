@@ -7,6 +7,7 @@ import {
   Body,
   UseGuards,
   Delete,
+  Put,
 } from '@nestjs/common';
 import CustomRequest from 'src/components/models/CustomRequest.interface';
 import TeamData from 'src/components/models/TeamData.interface';
@@ -16,11 +17,11 @@ import { TeamGuard } from 'src/components/guards/team.guard';
 import TeamService from 'src/components/services/team.service';
 
 @UseGuards(AuthGuard, TeamGuard)
-@Controller('user/team')
+@Controller('user/team/:teamId')
 export default class TeamController {
   constructor(private readonly teamService: TeamService) {}
 
-  @Get(':teamId')
+  @Get()
   getTeam(@Req() req: CustomRequest, @Param() params: any): TeamExtended {
     const { username } = req.session;
     const { teamId } = params;
@@ -29,7 +30,7 @@ export default class TeamController {
     return data;
   }
 
-  @Patch(':teamId')
+  @Patch()
   updateTeam(
     @Req() req: CustomRequest,
     @Param() params: any,
@@ -41,7 +42,7 @@ export default class TeamController {
     this.teamService.updateTeamData(username, teamId, data);
   }
 
-  @Delete(':teamId')
+  @Delete()
   deleteTeam(@Req() req: CustomRequest, @Param() params: any) {
     const { username } = req.session;
     const { teamId } = params;
