@@ -320,7 +320,7 @@ export default class TeamStorageAdapter {
     }
   }
   resetTeam(username: string, teamId: number | string) {
-    if (!this.isTeamDefault(username, teamId)) {
+    if (!hasTeamDefault(username, teamId)) {
       throw new Error('Team is not resettable');
     }
     this.deleteTeam(username, teamId);
