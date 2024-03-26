@@ -172,7 +172,7 @@ export default class APIAdapter {
     }
   }
   async resetTeamsList() {
-    const response = await fetch(apiRequestPaths.resetAll, {
+    const response = await fetch(apiRequestPaths.teams, {
       method: "PUT",
       credentials: "include",
     });
