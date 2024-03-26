@@ -191,7 +191,7 @@ export default class APIAdapter {
     }
   }
   async resetTeam(teamId: number | string) {
-    const response = await fetch(apiRequestPaths.resetTeam(teamId), {
+    const response = await fetch(apiRequestPaths.team(teamId), {
       method: "PUT",
       credentials: "include",
     });
