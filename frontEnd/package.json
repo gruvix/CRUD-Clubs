@@ -2,7 +2,6 @@
   "name": "frontend",
   "version": "1.0.0",
   "description": "Front end part of the CRUD clubs proyect part 2",
-  "main": "index.js",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
