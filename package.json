@@ -6,9 +6,7 @@
   "scripts": {
     "test": "cd frontEnd && npm run test",
     "devLinux": "gnome-terminal --tab -- bash -c \"cd frontEnd && npm run dev\" & gnome-terminal --tab -- bash -c \"cd backEnd && npm run dev\"",
-    "devWindows": "start cmd /k \"cd frontEnd && npm run dev\" & start cmd /k \"cd backEnd && npm run dev\"",
-    "startBackWindows": "start cmd /k \"cd backEnd && npm run start\"",
-    "startFronWindows": "start cmd /k \"cd frontEnd && npm run start\""
+    "devWindows": "start cmd /k \"cd frontEnd && npm run dev\" & start cmd /k \"cd backEnd && npm run dev\""
   },
   "repository": {
     "type": "git",
