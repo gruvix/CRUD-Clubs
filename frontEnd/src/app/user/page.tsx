@@ -1,35 +1,22 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { webAppPaths } from "../../paths";
-import { useNavigate } from "react-router-dom";
 import LoginButton from "./LoginButton";
-import APIAdapter from "../adapters/APIAdapter";
-import LoadingSpinner from "../shared/LoadingSpinner";
-
+import APIAdapter from "../../components/adapters/APIAdapter";
+import { redirect } from "next/navigation";
 export default function Login() {
-  const [isLoading, setIsLoading] = React.useState(true);
-  const navigate = useNavigate();
-  const request = new APIAdapter();
 
-  const handleLoginCheck = async () => {
+  const checkLoginStatus = async () => {
     try {
-      const isLoggedIn = await request.getUserStatus();
-      if (isLoggedIn) navigate(webAppPaths.teams);
-      else setIsLoading(false);
-    } catch {
+      const request = new APIAdapter();
+      await request.getUserStatus() ? redirect(webAppPaths.teams) : null;
+    } catch (error) {
       alert("Error: could not check login status");
+      console.log(error);
+    } finally {
     }
   };
-  useEffect(() => {
-    handleLoginCheck();
-  }, []);
-
-  return isLoading ? (
-    <div className="d-flex justify-content-center">
-      <LoadingSpinner
-        style={{ marginTop: "20%", width: "15rem", height: "15rem" }}
-      />
-    </div>
-  ) : (
+  checkLoginStatus();
+  return (
     <div className="container">
       <div className="row justify-content-center align-items-center">
         <div className="col-md-6">
