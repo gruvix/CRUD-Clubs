@@ -1,12 +1,17 @@
+"use client";
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import LogoutButton from "./LogoutButton";
-import { webAppPaths } from "../../paths.js";
-import TeamCardComponent from "./TeamCard";
-import APIAdapter, { RedirectData } from "../adapters/APIAdapter";
-import ConfirmationModal from "../shared/ConfirmationModal";
-import LoadingSpinner from "../shared/LoadingSpinner";
-import TeamCard from "../adapters/TeamCard.js";
+import LogoutButton from "../../../components/TeamsList/LogoutButton";
+import { webAppPaths } from "../../../paths.js";
+import TeamCardComponent from "../../../components/TeamsList/TeamCard";
+import APIAdapter, {
+  RedirectData,
+} from "../../../components/adapters/APIAdapter";
+import ConfirmationModal from "../../../components/shared/ConfirmationModal";
+import LoadingSpinner from "../../../components/shared/LoadingSpinner";
+import TeamCard from "../../../components/adapters/TeamCard.js";
+import { useRouter } from "next/navigation";
+import '@/css/globals.css'
+
 
 interface TeamsData {
   username: string;
@@ -14,7 +19,7 @@ interface TeamsData {
 }
 
 export default function TeamsList(): React.ReactElement {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [searchOption, setSearchOption] = React.useState("All teams");
   const [searchPattern, setSearchPattern] = React.useState("");
   const [shouldTeamShow, setShouldTeamShow] = React.useState<boolean[]>([]);
@@ -34,7 +39,7 @@ export default function TeamsList(): React.ReactElement {
       setIsLoading(true);
       request.getTeams().then((data: TeamsData | RedirectData) => {
         if ("redirect" in data) {
-          navigate(data.redirect);
+          router.push(data.redirect);
         } else {
           setUsername(data.username);
           setTeamCards(data.teams);
@@ -48,20 +53,20 @@ export default function TeamsList(): React.ReactElement {
   const deleteTeam = (teamId: number) => async () => {
     request.deleteTeam(teamId).then((data: RedirectData) => {
       if (data.redirect) {
-        navigate(data.redirect);
+        router.push(data.redirect);
       } else {
         updateTeamsData();
       }
     });
   };
-  const setUpDeleteTeamModal = (teamId: number, teamName: string) => {
-    setModalCallback(() => deleteTeam(teamId));
+  const setUpDeleteTeamModal = (teamId: number | string, teamName: string) => {
+    setModalCallback(() => deleteTeam(Number(teamId)));
     setModalText(`Are you sure you want to delete team ${teamName}?`);
   };
   const resetTeams = () => async () => {
     request.resetTeamsList().then((data: RedirectData) => {
       if (data.redirect) {
-        navigate(data.redirect);
+        router.push(data.redirect);
       } else {
         updateTeamsData();
       }
@@ -97,7 +102,7 @@ export default function TeamsList(): React.ReactElement {
     <div className="container">
       <div className="row">
         <div className="col">
-          <LogoutButton style={{ marginTop: "15px" }} text="Log out" />
+          <LogoutButton style={{ marginTop: "15px" }} text="Log out" router={ router }/>
           <span className="text-center teams-page-title">
             User: <div id="username">{username}</div>
           </span>
@@ -110,7 +115,7 @@ export default function TeamsList(): React.ReactElement {
             type="button"
             id="add-team-button"
             className="btn btn-shadow btn-outline-warning"
-            onClick={() => navigate(webAppPaths.addTeam)}
+            onClick={() => router.push(webAppPaths.addTeam)}
           >
             Add new team
           </button>
@@ -203,6 +208,7 @@ export default function TeamsList(): React.ReactElement {
                     key={key}
                     deleteTeamCallback={setUpDeleteTeamModal}
                     visibility={shouldTeamShow[index]}
+                    router={router}
                   />
                 ))
               )}
