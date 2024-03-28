@@ -1,10 +1,10 @@
 body{
-  background-image: url('/img/messi-grey.png');
+  background-image: url('../img/messi-grey.png');
   background-size: cover;
   background-repeat: repeat;
   background-position: center;
   height: 100vh;
-  cursor: url('/img/cursor-ball.cur'), auto;
+  cursor: url('../img/cursor-ball.cur'), auto;
 }
 
 table {
@@ -102,16 +102,16 @@ td:first-child, th:first-child {
 }
 
 .btn-outline-warning:hover {
-  cursor: url('/img/cursor-red.cur'), auto;
+  cursor: url('../img/cursor-red.cur'), auto;
 }
 .btn-outline-success:hover {
-  cursor: url('/img/cursor-red.cur'), auto;
+  cursor: url('../img/cursor-red.cur'), auto;
 }
 .btn-outline-danger:hover {
-  cursor: url('/img/cursor-yellow.cur'), auto;
+  cursor: url('../img/cursor-yellow.cur'), auto;
 }
 .btn-outline-dark:hover {
-  cursor: url('/img/cursor-yellow.cur'), auto;
+  cursor: url('../img/cursor-yellow.cur'), auto;
 }
 
 .invalid-input {
