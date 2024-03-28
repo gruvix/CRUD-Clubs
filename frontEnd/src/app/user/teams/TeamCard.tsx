@@ -1,17 +1,17 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import TeamCrest from '../shared/TeamCrest';
-import { webAppPaths } from '../../paths.js';
-import TeamCardClass from '../adapters/TeamCard';
+import TeamCrest from '../../../components/shared/TeamCrest';
+import { webAppPaths } from '../../../paths.js';
+import TeamCardClass from '../../../components/adapters/TeamCard';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 interface TeamCardProps {
   team: TeamCardClass;
   visibility: boolean;
   deleteTeamCallback: (teamId: string | number, teamName: string) => void;
+  router: AppRouterInstance;
 }
 
-export default function TeamCard({ team, visibility, deleteTeamCallback  }: TeamCardProps) {
-  const navigate = useNavigate();
+export default function TeamCard({ team, visibility, deleteTeamCallback, router }: TeamCardProps) {
   return (
     <div className="card card-container" style={ visibility? { display: 'flex'} : { display: 'none' } }>
       <div className="card-header">
@@ -22,7 +22,7 @@ export default function TeamCard({ team, visibility, deleteTeamCallback  }: Team
         <button
           type="button"
           className="btn btn-outline-warning overlay-button-dark edit"
-          onClick={() => navigate(`${webAppPaths.team(team.id)}`)}
+          onClick={() => router.push(`${webAppPaths.team(team.id)}`)}
           style={{ marginRight: '10px' }}
         >
           edit

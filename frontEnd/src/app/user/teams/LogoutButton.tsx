@@ -1,15 +1,14 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { webAppPaths } from '../../paths';
-import APIAdapter from '../adapters/APIAdapter';
+import { webAppPaths } from '../../../paths';
+import APIAdapter from '../../../components/adapters/APIAdapter';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
-export default function LogoutButton({ style, text }: { style?: React.CSSProperties; text: string }) {
-  const navigate = useNavigate();
+export default function LogoutButton({ style, text, router }: { style?: React.CSSProperties; text: string, router: AppRouterInstance }) {
   const request = new APIAdapter();
   const handleLogout = async () => {
     try {
       request.logout();
-      navigate(webAppPaths.home);
+      router.push(webAppPaths.home);
     } catch {
       alert('Error: could not logout');
     }

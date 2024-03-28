@@ -1,8 +1,8 @@
 "use client";
 import React, { useEffect } from "react";
-import LogoutButton from "../../../components/TeamsList/LogoutButton";
+import LogoutButton from "./LogoutButton";
 import { webAppPaths } from "../../../paths.js";
-import TeamCardComponent from "../../../components/TeamsList/TeamCard";
+import TeamCardComponent from "./TeamCard";
 import APIAdapter, {
   RedirectData,
 } from "../../../components/adapters/APIAdapter";
