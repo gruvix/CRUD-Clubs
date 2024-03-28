@@ -1,9 +1,9 @@
 'use client';
 import React, { useEffect } from "react";
 import loginErrorHandler from "./loginErrorHandler";
-import { webAppPaths } from "../../paths";
-import LoadingSpinner from "../../components/shared/LoadingSpinner";
-import APIAdapter from "../../components/adapters/APIAdapter";
+import { webAppPaths } from "@/paths";
+import LoadingSpinner from "@/components/shared/LoadingSpinner";
+import APIAdapter from "@/components/adapters/APIAdapter";
 import { useRouter } from "next/navigation";
 export default function LoginButton() {
   const router = useRouter();
