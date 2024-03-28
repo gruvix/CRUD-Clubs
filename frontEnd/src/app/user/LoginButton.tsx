@@ -1,12 +1,12 @@
+'use client';
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import loginErrorHandler from "./loginErrorHandler";
 import { webAppPaths } from "../../paths";
-import LoadingSpinner from "../shared/LoadingSpinner";
-import APIAdapter from "../adapters/APIAdapter";
-
+import LoadingSpinner from "../../components/shared/LoadingSpinner";
+import APIAdapter from "../../components/adapters/APIAdapter";
+import { useRouter } from "next/navigation";
 export default function LoginButton() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [username, setUsername] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(true);
   const request = new APIAdapter();
@@ -15,9 +15,9 @@ export default function LoginButton() {
     setIsLoading(true);
     try {
       await request.login(username);
-      navigate(webAppPaths.teams);
+      router.push(webAppPaths.teams);
     } catch (error) {
-      loginErrorHandler(error);
+      loginErrorHandler(error as Error);
     }
     setIsLoading(false);
   };
