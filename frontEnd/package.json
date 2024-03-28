@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Front end part of the CRUD clubs proyect part 2",
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 8000",
     "build": "next build",
     "start": "next start",
     "test": "cypress open"
