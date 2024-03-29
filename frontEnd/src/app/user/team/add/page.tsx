@@ -1,25 +1,27 @@
+'use client';
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { TeamParameters, teamParametersKeys } from '../adapters/Team';
-import { webAppPaths } from '../../paths';
-import ConfirmationModal from '../shared/ConfirmationModal';
-import Player, { playerKeys } from '../adapters/Player';
+import { TeamParameters, teamParametersKeys } from '@/components/adapters/Team';
+import { webAppPaths } from '@/paths';
+import ConfirmationModal from '@/components/shared/ConfirmationModal';
+import Player, { playerKeys } from '@/components/adapters/Player';
 import UploadImageButton from './UploadImageButton';
-import isImageTypeValid from '../shared/validateImage';
-import APIAdapter from '../adapters/APIAdapter';
+import isImageTypeValid from '@/components/shared/validateImage';
+import APIAdapter from '@/components/adapters/APIAdapter';
+import { useRouter } from 'next/navigation';
+import '@/css/globals.css'
 
 
-export default function TeamAdder() {
+export default function Page() {
   const [playerSlots, setPlayerSlots] = React.useState([]);
   const [modalCallback, setModalCallback] = React.useState(() => (): void => {});
   const [modalText, setModalText] = React.useState('');
   const [teamParameterInputs, setTeamParameterInputs] = React.useState({} as TeamParameters);
   const [playerInputs, setPlayerInputs] = React.useState<Player[]>([]);
-  const [teamCrest, setTeamCrest] = React.useState<File>(null);
+  const [teamCrest, setTeamCrest] = React.useState<File | null>(null);
   const [canSubmitTeam, setCanSubmitTeam] = React.useState(false);
-  const navigate = useNavigate();
+  const router = useRouter();
   const returnToTeams = () => {
-    navigate(webAppPaths.teams);
+    router.push(webAppPaths.teams);
   };
   function findNextAvailableSlot(slots: number[]) {
     let nextSlot = 1;
@@ -45,7 +47,7 @@ export default function TeamAdder() {
     }
     const adapter = new APIAdapter();
     adapter.addTeam(teamParameterInputs, playerInputs, teamCrest).then((data) => {
-      if (data.redirect) navigate(data.redirect);
+      if (data.redirect) router.push(data.redirect);
       else {
         throw new Error(`Unexpected response from server: ${data}`);
       }
