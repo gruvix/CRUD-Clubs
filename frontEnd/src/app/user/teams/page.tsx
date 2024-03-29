@@ -1,17 +1,14 @@
 "use client";
 import React, { useEffect } from "react";
 import LogoutButton from "./LogoutButton";
-import { webAppPaths } from "../../../paths.js";
+import { webAppPaths } from "@/paths";
 import TeamCardComponent from "./TeamCard";
-import APIAdapter, {
-  RedirectData,
-} from "../../../components/adapters/APIAdapter";
-import ConfirmationModal from "../../../components/shared/ConfirmationModal";
-import LoadingSpinner from "../../../components/shared/LoadingSpinner";
-import TeamCard from "../../../components/adapters/TeamCard.js";
+import APIAdapter, { RedirectData } from "@/components/adapters/APIAdapter";
+import ConfirmationModal from "@/components/shared/ConfirmationModal";
+import LoadingSpinner from "@/components/shared/LoadingSpinner";
+import TeamCard from "@/components/adapters/TeamCard.js";
 import { useRouter } from "next/navigation";
-import '@/css/globals.css'
-
+import "@/css/globals.css";
 
 interface TeamsData {
   username: string;
@@ -102,7 +99,11 @@ export default function TeamsList(): React.ReactElement {
     <div className="container">
       <div className="row">
         <div className="col">
-          <LogoutButton style={{ marginTop: "15px" }} text="Log out" router={ router }/>
+          <LogoutButton
+            style={{ marginTop: "15px" }}
+            text="Log out"
+            router={router}
+          />
           <span className="text-center teams-page-title">
             User: <div id="username">{username}</div>
           </span>
