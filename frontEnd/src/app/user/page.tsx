@@ -54,7 +54,7 @@ export default function Login() {
               id="username-error"
               style={{ opacity: "0" }}
             >
-              Username may only contain letters
+              ERROR_MESSAGE
             </p>
           </div>
         </div>
