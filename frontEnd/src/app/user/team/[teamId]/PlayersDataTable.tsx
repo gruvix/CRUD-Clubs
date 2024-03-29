@@ -21,7 +21,7 @@ export default function PlayersDataTable({
   const NEW_PLAYER_ROW_KEY = -1;
   const [playerRows, setPlayerRows] = React.useState([] as Player[]);
   const [playerInputRows, setPlayerInputRows] = React.useState([] as Player[]);
-  const [editingRowKey, setEditingRowKey] = React.useState(null);
+  const [editingRowKey, setEditingRowKey] = React.useState<number>(NaN);
   const [newPlayerRow, setNewPlayerRow] = React.useState({} as Player);
   const inputReferece = useRef(null);
   const requestAdapter = new APIAdapter();
@@ -47,7 +47,7 @@ export default function PlayersDataTable({
     }
   };
   const disableRowEditing = () => {
-    setEditingRowKey(null);
+    setEditingRowKey(NaN);
   };
   const updatePlayerRow = (index: number) => {
     const newState = [...playerRows];
