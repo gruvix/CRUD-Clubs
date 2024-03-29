@@ -2,9 +2,9 @@
 import React, { useEffect } from "react";
 import loginErrorHandler from "./loginErrorHandler";
 import { webAppPaths } from "@/paths";
-import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import APIAdapter from "@/components/adapters/APIAdapter";
 import { useRouter } from "next/navigation";
+import LoginSpiner from "@/components/shared/loginSpinner";
 export default function LoginButton() {
   const router = useRouter();
   const [username, setUsername] = React.useState("");
@@ -23,7 +23,7 @@ export default function LoginButton() {
   };
   useEffect(() => {
     setIsLoading(false);
-  });
+  }, []);
 
   return (
     <>
@@ -34,14 +34,13 @@ export default function LoginButton() {
         placeholder="Username"
         onKeyDown={(e) => (e.key === "Enter" ? handleLogin() : null)}
         onChange={(e) => setUsername(e.target.value)}
+        disabled={isLoading}
       />
       {isLoading ? (
-        <LoadingSpinner
+        <LoginSpiner
           style={{
-            marginLeft: "40rem",
-            marginTop: "10rem",
-            width: "10rem",
-            height: "10rem",
+            width: "2rem",
+            height: "2rem",
           }}
         />
       ) : (

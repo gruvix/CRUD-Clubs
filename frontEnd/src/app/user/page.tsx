@@ -11,7 +11,9 @@ export default function Login() {
   const checkLoginStatus = async () => {
     try {
       const request = new APIAdapter();
-      (await request.getUserStatus()) ? router.push(webAppPaths.teams) : setIsLoading(false);
+      (await request.getUserStatus())
+        ? router.push(webAppPaths.teams)
+        : setIsLoading(false);
     } catch (error) {
       alert("Error: could not check login status");
       console.log(error);
@@ -22,7 +24,12 @@ export default function Login() {
 
   return isLoading ? (
     <LoadingSpinner
-      style={{ marginLeft: "44%", marginTop: "20%", width: "15rem", height: "15rem" }}
+      style={{
+        marginLeft: "44%",
+        marginTop: "20%",
+        width: "15rem",
+        height: "15rem",
+      }}
     />
   ) : (
     <div className="container">
@@ -44,7 +51,11 @@ export default function Login() {
         <div className="col-md-3 my-auto">
           <div
             className="input-group"
-            style={{ maxWidth: "300px", marginTop: "70%" }}
+            style={{
+              maxWidth: "300px",
+              marginTop: "70%",
+              position: "relative",
+            }}
           >
             <LoginButton />
           </div>
