@@ -16,7 +16,8 @@ export default class UserController {
   constructor(private readonly userService: UserService) {}
   @Get()
   async getUserStatus(@Req() req: CustomRequest) {
-    if (!(await this.userService.isLoggedIn(req))) {
+    console.log(`User is requesting user status: ${req.session.username}`);
+    if (!(this.userService.isLoggedIn(req))) {
       throw new HttpException('Not logged in', HttpStatus.UNAUTHORIZED);
     }
     return;
