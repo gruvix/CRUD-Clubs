@@ -1,7 +1,7 @@
 import React from 'react';
-import isImageTypeValid from '../shared/validateImage';
+import isImageTypeValid from '@/components/shared/validateImage';
 
-export default function UploadImageButton({ teamCrest }: { teamCrest: File }): React.ReactElement {
+export default function UploadImageButton({ teamCrest }: { teamCrest: File | null }): React.ReactElement {
   if (!teamCrest) {
     return (
       <button
@@ -9,7 +9,7 @@ export default function UploadImageButton({ teamCrest }: { teamCrest: File }): R
         className="btn btn-shadow btn-outline-warning"
         id="upload-image-button"
         style={{ fontSize: '150%', marginBottom: '2%', display: teamCrest ? 'none' : 'block' }}
-        onClick={() => { document.getElementById('upload-image-input').click(); }}
+        onClick={() => { document.getElementById('upload-image-input')?.click(); }}
       >
         <div>
           <span style={{ display: 'block' }}>
@@ -31,7 +31,7 @@ export default function UploadImageButton({ teamCrest }: { teamCrest: File }): R
         className="btn btn-shadow btn-success"
         id="uploaded-image-button"
         style={{ fontSize: '150%', marginBottom: '2%' }}
-        onClick={() => { document.getElementById('upload-image-input').click(); }}
+        onClick={() => { document.getElementById('upload-image-input')?.click(); }}
       >
         <div style={{ display: 'block' }}>
           <div>
