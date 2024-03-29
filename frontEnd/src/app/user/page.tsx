@@ -1,14 +1,17 @@
+"use client";
 import React from "react";
 import { webAppPaths } from "../../paths";
 import LoginButton from "./LoginButton";
-import APIAdapter from "../../components/adapters/APIAdapter";
-import { redirect } from "next/navigation";
+import APIAdapter from "@/components/adapters/APIAdapter";
+import { useRouter } from "next/navigation";
+import LoadingSpinner from "@/components/shared/LoadingSpinner";
 export default function Login() {
-
+  const [isLoading, setIsLoading] = React.useState(true);
+  const router = useRouter();
   const checkLoginStatus = async () => {
     try {
       const request = new APIAdapter();
-      await request.getUserStatus() ? redirect(webAppPaths.teams) : null;
+      (await request.getUserStatus()) ? router.push(webAppPaths.teams) : setIsLoading(false);
     } catch (error) {
       alert("Error: could not check login status");
       console.log(error);
@@ -16,7 +19,12 @@ export default function Login() {
     }
   };
   checkLoginStatus();
-  return (
+
+  return isLoading ? (
+    <LoadingSpinner
+      style={{ marginLeft: "44%", marginTop: "20%", width: "15rem", height: "15rem" }}
+    />
+  ) : (
     <div className="container">
       <div className="row justify-content-center align-items-center">
         <div className="col-md-6">
