@@ -128,3 +128,32 @@ td:first-child, th:first-child {
   transition-duration: 4s;
   transition-timing-function: ease-out;
 }
+
+.loader {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  left: 50%;
+  top: 7%;
+  background: #4188da;
+  position: absolute !important;
+  animation: roll 1s ease-in-out infinite alternate;
+  border-top-left-radius: 50% !important;
+  border-bottom-left-radius: 50% !important;
+}
+.loader:after{
+  content:"";
+  position: absolute;
+  inset: 5px;
+  border-radius: 50%;
+  border: 5px solid ;
+  border-color: #0bf1c0 transparent;
+}
+@keyframes roll {
+  0% {
+    transform: translateX(-300%) rotate(0deg) ;
+  }
+  100% {
+    transform:  translateX(300%) rotate(720deg);
+  }
+}
