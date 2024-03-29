@@ -30,13 +30,15 @@ export default function PlayersDataTable({
     index: number,
     parameter: string,
   ) => {
-    setPlayerInputRows((previousState) => ({
-      ...previousState,
-      [index]: {
-        ...previousState[index],
-        [parameter]: event.target.value,
-      },
-    }));
+    setPlayerInputRows((previousState) => {
+      return previousState.map((player, currentIndex) => {
+        if (currentIndex === index) {
+          return { ...player, [parameter]: event.target.value };
+        } else {
+          return player;
+        }
+      });
+    });
   };
   const enableRowEditing = (index: number) => {
     setEditingRowKey(index);
@@ -143,7 +145,7 @@ export default function PlayersDataTable({
                 <input
                   type="text"
                   className="form-control"
-                  value={newPlayerRow[parameter]? newPlayerRow[parameter] : ""}
+                  value={newPlayerRow[parameter] ? newPlayerRow[parameter] : ""}
                   style={{
                     display:
                       editingRowKey === NEW_PLAYER_ROW_KEY ? "inline" : "none",
@@ -226,7 +228,11 @@ export default function PlayersDataTable({
                         onFocus={handleInputFocus}
                         type="text"
                         className="form-control"
-                        value={playerInputRows[index][parameter]? playerInputRows[index][parameter] : ""}
+                        value={
+                          playerInputRows[index][parameter]
+                            ? playerInputRows[index][parameter]
+                            : ""
+                        }
                         onChange={(e) => updateInputValue(e, index, parameter)}
                         style={{
                           display: editingRowKey === index ? "inline" : "none",
