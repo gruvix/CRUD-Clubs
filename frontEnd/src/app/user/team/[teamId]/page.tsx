@@ -123,7 +123,7 @@ export default function Page({
                   id="image-input"
                   style={{ display: "none" }}
                   onChange={(e) => {
-                    handleImageUpdate(e.target.files[0]);
+                    handleImageUpdate(e.target.files![0]);
                   }}
                 />
               </div>
