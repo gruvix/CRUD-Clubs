@@ -1,13 +1,14 @@
 import React, { useEffect, useRef } from "react";
-import APIAdapter, { RedirectData } from "../adapters/APIAdapter";
-import Player, { playerKeys } from "../adapters/Player";
-import { useNavigate } from "react-router-dom";
+import APIAdapter, { RedirectData } from "@/components/adapters/APIAdapter";
+import Player, { playerKeys } from "@/components/adapters/Player";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 interface PlayersDataTableProps {
   playersData: Player[];
   teamId: number;
   setModalCallback: (callback: () => void) => void;
   setModalText: (text: string) => void;
+  router: AppRouterInstance;
 }
 
 export default function PlayersDataTable({
@@ -15,6 +16,7 @@ export default function PlayersDataTable({
   teamId,
   setModalCallback,
   setModalText,
+  router,
 }: PlayersDataTableProps): React.ReactElement {
   const NEW_PLAYER_ROW_KEY = -1;
   const [playerRows, setPlayerRows] = React.useState([] as Player[]);
@@ -22,7 +24,6 @@ export default function PlayersDataTable({
   const [editingRowKey, setEditingRowKey] = React.useState(null);
   const [newPlayerRow, setNewPlayerRow] = React.useState({} as Player);
   const inputReferece = useRef(null);
-  const navigate = useNavigate();
   const requestAdapter = new APIAdapter();
   const updateInputValue = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -63,7 +64,7 @@ export default function PlayersDataTable({
         .updatePlayer(teamId, updatedPlayerData)
         .then((data: RedirectData) => {
           if ("redirect" in data) {
-            navigate(data.redirect);
+            router.push(data.redirect);
           } else {
             disableRowEditing();
             updatePlayerRow(index);
@@ -82,7 +83,7 @@ export default function PlayersDataTable({
     try {
       requestAdapter.addPlayer(teamId, newPlayerRow).then((data) => {
         if (typeof data === "object" && "redirect" in data) {
-          navigate(data.redirect);
+          router.push(data.redirect);
         } else {
           disableRowEditing();
           addPlayerRow(data);
@@ -105,7 +106,7 @@ export default function PlayersDataTable({
     try {
       requestAdapter.removePlayer(teamId, playerRows[index].id).then((data) => {
         if (typeof data === "object" && "redirect" in data) {
-          navigate(data.redirect);
+          router.push(data.redirect);
         } else if (data) {
           setPlayerRows((previousState) =>
             previousState.filter((_, i) => i !== index),

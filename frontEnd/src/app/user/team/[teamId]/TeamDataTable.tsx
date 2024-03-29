@@ -1,11 +1,12 @@
 import React, { useEffect, useRef } from "react";
-import APIAdapter from "../adapters/APIAdapter";
-import { TeamParameters, teamParametersKeys } from "../adapters/Team";
-import { useNavigate } from "react-router-dom";
+import APIAdapter from "@/components/adapters/APIAdapter";
+import { TeamParameters } from "@/components/adapters/Team";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 interface TeamDataTableProps {
   teamData: TeamParameters;
   teamId: number;
+  router: AppRouterInstance;
 }
 interface TeamDataRows {
   [key: string]: string | number;
@@ -13,20 +14,20 @@ interface TeamDataRows {
 export default function TeamDataTable({
   teamData,
   teamId,
+  router,
 }: TeamDataTableProps): React.ReactElement {
   const [rowsTeamData, setRowsTeamData] = React.useState<TeamDataRows>({});
-  const [editingRowKey, setEditingRowKey] = React.useState(null);
+  const [editingRowKey, setEditingRowKey] = React.useState<string>('');
   const [inputValue, setInputValue] = React.useState<TeamDataRows>({});
   const inputReferece = useRef(null);
   const requestAdapter = new APIAdapter();
-  const navigate = useNavigate();
 
   const enableRowEditing = (key: string) => {
     setEditingRowKey(key);
     setInputValue({ ...inputValue, [key]: rowsTeamData[key] });
   };
   const disableRowEditing = () => {
-    setEditingRowKey(null);
+    setEditingRowKey('');
   };
   const updateTeamRow = (key: string) => {
     const newState = { ...rowsTeamData, [key]: inputValue[key] };
@@ -37,7 +38,7 @@ export default function TeamDataTable({
     try {
       requestAdapter.updateTeam(teamId, updatedData).then((data) => {
         if ("redirect" in data) {
-          navigate(data.redirect);
+          router.push(data.redirect);
         } else {
           disableRowEditing();
           updateTeamRow(key);
@@ -98,7 +99,7 @@ export default function TeamDataTable({
                   className="btn btn-shadow btn-outline-warning edit"
                   onClick={() => enableRowEditing(key)}
                   style={{
-                    display: editingRowKey === null ? "inline" : "none",
+                    display: editingRowKey === '' ? "inline" : "none",
                   }}
                 >
                   edit
