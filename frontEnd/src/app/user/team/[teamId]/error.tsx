@@ -1,6 +1,6 @@
 "use client";
-import TeamNotFoundError from "@/components/error/TeamNotFoundError";
-import UnauthorizedError from "@/components/error/UnauthorizedError";
+import TeamNotFoundError from "@/components/errors/TeamNotFoundError";
+import UnauthorizedError from "@/components/errors/UnauthorizedError";
 import { webAppPaths } from "@/paths";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
