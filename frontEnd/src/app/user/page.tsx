@@ -5,20 +5,21 @@ import LoginButton from "./LoginButton";
 import APIAdapter from "@/components/adapters/APIAdapter";
 import { useRouter } from "next/navigation";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
+import loginErrorHandler from "./loginErrorHandler";
 export default function Login() {
   const [isLoading, setIsLoading] = React.useState(true);
   const router = useRouter();
-  const checkLoginStatus = async () => {
-    try {
-      const request = new APIAdapter();
-      (await request.getUserStatus())
-        ? router.push(webAppPaths.teams)
-        : setIsLoading(false);
-    } catch (error) {
-      alert("Error: could not check login status");
-      console.log(error);
-    } finally {
-    }
+  const checkLoginStatus = () => {
+    const request = new APIAdapter();
+    request
+      .getUserStatus()
+      .then((isLoggedIn) => {
+        isLoggedIn ? router.push(webAppPaths.teams) : setIsLoading(false);
+      })
+      .catch((error) => {
+        setIsLoading(false);
+        loginErrorHandler(error as Error);
+      });
   };
   checkLoginStatus();
 

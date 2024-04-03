@@ -34,13 +34,15 @@ export default class APIAdapter {
       throw new Error(`Logout failed with status: ${response.status}`);
     }
   }
-  async getUserStatus() {
+  async getUserStatus(): Promise<boolean> {
     const response = await fetch(apiRequestPaths.user, {
       method: "GET",
       credentials: "include",
     });
     if (!response.ok) {
       switch (response.status) {
+        case 401:
+          return false;
         case 403:
           return false; //this function works different to other adapter unAuthorized status returns, since its job is to get the login status
         default:
