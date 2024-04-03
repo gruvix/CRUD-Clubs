@@ -57,18 +57,15 @@ export default class APIAdapter {
       method: "GET",
       credentials: "include",
     });
-    try {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+    if (!response.ok) {
+      switch (response.status) {
+        case 403:
+          return false; //this function works different to other adapter unAuthorized status returns, since its job is to get the login status
+        default:
+          throw new Error(`${response.status}`);
       }
-      return true;
-    } catch (error) {
-      const redirect = responseRedirect(response.status);
-      if (redirect) {
-        return false; //this function works different to other adapter unAuthorized status returns, since its job is to get the login status
-      }
-      throw error;
     }
+    return true;
   }
   async getTeam(teamId: number | string): Promise<Team> {
     const response = await fetch(apiRequestPaths.team(teamId), {
