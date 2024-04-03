@@ -107,23 +107,23 @@ export default class APIAdapter {
         "Content-Type": "application/json",
       },
     });
-      if (!response.ok) {
-        switch (response.status) {
-          case 403:
-            throw new UnauthorizedError();
-          default:
-            throw new Error(`${response.status}`);
-        }
+    if (!response.ok) {
+      switch (response.status) {
+        case 403:
+          throw new UnauthorizedError();
+        default:
+          throw new Error(`${response.status}`);
       }
-      const data = await response.json();
-      const teamsData = {
-        teams: {} as TeamCard[],
-        username: data.username as string,
-      };
-      Object.keys(data.teams).forEach((key) => {
-        teamsData.teams[Number(key)] = new TeamCard(data.teams[key]);
-      });
-      return teamsData;
+    }
+    const data = await response.json();
+    const teamsData = {
+      teams: {} as TeamCard[],
+      username: data.username as string,
+    };
+    Object.keys(data.teams).forEach((key) => {
+      teamsData.teams[Number(key)] = new TeamCard(data.teams[key]);
+    });
+    return teamsData;
   }
   async deleteTeam(teamId: number | string) {
     const response = await fetch(apiRequestPaths.team(teamId), {
