@@ -4,6 +4,7 @@ import validateUsername from "../shared/usernameValidation";
 import Player from "./Player";
 import Team, { TeamParameters } from "./Team";
 import TeamCard from "./TeamCard";
+import TeamNotFoundError from "../errors/TeamNotFoundError";
 
 function responseRedirect(status: number) {
   switch (status) {
