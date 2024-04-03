@@ -198,6 +198,7 @@ export default function Page({
                 teamId={Number(teamId)}
                 setModalCallback={setModalCallback}
                 setModalText={setModalText}
+                errorHandler={setAsyncError}
                 router={router}
               />
             </div>

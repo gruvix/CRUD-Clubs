@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import APIAdapter, { RedirectData } from "@/components/adapters/APIAdapter";
+import APIAdapter from "@/components/adapters/APIAdapter";
 import Player, { playerKeys } from "@/components/adapters/Player";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
@@ -9,6 +9,7 @@ interface PlayersDataTableProps {
   setModalCallback: (callback: () => void) => void;
   setModalText: (text: string) => void;
   router: AppRouterInstance;
+  errorHandler: (error: Error) => void;
 }
 
 export default function PlayersDataTable({
@@ -17,6 +18,7 @@ export default function PlayersDataTable({
   setModalCallback,
   setModalText,
   router,
+  errorHandler = () => {},
 }: PlayersDataTableProps): React.ReactElement {
   const NEW_PLAYER_ROW_KEY = -1;
   const [playerRows, setPlayerRows] = React.useState([] as Player[]);
@@ -61,20 +63,15 @@ export default function PlayersDataTable({
       ...playerInputRows[index],
       id: playerRows[index].id,
     });
-    try {
-      requestAdapter
-        .updatePlayer(teamId, updatedPlayerData)
-        .then((data: RedirectData) => {
-          if ("redirect" in data) {
-            router.push(data.redirect);
-          } else {
-            disableRowEditing();
-            updatePlayerRow(index);
-          }
-        });
-    } catch (error) {
-      alert(error);
-    }
+    requestAdapter
+      .updatePlayer(teamId, updatedPlayerData)
+      .then(() => {
+        disableRowEditing();
+        updatePlayerRow(index);
+      })
+      .catch((error) => {
+        errorHandler(error);
+      });
   };
   const addPlayerRow = (newId: number) => {
     const newPlayerData = new Player({ ...newPlayerRow, id: newId });
@@ -82,18 +79,15 @@ export default function PlayersDataTable({
     setPlayerInputRows((previousState) => [...previousState, newPlayerData]);
   };
   const handleNewPlayer = () => {
-    try {
-      requestAdapter.addPlayer(teamId, newPlayerRow).then((data) => {
-        if (typeof data === "object" && "redirect" in data) {
-          router.push(data.redirect);
-        } else {
-          disableRowEditing();
-          addPlayerRow(data);
-        }
+    requestAdapter
+      .addPlayer(teamId, newPlayerRow)
+      .then((newPlayerId) => {
+        disableRowEditing();
+        addPlayerRow(newPlayerId);
+      })
+      .catch((error) => {
+        errorHandler(error);
       });
-    } catch (error) {
-      alert(error);
-    }
   };
   const updateNewPlayerInput = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -105,19 +99,16 @@ export default function PlayersDataTable({
     });
   };
   const removePlayer = (index: number) => {
-    try {
-      requestAdapter.removePlayer(teamId, playerRows[index].id).then((data) => {
-        if (typeof data === "object" && "redirect" in data) {
-          router.push(data.redirect);
-        } else if (data) {
-          setPlayerRows((previousState) =>
-            previousState.filter((_, i) => i !== index),
-          );
-        }
+    requestAdapter
+      .removePlayer(teamId, playerRows[index].id)
+      .then(() => {
+        setPlayerRows((previousState) =>
+          previousState.filter((_, i) => i !== index),
+        );
+      })
+      .catch((error) => {
+        errorHandler(error);
       });
-    } catch (error) {
-      alert(error);
-    }
   };
   const setModal = (index: number) => {
     setModalCallback(() => () => removePlayer(index));
