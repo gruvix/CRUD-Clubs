@@ -1,4 +1,5 @@
 import { BASE_API_URL, apiRequestPaths, webAppPaths } from "../../paths";
+import UnauthorizedError from "@/components/errors/UnauthorizedError";
 import validateUsername from "../shared/usernameValidation";
 import Player from "./Player";
 import Team, { TeamParameters } from "./Team";
@@ -68,7 +69,7 @@ export default class APIAdapter {
       throw error;
     }
   }
-  async getTeam(teamId: number | string) {
+  async getTeam(teamId: number | string): Promise<Team> {
     const response = await fetch(apiRequestPaths.team(teamId), {
       method: "GET",
       credentials: "include",
@@ -76,21 +77,19 @@ export default class APIAdapter {
         "Content-Type": "application/json",
       },
     });
-
-    try {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+    if (!response.ok) {
+      switch (response.status) {
+        case 403:
+          throw new UnauthorizedError();
+        case 404:
+          throw new TeamNotFoundError();
+        default:
+          throw new Error(`${response.status}`);
       }
-      const data = await response.json();
-      const teamData = new Team(data);
-      return teamData;
-    } catch (error) {
-      const redirect = responseRedirect(response.status);
-      if (redirect) {
-        return redirect;
-      }
-      throw error;
     }
+    const data = await response.json();
+    const teamData = new Team(data);
+    return teamData;
   }
   async updateTeam(
     teamId: number | string,
