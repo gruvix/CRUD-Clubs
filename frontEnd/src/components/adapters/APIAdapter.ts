@@ -237,18 +237,17 @@ export default class APIAdapter {
       },
       body: JSON.stringify({ playerId }),
     });
-    try {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+    if (!response.ok) {
+      switch (response.status) {
+        case 403:
+          throw new UnauthorizedError();
+        case 404:
+          throw new TeamNotFoundError();
+        default:
+          throw new Error(`${response.status}`);
       }
-      return true;
-    } catch (error) {
-      const redirect = responseRedirect(response.status);
-      if (redirect) {
-        return redirect;
-      }
-      throw error;
     }
+    return true;
   }
   async addTeam(
     teamParameters: TeamParameters,
