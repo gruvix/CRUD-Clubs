@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import LogoutButton from "./LogoutButton";
 import { webAppPaths } from "@/paths";
 import TeamCardComponent from "./TeamCard";
-import APIAdapter, { RedirectData } from "@/components/adapters/APIAdapter";
+import APIAdapter from "@/components/adapters/APIAdapter";
 import ConfirmationModal from "@/components/shared/ConfirmationModal";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import TeamCard from "@/components/adapters/TeamCard.js";
