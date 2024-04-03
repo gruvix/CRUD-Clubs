@@ -21,7 +21,13 @@ export default class TeamService {
 
   resetTeam(username: string, teamId: string | number) {
     try {
-      storage.resetTeam(username, teamId);
+      const reset = storage.resetTeam(username, teamId);
+      if(!reset){
+        throw new HttpException(
+          'Failed to reset team: team is not resettable',
+          HttpStatus.UNPROCESSABLE_ENTITY,
+        );
+      }
     } catch (error) {
       console.log(error);
       throw new HttpException(
