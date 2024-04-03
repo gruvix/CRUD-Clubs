@@ -6,25 +6,6 @@ import Team, { TeamParameters } from "./Team";
 import TeamCard from "./TeamCard";
 import TeamNotFoundError from "../errors/TeamNotFoundError";
 
-function responseRedirect(status: number) {
-  switch (status) {
-    case 401:
-      return { redirect: webAppPaths.home };
-    case 403:
-      return { redirect: webAppPaths.home };
-    case 404:
-      return { redirect: `${webAppPaths.error(404)}` };
-    case 500:
-      return { redirect: `${webAppPaths.error(500)}` };
-    default:
-      return null;
-  }
-}
-
-export interface RedirectData {
-  redirect: string;
-}
-
 export default class APIAdapter {
   async login(username: string) {
     const error = validateUsername(username);
