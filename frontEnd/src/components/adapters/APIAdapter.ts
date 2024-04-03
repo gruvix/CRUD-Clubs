@@ -130,19 +130,18 @@ export default class APIAdapter {
       method: "DELETE",
       credentials: "include",
     });
-    try {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+    if (!response.ok) {
+      switch (response.status) {
+        case 403:
+          throw new UnauthorizedError();
+        case 404:
+          throw new TeamNotFoundError();
+        default:
+          throw new Error(`${response.status}`);
       }
-      const data = response;
-      return data;
-    } catch (error) {
-      const redirect = responseRedirect(response.status);
-      if (redirect) {
-        return redirect;
-      }
-      throw error;
     }
+    const data = response;
+    return data;
   }
   async resetTeamsList() {
     const response = await fetch(apiRequestPaths.teams, {
