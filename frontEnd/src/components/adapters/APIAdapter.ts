@@ -313,18 +313,15 @@ export default class APIAdapter {
       credentials: "include",
       body: formData,
     });
-    try {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+    if (!response.ok) {
+      switch (response.status) {
+        case 403:
+          throw new UnauthorizedError();
+        default:
+          throw new Error(`${response.status}`);
       }
-      const newCrestUrl = BASE_API_URL + (await response.json());
-      return newCrestUrl;
-    } catch (error) {
-      const redirect = responseRedirect(response.status);
-      if (redirect) {
-        return redirect;
-      }
-      throw error;
     }
+    const newCrestUrl = BASE_API_URL + (await response.json());
+    return newCrestUrl;
   }
 }
