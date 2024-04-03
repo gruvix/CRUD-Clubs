@@ -130,9 +130,13 @@ export default class APIAdapter {
         "Content-Type": "application/json",
       },
     });
-    try {
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        switch (response.status) {
+          case 403:
+            throw new UnauthorizedError();
+          default:
+            throw new Error(`${response.status}`);
+        }
       }
       const data = await response.json();
       const teamsData = {
@@ -143,13 +147,6 @@ export default class APIAdapter {
         teamsData.teams[Number(key)] = new TeamCard(data.teams[key]);
       });
       return teamsData;
-    } catch (error) {
-      const redirect = responseRedirect(response.status);
-      if (redirect) {
-        return redirect;
-      }
-      throw error;
-    }
   }
   async deleteTeam(teamId: number | string) {
     const response = await fetch(apiRequestPaths.team(teamId), {
