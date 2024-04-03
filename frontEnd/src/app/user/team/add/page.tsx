@@ -19,6 +19,7 @@ export default function Page() {
   const [teamParameterInputs, setTeamParameterInputs] = React.useState(
     {} as TeamParameters,
   );
+  const [asyncError, setAsyncError] = React.useState<Error>();
   const [playerInputs, setPlayerInputs] = React.useState<Player[]>([]);
   const [teamCrest, setTeamCrest] = React.useState<File | null>(null);
   const [canSubmitTeam, setCanSubmitTeam] = React.useState(false);
@@ -54,9 +55,15 @@ export default function Page() {
       .then((newTeamId) => {
         router.push(webAppPaths.team(newTeamId));
       })
-      .catch((error) => {});
+      .catch((error) => {
+        setAsyncError(error);
+      });
   };
-
+  useEffect(() => {
+    if (asyncError) {
+      throw asyncError;
+    }
+  }, [asyncError]);
   return (
     <div className="container">
       <div className="row">
