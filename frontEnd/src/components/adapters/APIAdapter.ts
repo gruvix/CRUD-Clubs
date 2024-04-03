@@ -267,19 +267,16 @@ export default class APIAdapter {
       credentials: "include",
       body: formData,
     });
-    try {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+    if (!response.ok) {
+      switch (response.status) {
+        case 403:
+          throw new UnauthorizedError();
+        default:
+          throw new Error(`${response.status}`);
       }
-      const newTeamId = await response.json();
-      return { redirect: webAppPaths.team(newTeamId) };
-    } catch (error) {
-      const redirect = responseRedirect(response.status);
-      if (redirect) {
-        return redirect;
-      }
-      throw error;
     }
+    const newTeamId = await response.json();
+    return newTeamId;
   }
   async updateTeamCrest(teamId: number | string, image: File) {
     const formData = new FormData();
