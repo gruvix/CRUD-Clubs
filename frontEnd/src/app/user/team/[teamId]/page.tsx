@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import React, { useEffect } from "react";
 import TeamCrest from "@/components/shared/TeamCrest";
 import ResetTeamButton from "./ResetTeamButton";
@@ -11,7 +11,8 @@ import isImageTypeValid from "@/components/shared/validateImage";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import ConfirmationModal from "@/components/shared/ConfirmationModal";
 import { webAppPaths } from "@/paths";
-import '@/css/globals.css'
+import "@/css/globals.css";
+import FailedToUpdateCrestError from "@/components/errors/FailedToUpdateCrestError";
 
 export default function Page({
   params,
@@ -26,21 +27,19 @@ export default function Page({
     () => (): void => {},
   );
   const [modalText, setModalText] = React.useState("");
+  const [asyncError, setAsyncError] = React.useState<Error>();
   const request = new APIAdapter();
-  const updateTeamData = async () => {
-    try {
-      setIsLoading(true);
-      request.getTeam(teamId).then((data: RedirectData | Team) => {
-        if ("redirect" in data) {
-          router.push(data.redirect);
-        } else {
-          setTeamData(data);
-          setIsLoading(false);
-        }
+  const updateLocalTeamData = async () => {
+    setIsLoading(true);
+    request
+      .getTeam(teamId)
+      .then((data) => {
+        setTeamData(data);
+        setIsLoading(false);
+      })
+      .catch((error: Error) => {
+        setAsyncError(error);
       });
-    } catch (error) {
-      alert(error);
-    }
   };
   const handleImageUpdate = (image: File) => {
     if (!isImageTypeValid(image)) {
@@ -48,30 +47,39 @@ export default function Page({
     } else {
       request
         .updateTeamCrest(teamId, image)
-        .then((newCrestUrl: string | RedirectData) => {
-          if (typeof newCrestUrl === "object" && "redirect" in newCrestUrl) {
-            router.push(newCrestUrl.redirect);
+        .then((newCrestUrl: string) => {
+          setTeamData((previousState) => ({
+            ...previousState,
+            other: { ...previousState.other, crestUrl: newCrestUrl },
+          }));
+        })
+        .catch((error: Error) => {
+          if (error instanceof FailedToUpdateCrestError) {
+            alert(`${error}`);
           } else {
-            setTeamData((previousState) => ({
-              ...previousState,
-              other: { ...previousState.other, crestUrl: newCrestUrl },
-            }));
+            setAsyncError(error);
           }
         });
     }
   };
   const resetTeam = () => async () => {
-    request.resetTeam(teamId).then((data: RedirectData) => {
-      if (data.redirect) {
-        router.push(data.redirect);
-      } else {
-        updateTeamData();
-      }
-    });
+    await request
+      .resetTeam(teamId)
+      .then(() => {
+        updateLocalTeamData();
+      })
+      .catch((error) => {
+        setAsyncError(error);
+      });
   };
   useEffect(() => {
-    updateTeamData();
+    updateLocalTeamData();
   }, []);
+  useEffect(() => {
+    if (asyncError) {
+      throw asyncError;
+    }
+  }, [asyncError]);
 
   return (
     <div className="container">
