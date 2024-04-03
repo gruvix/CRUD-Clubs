@@ -228,7 +228,10 @@ export default class APIAdapter {
       throw error;
     }
   }
-  async addPlayer(teamId: number | string, playerData: Player) {
+  async addPlayer(
+    teamId: number | string,
+    playerData: Player,
+  ): Promise<number> {
     const response = await fetch(apiRequestPaths.player(teamId), {
       method: "POST",
       credentials: "include",
@@ -237,19 +240,16 @@ export default class APIAdapter {
       },
       body: JSON.stringify(playerData),
     });
-    try {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+    if (!response.ok) {
+      switch (response.status) {
+        case 403:
+          throw new UnauthorizedError();
+        default:
+          throw new Error(`${response.status}`);
       }
-      const newId = await response.json();
-      return newId;
-    } catch (error) {
-      const redirect = responseRedirect(response.status);
-      if (redirect) {
-        return redirect;
-      }
-      throw error;
     }
+    const newId = await response.json();
+    return newId;
   }
   async removePlayer(teamId: number, playerId: number) {
     const response = await fetch(apiRequestPaths.player(teamId), {
