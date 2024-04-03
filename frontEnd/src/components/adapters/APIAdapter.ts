@@ -5,6 +5,7 @@ import Player from "./Player";
 import Team, { TeamParameters } from "./Team";
 import TeamCard from "./TeamCard";
 import TeamNotFoundError from "../errors/TeamNotFoundError";
+import TeamNotResettableError from "../errors/TeamNotResettableError";
 
 export default class APIAdapter {
   async login(username: string) {
@@ -148,38 +149,36 @@ export default class APIAdapter {
       method: "PUT",
       credentials: "include",
     });
-    try {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+    if (!response.ok) {
+      switch (response.status) {
+        case 403:
+          throw new UnauthorizedError();
+        default:
+          throw new Error(`${response.status}`);
       }
-      const data = response;
-      return data;
-    } catch (error) {
-      const redirect = responseRedirect(response.status);
-      if (redirect) {
-        return redirect;
-      }
-      throw error;
     }
+    const data = response;
+    return data;
   }
   async resetTeam(teamId: number | string) {
     const response = await fetch(apiRequestPaths.team(teamId), {
       method: "PUT",
       credentials: "include",
     });
-    try {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+    if (!response.ok) {
+      switch (response.status) {
+        case 403:
+          throw new UnauthorizedError();
+        case 404:
+          throw new TeamNotFoundError();
+        case 422:
+          throw new TeamNotResettableError();
+        default:
+          throw new Error(`${response.status}`);
       }
-      const data = response;
-      return data;
-    } catch (error) {
-      const redirect = responseRedirect(response.status);
-      if (redirect) {
-        return redirect;
-      }
-      throw error;
     }
+    const data = response;
+    return data;
   }
   async updatePlayer(teamId: number | string, playerData: Player) {
     const response = await fetch(apiRequestPaths.player(teamId), {
