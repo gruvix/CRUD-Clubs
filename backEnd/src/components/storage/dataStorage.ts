@@ -37,7 +37,7 @@ export async function readFile(targetPath: string): Promise<Buffer> {
     }
   }
 }
-export async function readJSONFile(targetPath: string): Promise<JSON> {
+export async function readJSONFile(targetPath: string): Promise<any> {
   const content = JSON.parse(await fs.readFile(targetPath, 'utf-8'));
   return content;
 }
