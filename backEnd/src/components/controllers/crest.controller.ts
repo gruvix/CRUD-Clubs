@@ -12,11 +12,11 @@ export default class CrestController {
   constructor(private readonly crestService: CrestService) {}
 
   @Get(':teamId/:filename')
-  getCrest(@Req() req: CustomRequest, @Param() params: any, @Res() res: Response) {
+  async getCrest(@Req() req: CustomRequest, @Param() params: any, @Res() res: Response) {
     const { username } = req.session;
     const { teamId, filename } = params;
     console.log(`User ${username} is requesting crest for team ${teamId}`);
-    const file = this.crestService.getCrest(username, filename);
+    const file = await this.crestService.getCrest(username, filename);
     res.send(file);
   }
 

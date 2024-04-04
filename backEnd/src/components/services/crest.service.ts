@@ -9,8 +9,8 @@ const teamStorage = new TeamStorageAdapter();
 @Injectable()
 export default class CrestService {
 
-    getCrest(username: string, fileName: string): Buffer {
-        return crestStorage.getCrest(username, fileName);
+    async getCrest(username: string, fileName: string): Promise<Buffer> {
+        return await crestStorage.getCrest(username, fileName);
     }
     updateCrest(username: string, teamId: number | string, filename: string): string {
         crestStorage.deleteOldCrest(username, teamId, filename);

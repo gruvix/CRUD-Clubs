@@ -4,15 +4,15 @@ import TeamStorageAdapter from './teamStorage.adapter';
 
 const teamStorage = new TeamStorageAdapter();
 export default class CrestStorageAdapter {
-  getCrest(username: string, filename: string): Buffer {
+  async getCrest(username: string, filename: string): Promise<Buffer> {
     const imgPath = `${getUserCustomCrestFolderPath(username)}/${filename}`;
-    const file = readFile(imgPath);
+    const file = await readFile(imgPath);
     return file;
   }
   /**
-   * Deletes old crest if it is different from the new one
+   * Deletes the old crest if it is different from the new one
    */
-  deleteOldCrest(
+  async deleteOldCrest(
     username: string,
     teamId: number | string,
     newCrestFilename: string,
@@ -23,7 +23,7 @@ export default class CrestStorageAdapter {
     if (oldCrestFilename !== newCrestFilename) {
       try {
         const oldCrestPath = `${getUserCustomCrestFolderPath(username)}/${oldCrestFilename}`;
-        deleteFile(oldCrestPath);
+        await deleteFile(oldCrestPath);
       } catch (error) {
         throw error;
       }
