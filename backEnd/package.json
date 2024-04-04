@@ -47,7 +47,7 @@
   "scripts": {
     "dev": "nest start --watch",
     "dev:cmd": "start cmd /k \"nest start --watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "jest": "start cmd /k \"jest --watch --coverage"
   },
   "rootDir": "src",
   "repository": {
