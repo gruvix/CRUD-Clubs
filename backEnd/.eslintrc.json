@@ -33,5 +33,5 @@
       }
     ]
   },
-  "plugins": ["@typescript-eslint"]
+  "plugins": ["@typescript-eslint", "jest"]
 }
