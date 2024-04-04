@@ -13,10 +13,13 @@ import { readJSONFile, writeFile, deleteFile } from '../storage/dataStorage';
  * @param {string} username
  * @param {Number} teamId
  */
-function readTeamFile(username: string, teamId: number | string): TeamExtended {
+async function readTeamFile(
+  username: string,
+  teamId: number | string,
+): Promise<TeamExtended> {
   try {
     const teamPath = getUserTeamJSONPath(username, teamId);
-    const team = new TeamExtended(readJSONFile(teamPath));
+    const team = new TeamExtended(await readJSONFile(teamPath));
     return team;
   } catch (error) {
     throw error;
@@ -97,10 +100,13 @@ function hasTeamDefault(username: string, teamId: number | string) {
   return team.hasDefault;
 }
 export default class TeamStorageAdapter {
-  private defaultTeamCheck(username: string, teamId: number | string) {
+  private async defaultTeamCheck(
+    username: string,
+    teamId: number | string,
+  ): Promise<void> {
     try {
       if (this.isTeamDefault(username, teamId)) {
-        this.cloneTeamFromDefault(username, teamId);
+        await this.cloneTeamFromDefault(username, teamId);
         const DEFAULT_TEAMLIST_PARAMETER = 'isDefault';
         updateTeamlistParameter(
           username,
@@ -113,9 +119,12 @@ export default class TeamStorageAdapter {
       throw error;
     }
   }
-  isTeamDefault(username: string, teamId: number | string) {
+  async isTeamDefault(
+    username: string,
+    teamId: number | string,
+  ): Promise<boolean> {
     const teamsListPath = getUserTeamsListJSONPath(username);
-    const teams = readJSONFile(teamsListPath);
+    const teams = await readJSONFile(teamsListPath);
     const team = teams[teamId];
     if (team.isDefault) {
       return true;
@@ -129,13 +138,16 @@ export default class TeamStorageAdapter {
   getTeamsList(username: string) {
     return readJSONFile(getUserTeamsListJSONPath(username));
   }
-  getTeam(username: string, teamId: number | string): TeamExtended {
-    const teamDefaultBool = this.isTeamDefault(username, teamId);
+  async getTeam(
+    username: string,
+    teamId: number | string,
+  ): Promise<TeamExtended> {
+    const teamDefaultBool = await this.isTeamDefault(username, teamId);
     try {
       let sourceUserName = 'default';
       !teamDefaultBool ? (sourceUserName = username) : null;
       const team = new TeamExtended({
-        ...readTeamFile(sourceUserName, teamId),
+        ...(await readTeamFile(sourceUserName, teamId)),
         isDefault: teamDefaultBool,
         hasDefault: hasTeamDefault(username, teamId),
       });
@@ -144,15 +156,15 @@ export default class TeamStorageAdapter {
       throw error;
     }
   }
-  copyTeamListTeam(
+  async copyTeamListTeam(
     sourceUser: string,
     targetUser: string,
     teamId: string | number,
-  ) {
+  ): Promise<void> {
     const sourceTeamsPath = getUserTeamsListJSONPath(sourceUser);
     const targetTeamsPath = getUserTeamsListJSONPath(targetUser);
     const userTeams = readJSONFile(targetTeamsPath);
-    const defaultTeams: TeamListTeam[] = readJSONFile(sourceTeamsPath);
+    const defaultTeams: TeamListTeam[] = await readJSONFile(sourceTeamsPath);
 
     const newTeam: TeamListTeam = Object.values(defaultTeams).find(
       (team: TeamListTeam) => team.id === Number(teamId),
@@ -164,9 +176,9 @@ export default class TeamStorageAdapter {
       throw copyError;
     }
   }
-  copyTeamList(sourceUser: string, targetUser: string) {
+  async copyTeamList(sourceUser: string, targetUser: string): Promise<void> {
     const defaultTeamsPath = getUserTeamsListJSONPath(sourceUser);
-    const teams = readJSONFile(defaultTeamsPath);
+    const teams = await readJSONFile(defaultTeamsPath);
     const teamsParsed: { [key: string]: TeamListTeam } = {};
     teams.forEach((team: TeamListTeam) => {
       teamsParsed[team.id] = new TeamListTeam(team);
@@ -182,20 +194,20 @@ export default class TeamStorageAdapter {
    * @param {string} targetUser - username of copy target folder
    * @param {Number} teamId - id of the team to be copied
    */
-  cloneTeamFromDefault(targetUser: string, teamId: number | string) {
+  async cloneTeamFromDefault(targetUser: string, teamId: number | string) {
     try {
       const DEFAULT_USER = 'default';
-      const team = readTeamFile(DEFAULT_USER, teamId);
+      const team = await readTeamFile(DEFAULT_USER, teamId);
       saveTeam(team, targetUser);
     } catch (copyError) {
       throw copyError;
     }
   }
-  updateTeam(
+  async updateTeam(
     newData: { [key: string]: string | number | boolean },
     username: string,
     teamId: number | string,
-  ) {
+  ): Promise<void> {
     const updatedData = newData;
     this.defaultTeamCheck(username, teamId);
     updatedData.lastUpdated = getDate();
@@ -204,7 +216,7 @@ export default class TeamStorageAdapter {
         updateTeamlistParameter(username, teamId, key, updatedData[key]);
       }
     });
-    const team = readTeamFile(username, teamId);
+    const team = await readTeamFile(username, teamId);
     Object.assign(team, updatedData);
     saveTeam(team, username);
   }
@@ -227,15 +239,15 @@ export default class TeamStorageAdapter {
    * @param {JSON} playerData - id of the team to be copied
    * @returns {Number} - id of the new player
    */
-  addPlayer(
+  async addPlayer(
     username: string,
     teamId: number | string,
     playerData: Player,
-  ): number {
+  ): Promise<number> {
     try {
       this.defaultTeamCheck(username, teamId);
       const player = new Player(playerData);
-      const team = readTeamFile(username, teamId);
+      const team = await readTeamFile(username, teamId);
       const id = findNextFreePlayerId(team.squad);
       player.id = id;
       if (!team.squad.length) {
@@ -250,10 +262,14 @@ export default class TeamStorageAdapter {
       throw error;
     }
   }
-  updatePlayer(username: string, teamId: number | string, player: Player) {
+  async updatePlayer(
+    username: string,
+    teamId: number | string,
+    player: Player,
+  ): Promise<void> {
     try {
       this.defaultTeamCheck(username, teamId);
-      const team = readTeamFile(username, teamId);
+      const team = await readTeamFile(username, teamId);
       console.log(`Updating player ${player.id} in team ${teamId}`);
       const playerIndex = team.squad.findIndex(
         (squadPlayer: Player) => Number(squadPlayer.id) === Number(player.id),
@@ -268,14 +284,14 @@ export default class TeamStorageAdapter {
       throw error;
     }
   }
-  removePlayer(
+  async removePlayer(
     username: string,
     teamId: number | string,
     playerId: string | number,
-  ) {
+  ): Promise<void> {
     try {
       this.defaultTeamCheck(username, teamId);
-      const team = readTeamFile(username, teamId);
+      const team = await readTeamFile(username, teamId);
       team.squad = team.squad.filter(
         (player: Player) => Number(player.id) !== Number(playerId),
       );
@@ -284,9 +300,9 @@ export default class TeamStorageAdapter {
       throw error;
     }
   }
-  findNextFreeTeamId(username: string) {
+  async findNextFreeTeamId(username: string): Promise<number> {
     const teamsPath = getUserTeamsListJSONPath(username);
-    const teamsData: TeamListTeam[] = readJSONFile(teamsPath);
+    const teamsData: TeamListTeam[] = await readJSONFile(teamsPath);
     const sortedTeams = Object.values(teamsData).sort(
       (a: TeamListTeam, b: TeamListTeam) => a.id - b.id,
     );
@@ -300,9 +316,13 @@ export default class TeamStorageAdapter {
     console.log(`New team ID: ${nextFreeId}`);
     return nextFreeId;
   }
-  addTeam(username: string, teamData: any, imageFileName: string) {
+  async addTeam(
+    username: string,
+    teamData: any,
+    imageFileName: string,
+  ): Promise<number> {
     try {
-      const id = this.findNextFreeTeamId(username);
+      const id = await this.findNextFreeTeamId(username);
       const team = new TeamExtended({
         ...teamData,
         id,
@@ -319,16 +339,13 @@ export default class TeamStorageAdapter {
       throw error;
     }
   }
-  /**
-   * @returns {boolean} - true if team is resettable and successfully reset, false otherwise
-   */
-  resetTeam(username: string, teamId: number | string) {
+  async resetTeam(username: string, teamId: number | string): Promise<boolean> {
     if (!hasTeamDefault(username, teamId)) {
       return false;
     }
     this.deleteTeam(username, teamId);
     const defaultUsername = 'default';
-    this.cloneTeamFromDefault(username, teamId);
+    await this.cloneTeamFromDefault(username, teamId);
     this.copyTeamListTeam(defaultUsername, username, teamId);
     return true;
   }
