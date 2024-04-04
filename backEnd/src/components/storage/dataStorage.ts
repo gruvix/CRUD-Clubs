@@ -1,47 +1,62 @@
-import * as fs from "fs";
+import { promises as fs } from 'fs';
 
-export function deleteFile(userPath: string) {
-  fs.rmSync(userPath, { recursive: true, force: true });
-}
-export function copyFile(sourcePath: string, targetPath: string) {
-  fs.copyFileSync(sourcePath, targetPath);
-}
-export function writeFile(targetPath: string, content: any) {
-  fs.writeFileSync(targetPath, content);
-}
-export function readFile(targetPath: string) {
+export async function deleteFile(userPath: string): Promise<void> {
   try {
-    const content = fs.readFileSync(targetPath);
-    return content;
+    await fs.rm(userPath, { recursive: true, force: true });
   } catch (err) {
     throw err;
   }
 }
-/**
- * @returns - JSON object
- */
-export function readJSONFile(targetPath: string) {
+export async function copyFile(sourcePath: string, targetPath: string): Promise<void> {
   try {
-    const content = JSON.parse(fs.readFileSync(targetPath, "utf-8"));
-    return content;
+    await fs.copyFile(sourcePath, targetPath);
+  } catch (err) {
+    if (err.code === 'ENOENT') {
+      throw new Error(`File not found: ${targetPath}`);
+    } else {
+      throw err;
+    }
+  }
+}
+export async function writeFile(targetPath: string, content: any): Promise<void> {
+  try {
+    await fs.writeFile(targetPath, content);
   } catch (err) {
     throw err;
   }
 }
-export function validateFile(filePath: string) {
+export async function readFile(targetPath: string): Promise<Buffer> {
   try {
-    fs.accessSync(filePath, fs.constants.F_OK);
+    const content = await fs.readFile(targetPath);
+    return content;
+  } catch (err) {
+    if (err.code === 'ENOENT') {
+      throw new Error(`File not found: ${targetPath}`);
+    } else {
+      throw err;
+    }
+  }
+}
+export async function readJSONFile(targetPath: string): Promise<JSON> {
+  const content = JSON.parse(await fs.readFile(targetPath, 'utf-8'));
+  return content;
+}
+export async function validateFile(filePath: string) {
+  try {
+    await fs.access(filePath, fs.constants.F_OK);
     return true;
   } catch (err) {
     return false;
   }
 }
-export function createFolder(folderPath: string) {
+export async function createFolder(folderPath: string): Promise<void> {
   try {
-    if (!fs.existsSync(folderPath)) {
-      fs.mkdirSync(folderPath);
-    }
+    await fs.access(folderPath);
   } catch (err) {
-    throw err;
+    if (err.code === 'ENOENT') {
+      await fs.mkdir(folderPath);
+    } else {
+      throw err;
+    }
   }
 }
