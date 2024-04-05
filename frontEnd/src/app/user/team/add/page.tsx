@@ -9,6 +9,7 @@ import isImageTypeValid from "@/components/shared/validateImage";
 import APIAdapter from "@/components/adapters/APIAdapter";
 import { useRouter } from "next/navigation";
 import "@/css/globals.css";
+import UnsupportedMediaTypeError from "@/components/errors/UnsupportedMediaTypeError";
 
 export default function Page() {
   const [playerSlots, setPlayerSlots] = React.useState([]);
@@ -24,6 +25,16 @@ export default function Page() {
   const [teamCrest, setTeamCrest] = React.useState<File | null>(null);
   const [canSubmitTeam, setCanSubmitTeam] = React.useState(false);
   const router = useRouter();
+
+  const errorHandler = (error: Error) => {
+    if (
+      error instanceof UnsupportedMediaTypeError
+    ) {
+      alert(`${error}`);
+    } else {
+      setAsyncError(error);
+    }
+  };
   const returnToTeams = () => {
     router.push(webAppPaths.teams);
   };
@@ -56,7 +67,7 @@ export default function Page() {
         router.push(webAppPaths.team(newTeamId));
       })
       .catch((error) => {
-        setAsyncError(error);
+        errorHandler(error);
       });
   };
   useEffect(() => {
