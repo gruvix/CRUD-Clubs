@@ -1,6 +1,6 @@
 import React from 'react';
 import { webAppPaths } from '../../../paths';
-import APIAdapter from '../../../components/adapters/APIAdapter';
+import APIAdapter from '@/components/adapters/APIAdapter';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 export default function LogoutButton({ style, text, router }: { style?: React.CSSProperties; text: string, router: AppRouterInstance }) {
