@@ -35,11 +35,12 @@ export default class NewTeamController {
       `User ${username} is adding the new team "${parsedTeamData.name}"`,
     );
     try {
-      return await this.teamService.addTeam(
+      const newTeamId = await this.teamService.addTeam(
         username,
         parsedTeamData,
         image.filename,
-      );
+      )
+      res.status(201).send(newTeamId.toString());
     } catch (error) {
       if (error instanceof HttpException) {
         return res.status(error.getStatus()).send(error.message);
