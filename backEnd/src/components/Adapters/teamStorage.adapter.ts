@@ -25,12 +25,12 @@ async function readTeamFile(
     throw error;
   }
 }
-function saveTeam(team: TeamExtended, username: string) {
+async function saveTeam(team: TeamExtended, username: string): Promise<void> {
   try {
     const targetPath = getUserTeamJSONPath(username, team.id);
     console.log(`Saving team ${team.id} to ${username} on ${targetPath}`);
     const content = JSON.stringify(team);
-    writeFile(targetPath, content);
+    await writeFile(targetPath, content);
   } catch (writeError) {
     throw writeError;
   }
@@ -42,33 +42,33 @@ function saveTeam(team: TeamExtended, username: string) {
  * @param {string} parameter - teamlist parameter to be updated
  * @param {any} value - new value of parameter
  */
-function updateTeamlistParameter(
+async function updateTeamlistParameter(
   username: string,
   teamId: number | string,
   parameter: string,
   value: string | number | boolean,
 ) {
   const teamsPath = getUserTeamsListJSONPath(username);
-  const teams = readJSONFile(teamsPath);
+  const teams = await readJSONFile(teamsPath);
   teams[teamId][parameter] = value;
-  writeFile(teamsPath, JSON.stringify(teams));
+  await writeFile(teamsPath, JSON.stringify(teams));
 }
-function addTeamToTeamlist(newTeam: TeamExtended, username: string) {
+async function addTeamToTeamlist(newTeam: TeamExtended, username: string): Promise<void> {
   const userTeamsPath = getUserTeamsListJSONPath(username);
-  const userTeams = readJSONFile(userTeamsPath);
+  const userTeams = await readJSONFile(userTeamsPath);
   userTeams[newTeam.id] = new TeamListTeam(
     newTeam as unknown as TeamListTeam,
     true,
     false,
     false,
   );
-  writeFile(userTeamsPath, JSON.stringify(userTeams));
+  await writeFile(userTeamsPath, JSON.stringify(userTeams));
 }
-function deleteTeamFromTeamlist(username: string, teamId: number | string) {
+async function deleteTeamFromTeamlist(username: string, teamId: number | string): Promise<void> {
   const teamsPath = getUserTeamsListJSONPath(username);
-  const teams = readJSONFile(teamsPath);
+  const teams = await readJSONFile(teamsPath);
   delete teams[teamId];
-  writeFile(teamsPath, JSON.stringify(teams));
+  await writeFile(teamsPath, JSON.stringify(teams));
 }
 /**
  * @returns {string} - Returns current date in ISOS string format
@@ -93,9 +93,9 @@ function findNextFreePlayerId(players: Player[]): number {
   }
   return nextFreeId;
 }
-function hasTeamDefault(username: string, teamId: number | string) {
+async function hasTeamDefault(username: string, teamId: number | string): Promise<boolean> {
   const teamsListPath = getUserTeamsListJSONPath(username);
-  const teams = readJSONFile(teamsListPath);
+  const teams = await readJSONFile(teamsListPath);
   const team = teams[teamId];
   return team.hasDefault;
 }
@@ -135,8 +135,8 @@ export default class TeamStorageAdapter {
    * gets a teams list by username
    * @param {string} username
    */
-  getTeamsList(username: string) {
-    return readJSONFile(getUserTeamsListJSONPath(username));
+  async getTeamsList(username: string): Promise<TeamListTeam[]> {
+    return await readJSONFile(getUserTeamsListJSONPath(username));
   }
   async getTeam(
     username: string,
@@ -149,7 +149,7 @@ export default class TeamStorageAdapter {
       const team = new TeamExtended({
         ...(await readTeamFile(sourceUserName, teamId)),
         isDefault: teamDefaultBool,
-        hasDefault: hasTeamDefault(username, teamId),
+        hasDefault: await hasTeamDefault(username, teamId),
       });
       return team;
     } catch (error) {
@@ -220,9 +220,9 @@ export default class TeamStorageAdapter {
     Object.assign(team, updatedData);
     saveTeam(team, username);
   }
-  validateTeam(username: string, teamId: number | string) {
+  async validateTeam(username: string, teamId: number | string): Promise<boolean | string | number> {
     const teamsPath = getUserTeamsListJSONPath(username);
-    const teamsData = readJSONFile(teamsPath);
+    const teamsData = await readJSONFile(teamsPath);
     if (!teamsData[teamId]) {
       return false;
     }
