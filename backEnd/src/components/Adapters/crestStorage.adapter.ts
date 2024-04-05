@@ -18,7 +18,7 @@ export default class CrestStorageAdapter {
     newCrestFilename: string,
   ) {
     if (teamStorage.isTeamDefault(username, teamId)) return;
-    const team = teamStorage.getTeam(username, teamId);
+    const team = await teamStorage.getTeam(username, teamId);
     const oldCrestFilename = team.crestUrl.split('/').pop();
     if (oldCrestFilename !== newCrestFilename) {
       try {
