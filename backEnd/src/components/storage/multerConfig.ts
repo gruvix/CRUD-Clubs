@@ -29,11 +29,11 @@ const storage = multer.diskStorage({
     const userCrestsFolderPath = `${getUserCustomCrestFolderPath(username)}`;
     cb(null, userCrestsFolderPath);
   },
-  filename: (req: any, file, cb) => {
+  filename: async (req: any, file, cb) => {
     let { teamId } = req.params;
     if (!teamId) {
       const { username } = req.session;
-      teamId = adapter.findNextFreeTeamId(username).toString();
+      teamId = (await adapter.findNextFreeTeamId(username)).toString();
     }
     const filename = `${teamId}${path.extname(file.originalname)}`;
     cb(null, filename);
