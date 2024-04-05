@@ -22,11 +22,11 @@ export default class TeamController {
   constructor(private readonly teamService: TeamService) {}
 
   @Get()
-  getTeam(@Req() req: CustomRequest, @Param() params: any): TeamExtended {
+  async getTeam(@Req() req: CustomRequest, @Param() params: any): Promise<TeamExtended> {
     const { username } = req.session;
     const { teamId } = params;
     console.log(`User ${username} requested team ${teamId}`);
-    const data: TeamExtended = this.teamService.getTeamData(username, teamId);
+    const data = await this.teamService.getTeamData(username, teamId);
     return data;
   }
 

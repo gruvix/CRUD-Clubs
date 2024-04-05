@@ -23,8 +23,8 @@ export default class UserController {
     return;
   }
   @Post()
-  login(@Req() request: CustomRequest, @Body() data: { username: string }) {
-    const success = this.userService.handleUserLogin(data.username);
+  async login(@Req() request: CustomRequest, @Body() data: { username: string }) {
+    const success = await this.userService.handleUserLogin(data.username);
     if (success) {
       request.session.username = data.username;
       console.log(`User ${data.username} logged in`);

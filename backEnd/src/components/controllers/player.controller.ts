@@ -20,30 +20,30 @@ export default class PlayerController {
   constructor(private readonly playerService: PlayerService) {}
 
   @Post()
-  addPlayer(
+  async addPlayer(
     @Req() req: CustomRequest,
     @Param() params: any,
     @Body() newPlayer: Player,
   ) {
     const { username } = req.session;
     console.log(`User ${username} is adding player to team ${params.teamId}`);
-    const newId = this.playerService.addPlayer(username, params.teamId, newPlayer);
+    const newId = await this.playerService.addPlayer(username, params.teamId, newPlayer);
     return newId;
   }
 
   @Patch()
-  updatePlayer(
+  async updatePlayer(
     @Req() req: CustomRequest,
     @Param() params: any,
     @Body() playerData: Player,
   ) {
     const { username } = req.session;
     console.log(`User ${username} is updating team ${params.teamId}'s player ${playerData.id}`);
-    this.playerService.updatePlayer(username, params.teamId, playerData);
+    await this.playerService.updatePlayer(username, params.teamId, playerData);
   }
 
   @Delete()
-  deletePlayer(
+  async deletePlayer(
     @Req() req: CustomRequest,
     @Param() params: any,
     @Body() data: { playerId: number },
@@ -51,6 +51,6 @@ export default class PlayerController {
     const { playerId } = data;
     const { username } = req.session;
     console.log(`User ${username} is deleting team ${params.teamId}'s player ${playerId}`);
-    this.playerService.removePlayer(username, params.teamId, playerId);
+    await this.playerService.removePlayer(username, params.teamId, playerId);
   }
 }

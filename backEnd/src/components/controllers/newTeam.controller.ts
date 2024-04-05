@@ -20,7 +20,7 @@ export default class NewTeamController {
 
   @Post('add')
   @UseInterceptors(FileInterceptor('image', multerOptions))
-  addTeam(
+  async addTeam(
     @Req() req: CustomRequest,
     @Body() body: {teamData: string},
     @UploadedFile() image: Express.Multer.File,
@@ -28,6 +28,6 @@ export default class NewTeamController {
     const { username } = req.session;
     const parsedTeamData = JSON.parse(body.teamData);
     console.log(`User ${username} is adding the new team "${parsedTeamData.name}"`);
-    return this.teamService.addTeam(username, parsedTeamData, image.filename);
+    return await this.teamService.addTeam(username, parsedTeamData, image.filename);
   }
 }

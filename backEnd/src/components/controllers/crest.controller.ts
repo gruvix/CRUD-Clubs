@@ -22,12 +22,12 @@ export default class CrestController {
 
   @Put(':teamId')
   @UseInterceptors(FileInterceptor('image', multerOptions))
-    updateCrest(@Req() req: CustomRequest, @Param() params: any, @UploadedFile() image: Express.Multer.File) {
+   async updateCrest(@Req() req: CustomRequest, @Param() params: any, @UploadedFile() image: Express.Multer.File) {
     const { username } = req.session;
     const { teamId } = params;
     const { filename } = image;
     console.log(`User ${username} is updating crest for team ${teamId}`);
-    const newCrestUrl = this.crestService.updateCrest(username, teamId, filename);
+    const newCrestUrl = await this.crestService.updateCrest(username, teamId, filename);
     return JSON.stringify(newCrestUrl);
   }
 }

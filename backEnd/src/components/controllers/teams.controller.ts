@@ -15,22 +15,22 @@ export default class TeamsController {
   constructor(private readonly teamsService: TeamsService) {}
 
   @Get()
-  getTeamsList(@Req() req: CustomRequest): TeamsData {
+  async getTeamsList(@Req() req: CustomRequest): Promise<TeamsData> {
     const { username } = req.session;
     console.log(`User ${username} requested teams list`);
     const data: TeamsData = {
       username, //Create custom endpoint to get username, remove username from other requests
-      teams: this.teamsService.getTeamsData(username),
+      teams: await this.teamsService.getTeamsData(username),
     };
     return data;
   }
 
   @Put()
-  resetTeamsList(@Req() req: CustomRequest) {
+  async resetTeamsList(@Req() req: CustomRequest) {
     const { username } = req.session;
     console.log(`User ${username} requested teams list reset`);
     try {
-      this.teamsService.resetTeamsList(username);
+      await this.teamsService.resetTeamsList(username);
     } catch (error) {
       throw new HttpException('Failed to get team', HttpStatus.INTERNAL_SERVER_ERROR);
     }
