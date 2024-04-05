@@ -30,8 +30,17 @@ export default function TeamsList(): React.ReactElement {
     () => (): void => {},
   );
   const [modalText, setModalText] = React.useState("");
+  const [asyncError, setAsyncError] = React.useState<Error>();
+
   const request = new APIAdapter();
 
+  const errorHandler = (error: Error) => {
+    if (error instanceof UnauthorizedError) {
+      router.push(webAppPaths.user);
+    } else {
+      setAsyncError(error);
+    }
+  };
   const updateTeamsData = async () => {
     setIsLoading(true);
     request
@@ -42,34 +51,32 @@ export default function TeamsList(): React.ReactElement {
         setIsLoading(false);
       })
       .catch((error) => {
-        if (error instanceof UnauthorizedError) {
-          router.push(webAppPaths.user);
-        } else {
-          alert(error);
-        }
+        errorHandler(error);
       });
   };
   const deleteTeam = (teamId: number) => async () => {
-    request.deleteTeam(teamId).then((data: RedirectData) => {
-      if (data.redirect) {
-        router.push(data.redirect);
-      } else {
+    request
+      .deleteTeam(teamId)
+      .then(() => {
         updateTeamsData();
-      }
-    });
+      })
+      .catch((error) => {
+        errorHandler(error);
+      });
   };
   const setUpDeleteTeamModal = (teamId: number | string, teamName: string) => {
     setModalCallback(() => deleteTeam(Number(teamId)));
     setModalText(`Are you sure you want to delete team ${teamName}?`);
   };
   const resetTeams = () => async () => {
-    request.resetTeamsList().then((data: RedirectData) => {
-      if (data.redirect) {
-        router.push(data.redirect);
-      } else {
+    request
+      .resetTeamsList()
+      .then(() => {
         updateTeamsData();
-      }
-    });
+      })
+      .catch((error) => {
+        errorHandler(error);
+      });
   };
   useEffect(() => {
     updateTeamsData();
@@ -96,6 +103,11 @@ export default function TeamsList(): React.ReactElement {
       }),
     );
   }, [searchPattern, searchOption, teamCards]);
+  useEffect(() => {
+    if (asyncError) {
+      throw asyncError;
+    }
+  }, [asyncError]);
 
   return (
     <div className="container">
