@@ -41,7 +41,7 @@ export async function readJSONFile(targetPath: string): Promise<any> {
   const content = JSON.parse(await fs.readFile(targetPath, 'utf-8'));
   return content;
 }
-export async function validateFile(filePath: string) {
+export async function validateFile(filePath: string): Promise<boolean> {
   try {
     await fs.access(filePath, fs.constants.F_OK);
     return true;
