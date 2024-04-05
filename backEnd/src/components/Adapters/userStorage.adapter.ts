@@ -12,12 +12,12 @@ export default class UserStorageAdapter {
   async createUser(username: string): Promise<void> {
     try {
       const defaultUsername = 'default';
+      await createFolder(getUserRootPath(username));
       await Promise.all([
-        createFolder(getUserRootPath(username)),
         createFolder(getUserTeamsFolderPath(username)),
         createFolder(getUserCustomCrestFolderPath(username)),
-        teamStorage.copyTeamList(defaultUsername, username),
       ]);
+      await teamStorage.copyTeamList(defaultUsername, username);
     } catch (e) {
       throw new Error('Failed to create new user: ' + e);
     }
@@ -30,12 +30,13 @@ export default class UserStorageAdapter {
     }
   }
   async userExists(username: string): Promise<boolean | Error> {
-    if (!await validateFile(getUserTeamsListJSONPath(username))) {
+    if (!(await validateFile(getUserTeamsListJSONPath(username)))) {
       return false;
     }
     return true;
   }
   async resetUser(username: string): Promise<void> {
-    await Promise.all([this.deleteUser(username), this.createUser(username)]);
+    await this.deleteUser(username);
+    await this.createUser(username);
   }
 }
