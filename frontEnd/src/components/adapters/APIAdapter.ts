@@ -6,6 +6,7 @@ import Team, { TeamParameters } from "./Team";
 import TeamCard from "./TeamCard";
 import TeamNotFoundError from "../errors/TeamNotFoundError";
 import TeamNotResettableError from "../errors/TeamNotResettableError";
+import UnsupportedMediaTypeError from "../errors/UnsupportedMediaTypeError";
 
 export default class APIAdapter {
   async login(username: string) {
@@ -272,6 +273,8 @@ export default class APIAdapter {
       switch (response.status) {
         case 403:
           throw new UnauthorizedError();
+        case 415:
+          throw new UnsupportedMediaTypeError();
         default:
           throw new Error(`${response.status}`);
       }
@@ -291,6 +294,8 @@ export default class APIAdapter {
       switch (response.status) {
         case 403:
           throw new UnauthorizedError();
+        case 415:
+          throw new UnsupportedMediaTypeError();
         default:
           throw new Error(`${response.status}`);
       }
