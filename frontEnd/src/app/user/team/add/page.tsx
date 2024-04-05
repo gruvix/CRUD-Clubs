@@ -226,7 +226,7 @@ export default function Page() {
             id="upload-image-input"
             style={{ display: "none" }}
             onChange={(e) => {
-              setTeamCrest(e.target.files[0]);
+              setTeamCrest(e.target.files![0]);
             }}
           />
         </div>
