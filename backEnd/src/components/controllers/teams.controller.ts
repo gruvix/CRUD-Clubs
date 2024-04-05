@@ -1,12 +1,12 @@
 import { Controller, Get, HttpException, HttpStatus, Put, Req, UseGuards } from '@nestjs/common';
 import CustomRequest from 'src/components/models/CustomRequest.interface';
-import TeamExtended from 'src/components/models/TeamExtended';
 import { AuthGuard } from 'src/components/guards/auth.guard';
 import TeamsService from 'src/components/services/teams.service';
+import TeamListTeam from '../models/TeamListTeam';
 
 interface TeamsData {
   username: string;
-  teams: TeamExtended[];
+  teams: TeamListTeam[];
 }
 
 @UseGuards(AuthGuard)
