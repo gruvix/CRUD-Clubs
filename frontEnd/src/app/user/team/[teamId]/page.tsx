@@ -6,13 +6,14 @@ import TeamDataTable from "./TeamDataTable";
 import PlayersDataTable from "./PlayersDataTable";
 import { useRouter } from "next/navigation";
 import Team from "@/components/adapters/Team";
-import APIAdapter, { RedirectData } from "@/components/adapters/APIAdapter";
+import APIAdapter from "@/components/adapters/APIAdapter";
 import isImageTypeValid from "@/components/shared/validateImage";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import ConfirmationModal from "@/components/shared/ConfirmationModal";
 import { webAppPaths } from "@/paths";
 import "@/css/globals.css";
 import FailedToUpdateCrestError from "@/components/errors/FailedToUpdateCrestError";
+import UnsupportedMediaTypeError from "@/components/errors/UnsupportedMediaTypeError";
 
 export default function Page({
   params,
@@ -29,6 +30,17 @@ export default function Page({
   const [modalText, setModalText] = React.useState("");
   const [asyncError, setAsyncError] = React.useState<Error>();
   const request = new APIAdapter();
+
+  const errorHandler = (error: Error) => {
+    if (
+      error instanceof FailedToUpdateCrestError ||
+      error instanceof UnsupportedMediaTypeError
+    ) {
+      alert(`${error}`);
+    } else {
+      setAsyncError(error);
+    }
+  };
   const updateLocalTeamData = async () => {
     setIsLoading(true);
     request
@@ -38,7 +50,7 @@ export default function Page({
         setIsLoading(false);
       })
       .catch((error: Error) => {
-        setAsyncError(error);
+        errorHandler(error);
       });
   };
   const handleImageUpdate = (image: File) => {
@@ -54,11 +66,7 @@ export default function Page({
           }));
         })
         .catch((error: Error) => {
-          if (error instanceof FailedToUpdateCrestError) {
-            alert(`${error}`);
-          } else {
-            setAsyncError(error);
-          }
+          errorHandler(error);
         });
     }
   };
@@ -69,7 +77,7 @@ export default function Page({
         updateLocalTeamData();
       })
       .catch((error) => {
-        setAsyncError(error);
+        errorHandler(error);
       });
   };
   useEffect(() => {
