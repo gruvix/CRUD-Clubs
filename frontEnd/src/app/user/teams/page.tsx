@@ -9,6 +9,7 @@ import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import TeamCard from "@/components/adapters/TeamCard.js";
 import { useRouter } from "next/navigation";
 import "@/css/globals.css";
+import UnauthorizedError from "@/components/errors/UnauthorizedError";
 
 interface TeamsData {
   username: string;
@@ -32,20 +33,21 @@ export default function TeamsList(): React.ReactElement {
   const request = new APIAdapter();
 
   const updateTeamsData = async () => {
-    try {
-      setIsLoading(true);
-      request.getTeams().then((data: TeamsData | RedirectData) => {
-        if ("redirect" in data) {
-          router.push(data.redirect);
+    setIsLoading(true);
+    request
+      .getTeams()
+      .then((data: TeamsData) => {
+        setUsername(data.username);
+        setTeamCards(data.teams);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        if (error instanceof UnauthorizedError) {
+          router.push(webAppPaths.user);
         } else {
-          setUsername(data.username);
-          setTeamCards(data.teams);
-          setIsLoading(false);
+          alert(error);
         }
       });
-    } catch (error) {
-      alert(error);
-    }
   };
   const deleteTeam = (teamId: number) => async () => {
     request.deleteTeam(teamId).then((data: RedirectData) => {
