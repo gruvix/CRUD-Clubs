@@ -4,6 +4,7 @@ import { getUserCustomCrestFolderPath } from "./userPath";
 import TeamStorageAdapter from "../Adapters/teamStorage.adapter";
 import { Request } from "express";
 import { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
+import { HttpException, HttpStatus } from "@nestjs/common";
 
 
 const imageFilter = (
@@ -13,7 +14,11 @@ const imageFilter = (
 ) => {
   const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
   if (!allowedTypes.includes(file.mimetype)) {
-    return cb(null, false);
+    const error = new HttpException(
+      'Invalid filetype uploaded. Only jpeg, jpg, png and gif files are allowed.',
+      HttpStatus.UNSUPPORTED_MEDIA_TYPE,
+    );
+    return cb(error);
   }
   cb(null, true);
 };
