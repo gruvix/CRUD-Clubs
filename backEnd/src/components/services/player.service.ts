@@ -5,14 +5,14 @@ import TeamStorageAdapter from '../Adapters/teamStorage.adapter';
 const storage = new TeamStorageAdapter();
 @Injectable()
 export default class PlayerService {
-  addPlayer(
+  async addPlayer(
     username: string,
     teamId: string | number,
     player: Player,
-  ): number | Error {
+  ): Promise<number | Error> {
     let newId: number;
     try {
-      newId = storage.addPlayer(username, teamId, player);
+      newId = await storage.addPlayer(username, teamId, player);
     } catch {
       throw new HttpException(
         'Server failed to add player',
@@ -23,9 +23,9 @@ export default class PlayerService {
       ? newId
       : new Error('Failed to add player, unkown server error');
   }
-  updatePlayer(username: string, teamId: string | number, newData: Player) {
+  async updatePlayer(username: string, teamId: string | number, newData: Player): Promise<void> {
     try {
-      storage.updatePlayer(username, teamId, newData);
+      await storage.updatePlayer(username, teamId, newData);
     } catch {
       throw new HttpException(
         'Server failed to update player',
@@ -33,13 +33,13 @@ export default class PlayerService {
       );
     }
   }
-  removePlayer(
+  async removePlayer(
     username: string,
     teamId: string | number,
     playerId: string | number,
-  ) {
+  ): Promise<void> {
     try {
-      storage.removePlayer(username, teamId, playerId);
+      await storage.removePlayer(username, teamId, playerId);
     } catch {
       throw new HttpException(
         'Server failed to remove player',

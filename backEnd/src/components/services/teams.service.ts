@@ -7,12 +7,12 @@ const userStorage = new UserStorageAdapter();
 const teamsStorage = new TeamStorageAdapter();
 @Injectable()
 export default class TeamsService {
-  getTeamsData(username: string): TeamExtended[] {
-    const data: TeamExtended[] = teamsStorage.getTeamsList(username);
+  async getTeamsData(username: string): Promise<TeamExtended[]> {
+    const data = await teamsStorage.getTeamsList(username);
     return data;
   }
 
-  resetTeamsList(username: string) {
-    userStorage.resetUser(username);
+  async resetTeamsList(username: string) {
+    await userStorage.resetUser(username);
   }
 }

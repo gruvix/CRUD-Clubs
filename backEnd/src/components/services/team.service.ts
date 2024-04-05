@@ -5,9 +5,9 @@ const storage = new TeamStorageAdapter();
 
 @Injectable()
 export default class TeamService {
-  addTeam(username: string, teamData: any, imageFileName: string) {
+  async addTeam(username: string, teamData: any, imageFileName: string): Promise<number> {
     try {
-      const id = storage.addTeam(username, teamData, imageFileName);
+      const id = await storage.addTeam(username, teamData, imageFileName);
       return id;
     } catch (error) {
       console.log(error);
@@ -19,9 +19,9 @@ export default class TeamService {
     }
   }
 
-  resetTeam(username: string, teamId: string | number) {
+  async resetTeam(username: string, teamId: string | number): Promise<void> {
     try {
-      const reset = storage.resetTeam(username, teamId);
+      const reset = await storage.resetTeam(username, teamId);
       if(!reset){
         throw new HttpException(
           'Failed to reset team: team is not resettable',
@@ -38,9 +38,9 @@ export default class TeamService {
     }
   }
 
-  getTeamData(username: string, teamId: string | number): TeamExtended {
+  async getTeamData(username: string, teamId: string | number): Promise<TeamExtended> {
     try {
-      return storage.getTeam(username, teamId);
+      return await storage.getTeam(username, teamId);
     } catch (error) {
       console.log(error);
       throw new HttpException(

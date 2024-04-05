@@ -24,11 +24,11 @@ export default class UserService {
     if (error) {
       throw error;
     }
-    const exists = userStorage.userExists(username);
+    const exists = await userStorage.userExists(username);
     if (!exists) {
       try {
         console.log('user not found, creating new user');
-        userStorage.createUser(username);
+        await userStorage.createUser(username);
         return true;
       } catch (error) {
         throw error;
