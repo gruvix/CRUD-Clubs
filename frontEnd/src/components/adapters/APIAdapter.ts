@@ -255,7 +255,7 @@ export default class APIAdapter {
     teamParameters: TeamParameters,
     players: Player[],
     imageFile: File,
-  ) {
+  ): Promise<number> {
     const squad = [] as object[];
     Object.keys(players).forEach((player, index) => {
       squad.push({ ...players[Number(player)], id: index });
