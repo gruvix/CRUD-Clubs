@@ -1,6 +1,7 @@
 import {
   Controller,
   Get,
+  HttpException,
   Param,
   Put,
   Req,
@@ -40,16 +41,26 @@ export default class CrestController {
     @Req() req: CustomRequest,
     @Param() params: any,
     @UploadedFile() image: Express.Multer.File,
+    @Res() res: Response,
   ) {
     const { username } = req.session;
     const { teamId } = params;
     const { filename } = image;
     console.log(`User ${username} is updating crest for team ${teamId}`);
-    const newCrestUrl = await this.crestService.updateCrest(
-      username,
-      teamId,
-      filename,
-    );
-    return JSON.stringify(newCrestUrl);
+    try {
+      const newCrestUrl = await this.crestService.updateCrest(
+        username,
+        teamId,
+        filename,
+      );
+      return JSON.stringify(newCrestUrl);
+    } catch (error) {
+      if (error instanceof HttpException) {
+        return res.status(error.getStatus()).send(error.message);
+      } else {
+        console.log(error.message);
+        return res.status(500).send(error.message);
+      }
+    }
   }
 }
