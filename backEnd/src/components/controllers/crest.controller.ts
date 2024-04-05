@@ -1,4 +1,14 @@
-import { Controller, Get, Param, Put, Req, Res, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Put,
+  Req,
+  Res,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import CustomRequest from 'src/components/models/CustomRequest.interface';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from 'src/components/guards/auth.guard';
@@ -12,7 +22,11 @@ export default class CrestController {
   constructor(private readonly crestService: CrestService) {}
 
   @Get(':teamId/:filename')
-  async getCrest(@Req() req: CustomRequest, @Param() params: any, @Res() res: Response) {
+  async getCrest(
+    @Req() req: CustomRequest,
+    @Param() params: any,
+    @Res() res: Response,
+  ) {
     const { username } = req.session;
     const { teamId, filename } = params;
     console.log(`User ${username} is requesting crest for team ${teamId}`);
@@ -22,12 +36,20 @@ export default class CrestController {
 
   @Put(':teamId')
   @UseInterceptors(FileInterceptor('image', multerOptions))
-   async updateCrest(@Req() req: CustomRequest, @Param() params: any, @UploadedFile() image: Express.Multer.File) {
+  async updateCrest(
+    @Req() req: CustomRequest,
+    @Param() params: any,
+    @UploadedFile() image: Express.Multer.File,
+  ) {
     const { username } = req.session;
     const { teamId } = params;
     const { filename } = image;
     console.log(`User ${username} is updating crest for team ${teamId}`);
-    const newCrestUrl = await this.crestService.updateCrest(username, teamId, filename);
+    const newCrestUrl = await this.crestService.updateCrest(
+      username,
+      teamId,
+      filename,
+    );
     return JSON.stringify(newCrestUrl);
   }
 }
