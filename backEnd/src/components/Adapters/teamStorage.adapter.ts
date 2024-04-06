@@ -236,7 +236,7 @@ export default class TeamStorageAdapter {
     playerData: Player,
   ): Promise<number> {
     try {
-      this.defaultTeamCheckHandler(username, teamId);
+      await this.defaultTeamCheckHandler(username, teamId);
       const player = new Player(playerData);
       const team = await readTeamFile(username, teamId);
       const id = findNextFreePlayerId(team.squad);
