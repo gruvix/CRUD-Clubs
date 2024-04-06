@@ -1,4 +1,12 @@
-import { Controller, Get, HttpException, HttpStatus, Put, Req, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpException,
+  HttpStatus,
+  Put,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import CustomRequest from 'src/components/models/CustomRequest.interface';
 import { AuthGuard } from 'src/components/guards/auth.guard';
 import TeamsService from 'src/components/services/teams.service';
@@ -18,11 +26,19 @@ export default class TeamsController {
   async getTeamsList(@Req() req: CustomRequest): Promise<TeamsData> {
     const { username } = req.session;
     console.log(`User ${username} requested teams list`);
-    const data: TeamsData = {
-      username, //Create custom endpoint to get username, remove username from other requests
-      teams: await this.teamsService.getTeamsData(username),
-    };
-    return data;
+    try {
+      const data: TeamsData = {
+        username, //Create custom endpoint to get username, remove username from other requests
+        teams: await this.teamsService.getTeamsData(username),
+      };
+      return data;
+    } catch (error) {
+      if(error)
+      throw new HttpException(
+        'Failed to get teams',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   @Put()
@@ -32,7 +48,10 @@ export default class TeamsController {
     try {
       await this.teamsService.resetTeamsList(username);
     } catch (error) {
-      throw new HttpException('Failed to get team', HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException(
+        'Failed to reset teams',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 }
