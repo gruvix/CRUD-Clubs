@@ -53,7 +53,7 @@ export default class CrestController {
         teamId,
         filename,
       );
-      return JSON.stringify(newCrestUrl);
+      res.send(JSON.stringify(newCrestUrl));
     } catch (error) {
       if (error instanceof HttpException) {
         return res.status(error.getStatus()).send(error.message);
