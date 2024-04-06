@@ -53,7 +53,10 @@ async function updateTeamlistParameter(
   teams[teamId][parameter] = value;
   await writeFile(teamsPath, JSON.stringify(teams));
 }
-async function addTeamToTeamlist(newTeam: TeamExtended, username: string): Promise<void> {
+async function addTeamToTeamlist(
+  newTeam: TeamExtended,
+  username: string,
+): Promise<void> {
   const userTeamsPath = getUserTeamsListJSONPath(username);
   const userTeams = await readJSONFile(userTeamsPath);
   userTeams[newTeam.id] = new TeamListTeam(
@@ -64,7 +67,10 @@ async function addTeamToTeamlist(newTeam: TeamExtended, username: string): Promi
   );
   await writeFile(userTeamsPath, JSON.stringify(userTeams));
 }
-async function deleteTeamFromTeamlist(username: string, teamId: number | string): Promise<void> {
+async function deleteTeamFromTeamlist(
+  username: string,
+  teamId: number | string,
+): Promise<void> {
   const teamsPath = getUserTeamsListJSONPath(username);
   const teams = await readJSONFile(teamsPath);
   delete teams[teamId];
@@ -93,7 +99,10 @@ function findNextFreePlayerId(players: Player[]): number {
   }
   return nextFreeId;
 }
-async function hasTeamDefault(username: string, teamId: number | string): Promise<boolean> {
+async function hasTeamDefault(
+  username: string,
+  teamId: number | string,
+): Promise<boolean> {
   const teamsListPath = getUserTeamsListJSONPath(username);
   const teams = await readJSONFile(teamsListPath);
   const team = teams[teamId];
@@ -209,18 +218,21 @@ export default class TeamStorageAdapter {
     teamId: number | string,
   ): Promise<void> {
     const updatedData = newData;
-    this.defaultTeamCheck(username, teamId);
+    await this.defaultTeamCheck(username, teamId);
     updatedData.lastUpdated = getDate();
-    TeamListTeam.properties().forEach((key: string) => {
+    TeamListTeam.properties().forEach(async (key: string) => {
       if (updatedData[key] !== undefined) {
-        updateTeamlistParameter(username, teamId, key, updatedData[key]);
+        await updateTeamlistParameter(username, teamId, key, updatedData[key]);
       }
     });
     const team = await readTeamFile(username, teamId);
     Object.assign(team, updatedData);
-    saveTeam(team, username);
+    await saveTeam(team, username);
   }
-  async validateTeam(username: string, teamId: number | string): Promise<boolean | string | number> {
+  async validateTeam(
+    username: string,
+    teamId: number | string,
+  ): Promise<boolean | string | number> {
     const teamsPath = getUserTeamsListJSONPath(username);
     const teamsData = await readJSONFile(teamsPath);
     if (!teamsData[teamId]) {
@@ -228,10 +240,12 @@ export default class TeamStorageAdapter {
     }
     return teamsData[teamId];
   }
-  deleteTeam(username: string, teamId: number | string) {
+  async deleteTeam(username: string, teamId: number | string): Promise<void> {
     const teamPath = getUserTeamJSONPath(username, teamId);
-    deleteFile(teamPath);
-    deleteTeamFromTeamlist(username, teamId);
+    Promise.all([
+      deleteFile(teamPath),
+      deleteTeamFromTeamlist(username, teamId),
+    ]);
   }
   /**
    * @param {string} username - owner of team

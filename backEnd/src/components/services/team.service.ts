@@ -51,13 +51,13 @@ export default class TeamService {
     }
   }
 
-  updateTeamData(
+  async updateTeamData(
     username: string,
     teamId: string | number,
     newData: { [key: string]: string | number | boolean },
-  ) {
+  ): Promise<void> {
     try {
-      storage.updateTeam(newData, username, teamId);
+      await storage.updateTeam(newData, username, teamId);
     } catch (error) {
       console.log(error);
       throw new HttpException(
@@ -68,9 +68,9 @@ export default class TeamService {
     }
   }
 
-  deleteTeam(username: string, teamId: string | number) {
+  async deleteTeam(username: string, teamId: string | number): Promise<void> {
     try {
-      storage.deleteTeam(username, teamId);
+      await storage.deleteTeam(username, teamId);
     } catch (error) {
       console.log(error);
       throw new HttpException(
