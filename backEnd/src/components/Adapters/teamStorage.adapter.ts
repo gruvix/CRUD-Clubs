@@ -9,11 +9,6 @@ import {
 import { readJSONFile, writeFile, deleteFile } from '../storage/dataStorage';
 import teamIsNotResettableError from '../errors/teamIsNotResettableError';
 
-/**
- * gets a team from storage by id and username
- * @param {string} username
- * @param {Number} teamId
- */
 async function readTeamFile(
   username: string,
   teamId: number | string,
@@ -36,13 +31,6 @@ async function saveTeam(team: TeamExtended, username: string): Promise<void> {
     throw writeError;
   }
 }
-/**
- * updates a teamlist parameter
- * @param {string} username
- * @param {Number} teamId
- * @param {string} parameter - teamlist parameter to be updated
- * @param {any} value - new value of parameter
- */
 async function updateTeamlistParameter(
   username: string,
   teamId: number | string,
@@ -77,9 +65,6 @@ async function deleteTeamFromTeamlist(
   delete teams[teamId];
   await writeFile(teamsPath, JSON.stringify(teams));
 }
-/**
- * @returns {string} - Returns current date in ISOS string format
- */
 function getDate(): string {
   const now = new Date();
   return now.toISOString();
@@ -141,10 +126,6 @@ export default class TeamStorageAdapter {
     }
     return false;
   }
-  /**
-   * gets a teams list by username
-   * @param {string} username
-   */
   async getTeamsList(username: string): Promise<TeamListTeam[]> {
     return await readJSONFile(getUserTeamsListJSONPath(username));
   }
@@ -200,10 +181,6 @@ export default class TeamStorageAdapter {
       throw creationError;
     }
   }
-  /**
-   * @param {string} targetUser - username of copy target folder
-   * @param {Number} teamId - id of the team to be copied
-   */
   async cloneTeamFromDefault(targetUser: string, teamId: number | string) {
     try {
       const DEFAULT_USER = 'default';
@@ -255,12 +232,6 @@ export default class TeamStorageAdapter {
       deleteTeamFromTeamlist(username, teamId),
     ]);
   }
-  /**
-   * @param {string} username - owner of team
-   * @param {Number} teamId - target team id
-   * @param {JSON} playerData - id of the team to be copied
-   * @returns {Number} - id of the new player
-   */
   async addPlayer(
     username: string,
     teamId: number | string,
