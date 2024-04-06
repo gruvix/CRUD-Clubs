@@ -130,10 +130,16 @@ export default function PlayersDataTable({
       <table className="table" id="players-table">
         <thead>
           <tr className="table-dark" id="add-player-row">
-            {playerKeys.map((parameter) => (
+            {playerKeys.map((parameter, keysIndex) => (
               <td className="text-warning" key={parameter}>
                 {parameter}
                 <input
+                  ref={
+                    editingRowKey === NEW_PLAYER_ROW_KEY && keysIndex === 0
+                      ? inputReferece
+                      : null
+                  }
+                  onFocus={handleInputFocus}
                   type="text"
                   className="form-control"
                   value={newPlayerRow[parameter] ? newPlayerRow[parameter] : ""}
