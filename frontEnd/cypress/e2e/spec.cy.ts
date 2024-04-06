@@ -121,6 +121,7 @@ describe("test the team editor page with the first team", () => {
 
   it("updates all team parameters with a random string", () => {
     const randomString = generateRandomString();
+    cy.wait(1000);
     cy.get("#team-table .edit").each(($editButton, index) => {
       cy.wrap($editButton)
         .click()
