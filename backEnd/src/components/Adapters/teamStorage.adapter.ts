@@ -154,7 +154,7 @@ export default class TeamStorageAdapter {
   ): Promise<void> {
     const sourceTeamsPath = getUserTeamsListJSONPath(sourceUser);
     const targetTeamsPath = getUserTeamsListJSONPath(targetUser);
-    const userTeams = readJSONFile(targetTeamsPath);
+    const userTeams = await readJSONFile(targetTeamsPath);
     const defaultTeams: TeamListTeam[] = await readJSONFile(sourceTeamsPath);
 
     const newTeam: TeamListTeam = Object.values(defaultTeams).find(
@@ -162,7 +162,7 @@ export default class TeamStorageAdapter {
     ) as TeamListTeam;
     try {
       userTeams[teamId] = new TeamListTeam(newTeam);
-      writeFile(targetTeamsPath, JSON.stringify(userTeams));
+      await writeFile(targetTeamsPath, JSON.stringify(userTeams));
     } catch (copyError) {
       throw copyError;
     }
@@ -176,7 +176,7 @@ export default class TeamStorageAdapter {
     });
     try {
       const teamsPath = getUserTeamsListJSONPath(targetUser);
-      writeFile(teamsPath, JSON.stringify(teamsParsed));
+      await writeFile(teamsPath, JSON.stringify(teamsParsed));
     } catch (creationError) {
       throw creationError;
     }
@@ -249,7 +249,7 @@ export default class TeamStorageAdapter {
         team.squad.unshift(player);
       }
       console.log('Adding player to team', teamId);
-      saveTeam(team, username);
+      await saveTeam(team, username);
       return id;
     } catch (error) {
       throw error;
@@ -261,7 +261,7 @@ export default class TeamStorageAdapter {
     player: Player,
   ): Promise<void> {
     try {
-      this.defaultTeamCheck(username, teamId);
+      await this.defaultTeamCheckHandler(username, teamId);
       const team = await readTeamFile(username, teamId);
       console.log(`Updating player ${player.id} in team ${teamId}`);
       const playerIndex = team.squad.findIndex(
@@ -269,7 +269,7 @@ export default class TeamStorageAdapter {
       );
       if (playerIndex !== -1) {
         team.squad[playerIndex] = player;
-        saveTeam(team, username);
+        await saveTeam(team, username);
       } else {
         throw new Error('Player not found');
       }
@@ -283,12 +283,12 @@ export default class TeamStorageAdapter {
     playerId: string | number,
   ): Promise<void> {
     try {
-      this.defaultTeamCheck(username, teamId);
+      await this.defaultTeamCheckHandler(username, teamId);
       const team = await readTeamFile(username, teamId);
       team.squad = team.squad.filter(
         (player: Player) => Number(player.id) !== Number(playerId),
       );
-      saveTeam(team, username);
+      await saveTeam(team, username);
     } catch (error) {
       throw error;
     }
@@ -335,7 +335,6 @@ export default class TeamStorageAdapter {
     }
   }
   async resetTeam(username: string, teamId: number | string): Promise<void> {
-
     if (!(await hasTeamDefault(username, teamId))) {
       throw new teamIsNotResettableError();
     }
