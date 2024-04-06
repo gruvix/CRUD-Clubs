@@ -95,7 +95,7 @@ async function hasTeamDefault(
   return team.hasDefault;
 }
 export default class TeamStorageAdapter {
-  private async defaultTeamCheckHandler(
+  private async ensureTeamIsUnDefault(
     username: string,
     teamId: number | string,
   ): Promise<void> {
@@ -196,7 +196,7 @@ export default class TeamStorageAdapter {
     teamId: number | string,
   ): Promise<void> {
     const updatedData = newData;
-    await this.defaultTeamCheckHandler(username, teamId);
+    await this.ensureTeamIsUnDefault(username, teamId);
     updatedData.lastUpdated = getDate();
     for(const key of TeamListTeam.properties()) {
       if (!!updatedData[key]) {
@@ -236,7 +236,7 @@ export default class TeamStorageAdapter {
     playerData: Player,
   ): Promise<number> {
     try {
-      await this.defaultTeamCheckHandler(username, teamId);
+      await this.ensureTeamIsUnDefault(username, teamId);
       const player = new Player(playerData);
       const team = await readTeamFile(username, teamId);
       const id = findNextFreePlayerId(team.squad);
@@ -259,7 +259,7 @@ export default class TeamStorageAdapter {
     player: Player,
   ): Promise<void> {
     try {
-      await this.defaultTeamCheckHandler(username, teamId);
+      await this.ensureTeamIsUnDefault(username, teamId);
       const team = await readTeamFile(username, teamId);
       console.log(`Updating player ${player.id} in team ${teamId}`);
       const playerIndex = team.squad.findIndex(
@@ -281,7 +281,7 @@ export default class TeamStorageAdapter {
     playerId: string | number,
   ): Promise<void> {
     try {
-      await this.defaultTeamCheckHandler(username, teamId);
+      await this.ensureTeamIsUnDefault(username, teamId);
       const team = await readTeamFile(username, teamId);
       team.squad = team.squad.filter(
         (player: Player) => Number(player.id) !== Number(playerId),
