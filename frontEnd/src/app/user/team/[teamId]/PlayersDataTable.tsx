@@ -139,6 +139,9 @@ export default function PlayersDataTable({
                       ? inputReferece
                       : null
                   }
+                  onKeyDown={(e) =>
+                    e.key === "Enter" ? handleNewPlayer() : null
+                  }
                   onFocus={handleInputFocus}
                   type="text"
                   className="form-control"
