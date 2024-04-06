@@ -198,18 +198,16 @@ export default class TeamStorageAdapter {
     const updatedData = newData;
     await this.defaultTeamCheckHandler(username, teamId);
     updatedData.lastUpdated = getDate();
-    await Promise.all([
-      TeamListTeam.properties().forEach(async (key: string) => {
-        if (updatedData[key] !== undefined) {
-          await updateTeamlistParameter(
-            username,
-            teamId,
-            key,
-            updatedData[key],
-          );
-        }
-      }),
-    ]);
+    for(const key of TeamListTeam.properties()) {
+      if (!!updatedData[key]) {
+        await updateTeamlistParameter(
+          username,
+          teamId,
+          key,
+          updatedData[key],
+        );
+      }
+    }
     const team = await readTeamFile(username, teamId);
     Object.assign(team, updatedData);
     await saveTeam(team, username);
