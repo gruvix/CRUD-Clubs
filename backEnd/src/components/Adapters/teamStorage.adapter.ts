@@ -114,10 +114,10 @@ export default class TeamStorageAdapter {
     teamId: number | string,
   ): Promise<void> {
     try {
-      if (this.isTeamDefault(username, teamId)) {
+      if (await this.isTeamDefault(username, teamId)) {
         await this.cloneTeamFromDefault(username, teamId);
         const DEFAULT_TEAMLIST_PARAMETER = 'isDefault';
-        updateTeamlistParameter(
+        await updateTeamlistParameter(
           username,
           teamId,
           DEFAULT_TEAMLIST_PARAMETER,
@@ -207,7 +207,7 @@ export default class TeamStorageAdapter {
     try {
       const DEFAULT_USER = 'default';
       const team = await readTeamFile(DEFAULT_USER, teamId);
-      saveTeam(team, targetUser);
+      await saveTeam(team, targetUser);
     } catch (copyError) {
       throw copyError;
     }
