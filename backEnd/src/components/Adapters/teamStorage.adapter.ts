@@ -7,6 +7,7 @@ import {
   getUserTeamsListJSONPath,
 } from '../storage/userPath';
 import { readJSONFile, writeFile, deleteFile } from '../storage/dataStorage';
+import teamIsNotResettableError from '../errors/teamIsNotResettableError';
 
 /**
  * gets a team from storage by id and username
@@ -353,14 +354,20 @@ export default class TeamStorageAdapter {
       throw error;
     }
   }
-  async resetTeam(username: string, teamId: number | string): Promise<boolean> {
-    if (!hasTeamDefault(username, teamId)) {
-      return false;
+  async resetTeam(username: string, teamId: number | string): Promise<void> {
+
+    if (!(await hasTeamDefault(username, teamId))) {
+      throw new teamIsNotResettableError();
     }
-    this.deleteTeam(username, teamId);
-    const defaultUsername = 'default';
-    await this.cloneTeamFromDefault(username, teamId);
-    this.copyTeamListTeam(defaultUsername, username, teamId);
-    return true;
+    try {
+      await this.deleteTeam(username, teamId);
+      const defaultUsername = 'default';
+      Promise.all([
+        this.cloneTeamFromDefault(username, teamId),
+        this.copyTeamListTeam(defaultUsername, username, teamId),
+      ]);
+    } catch (error) {
+      throw new Error('Team reset failed' + error);
+    }
   }
 }

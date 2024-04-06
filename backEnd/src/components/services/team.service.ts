@@ -1,11 +1,16 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import TeamExtended from 'src/components/models/TeamExtended';
 import TeamStorageAdapter from 'src/components/Adapters/teamStorage.adapter';
+import teamIsNotResettableError from '../errors/teamIsNotResettableError';
 const storage = new TeamStorageAdapter();
 
 @Injectable()
 export default class TeamService {
-  async addTeam(username: string, teamData: any, imageFileName: string): Promise<number> {
+  async addTeam(
+    username: string,
+    teamData: any,
+    imageFileName: string,
+  ): Promise<number> {
     try {
       const id = await storage.addTeam(username, teamData, imageFileName);
       return id;
@@ -21,14 +26,14 @@ export default class TeamService {
 
   async resetTeam(username: string, teamId: string | number): Promise<void> {
     try {
-      const reset = await storage.resetTeam(username, teamId);
-      if(!reset){
+      await storage.resetTeam(username, teamId);
+    } catch (error) {
+      if (error instanceof teamIsNotResettableError) {
         throw new HttpException(
           'Failed to reset team: team is not resettable',
           HttpStatus.UNPROCESSABLE_ENTITY,
         );
       }
-    } catch (error) {
       console.log(error);
       throw new HttpException(
         'Server failed to reset team',
@@ -38,7 +43,10 @@ export default class TeamService {
     }
   }
 
-  async getTeamData(username: string, teamId: string | number): Promise<TeamExtended> {
+  async getTeamData(
+    username: string,
+    teamId: string | number,
+  ): Promise<TeamExtended> {
     try {
       return await storage.getTeam(username, teamId);
     } catch (error) {
