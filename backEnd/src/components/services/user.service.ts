@@ -2,8 +2,6 @@
 import { Injectable } from '@nestjs/common';
 import { validateUsername } from 'src/components/userValidation';
 import UserStorageAdapter from 'src/components/Adapters/userStorage.adapter';
-import { getUserTeamsListJSONPath } from 'src/components/storage/userPath';
-import { validateFile } from 'src/components/storage/dataStorage';
 import CustomRequest from '../models/CustomRequest.interface';
 
 const userStorage = new UserStorageAdapter();
