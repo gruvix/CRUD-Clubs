@@ -95,7 +95,7 @@ async function hasTeamDefault(
   return team.hasDefault;
 }
 export default class TeamStorageAdapter {
-  private async defaultTeamCheck(
+  private async defaultTeamCheckHandler(
     username: string,
     teamId: number | string,
   ): Promise<void> {
@@ -196,7 +196,7 @@ export default class TeamStorageAdapter {
     teamId: number | string,
   ): Promise<void> {
     const updatedData = newData;
-    await this.defaultTeamCheck(username, teamId);
+    await this.defaultTeamCheckHandler(username, teamId);
     updatedData.lastUpdated = getDate();
     await Promise.all([
       TeamListTeam.properties().forEach(async (key: string) => {
@@ -238,7 +238,7 @@ export default class TeamStorageAdapter {
     playerData: Player,
   ): Promise<number> {
     try {
-      this.defaultTeamCheck(username, teamId);
+      this.defaultTeamCheckHandler(username, teamId);
       const player = new Player(playerData);
       const team = await readTeamFile(username, teamId);
       const id = findNextFreePlayerId(team.squad);
