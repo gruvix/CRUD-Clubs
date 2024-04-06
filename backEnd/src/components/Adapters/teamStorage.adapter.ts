@@ -354,8 +354,10 @@ export default class TeamStorageAdapter {
         isDefault: false,
         hasDefault: false,
       }); // Replace TeamExtended with custom class that stores team in original (default) format
-      saveTeam(team, username);
-      addTeamToTeamlist(team, username);
+      Promise.all([
+        saveTeam(team, username),
+        addTeamToTeamlist(team, username),
+      ]);
       return id;
     } catch (error) {
       throw error;
