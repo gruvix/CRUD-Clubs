@@ -44,3 +44,16 @@ describe('copyFile', () => {
     );
   });
 });
+describe('writeFile', () => {
+  it('should write a file successfully', async () => {
+    mockedFsPromises.writeFile.mockResolvedValue(undefined as never);
+    storage.writeFile(filePath, 'content');
+    expect(mockedFsPromises.writeFile).toHaveBeenCalledWith(filePath, 'content');
+  });
+  it('should handle other errors from writing a file', async () => {
+    mockedFsPromises.writeFile.mockRejectedValue(new Error('Simulated Error'));
+    await expect(storage.writeFile(filePath, filePath)).rejects.toThrow(
+      'Simulated Error',
+    );
+  });
+})
