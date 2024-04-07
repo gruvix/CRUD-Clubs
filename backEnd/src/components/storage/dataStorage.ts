@@ -1,15 +1,15 @@
-import { promises as fs } from 'fs';
+import * as fsPromises from 'fs/promises';
 
 export async function deleteFile(userPath: string): Promise<void> {
   try {
-    await fs.rm(userPath, { recursive: true, force: true });
+    await fsPromises.rm(userPath, { recursive: true, force: true });
   } catch (err) {
     throw err;
   }
 }
 export async function copyFile(sourcePath: string, targetPath: string): Promise<void> {
   try {
-    await fs.copyFile(sourcePath, targetPath);
+    await fsPromises.copyFile(sourcePath, targetPath);
   } catch (err) {
     if (err.code === 'ENOENT') {
       throw new Error(`File not found: ${targetPath}`);
@@ -20,14 +20,14 @@ export async function copyFile(sourcePath: string, targetPath: string): Promise<
 }
 export async function writeFile(targetPath: string, content: any): Promise<void> {
   try {
-    await fs.writeFile(targetPath, content);
+    await fsPromises.writeFile(targetPath, content);
   } catch (err) {
     throw err;
   }
 }
 export async function readFile(targetPath: string): Promise<Buffer> {
   try {
-    const content = await fs.readFile(targetPath);
+    const content = await fsPromises.readFile(targetPath);
     return content;
   } catch (err) {
     if (err.code === 'ENOENT') {
@@ -38,13 +38,13 @@ export async function readFile(targetPath: string): Promise<Buffer> {
   }
 }
 export async function readJSONFile(targetPath: string): Promise<any> {
-  const jsonContent = await fs.readFile(targetPath, 'utf-8')
+  const jsonContent = await fsPromises.readFile(targetPath, 'utf-8')
   const content = JSON.parse(jsonContent);
   return content;
 }
 export async function validateFile(filePath: string): Promise<boolean> {
   try {
-    await fs.access(filePath, fs.constants.F_OK);
+    await fsPromises.access(filePath, fsPromises.constants.F_OK);
     return true;
   } catch (err) {
     return false;
@@ -52,10 +52,10 @@ export async function validateFile(filePath: string): Promise<boolean> {
 }
 export async function createFolder(folderPath: string): Promise<void> {
   try {
-    await fs.access(folderPath);
+    await fsPromises.access(folderPath);
   } catch (err) {
     if (err.code === 'ENOENT') {
-      await fs.mkdir(folderPath);
+      await fsPromises.mkdir(folderPath);
     } else {
       throw err;
     }
