@@ -21,3 +21,26 @@ describe('deleteFile', () => {
     );
   });
 });
+describe('copyFile', () => {
+  it('should copy a file successfully', async () => {
+    mockedFsPromises.copyFile.mockResolvedValue(undefined as never);
+    storage.copyFile(filePath, filePath);
+    expect(mockedFsPromises.copyFile).toHaveBeenCalledWith(filePath, filePath);
+  });
+  it('should handle file not found error from copying a file', async () => {
+    mockedFsPromises.copyFile.mockImplementation(() => {
+      const error = new Error('ENOENT: no such file or directory, copyFile');
+      (error as any).code = 'ENOENT';
+      return Promise.reject(error);
+    });
+    await expect(storage.copyFile(filePath, filePath)).rejects.toThrow(
+      'File not found: ' + filePath,
+    );
+  });
+  it('should handle other errors from copying a file', async () => {
+    mockedFsPromises.copyFile.mockRejectedValue(new Error('Simulated Error'));
+    await expect(storage.copyFile(filePath, filePath)).rejects.toThrow(
+      'Simulated Error',
+    );
+  });
+});
