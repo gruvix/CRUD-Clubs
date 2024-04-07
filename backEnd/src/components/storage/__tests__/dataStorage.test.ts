@@ -57,3 +57,16 @@ describe('writeFile', () => {
     );
   });
 })
+describe('readFile', () => {
+  it('should read a file successfully', async () => {
+    mockedFsPromises.readFile.mockResolvedValue(Buffer.from('content'));
+    const content = await storage.readFile(filePath);
+    expect(content).toEqual(Buffer.from('content'));
+  });
+  it('should handle other errors from reading a file', async () => {
+    mockedFsPromises.readFile.mockRejectedValue(new Error('Simulated Error'));
+    await expect(storage.readFile(filePath)).rejects.toThrow(
+      'Simulated Error',
+    );
+  });
+});
