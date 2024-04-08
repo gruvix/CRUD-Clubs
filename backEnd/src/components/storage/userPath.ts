@@ -71,7 +71,7 @@ export function getUserTeamJSONPath(
   username: string,
   teamId: string | number,
   fullpath = true
-) {
+): string {
   return fullpath
     ? `${getUserTeamsFolderPath(username)}/${teamId}.json`
     : `${getUserTeamsFolderPath(username, false)}/${teamId}.json`;
