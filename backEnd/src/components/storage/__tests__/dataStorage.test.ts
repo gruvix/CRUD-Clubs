@@ -5,6 +5,8 @@ import * as fsPromises from 'fs/promises';
 const mockedFsPromises = fsPromises as jest.Mocked<typeof fsPromises>;
 
 const filePath = '/path/to/file';
+const notFoundError = new Error('ENOENT: no such file or directory');
+(notFoundError as any).code = 'ENOENT';
 describe('deleteFile', () => {
   it('should delete a file successfully', async () => {
     mockedFsPromises.rm.mockResolvedValue(undefined as never);
