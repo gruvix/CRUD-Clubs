@@ -30,11 +30,7 @@ describe('copyFile', () => {
     expect(mockedFsPromises.copyFile).toHaveBeenCalledWith(filePath, filePath);
   });
   it('should handle file not found error from copying a file', async () => {
-    mockedFsPromises.copyFile.mockImplementation(() => {
-      const error = new Error('ENOENT: no such file or directory, copyFile');
-      (error as any).code = 'ENOENT';
-      return Promise.reject(error);
-    });
+    mockedFsPromises.copyFile.mockRejectedValue(notFoundError)
     await expect(storage.copyFile(filePath, filePath)).rejects.toThrow(
       'File not found: ' + filePath,
     );
@@ -50,7 +46,10 @@ describe('writeFile', () => {
   it('should write a file successfully', async () => {
     mockedFsPromises.writeFile.mockResolvedValue(undefined as never);
     storage.writeFile(filePath, 'content');
-    expect(mockedFsPromises.writeFile).toHaveBeenCalledWith(filePath, 'content');
+    expect(mockedFsPromises.writeFile).toHaveBeenCalledWith(
+      filePath,
+      'content',
+    );
   });
   it('should handle other errors from writing a file', async () => {
     mockedFsPromises.writeFile.mockRejectedValue(new Error('Simulated Error'));
@@ -58,7 +57,7 @@ describe('writeFile', () => {
       'Simulated Error',
     );
   });
-})
+});
 describe('readFile', () => {
   it('should read a file successfully', async () => {
     mockedFsPromises.readFile.mockResolvedValue(Buffer.from('content'));
@@ -67,7 +66,15 @@ describe('readFile', () => {
   });
   it('should handle other errors from reading a file', async () => {
     mockedFsPromises.readFile.mockRejectedValue(new Error('Simulated Error'));
+    await expect(storage.readFile(filePath)).rejects.toThrow('Simulated Error');
+  });
+  it('should handle file not found error when reading a file', async () => {
+    mockedFsPromises.readFile.mockRejectedValue(notFoundError)
     await expect(storage.readFile(filePath)).rejects.toThrow(
+      'File not found: ' + filePath,
+    );
+  });
+});
 describe('readJSONFile', () => {
   it('should read a JSON file successfully', async () => {
     mockedFsPromises.readFile.mockResolvedValue(
