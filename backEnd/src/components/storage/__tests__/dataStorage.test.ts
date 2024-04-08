@@ -30,7 +30,7 @@ describe('copyFile', () => {
     expect(mockedFsPromises.copyFile).toHaveBeenCalledWith(filePath, filePath);
   });
   it('should handle file not found error from copying a file', async () => {
-    mockedFsPromises.copyFile.mockRejectedValue(notFoundError)
+    mockedFsPromises.copyFile.mockRejectedValue(notFoundError);
     await expect(storage.copyFile(filePath, filePath)).rejects.toThrow(
       'File not found: ' + filePath,
     );
@@ -69,7 +69,7 @@ describe('readFile', () => {
     await expect(storage.readFile(filePath)).rejects.toThrow('Simulated Error');
   });
   it('should handle file not found error when reading a file', async () => {
-    mockedFsPromises.readFile.mockRejectedValue(notFoundError)
+    mockedFsPromises.readFile.mockRejectedValue(notFoundError);
     await expect(storage.readFile(filePath)).rejects.toThrow(
       'File not found: ' + filePath,
     );
@@ -84,7 +84,7 @@ describe('readJSONFile', () => {
     expect(content).toEqual({ key: 'value' });
   });
   it('should handle file not found error from reading a file', async () => {
-    mockedFsPromises.readFile.mockRejectedValue(notFoundError)
+    mockedFsPromises.readFile.mockRejectedValue(notFoundError);
     await expect(storage.readJSONFile(filePath)).rejects.toThrow(
       'File not found: ' + filePath,
     );
@@ -94,5 +94,17 @@ describe('readJSONFile', () => {
     await expect(storage.readJSONFile(filePath)).rejects.toThrow(
       'Simulated Error',
     );
+  });
+});
+describe('validateFile', () => {
+  it('should validate a file successfully', async () => {
+    mockedFsPromises.access.mockResolvedValue(undefined as never);
+    const result = await storage.validateFile(filePath);
+    expect(result).toBe(true);
+  });
+  it('should fail to validate a file', async () => {
+    mockedFsPromises.access.mockRejectedValue(undefined as never);
+    const result = await storage.validateFile(filePath);
+    expect(result).toBe(false);
   });
 });
