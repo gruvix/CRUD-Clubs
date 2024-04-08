@@ -4,6 +4,7 @@ jest.mock('../../storage/userPath');
 import * as ds from '../../storage/dataStorage';
 import * as us from '../../storage/userPath';
 import FileNotFoundError from '../../errors/FileNotFoundError';
+import TeamExtended from '../../models/TeamExtended';
 jest.spyOn(console, 'log').getMockImplementation();
 
 const dataStorageMock = ds as jest.Mocked<typeof ds>;
@@ -25,6 +26,26 @@ const nonDefaultTeamsListMock = {
     hasDefault: false,
   },
 };
+const nonDefaultTeamMock = new TeamExtended({
+  id: teamId,
+  name: 'name',
+  squad: [],
+  lastUpdated: '',
+  hasCustomCrest: false,
+  isDefault: false,
+  hasDefault: false,
+  crestUrl: '',
+} as any);
+const defaultTeamMock = new TeamExtended({
+  id: teamId,
+  name: 'name',
+  squad: [],
+  lastUpdated: '',
+  hasCustomCrest: false,
+  isDefault: true,
+  hasDefault: true,
+  crestUrl: '',
+} as any);
 describe('isTeamDefault', () => {
   it('should return true when team is default', async () => {
     dataStorageMock.readJSONFile.mockResolvedValue(defaultTeamsListMock);
