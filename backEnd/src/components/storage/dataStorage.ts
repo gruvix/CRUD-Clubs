@@ -1,4 +1,5 @@
 import * as fsPromises from 'fs/promises';
+import FileNotFoundError from '../errors/fileNotFoundError';
 
 export async function deleteFile(userPath: string): Promise<void> {
   try {
@@ -12,7 +13,7 @@ export async function copyFile(sourcePath: string, targetPath: string): Promise<
     await fsPromises.copyFile(sourcePath, targetPath);
   } catch (err) {
     if (err.code === 'ENOENT') {
-      throw new Error(`File not found: ${targetPath}`);
+      throw new FileNotFoundError(`File not found: ${targetPath}`);
     } else {
       throw err;
     }
@@ -31,16 +32,24 @@ export async function readFile(targetPath: string): Promise<Buffer> {
     return content;
   } catch (err) {
     if (err.code === 'ENOENT') {
-      throw new Error(`File not found: ${targetPath}`);
+      throw new FileNotFoundError(`File not found: ${targetPath}`);
     } else {
       throw err;
     }
   }
 }
 export async function readJSONFile(targetPath: string): Promise<any> {
-  const jsonContent = await fsPromises.readFile(targetPath, 'utf-8')
-  const content = JSON.parse(jsonContent);
-  return content;
+  try {
+    const jsonContent = await fsPromises.readFile(targetPath, 'utf-8')
+    const content = JSON.parse(jsonContent);
+    return content;
+  } catch (err) {
+    if (err.code === 'ENOENT') {
+      throw new FileNotFoundError(`File not found: ${targetPath}`);
+    } else {
+      throw err;
+    }
+  }
 }
 export async function validateFile(filePath: string): Promise<boolean> {
   try {
