@@ -15,3 +15,14 @@ const nonDefaultTeamMock = {
       isDefault: false,
     },
   };
+describe('isTeamDefault', () => {
+  it('should return true when team is default', async () => {
+    dsMock.readJSONFile.mockResolvedValue(defaultTeamMock);
+
+    expect(await adapter.isTeamDefault('test', 1)).toEqual(true);
+  });
+  it('should return false when team is not default', async () => {
+    dsMock.readJSONFile.mockResolvedValue(nonDefaultTeamMock);
+    expect(await adapter.isTeamDefault('test', 1)).toEqual(false);
+  });
+});
