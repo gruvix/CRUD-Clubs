@@ -8,7 +8,10 @@ export async function deleteFile(userPath: string): Promise<void> {
     throw err;
   }
 }
-export async function copyFile(sourcePath: string, targetPath: string): Promise<void> {
+export async function copyFile(
+  sourcePath: string,
+  targetPath: string,
+): Promise<void> {
   try {
     await fsPromises.copyFile(sourcePath, targetPath);
   } catch (err) {
@@ -19,7 +22,10 @@ export async function copyFile(sourcePath: string, targetPath: string): Promise<
     }
   }
 }
-export async function writeFile(targetPath: string, content: any): Promise<void> {
+export async function writeFile(
+  targetPath: string,
+  content: any,
+): Promise<void> {
   try {
     await fsPromises.writeFile(targetPath, content);
   } catch (err) {
@@ -40,7 +46,7 @@ export async function readFile(targetPath: string): Promise<Buffer> {
 }
 export async function readJSONFile(targetPath: string): Promise<any> {
   try {
-    const jsonContent = await fsPromises.readFile(targetPath, 'utf-8')
+    const jsonContent = await fsPromises.readFile(targetPath, 'utf-8');
     const content = JSON.parse(jsonContent);
     return content;
   } catch (err) {
@@ -64,7 +70,11 @@ export async function createFolder(folderPath: string): Promise<void> {
     await fsPromises.access(folderPath);
   } catch (err) {
     if (err.code === 'ENOENT') {
-      await fsPromises.mkdir(folderPath);
+      try {
+        await fsPromises.mkdir(folderPath, { recursive: true });
+      } catch (subErr) {
+        throw subErr;
+      }
     } else {
       throw err;
     }
