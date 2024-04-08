@@ -108,3 +108,26 @@ describe('validateFile', () => {
     expect(result).toBe(false);
   });
 });
+describe('createFolder', () => {
+  it('should create a folder successfully', async () => {
+    mockedFsPromises.access.mockRejectedValue(notFoundError);
+    mockedFsPromises.mkdir.mockResolvedValue(undefined as never);
+    await storage.createFolder(filePath);
+    expect(mockedFsPromises.mkdir).toHaveBeenCalledWith(filePath, {
+      recursive: true,
+    });
+  });
+  it('should handle errors from creating a folder', async () => {
+    mockedFsPromises.access.mockRejectedValue(notFoundError);
+    mockedFsPromises.mkdir.mockRejectedValue(new Error('Simulated Error'));
+    await expect(storage.createFolder(filePath)).rejects.toThrow(
+      'Simulated Error',
+    );
+  });
+  it('should handle other errors from file validation before creating a folder', async () => {
+    mockedFsPromises.access.mockRejectedValue(new Error('Simulated Error'));
+    await expect(storage.createFolder(filePath)).rejects.toThrow(
+      'Simulated Error',
+    );
+  });
+})
