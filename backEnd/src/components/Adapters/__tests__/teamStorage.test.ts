@@ -13,10 +13,10 @@ const defaultTeamsListMock = {
   },
 };
 const nonDefaultTeamsListMock = {
-    1: {
-      isDefault: false,
-    },
-  };
+  1: {
+    isDefault: false,
+  },
+};
 describe('isTeamDefault', () => {
   it('should return true when team is default', async () => {
     dsMock.readJSONFile.mockResolvedValue(defaultTeamsListMock);
@@ -35,6 +35,10 @@ describe('getTeamsList', () => {
   });
   it('should handle errors', async () => {
     dsMock.readJSONFile.mockRejectedValue(new FileNotFoundError());
-    await expect(adapter.getTeamsList('test')).rejects.toThrow(FileNotFoundError);
+    await expect(adapter.getTeamsList('test')).rejects.toThrow(
+      FileNotFoundError,
+    );
+  });
+});
   });
 });
