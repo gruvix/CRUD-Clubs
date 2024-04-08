@@ -127,7 +127,12 @@ export default class TeamStorageAdapter {
     return false;
   }
   async getTeamsList(username: string): Promise<TeamListTeam[]> {
-    return await readJSONFile(getUserTeamsListJSONPath(username));
+    try {
+      return await readJSONFile(getUserTeamsListJSONPath(username));
+    } catch (error) {
+      console.log('Failed to get teams list');
+      throw error;
+    }
   }
   async getTeam(
     username: string,
@@ -198,14 +203,9 @@ export default class TeamStorageAdapter {
     const updatedData = newData;
     await this.ensureTeamIsUnDefault(username, teamId);
     updatedData.lastUpdated = getDate();
-    for(const key of TeamListTeam.properties()) {
+    for (const key of TeamListTeam.properties()) {
       if (!!updatedData[key]) {
-        await updateTeamlistParameter(
-          username,
-          teamId,
-          key,
-          updatedData[key],
-        );
+        await updateTeamlistParameter(username, teamId, key, updatedData[key]);
       }
     }
     const team = await readTeamFile(username, teamId);
