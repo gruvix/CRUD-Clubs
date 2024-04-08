@@ -1,41 +1,47 @@
 import TeamStorageAdapter from '../teamStorage.adapter';
 jest.mock('../../storage/dataStorage');
+jest.mock('../../storage/userPath');
 import * as ds from '../../storage/dataStorage';
+import * as us from '../../storage/userPath';
 import FileNotFoundError from '../../errors/FileNotFoundError';
 jest.spyOn(console, 'log').getMockImplementation();
 
-const dsMock = ds as jest.Mocked<typeof ds>;
+const dataStorageMock = ds as jest.Mocked<typeof ds>;
+const userPathMock = us as jest.Mocked<typeof us>;
 const adapter = new TeamStorageAdapter();
 
+const username = 'username';
+const teamId = 1;
+
 const defaultTeamsListMock = {
-  1: {
+  [teamId]: {
     isDefault: true,
   },
 };
 const nonDefaultTeamsListMock = {
-  1: {
+  [teamId]: {
     isDefault: false,
   },
 };
 describe('isTeamDefault', () => {
   it('should return true when team is default', async () => {
-    dsMock.readJSONFile.mockResolvedValue(defaultTeamsListMock);
+    dataStorageMock.readJSONFile.mockResolvedValue(defaultTeamsListMock);
 
-    expect(await adapter.isTeamDefault('test', 1)).toEqual(true);
+    expect(await adapter.isTeamDefault(username, teamId)).toEqual(true);
   });
   it('should return false when team is not default', async () => {
-    dsMock.readJSONFile.mockResolvedValue(nonDefaultTeamsListMock);
-    expect(await adapter.isTeamDefault('test', 1)).toEqual(false);
+    dataStorageMock.readJSONFile.mockResolvedValue(nonDefaultTeamsListMock);
+    expect(await adapter.isTeamDefault(username, teamId)).toEqual(false);
   });
 });
 describe('getTeamsList', () => {
   it('should return a list of teams', async () => {
-    dsMock.readJSONFile.mockResolvedValue(defaultTeamsListMock);
-    expect(await adapter.getTeamsList('test')).toEqual(defaultTeamsListMock);
+    dataStorageMock.readJSONFile.mockResolvedValue(defaultTeamsListMock);
+    expect(await adapter.getTeamsList(username)).toEqual(defaultTeamsListMock);
   });
   it('should handle errors', async () => {
-    dsMock.readJSONFile.mockRejectedValue(new FileNotFoundError());
-    await expect(adapter.getTeamsList('test')).rejects.toThrow(
+    dataStorageMock.readJSONFile.mockRejectedValue(new FileNotFoundError());
+    await expect(adapter.getTeamsList(username)).rejects.toThrow(
       FileNotFoundError,
     );
   });
