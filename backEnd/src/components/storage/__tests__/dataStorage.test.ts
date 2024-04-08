@@ -68,6 +68,23 @@ describe('readFile', () => {
   it('should handle other errors from reading a file', async () => {
     mockedFsPromises.readFile.mockRejectedValue(new Error('Simulated Error'));
     await expect(storage.readFile(filePath)).rejects.toThrow(
+describe('readJSONFile', () => {
+  it('should read a JSON file successfully', async () => {
+    mockedFsPromises.readFile.mockResolvedValue(
+      Buffer.from('{"key": "value"}'),
+    );
+    const content = await storage.readJSONFile(filePath);
+    expect(content).toEqual({ key: 'value' });
+  });
+  it('should handle file not found error from reading a file', async () => {
+    mockedFsPromises.readFile.mockRejectedValue(notFoundError)
+    await expect(storage.readJSONFile(filePath)).rejects.toThrow(
+      'File not found: ' + filePath,
+    );
+  });
+  it('should handle other errors from reading a JSON file', async () => {
+    mockedFsPromises.readFile.mockRejectedValue(new Error('Simulated Error'));
+    await expect(storage.readJSONFile(filePath)).rejects.toThrow(
       'Simulated Error',
     );
   });
