@@ -16,11 +16,13 @@ const teamId = 1;
 const defaultTeamsListMock = {
   [teamId]: {
     isDefault: true,
+    hasDefault: true,
   },
 };
 const nonDefaultTeamsListMock = {
   [teamId]: {
     isDefault: false,
+    hasDefault: false,
   },
 };
 describe('isTeamDefault', () => {
