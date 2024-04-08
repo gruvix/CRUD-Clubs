@@ -89,10 +89,15 @@ async function hasTeamDefault(
   username: string,
   teamId: number | string,
 ): Promise<boolean> {
-  const teamsListPath = getUserTeamsListJSONPath(username);
-  const teams = await readJSONFile(teamsListPath);
-  const team = teams[teamId];
-  return team.hasDefault;
+  try {
+    const teamsListPath = getUserTeamsListJSONPath(username);
+    const teams = await readJSONFile(teamsListPath);
+    const team = teams[teamId];
+    return team.hasDefault;
+  } catch (error) {
+    console.log('Failed to get teams list');
+    throw error;
+  }
 }
 export default class TeamStorageAdapter {
   private async ensureTeamIsUnDefault(
