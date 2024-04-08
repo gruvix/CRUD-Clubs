@@ -7,7 +7,7 @@ import {
   getUserTeamsListJSONPath,
 } from '../storage/userPath';
 import { readJSONFile, writeFile, deleteFile } from '../storage/dataStorage';
-import teamIsNotResettableError from '../errors/teamIsNotResettableError';
+import TeamIsNotResettableError from '../errors/TeamIsNotResettableError';
 
 async function readTeamFile(
   username: string,
@@ -334,7 +334,7 @@ export default class TeamStorageAdapter {
   }
   async resetTeam(username: string, teamId: number | string): Promise<void> {
     if (!(await hasTeamDefault(username, teamId))) {
-      throw new teamIsNotResettableError();
+      throw new TeamIsNotResettableError();
     }
     try {
       await this.deleteTeam(username, teamId);

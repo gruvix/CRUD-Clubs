@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import TeamExtended from 'src/components/models/TeamExtended';
 import TeamStorageAdapter from 'src/components/Adapters/teamStorage.adapter';
-import teamIsNotResettableError from '../errors/teamIsNotResettableError';
+import TeamIsNotResettableError from '../errors/TeamIsNotResettableError';
 const storage = new TeamStorageAdapter();
 
 @Injectable()
@@ -28,7 +28,7 @@ export default class TeamService {
     try {
       await storage.resetTeam(username, teamId);
     } catch (error) {
-      if (error instanceof teamIsNotResettableError) {
+      if (error instanceof TeamIsNotResettableError) {
         throw new HttpException(
           'Failed to reset team: team is not resettable',
           HttpStatus.UNPROCESSABLE_ENTITY,
