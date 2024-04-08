@@ -69,5 +69,56 @@ describe('getTeamsList', () => {
     );
   });
 });
+
+describe('getTeam', () => {
+  it('should return a non-default team', async () => {
+    userPathMock.getUserTeamsListJSONPath.mockResolvedValue(
+      'path/file.json' as never,
+    );
+    userPathMock.getUserTeamJSONPath.mockResolvedValue(
+      'path/file.json' as never,
+    );
+    dataStorageMock.readJSONFile
+      .mockResolvedValueOnce(nonDefaultTeamsListMock)
+      .mockResolvedValueOnce(nonDefaultTeamMock)
+      .mockResolvedValueOnce(nonDefaultTeamsListMock);
+    const result = await adapter.getTeam(username, teamId);
+    expect(result).toEqual(nonDefaultTeamMock);
+  });
+  it('should return a default team', async () => {
+    userPathMock.getUserTeamsListJSONPath.mockResolvedValue(
+      'path/file.json' as never,
+    );
+    userPathMock.getUserTeamJSONPath.mockResolvedValue(
+      'path/file.json' as never,
+    );
+    dataStorageMock.readJSONFile
+      .mockResolvedValueOnce(defaultTeamsListMock)
+      .mockResolvedValueOnce(defaultTeamMock)
+      .mockResolvedValueOnce(defaultTeamsListMock);
+    const result = await adapter.getTeam(username, teamId);
+    expect(result).toEqual(defaultTeamMock);
+  });
+
+  it('should handle errors', async () => {
+    userPathMock.getUserTeamsListJSONPath.mockResolvedValue(
+      'path/file.json' as never,
+    );
+    userPathMock.getUserTeamJSONPath.mockResolvedValue(
+      'path/file.json' as never,
+    );
+    dataStorageMock.readJSONFile
+      .mockResolvedValueOnce(defaultTeamsListMock)
+      .mockRejectedValueOnce(new FileNotFoundError());
+    await expect(adapter.getTeam(username, teamId)).rejects.toThrow(
+      FileNotFoundError,
+    );
+    dataStorageMock.readJSONFile
+    .mockResolvedValueOnce(defaultTeamsListMock)
+    .mockResolvedValueOnce(defaultTeamMock)
+    .mockRejectedValueOnce(new FileNotFoundError());
+    await expect(adapter.getTeam(username, teamId)).rejects.toThrow(
+        FileNotFoundError,
+      );
   });
 });
