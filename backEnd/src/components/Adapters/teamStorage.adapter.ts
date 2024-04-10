@@ -163,19 +163,20 @@ export default class TeamStorageAdapter {
     targetUser: string,
     teamId: number,
   ): Promise<void> {
-    const sourceTeamsPath = getUserTeamsListJSONPath(sourceUser);
-    const targetTeamsPath = getUserTeamsListJSONPath(targetUser);
-    const userTeams = await readJSONFile(targetTeamsPath);
-    const sourceTeams: TeamListTeam[] = await readJSONFile(sourceTeamsPath);
-
-    const newTeam: TeamListTeam = Object.values(sourceTeams).find(
-      (team: TeamListTeam) => team.id === Number(teamId),
-    ) as TeamListTeam;
     try {
+      if (sourceUser === targetUser)
+        throw new Error('Source and target users must be different');
+      const sourceTeamsPath = getUserTeamsListJSONPath(sourceUser);
+      const targetTeamsPath = getUserTeamsListJSONPath(targetUser);
+      const userTeams: TeamListTeam[] = await readJSONFile(targetTeamsPath);
+      const sourceTeams: TeamListTeam[] = await readJSONFile(sourceTeamsPath);
+      const newTeam: TeamListTeam = Object.values(sourceTeams).find(
+        (team: TeamListTeam) => team.id === Number(teamId),
+      ) as TeamListTeam;
       userTeams[teamId] = new TeamListTeam(newTeam);
       await writeFile(targetTeamsPath, JSON.stringify(userTeams));
-    } catch (copyError) {
-      throw copyError;
+    } catch (error) {
+      throw error;
     }
   }
   async copyTeamList(sourceUser: string, targetUser: string): Promise<void> {
