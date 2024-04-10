@@ -13,6 +13,7 @@ const adapter = new TeamStorageAdapter();
 
 const username = 'username';
 const teamId = 1;
+const filePath = 'path/to/file' as never;
 
 const defaultTeamsListMock = {
   [teamId]: {
@@ -72,12 +73,8 @@ describe('getTeamsList', () => {
 
 describe('getTeam', () => {
   it('should return a non-default team', async () => {
-    userPathMock.getUserTeamsListJSONPath.mockResolvedValue(
-      'path/file.json' as never,
-    );
-    userPathMock.getUserTeamJSONPath.mockResolvedValue(
-      'path/file.json' as never,
-    );
+    userPathMock.getUserTeamsListJSONPath.mockResolvedValue(filePath);
+    userPathMock.getUserTeamJSONPath.mockResolvedValue(filePath);
     dataStorageMock.readJSONFile
       .mockResolvedValueOnce(nonDefaultTeamsListMock)
       .mockResolvedValueOnce(nonDefaultTeamMock)
@@ -86,12 +83,8 @@ describe('getTeam', () => {
     expect(result).toEqual(nonDefaultTeamMock);
   });
   it('should return a default team', async () => {
-    userPathMock.getUserTeamsListJSONPath.mockResolvedValue(
-      'path/file.json' as never,
-    );
-    userPathMock.getUserTeamJSONPath.mockResolvedValue(
-      'path/file.json' as never,
-    );
+    userPathMock.getUserTeamsListJSONPath.mockResolvedValue(filePath);
+    userPathMock.getUserTeamJSONPath.mockResolvedValue(filePath);
     dataStorageMock.readJSONFile
       .mockResolvedValueOnce(defaultTeamsListMock)
       .mockResolvedValueOnce(defaultTeamMock)
@@ -101,12 +94,8 @@ describe('getTeam', () => {
   });
 
   it('should handle errors', async () => {
-    userPathMock.getUserTeamsListJSONPath.mockResolvedValue(
-      'path/file.json' as never,
-    );
-    userPathMock.getUserTeamJSONPath.mockResolvedValue(
-      'path/file.json' as never,
-    );
+    userPathMock.getUserTeamsListJSONPath.mockResolvedValue(filePath);
+    userPathMock.getUserTeamJSONPath.mockResolvedValue(filePath);
     dataStorageMock.readJSONFile
       .mockResolvedValueOnce(defaultTeamsListMock)
       .mockRejectedValueOnce(new FileNotFoundError());
