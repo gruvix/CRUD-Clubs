@@ -120,10 +120,7 @@ export default class TeamStorageAdapter {
       throw error;
     }
   }
-  async isTeamDefault(
-    username: string,
-    teamId: number,
-  ): Promise<boolean> {
+  async isTeamDefault(username: string, teamId: number): Promise<boolean> {
     const teamsListPath = getUserTeamsListJSONPath(username);
     const teams = await readJSONFile(teamsListPath);
     const team = teams[teamId];
@@ -140,10 +137,7 @@ export default class TeamStorageAdapter {
       throw error;
     }
   }
-  async getTeam(
-    username: string,
-    teamId: number,
-  ): Promise<TeamExtended> {
+  async getTeam(username: string, teamId: number): Promise<TeamExtended> {
     const teamDefaultBool = await this.isTeamDefault(username, teamId);
     try {
       let sourceUserName = 'default';
