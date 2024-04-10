@@ -165,9 +165,9 @@ export default class TeamStorageAdapter {
     const sourceTeamsPath = getUserTeamsListJSONPath(sourceUser);
     const targetTeamsPath = getUserTeamsListJSONPath(targetUser);
     const userTeams = await readJSONFile(targetTeamsPath);
-    const defaultTeams: TeamListTeam[] = await readJSONFile(sourceTeamsPath);
+    const sourceTeams: TeamListTeam[] = await readJSONFile(sourceTeamsPath);
 
-    const newTeam: TeamListTeam = Object.values(defaultTeams).find(
+    const newTeam: TeamListTeam = Object.values(sourceTeams).find(
       (team: TeamListTeam) => team.id === Number(teamId),
     ) as TeamListTeam;
     try {
