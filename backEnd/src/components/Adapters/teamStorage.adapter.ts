@@ -8,10 +8,11 @@ import {
 } from '../storage/userPath';
 import { readJSONFile, writeFile, deleteFile } from '../storage/dataStorage';
 import TeamIsNotResettableError from '../errors/TeamIsNotResettableError';
+import InvalidTeamIdError from '../errors/InvalidTeamIdError';
 
 async function readTeamFile(
   username: string,
-  teamId: number | string,
+  teamId: number,
 ): Promise<TeamExtended> {
   try {
     const teamPath = getUserTeamJSONPath(username, teamId);
@@ -27,13 +28,13 @@ async function saveTeam(team: TeamExtended, username: string): Promise<void> {
     console.log(`Saving team ${team.id} to ${username} on ${targetPath}`);
     const content = JSON.stringify(team);
     await writeFile(targetPath, content);
-  } catch (writeError) {
-    throw writeError;
+  } catch (error) {
+    throw error;
   }
 }
 async function updateTeamlistParameter(
   username: string,
-  teamId: number | string,
+  teamId: number,
   parameter: string,
   value: string | number | boolean,
 ) {
@@ -58,7 +59,7 @@ async function addTeamToTeamlist(
 }
 async function deleteTeamFromTeamlist(
   username: string,
-  teamId: number | string,
+  teamId: number,
 ): Promise<void> {
   const teamsPath = getUserTeamsListJSONPath(username);
   const teams = await readJSONFile(teamsPath);
@@ -87,7 +88,7 @@ function findNextFreePlayerId(players: Player[]): number {
 }
 async function hasTeamDefault(
   username: string,
-  teamId: number | string,
+  teamId: number,
 ): Promise<boolean> {
   try {
     const teamsListPath = getUserTeamsListJSONPath(username);
@@ -102,7 +103,7 @@ async function hasTeamDefault(
 export default class TeamStorageAdapter {
   private async ensureTeamIsUnDefault(
     username: string,
-    teamId: number | string,
+    teamId: number,
   ): Promise<void> {
     try {
       if (await this.isTeamDefault(username, teamId)) {
@@ -121,7 +122,7 @@ export default class TeamStorageAdapter {
   }
   async isTeamDefault(
     username: string,
-    teamId: number | string,
+    teamId: number,
   ): Promise<boolean> {
     const teamsListPath = getUserTeamsListJSONPath(username);
     const teams = await readJSONFile(teamsListPath);
@@ -141,7 +142,7 @@ export default class TeamStorageAdapter {
   }
   async getTeam(
     username: string,
-    teamId: number | string,
+    teamId: number,
   ): Promise<TeamExtended> {
     const teamDefaultBool = await this.isTeamDefault(username, teamId);
     try {
@@ -160,7 +161,7 @@ export default class TeamStorageAdapter {
   async copyTeamListTeam(
     sourceUser: string,
     targetUser: string,
-    teamId: string | number,
+    teamId: number,
   ): Promise<void> {
     const sourceTeamsPath = getUserTeamsListJSONPath(sourceUser);
     const targetTeamsPath = getUserTeamsListJSONPath(targetUser);
@@ -191,7 +192,7 @@ export default class TeamStorageAdapter {
       throw creationError;
     }
   }
-  async cloneTeamFromDefault(targetUser: string, teamId: number | string) {
+  async cloneTeamFromDefault(targetUser: string, teamId: number) {
     try {
       const DEFAULT_USER = 'default';
       const team = await readTeamFile(DEFAULT_USER, teamId);
@@ -203,7 +204,7 @@ export default class TeamStorageAdapter {
   async updateTeam(
     newData: { [key: string]: string | number | boolean },
     username: string,
-    teamId: number | string,
+    teamId: number,
   ): Promise<void> {
     const updatedData = newData;
     await this.ensureTeamIsUnDefault(username, teamId);
@@ -219,7 +220,7 @@ export default class TeamStorageAdapter {
   }
   async validateTeam(
     username: string,
-    teamId: number | string,
+    teamId: number,
   ): Promise<boolean | string | number> {
     const teamsPath = getUserTeamsListJSONPath(username);
     const teamsData = await readJSONFile(teamsPath);
@@ -228,7 +229,7 @@ export default class TeamStorageAdapter {
     }
     return teamsData[teamId];
   }
-  async deleteTeam(username: string, teamId: number | string): Promise<void> {
+  async deleteTeam(username: string, teamId: number): Promise<void> {
     const teamPath = getUserTeamJSONPath(username, teamId);
     Promise.all([
       deleteFile(teamPath),
@@ -237,7 +238,7 @@ export default class TeamStorageAdapter {
   }
   async addPlayer(
     username: string,
-    teamId: number | string,
+    teamId: number,
     playerData: Player,
   ): Promise<number> {
     try {
@@ -260,7 +261,7 @@ export default class TeamStorageAdapter {
   }
   async updatePlayer(
     username: string,
-    teamId: number | string,
+    teamId: number,
     player: Player,
   ): Promise<void> {
     try {
@@ -282,7 +283,7 @@ export default class TeamStorageAdapter {
   }
   async removePlayer(
     username: string,
-    teamId: number | string,
+    teamId: number,
     playerId: string | number,
   ): Promise<void> {
     try {
@@ -337,7 +338,7 @@ export default class TeamStorageAdapter {
       throw error;
     }
   }
-  async resetTeam(username: string, teamId: number | string): Promise<void> {
+  async resetTeam(username: string, teamId: number): Promise<void> {
     if (!(await hasTeamDefault(username, teamId))) {
       throw new TeamIsNotResettableError();
     }
