@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import TeamExtended from 'src/components/models/TeamExtended';
 import TeamStorageAdapter from 'src/components/Adapters/teamStorage.adapter';
 import UserStorageAdapter from '../Adapters/userStorage.adapter';
 import TeamListTeam from '../models/TeamListTeam';
