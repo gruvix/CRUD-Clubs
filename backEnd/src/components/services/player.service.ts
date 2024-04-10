@@ -7,7 +7,7 @@ const storage = new TeamStorageAdapter();
 export default class PlayerService {
   async addPlayer(
     username: string,
-    teamId: string | number,
+    teamId: number,
     player: Player,
   ): Promise<number | Error> {
     let newId: number;
@@ -23,7 +23,7 @@ export default class PlayerService {
       ? newId
       : new Error('Failed to add player, unkown server error');
   }
-  async updatePlayer(username: string, teamId: string | number, newData: Player): Promise<void> {
+  async updatePlayer(username: string, teamId: number, newData: Player): Promise<void> {
     try {
       await storage.updatePlayer(username, teamId, newData);
     } catch {
@@ -35,7 +35,7 @@ export default class PlayerService {
   }
   async removePlayer(
     username: string,
-    teamId: string | number,
+    teamId: number,
     playerId: string | number,
   ): Promise<void> {
     try {

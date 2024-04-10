@@ -24,7 +24,7 @@ export default class TeamService {
     }
   }
 
-  async resetTeam(username: string, teamId: string | number): Promise<void> {
+  async resetTeam(username: string, teamId: number): Promise<void> {
     try {
       await storage.resetTeam(username, teamId);
     } catch (error) {
@@ -45,7 +45,7 @@ export default class TeamService {
 
   async getTeamData(
     username: string,
-    teamId: string | number,
+    teamId: number,
   ): Promise<TeamExtended> {
     try {
       return await storage.getTeam(username, teamId);
@@ -61,7 +61,7 @@ export default class TeamService {
 
   async updateTeamData(
     username: string,
-    teamId: string | number,
+    teamId: number,
     newData: { [key: string]: string | number | boolean },
   ): Promise<void> {
     try {
@@ -76,7 +76,7 @@ export default class TeamService {
     }
   }
 
-  async deleteTeam(username: string, teamId: string | number): Promise<void> {
+  async deleteTeam(username: string, teamId: number): Promise<void> {
     try {
       await storage.deleteTeam(username, teamId);
     } catch (error) {

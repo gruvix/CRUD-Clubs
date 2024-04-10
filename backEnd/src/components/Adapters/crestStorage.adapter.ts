@@ -14,7 +14,7 @@ export default class CrestStorageAdapter {
    */
   async deleteOldCrest(
     username: string,
-    teamId: number | string,
+    teamId: number,
     newCrestFilename: string,
   ) {
     if (teamStorage.isTeamDefault(username, teamId)) return;
