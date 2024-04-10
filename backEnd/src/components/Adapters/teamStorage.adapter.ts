@@ -8,7 +8,6 @@ import {
 } from '../storage/userPath';
 import { readJSONFile, writeFile, deleteFile } from '../storage/dataStorage';
 import TeamIsNotResettableError from '../errors/TeamIsNotResettableError';
-import InvalidTeamIdError from '../errors/InvalidTeamIdError';
 
 async function readTeamFile(
   username: string,
@@ -174,17 +173,20 @@ export default class TeamStorageAdapter {
     }
   }
   async copyTeamList(sourceUser: string, targetUser: string): Promise<void> {
-    const defaultTeamsPath = getUserTeamsListJSONPath(sourceUser);
-    const teams = await readJSONFile(defaultTeamsPath);
-    const teamsParsed: { [key: string]: TeamListTeam } = {};
-    teams.forEach((team: TeamListTeam) => {
-      teamsParsed[team.id] = new TeamListTeam(team);
-    });
     try {
+      if (sourceUser === targetUser)
+        throw new Error('Source and target users must be different');
+      const defaultTeamsPath = getUserTeamsListJSONPath(sourceUser);
+      const teams = await readJSONFile(defaultTeamsPath);
+      const teamsParsed: { [key: string]: TeamListTeam } = {};
+      console.log(teams);
+      teams.forEach((team: TeamListTeam) => {
+        teamsParsed[team.id] = new TeamListTeam(team);
+      });
       const teamsPath = getUserTeamsListJSONPath(targetUser);
       await writeFile(teamsPath, JSON.stringify(teamsParsed));
-    } catch (creationError) {
-      throw creationError;
+    } catch (error) {
+      throw error;
     }
   }
   async cloneTeamFromDefault(targetUser: string, teamId: number) {
