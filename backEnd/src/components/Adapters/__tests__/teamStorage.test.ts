@@ -11,18 +11,21 @@ const dataStorageMock = ds as jest.Mocked<typeof ds>;
 const userPathMock = us as jest.Mocked<typeof us>;
 const adapter = new TeamStorageAdapter();
 
+const defaultUsername = 'default';
 const username = 'username';
 const teamId = 1;
 const filePath = 'path/to/file' as never;
 
 const defaultTeamsListMock = {
   [teamId]: {
+    id: teamId,
     isDefault: true,
     hasDefault: true,
   },
 };
 const nonDefaultTeamsListMock = {
   [teamId]: {
+    id: teamId,
     isDefault: false,
     hasDefault: false,
   },
@@ -103,11 +106,30 @@ describe('getTeam', () => {
       FileNotFoundError,
     );
     dataStorageMock.readJSONFile
-    .mockResolvedValueOnce(defaultTeamsListMock)
-    .mockResolvedValueOnce(defaultTeamMock)
-    .mockRejectedValueOnce(new FileNotFoundError());
+      .mockResolvedValueOnce(defaultTeamsListMock)
+      .mockResolvedValueOnce(defaultTeamMock)
+      .mockRejectedValueOnce(new FileNotFoundError());
     await expect(adapter.getTeam(username, teamId)).rejects.toThrow(
-        FileNotFoundError,
-      );
+      FileNotFoundError,
+    );
+  });
+});
+describe('copyTeamListTeam', () => {
+  it('should copy a team', async () => {
+    userPathMock.getUserTeamsListJSONPath.mockReturnValue(filePath);
+    dataStorageMock.readJSONFile
+      .mockResolvedValueOnce(defaultTeamsListMock)
+      .mockResolvedValueOnce(nonDefaultTeamsListMock);
+    dataStorageMock.writeFile.mockResolvedValue(undefined as never);
+    await adapter.copyTeamListTeam(defaultUsername, username, teamId);
+    expect(dataStorageMock.writeFile).toHaveBeenCalledWith(
+      filePath,
+      JSON.stringify(defaultTeamsListMock),
+    );
+  });
+  it('should handle same source and target users', async () => {
+    await expect(adapter.copyTeamListTeam(defaultUsername, defaultUsername, 1)).rejects.toThrow(
+      'Source and target users must be different',
+    );
   });
 });
