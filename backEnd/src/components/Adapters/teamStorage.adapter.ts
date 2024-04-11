@@ -176,15 +176,10 @@ export default class TeamStorageAdapter {
     try {
       if (sourceUser === targetUser)
         throw new Error('Source and target users must be different');
-      const defaultTeamsPath = getUserTeamsListJSONPath(sourceUser);
-      const teams = await readJSONFile(defaultTeamsPath);
-      const teamsParsed: { [key: string]: TeamListTeam } = {};
-      console.log(teams);
-      teams.forEach((team: TeamListTeam) => {
-        teamsParsed[team.id] = new TeamListTeam(team);
-      });
+      const sourceTeamsPath = getUserTeamsListJSONPath(sourceUser);
+      const teams = await readJSONFile(sourceTeamsPath);
       const teamsPath = getUserTeamsListJSONPath(targetUser);
-      await writeFile(teamsPath, JSON.stringify(teamsParsed));
+      await writeFile(teamsPath, JSON.stringify(teams));
     } catch (error) {
       throw error;
     }
