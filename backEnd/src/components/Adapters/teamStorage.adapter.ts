@@ -172,7 +172,7 @@ export default class TeamStorageAdapter {
       throw error;
     }
   }
-  async copyTeamList(sourceUser: string, targetUser: string): Promise<void> {
+  async copyTeamsList(sourceUser: string, targetUser: string): Promise<void> {
     try {
       if (sourceUser === targetUser)
         throw new Error('Source and target users must be different');

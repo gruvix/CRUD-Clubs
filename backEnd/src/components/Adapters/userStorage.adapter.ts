@@ -17,7 +17,7 @@ export default class UserStorageAdapter {
         createFolder(getUserTeamsFolderPath(username)),
         createFolder(getUserCustomCrestFolderPath(username)),
       ]);
-      await teamStorage.copyTeamList(defaultUsername, username);
+      await teamStorage.copyTeamsList(defaultUsername, username);
     } catch (e) {
       throw new Error('Failed to create new user: ' + e);
     }
