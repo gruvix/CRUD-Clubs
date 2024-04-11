@@ -50,6 +50,14 @@ const defaultTeamMock = new TeamExtended({
   hasDefault: true,
   crestUrl: '',
 } as any);
+beforeAll(() => {
+  userPathMock.getUserTeamsListJSONPath.mockReturnValue(filePath);
+  userPathMock.getUserTeamJSONPath.mockReturnValue(filePath);
+});
+afterEach(() => {
+  dataStorageMock.readJSONFile.mockClear();
+  dataStorageMock.writeFile.mockClear();
+});
 describe('isTeamDefault', () => {
   it('should return true when team is default', async () => {
     dataStorageMock.readJSONFile.mockResolvedValue(defaultTeamsListMock);
@@ -73,11 +81,8 @@ describe('getTeamsList', () => {
     );
   });
 });
-
 describe('getTeam', () => {
   it('should return a non-default team', async () => {
-    userPathMock.getUserTeamsListJSONPath.mockResolvedValue(filePath);
-    userPathMock.getUserTeamJSONPath.mockResolvedValue(filePath);
     dataStorageMock.readJSONFile
       .mockResolvedValueOnce(nonDefaultTeamsListMock)
       .mockResolvedValueOnce(nonDefaultTeamMock)
@@ -86,8 +91,6 @@ describe('getTeam', () => {
     expect(result).toEqual(nonDefaultTeamMock);
   });
   it('should return a default team', async () => {
-    userPathMock.getUserTeamsListJSONPath.mockResolvedValue(filePath);
-    userPathMock.getUserTeamJSONPath.mockResolvedValue(filePath);
     dataStorageMock.readJSONFile
       .mockResolvedValueOnce(defaultTeamsListMock)
       .mockResolvedValueOnce(defaultTeamMock)
@@ -97,8 +100,6 @@ describe('getTeam', () => {
   });
 
   it('should handle errors', async () => {
-    userPathMock.getUserTeamsListJSONPath.mockResolvedValue(filePath);
-    userPathMock.getUserTeamJSONPath.mockResolvedValue(filePath);
     dataStorageMock.readJSONFile
       .mockResolvedValueOnce(defaultTeamsListMock)
       .mockRejectedValueOnce(new FileNotFoundError());
@@ -116,7 +117,6 @@ describe('getTeam', () => {
 });
 describe('copyTeamListTeam', () => {
   it('should copy a team', async () => {
-    userPathMock.getUserTeamsListJSONPath.mockReturnValue(filePath);
     dataStorageMock.readJSONFile
       .mockResolvedValueOnce(defaultTeamsListMock)
       .mockResolvedValueOnce(nonDefaultTeamsListMock);
@@ -135,7 +135,6 @@ describe('copyTeamListTeam', () => {
 });
 describe('copyTeamsList', () => {
   it('should copy a list of teams', async () => {
-    userPathMock.getUserTeamsListJSONPath.mockReturnValue(filePath);
     dataStorageMock.readJSONFile.mockResolvedValueOnce(defaultTeamsListMock);
     dataStorageMock.writeFile.mockResolvedValue(undefined as never);
     await adapter.copyTeamsList(defaultUsername, username);
@@ -145,7 +144,6 @@ describe('copyTeamsList', () => {
     );
   });
   it('should handle same source and target users situation', async () => {
-    userPathMock.getUserTeamsListJSONPath.mockReturnValue(filePath);
     dataStorageMock.readJSONFile.mockResolvedValueOnce(defaultTeamsListMock);
     await expect(
       adapter.copyTeamsList(defaultUsername, defaultUsername),
