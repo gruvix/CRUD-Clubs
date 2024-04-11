@@ -47,7 +47,7 @@ export default class APIAdapter {
         case 403:
           return false; //this function works different to other adapter unAuthorized status returns, since its job is to get the login status
         default:
-          throw new Error(`${response.status}`);
+          throw new Error(`${response.status} - ${response.statusText}`);
       }
     }
     return true;
@@ -67,7 +67,7 @@ export default class APIAdapter {
         case 404:
           throw new TeamNotFoundError();
         default:
-          throw new Error(`${response.status}`);
+          throw new Error(`${response.status} - ${response.statusText}`);
       }
     }
     const data = await response.json();
@@ -97,7 +97,7 @@ export default class APIAdapter {
         case 404:
           throw new TeamNotFoundError();
         default:
-          throw new Error(`${response.status}`);
+          throw new Error(`${response.status} - ${response.statusText}`);
       }
     }
     const data = response;
@@ -116,7 +116,7 @@ export default class APIAdapter {
         case 403:
           throw new UnauthorizedError();
         default:
-          throw new Error(`${response.status}`);
+          throw new Error(`${response.status} - ${response.statusText}`);
       }
     }
     const data = await response.json();
@@ -141,7 +141,7 @@ export default class APIAdapter {
         case 404:
           throw new TeamNotFoundError();
         default:
-          throw new Error(`${response.status}`);
+          throw new Error(`${response.status} - ${response.statusText}`);
       }
     }
     const data = response;
@@ -157,7 +157,7 @@ export default class APIAdapter {
         case 403:
           throw new UnauthorizedError();
         default:
-          throw new Error(`${response.status}`);
+          throw new Error(`${response.status} - ${response.statusText}`);
       }
     }
     const data = response;
@@ -177,7 +177,7 @@ export default class APIAdapter {
         case 422:
           throw new TeamNotResettableError();
         default:
-          throw new Error(`${response.status}`);
+          throw new Error(`${response.status} - ${response.statusText}`);
       }
     }
     const data = response;
@@ -199,7 +199,7 @@ export default class APIAdapter {
         case 404:
           throw new TeamNotFoundError();
         default:
-          throw new Error(`${response.status}`);
+          throw new Error(`${response.status} - ${response.statusText}`);
       }
     }
     const data = response;
@@ -224,7 +224,7 @@ export default class APIAdapter {
         case 404:
           throw new TeamNotFoundError();
         default:
-          throw new Error(`${response.status}`);
+          throw new Error(`${response.status} - ${response.statusText}`);
       }
     }
     const newId = await response.json();
@@ -246,7 +246,7 @@ export default class APIAdapter {
         case 404:
           throw new TeamNotFoundError();
         default:
-          throw new Error(`${response.status}`);
+          throw new Error(`${response.status} - ${response.statusText}`);
       }
     }
     return true;
@@ -276,7 +276,7 @@ export default class APIAdapter {
         case 415:
           throw new UnsupportedMediaTypeError();
         default:
-          throw new Error(`${response.status}`);
+          throw new Error(`${response.status} - ${response.statusText}`);
       }
     }
     const newTeamId = await response.json();
@@ -297,7 +297,7 @@ export default class APIAdapter {
         case 415:
           throw new UnsupportedMediaTypeError();
         default:
-          throw new Error(`${response.status}`);
+          throw new Error(`${response.status} - ${response.statusText}`);
       }
     }
     const newCrestUrl = BASE_API_URL + (await response.json());
