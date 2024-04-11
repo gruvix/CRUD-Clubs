@@ -12,6 +12,7 @@ import isNonNegativeNumber from './isNonNegativeNumber';
 export class TeamGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
+    request.params.teamId = Number(request.params.teamId);
     const teamId = request.params.teamId;
     const username = request.session.username;
     if (!isNonNegativeNumber(teamId)) {

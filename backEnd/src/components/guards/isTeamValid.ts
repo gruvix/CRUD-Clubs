@@ -5,7 +5,7 @@ export default async function isTeamValid(
   username: string,
   teamId: number,
 ): Promise<boolean> {
-  if (!(await storage.validateTeam(username, teamId))) {
+  if (await storage.validateTeam(username, teamId)) {
     return false
   }
   return true;
