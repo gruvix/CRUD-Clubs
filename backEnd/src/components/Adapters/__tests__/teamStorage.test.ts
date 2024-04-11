@@ -128,8 +128,28 @@ describe('copyTeamListTeam', () => {
     );
   });
   it('should handle same source and target users', async () => {
-    await expect(adapter.copyTeamListTeam(defaultUsername, defaultUsername, 1)).rejects.toThrow(
-      'Source and target users must be different',
+    await expect(
+      adapter.copyTeamListTeam(defaultUsername, defaultUsername, 1),
+    ).rejects.toThrow('Source and target users must be different');
+  });
+});
+describe('copyTeamsList', () => {
+  it('should copy a list of teams', async () => {
+    userPathMock.getUserTeamsListJSONPath.mockReturnValue(filePath);
+    dataStorageMock.readJSONFile.mockResolvedValueOnce(defaultTeamsListMock);
+    dataStorageMock.writeFile.mockResolvedValue(undefined as never);
+    await adapter.copyTeamsList(defaultUsername, username);
+    expect(dataStorageMock.writeFile).toHaveBeenCalledWith(
+      filePath,
+      JSON.stringify(defaultTeamsListMock),
     );
   });
+  it('should handle same source and target users situation', async () => {
+    userPathMock.getUserTeamsListJSONPath.mockReturnValue(filePath);
+    dataStorageMock.readJSONFile.mockResolvedValueOnce(defaultTeamsListMock);
+    await expect(
+      adapter.copyTeamsList(defaultUsername, defaultUsername),
+    ).rejects.toThrow('Source and target users must be different');
+  });
+});
 });
