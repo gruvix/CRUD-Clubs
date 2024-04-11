@@ -189,8 +189,8 @@ export default class TeamStorageAdapter {
       const DEFAULT_USER = 'default';
       const team = await readTeamFile(DEFAULT_USER, teamId);
       await saveTeam(team, targetUser);
-    } catch (copyError) {
-      throw copyError;
+    } catch (error) {
+      throw error;
     }
   }
   async updateTeam(
