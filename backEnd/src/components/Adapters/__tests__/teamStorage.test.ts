@@ -189,4 +189,21 @@ describe('copyTeamsList', () => {
     ).rejects.toThrow('Source and target users must be different');
   });
 });
+describe('cloneTeamFromDefault', () => {
+  it('should clone a team', async () => {
+    dataStorageMock.readJSONFile.mockResolvedValue(nonDefaultTeamMock);
+    dataStorageMock.writeFile.mockResolvedValue(undefined as never);
+    console.log(nonDefaultTeamMock);
+    await adapter.cloneTeamFromDefault(username, teamId);
+    expect(dataStorageMock.writeFile).toHaveBeenCalledWith(
+      filePath,
+      JSON.stringify(nonDefaultTeamMock),
+    );
+  });
+  it('should handle errors', async () => {
+    dataStorageMock.readJSONFile.mockRejectedValue(new FileNotFoundError());
+    await expect(
+      adapter.cloneTeamFromDefault(username, teamId),
+    ).rejects.toThrow(FileNotFoundError);
+  });
 });
