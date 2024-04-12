@@ -198,16 +198,24 @@ export default class TeamStorageAdapter {
     teamId: number,
   ): Promise<void> {
     const updatedData = newData;
-    await this.ensureTeamIsUnDefault(username, teamId);
-    updatedData.lastUpdated = getDate();
-    for (const key of TeamListTeam.properties()) {
-      if (!!updatedData[key]) {
-        await updateTeamlistParameter(username, teamId, key, updatedData[key]);
-      }
+    if(!updatedData) {
+      throw new Error('No data provided');
     }
-    const team = await readTeamFile(username, teamId);
-    Object.assign(team, updatedData);
-    await saveTeam(team, username);
+    try {
+
+      await this.ensureTeamIsUnDefault(username, teamId);//
+      updatedData.lastUpdated = getDate();
+      for (const key of TeamListTeam.properties()) {
+        if (!!updatedData[key]) {
+          await updateTeamlistParameter(username, teamId, key, updatedData[key]);
+        }
+      }
+      const team = await readTeamFile(username, teamId);
+      Object.assign(team, updatedData);
+      await saveTeam(team, username);
+    } catch (error) {
+      throw error;
+    }
   }
   async validateTeam(
     username: string,
