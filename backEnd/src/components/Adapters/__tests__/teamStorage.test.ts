@@ -105,11 +105,11 @@ describe('isTeamDefault', () => {
 });
 describe('getTeamsList', () => {
   it('should return a list of teams', async () => {
-    dataStorageMock.readJSONFile.mockResolvedValue(defaultTeamsListMock);
+    dataStorageMock.readJSONFile.mockResolvedValueOnce(defaultTeamsListMock);
     expect(await adapter.getTeamsList(username)).toEqual(defaultTeamsListMock);
   });
   it('should handle errors', async () => {
-    dataStorageMock.readJSONFile.mockRejectedValue(new FileNotFoundError());
+    dataStorageMock.readJSONFile.mockRejectedValueOnce(new FileNotFoundError());
     await expect(adapter.getTeamsList(username)).rejects.toThrow(
       FileNotFoundError,
     );
@@ -129,21 +129,26 @@ describe('getTeam', () => {
       .mockResolvedValueOnce(defaultTeamsListMock)
       .mockResolvedValueOnce(defaultTeamMock)
       .mockResolvedValueOnce(defaultTeamsListMock);
-    const result = await adapter.getTeam(username, teamId);
-    expect(result).toEqual(defaultTeamMock);
+    await expect(adapter.getTeam(username, teamId)).resolves.toEqual(
+      defaultTeamMock,
+    );
   });
 
   it('should handle errors', async () => {
     dataStorageMock.readJSONFile
       .mockResolvedValueOnce(defaultTeamsListMock)
-      .mockRejectedValueOnce(new FileNotFoundError());
+      .mockImplementationOnce(() => {
+        throw new FileNotFoundError();
+      });
     await expect(adapter.getTeam(username, teamId)).rejects.toThrow(
       FileNotFoundError,
     );
     dataStorageMock.readJSONFile
       .mockResolvedValueOnce(defaultTeamsListMock)
       .mockResolvedValueOnce(defaultTeamMock)
-      .mockRejectedValueOnce(new FileNotFoundError());
+      .mockImplementationOnce(() => {
+        throw new FileNotFoundError();
+      });
     await expect(adapter.getTeam(username, teamId)).rejects.toThrow(
       FileNotFoundError,
     );
