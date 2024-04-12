@@ -15,6 +15,7 @@ const defaultUsername = 'default';
 const username = 'username';
 const teamId = 1;
 const filePath = 'path/to/file' as never;
+const newNameProp = { name: 'newName' };
 
 const defaultTeamsListMock = {
   [teamId]: {
