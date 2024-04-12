@@ -30,16 +30,19 @@ async function saveTeam(team: TeamExtended, username: string): Promise<void> {
     throw error;
   }
 }
-async function updateTeamlistParameter(
+async function updateTeamlistTeam(
   username: string,
   teamId: number,
-  parameter: string,
-  value: string | number | boolean,
+  newData: { [key: string]: string | number | boolean },
 ) {
-  const teamsPath = getUserTeamsListJSONPath(username);
-  const teams = await readJSONFile(teamsPath);
-  teams[teamId][parameter] = value;
-  await writeFile(teamsPath, JSON.stringify(teams));
+  try {
+    const teamsPath = getUserTeamsListJSONPath(username);
+    const teams = await readJSONFile(teamsPath);
+    Object.assign(teams[teamId], newData);
+    await writeFile(teamsPath, JSON.stringify(teams));
+  } catch (error) {
+    throw error;
+  }
 }
 async function addTeamToTeamlist(
   newTeam: TeamExtended,
@@ -106,13 +109,8 @@ export default class TeamStorageAdapter {
     try {
       if (await this.isTeamDefault(username, teamId)) {
         await this.cloneTeamFromDefault(username, teamId);
-        const DEFAULT_TEAMLIST_PARAMETER = 'isDefault';
-        await updateTeamlistParameter(
-          username,
-          teamId,
-          DEFAULT_TEAMLIST_PARAMETER,
-          false,
-        );
+        const clonedTeamIsDefaultProperty = { isDefault: false };
+        await updateTeamlistTeam(username, teamId, clonedTeamIsDefaultProperty);
       }
     } catch (error) {
       throw error;
@@ -198,18 +196,18 @@ export default class TeamStorageAdapter {
     teamId: number,
   ): Promise<void> {
     const updatedData = newData;
-    if(!updatedData) {
+    if (!updatedData) {
       throw new Error('No data provided');
     }
     try {
-
-      await this.ensureTeamIsUnDefault(username, teamId);//
+      await this.ensureTeamIsUnDefault(username, teamId); //
       updatedData.lastUpdated = getDate();
-      for (const key of TeamListTeam.properties()) {
-        if (!!updatedData[key]) {
-          await updateTeamlistParameter(username, teamId, key, updatedData[key]);
-        }
-      }
+      const teamlistData = {};
+      TeamListTeam.properties().forEach((property) => {
+        if (!updatedData[property]) return;
+        teamlistData[property] = updatedData[property];
+      });
+      await updateTeamlistTeam(username, teamId, teamlistData);
       const team = await readTeamFile(username, teamId);
       Object.assign(team, updatedData);
       await saveTeam(team, username);
