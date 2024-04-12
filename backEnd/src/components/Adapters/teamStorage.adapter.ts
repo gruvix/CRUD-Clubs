@@ -25,8 +25,7 @@ async function saveTeam(team: TeamExtended, username: string): Promise<void> {
   try {
     const targetPath = getUserTeamJSONPath(username, team.id);
     console.log(`Saving team ${team.id} to ${username} on ${targetPath}`);
-    const content = JSON.stringify(team);
-    await writeFile(targetPath, content);
+    await writeFile(targetPath, JSON.stringify(team));
   } catch (error) {
     throw error;
   }
