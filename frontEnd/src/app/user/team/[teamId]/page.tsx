@@ -30,6 +30,7 @@ export default function Page({
   const [modalText, setModalText] = React.useState("");
   const [asyncError, setAsyncError] = React.useState<Error>();
   const request = new APIAdapter();
+  const [pageTitle, setPageTitle] = React.useState("CRUD Team - " + teamId);
 
   const errorHandler = (error: Error) => {
     if (
@@ -47,6 +48,7 @@ export default function Page({
       .getTeam(teamId)
       .then((data) => {
         setTeamData(data);
+        setPageTitle(`CRUD Team ${teamId} - ${data.teamParameters.name}`);
         setIsLoading(false);
       })
       .catch((error: Error) => {
@@ -91,6 +93,7 @@ export default function Page({
 
   return (
     <div className="container">
+      <title>{pageTitle}</title>
       <div className="row">
         <div className="col-4">
           <button

@@ -31,7 +31,7 @@ export default function TeamsList(): React.ReactElement {
   );
   const [modalText, setModalText] = React.useState("");
   const [asyncError, setAsyncError] = React.useState<Error>();
-
+  const pageTitle = `CRUD ${username}'s teams`
   const request = new APIAdapter();
 
   const errorHandler = (error: Error) => {
@@ -108,9 +108,9 @@ export default function TeamsList(): React.ReactElement {
       throw asyncError;
     }
   }, [asyncError]);
-
   return (
     <div className="container">
+      <title>{pageTitle}</title>
       <div className="row">
         <div className="col">
           <LogoutButton

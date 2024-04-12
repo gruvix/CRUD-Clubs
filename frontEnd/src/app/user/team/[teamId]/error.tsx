@@ -37,6 +37,7 @@ export default function Error({
   }, []);
   return (
     <div className="container">
+      <title>CRUD Error</title>
       <div className="row justify-content-center align-items-center">
         <div className="col-md-6">
           <h1

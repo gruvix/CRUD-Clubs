@@ -6,6 +6,7 @@ import APIAdapter from "@/components/adapters/APIAdapter";
 import { useRouter } from "next/navigation";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import loginErrorHandler from "./loginErrorHandler";
+
 export default function Login() {
   const [isLoading, setIsLoading] = React.useState(true);
   const router = useRouter();
@@ -24,16 +25,17 @@ export default function Login() {
   checkLoginStatus();
 
   return isLoading ? (
-    <LoadingSpinner
+    <><title>CRUD Login</title><LoadingSpinner
       style={{
         marginLeft: "44%",
         marginTop: "20%",
         width: "15rem",
         height: "15rem",
-      }}
-    />
+      }} /></>
   ) : (
+
     <div className="container">
+      <title>CRUD Login</title>
       <div className="row justify-content-center align-items-center">
         <div className="col-md-6">
           <h1

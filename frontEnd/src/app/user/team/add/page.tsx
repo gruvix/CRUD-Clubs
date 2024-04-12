@@ -77,6 +77,7 @@ export default function Page() {
   }, [asyncError]);
   return (
     <div className="container">
+      <title>CRUD add team</title>
       <div className="row">
         <div className="col-4">
           <button
