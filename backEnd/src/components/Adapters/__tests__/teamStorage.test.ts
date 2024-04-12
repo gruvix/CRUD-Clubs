@@ -30,8 +30,8 @@ const nonDefaultTeamsListMock = {
     hasDefault: false,
   },
 };
+
 const nonDefaultTeamMock = new TeamExtended({
-  id: teamId,
   name: 'name',
   area: 'area',
   address: 'address',
@@ -39,15 +39,26 @@ const nonDefaultTeamMock = new TeamExtended({
   website: 'website',
   email: 'email',
   venue: 'venue',
-  squad: [],
-  lastUpdated: 'A long time ago',
-  hasCustomCrest: false,
-  isDefault: false,
+  id: teamId,
+  crestUrl: '/user/customCrest/0/0.png',
+  squad: [
+    {
+      id: 1,
+      name: 'name',
+      position: 'position',
+      dateOfBirth: 'dateOfBirth',
+      countryOfBirth: 'countryOfBirth',
+      nationality: 'nationality',
+      role: 'role',
+    },
+  ],
+  hasCustomCrest: true,
   hasDefault: false,
-  crestUrl: '',
-} as any);
+  isDefault: false,
+  lastUpdated: '2024-04-11T21:47:40.430Z',
+});
+
 const defaultTeamMock = new TeamExtended({
-  id: teamId,
   name: 'name',
   area: 'area',
   address: 'address',
@@ -55,13 +66,24 @@ const defaultTeamMock = new TeamExtended({
   website: 'website',
   email: 'email',
   venue: 'venue',
-  squad: [],
-  lastUpdated: 'A long time ago',
+  id: teamId,
+  crestUrl: '/user/customCrest/0/0.png',
+  squad: [
+    {
+      id: 1,
+      name: 'name',
+      position: 'position',
+      dateOfBirth: 'dateOfBirth',
+      countryOfBirth: 'countryOfBirth',
+      nationality: 'nationality',
+      role: 'role',
+    },
+  ],
   hasCustomCrest: false,
-  isDefault: true,
   hasDefault: true,
-  crestUrl: '',
-} as any);
+  isDefault: true,
+  lastUpdated: '2024-04-11T21:47:40.430Z',
+});
 beforeAll(() => {
   userPathMock.getUserTeamsListJSONPath.mockReturnValue(filePath);
   userPathMock.getUserTeamJSONPath.mockReturnValue(filePath);
