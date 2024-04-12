@@ -87,6 +87,7 @@ const defaultTeamMock = new TeamExtended({
 beforeAll(() => {
   userPathMock.getUserTeamsListJSONPath.mockReturnValue(filePath);
   userPathMock.getUserTeamJSONPath.mockReturnValue(filePath);
+  dataStorageMock.writeFile.mockResolvedValue(undefined as never);
 });
 afterEach(() => {
   dataStorageMock.readJSONFile.mockClear();
@@ -159,7 +160,6 @@ describe('copyTeamListTeam', () => {
     dataStorageMock.readJSONFile
       .mockResolvedValueOnce(defaultTeamsListMock)
       .mockResolvedValueOnce(nonDefaultTeamsListMock);
-    dataStorageMock.writeFile.mockResolvedValue(undefined as never);
     await adapter.copyTeamListTeam(defaultUsername, username, teamId);
     expect(dataStorageMock.writeFile).toHaveBeenCalledWith(
       filePath,
@@ -175,7 +175,6 @@ describe('copyTeamListTeam', () => {
 describe('copyTeamsList', () => {
   it('should copy a list of teams', async () => {
     dataStorageMock.readJSONFile.mockResolvedValueOnce(defaultTeamsListMock);
-    dataStorageMock.writeFile.mockResolvedValue(undefined as never);
     await adapter.copyTeamsList(defaultUsername, username);
     expect(dataStorageMock.writeFile).toHaveBeenCalledWith(
       filePath,
@@ -183,7 +182,6 @@ describe('copyTeamsList', () => {
     );
   });
   it('should handle same source and target users situation', async () => {
-    dataStorageMock.readJSONFile.mockResolvedValueOnce(defaultTeamsListMock);
     await expect(
       adapter.copyTeamsList(defaultUsername, defaultUsername),
     ).rejects.toThrow('Source and target users must be different');
@@ -191,16 +189,17 @@ describe('copyTeamsList', () => {
 });
 describe('cloneTeamFromDefault', () => {
   it('should clone a team', async () => {
-    dataStorageMock.readJSONFile.mockResolvedValue(nonDefaultTeamMock);
-    dataStorageMock.writeFile.mockResolvedValue(undefined as never);
+    dataStorageMock.readJSONFile.mockResolvedValueOnce(defaultTeamMock);
     await adapter.cloneTeamFromDefault(username, teamId);
     expect(dataStorageMock.writeFile).toHaveBeenCalledWith(
       filePath,
-      JSON.stringify(nonDefaultTeamMock),
+      JSON.stringify(defaultTeamMock),
     );
   });
   it('should handle errors', async () => {
-    dataStorageMock.readJSONFile.mockRejectedValueOnce(new FileNotFoundError());
+    dataStorageMock.readJSONFile.mockImplementationOnce(() => {
+      throw new FileNotFoundError();
+    });
     await expect(
       adapter.cloneTeamFromDefault(username, teamId),
     ).rejects.toThrow(FileNotFoundError);
