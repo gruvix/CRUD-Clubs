@@ -5,6 +5,7 @@ import * as ds from '../../storage/dataStorage';
 import * as us from '../../storage/userPath';
 import FileNotFoundError from '../../errors/FileNotFoundError';
 import TeamExtended from '../../models/TeamExtended';
+import TeamListTeam from 'src/components/models/TeamListTeam';
 jest.spyOn(console, 'log').getMockImplementation();
 
 const dataStorageMock = ds as jest.Mocked<typeof ds>;
@@ -206,5 +207,37 @@ describe('cloneTeamFromDefault', () => {
     await expect(
       adapter.cloneTeamFromDefault(username, teamId),
     ).rejects.toThrow(FileNotFoundError);
+  });
+});
+describe('updateTeam', () => {
+  it('should update a default team', async () => {
+    dataStorageMock.readJSONFile
+      .mockResolvedValueOnce(defaultTeamsListMock) //isTeamDefault
+      .mockResolvedValueOnce(defaultTeamMock) //cloneTeamFromDefault
+      .mockResolvedValueOnce(defaultTeamsListMock) //updateTeamListTeam (ensureTeamIsUnDefault)
+      .mockResolvedValueOnce(defaultTeamsListMock) //updateTeamListParameter
+      .mockResolvedValueOnce(nonDefaultTeamMock); //readTeamFile
+    dataStorageMock.writeFile.mockResolvedValue(undefined as never);
+
+    const clonedDefaultTeamsList = JSON.parse(
+      JSON.stringify(defaultTeamsListMock),
+    ) as TeamListTeam[];
+    clonedDefaultTeamsList[teamId].isDefault = false;
+
+    await adapter.updateTeam(newNameProp, username, teamId);
+
+    expect(dataStorageMock.writeFile).toHaveBeenCalledWith(
+      filePath,
+      JSON.stringify(defaultTeamMock),
+    );
+    expect(dataStorageMock.writeFile).toHaveBeenCalledWith(
+      filePath,
+      JSON.stringify(clonedDefaultTeamsList),
+    );
+  });
+  it('should handle null data', async () => {
+    await expect(adapter.updateTeam(null, username, teamId)).rejects.toThrow(
+      Error('No data provided'),
+    );
   });
 });
