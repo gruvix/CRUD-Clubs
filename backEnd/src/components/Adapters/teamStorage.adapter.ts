@@ -200,7 +200,7 @@ export default class TeamStorageAdapter {
       throw new Error('No data provided');
     }
     try {
-      await this.ensureTeamIsUnDefault(username, teamId); //
+      await this.ensureTeamIsUnDefault(username, teamId);
       updatedData.lastUpdated = getDate();
       const teamlistData = {};
       TeamListTeam.properties().forEach((property) => {
