@@ -21,6 +21,7 @@ const defaultTeamsListMock = {
     id: teamId,
     isDefault: true,
     hasDefault: true,
+    lastUpdated: 'Long Time Ago',
   },
 };
 const nonDefaultTeamsListMock = {
@@ -28,6 +29,7 @@ const nonDefaultTeamsListMock = {
     id: teamId,
     isDefault: false,
     hasDefault: false,
+    lastUpdated: 'Long Time Ago',
   },
 };
 
