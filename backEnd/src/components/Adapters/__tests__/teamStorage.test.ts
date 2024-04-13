@@ -266,8 +266,7 @@ describe('updateTeam', () => {
     );
   });
   it('should handle errors on isTeamDefault', async () => {
-    dataStorageMock.readJSONFile
-    .mockImplementationOnce(() => {
+    dataStorageMock.readJSONFile.mockImplementationOnce(() => {
       throw new FileNotFoundError();
     });
     await expect(
@@ -276,23 +275,49 @@ describe('updateTeam', () => {
   });
   it('should handle errors on updateTeamlistTeam', async () => {
     dataStorageMock.readJSONFile
-    .mockResolvedValueOnce(nonDefaultTeamsListMock)
-    .mockImplementationOnce(() => {
-      throw new Error();
-    })
+      .mockResolvedValueOnce(nonDefaultTeamsListMock)
+      .mockImplementationOnce(() => {
+        throw new Error();
+      });
     await expect(
       adapter.updateTeam(newNameProp, username, teamId),
     ).rejects.toThrow(Error);
   });
   it('should handle errors on saveTeam', async () => {
     dataStorageMock.readJSONFile
-    .mockResolvedValueOnce(nonDefaultTeamsListMock)
-    .mockResolvedValueOnce(nonDefaultTeamMock)
-    .mockImplementationOnce(() => {
-      throw new Error();
-    })
+      .mockResolvedValueOnce(nonDefaultTeamsListMock)
+      .mockResolvedValueOnce(nonDefaultTeamsListMock)
+      .mockImplementationOnce(() => {
+        throw new Error();
+      });
     await expect(
       adapter.updateTeam(newNameProp, username, teamId),
     ).rejects.toThrow(Error);
+  });
+});
+describe('validateTeam', () => {
+  it('should validate a default team', async () => {
+    dataStorageMock.readJSONFile.mockResolvedValueOnce(defaultTeamsListMock);
+    const result = await adapter.validateTeam(username, teamId);
+    expect(result).toEqual(defaultTeamsListMock[teamId]);
+  });
+  it('should validate a non-default team', async () => {
+    dataStorageMock.readJSONFile.mockResolvedValueOnce(nonDefaultTeamsListMock);
+    const result = await adapter.validateTeam(username, teamId);
+    expect(result).toEqual(nonDefaultTeamsListMock[teamId]);
+  });
+  it('should failt to validate a default team', async () => {
+    dataStorageMock.readJSONFile.mockResolvedValueOnce(defaultTeamsListMock);
+    const UNEXPECTED_TEAM_ID = -1;
+    const result = await adapter.validateTeam(username, UNEXPECTED_TEAM_ID);
+    expect(result).toEqual(false);
+  });
+  it('should failt to validate a default team', async () => {
+    dataStorageMock.readJSONFile.mockImplementationOnce(() => {
+      throw new FileNotFoundError();
+    });
+    await expect(adapter.validateTeam(username, teamId)).rejects.toThrow(
+      FileNotFoundError,
+    );
   });
 });
