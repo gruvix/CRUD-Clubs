@@ -20,7 +20,8 @@ export default class PlayerService {
       }
       player.id = newId;
       await storage.addPlayer(username, teamId, player);
-    } catch {
+    } catch (error) {
+      console.log(error);
       throw new HttpException(
         'Server failed to add player',
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -35,7 +36,8 @@ export default class PlayerService {
   ): Promise<void> {
     try {
       await storage.updatePlayer(username, teamId, newData);
-    } catch {
+    } catch (error) {
+      console.log(error);
       throw new HttpException(
         'Server failed to update player',
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -49,7 +51,8 @@ export default class PlayerService {
   ): Promise<void> {
     try {
       await storage.removePlayer(username, teamId, playerId);
-    } catch {
+    } catch (error) {
+      console.log(error);
       throw new HttpException(
         'Server failed to remove player',
         HttpStatus.INTERNAL_SERVER_ERROR,
