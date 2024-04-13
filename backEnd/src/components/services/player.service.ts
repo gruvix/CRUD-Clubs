@@ -15,7 +15,7 @@ export default class PlayerService {
       newId = storage.findNextFreePlayerId(
         (await storage.getTeam(username, teamId)).squad,
       );
-      if (!newId) {
+      if (newId !== 0 && !newId) {
         throw new Error('Failed to add player, unkown server error');
       }
       player.id = newId;
