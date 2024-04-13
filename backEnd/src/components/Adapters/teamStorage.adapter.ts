@@ -223,12 +223,16 @@ export default class TeamStorageAdapter {
     username: string,
     teamId: number,
   ): Promise<boolean | string | number> {
-    const teamsPath = getUserTeamsListJSONPath(username);
-    const teamsData = await readJSONFile(teamsPath);
-    if (!teamsData[teamId]) {
-      return false;
+    try {
+      const teamsPath = getUserTeamsListJSONPath(username);
+      const teamsData = await readJSONFile(teamsPath);
+      if (!teamsData[teamId]) {
+        return false;
+      }
+      return teamsData[teamId];
+    } catch (error) {
+      throw error;
     }
-    return teamsData[teamId];
   }
   async deleteTeam(username: string, teamId: number): Promise<void> {
     const teamPath = getUserTeamJSONPath(username, teamId);
