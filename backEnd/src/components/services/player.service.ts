@@ -12,18 +12,27 @@ export default class PlayerService {
   ): Promise<number | Error> {
     let newId: number;
     try {
-      newId = await storage.addPlayer(username, teamId, player);
+      newId = storage.findNextFreePlayerId(
+        (await storage.getTeam(username, teamId)).squad,
+      );
+      if (!newId) {
+        throw new Error('Failed to add player, unkown server error');
+      }
+      player.id = newId;
+      await storage.addPlayer(username, teamId, player);
     } catch {
       throw new HttpException(
         'Server failed to add player',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
-    return newId
-      ? newId
-      : new Error('Failed to add player, unkown server error');
+    return newId;
   }
-  async updatePlayer(username: string, teamId: number, newData: Player): Promise<void> {
+  async updatePlayer(
+    username: string,
+    teamId: number,
+    newData: Player,
+  ): Promise<void> {
     try {
       await storage.updatePlayer(username, teamId, newData);
     } catch {

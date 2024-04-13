@@ -75,22 +75,6 @@ function getDate(): string {
   const now = new Date();
   return now.toISOString();
 }
-function findNextFreePlayerId(players: Player[]): number {
-  const sortedPlayers = [...players].sort(
-    (a: Player, b: Player) => a.id - b.id,
-  );
-
-  let nextFreeId = 0;
-
-  for (let index = 0; index < sortedPlayers.length; index += 1) {
-    if (sortedPlayers[index].id > nextFreeId) {
-      return nextFreeId;
-    }
-    nextFreeId = sortedPlayers[index].id + 1;
-    console.log(`Next free ID: ${nextFreeId}`);
-  }
-  return nextFreeId;
-}
 async function hasTeamDefault(
   username: string,
   teamId: number,
@@ -119,6 +103,22 @@ export default class TeamStorageAdapter {
     } catch (error) {
       throw error;
     }
+  }
+  findNextFreePlayerId(players: Player[]): number {
+    const sortedPlayers = [...players].sort(
+      (a: Player, b: Player) => a.id - b.id,
+    );
+  
+    let nextFreeId = 0;
+  
+    for (let index = 0; index < sortedPlayers.length; index += 1) {
+      if (sortedPlayers[index].id > nextFreeId) {
+        return nextFreeId;
+      }
+      nextFreeId = sortedPlayers[index].id + 1;
+      console.log(`Next free ID: ${nextFreeId}`);
+    }
+    return nextFreeId;
   }
   async isTeamDefault(username: string, teamId: number): Promise<boolean> {
     try {
@@ -251,13 +251,11 @@ export default class TeamStorageAdapter {
     username: string,
     teamId: number,
     playerData: Player,
-  ): Promise<number> {
+  ): Promise<void> {
     try {
       await this.ensureTeamIsUnDefault(username, teamId);
       const player = new Player(playerData);
       const team = await readTeamFile(username, teamId);
-      const id = findNextFreePlayerId(team.squad);
-      player.id = id;
       if (!team.squad.length) {
         team.squad.push(player);
       } else {
@@ -265,7 +263,6 @@ export default class TeamStorageAdapter {
       }
       console.log('Adding player to team', teamId);
       await saveTeam(team, username);
-      return id;
     } catch (error) {
       throw error;
     }
