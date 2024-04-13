@@ -117,13 +117,17 @@ export default class TeamStorageAdapter {
     }
   }
   async isTeamDefault(username: string, teamId: number): Promise<boolean> {
-    const teamsListPath = getUserTeamsListJSONPath(username);
-    const teams = await readJSONFile(teamsListPath);
-    const team = teams[teamId];
-    if (team.isDefault) {
-      return true;
+    try {
+      const teamsListPath = getUserTeamsListJSONPath(username);
+      const teams = await readJSONFile(teamsListPath);
+      const team = teams[teamId];
+      if (team.isDefault) {
+        return true;
+      }
+      return false;
+    } catch (error) {
+      throw error;
     }
-    return false;
   }
   async getTeamsList(username: string): Promise<TeamListTeam[]> {
     try {
