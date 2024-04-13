@@ -62,10 +62,14 @@ async function deleteTeamFromTeamlist(
   username: string,
   teamId: number,
 ): Promise<void> {
-  const teamsPath = getUserTeamsListJSONPath(username);
-  const teams = await readJSONFile(teamsPath);
-  delete teams[teamId];
-  await writeFile(teamsPath, JSON.stringify(teams));
+  try {
+    const teamsPath = getUserTeamsListJSONPath(username);
+    const teams = await readJSONFile(teamsPath);
+    delete teams[teamId];
+    await writeFile(teamsPath, JSON.stringify(teams));
+  } catch (error) {
+    throw error;
+  }
 }
 function getDate(): string {
   const now = new Date();
