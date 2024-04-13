@@ -6,10 +6,8 @@ import * as us from '../../storage/userPath';
 import FileNotFoundError from '../../errors/FileNotFoundError';
 import TeamExtended from '../../models/TeamExtended';
 import TeamListTeam from 'src/components/models/TeamListTeam';
-import { toMatchObjectExcept } from './customMatchers';
 jest.spyOn(console, 'log').getMockImplementation();
 
-expect.extend({ toMatchObjectExcept });
 const dataStorageMock = ds as jest.Mocked<typeof ds>;
 const userPathMock = us as jest.Mocked<typeof us>;
 const adapter = new TeamStorageAdapter();
@@ -253,12 +251,22 @@ describe('updateTeam', () => {
       JSON.stringify(nonDefaultTeamMock),
     ) as TeamExtended;
     Object.assign(modifiedTeam, newNameProp);
+      delete modifiedTeam.lastUpdated;
 
     await adapter.updateTeam(newNameProp, username, teamId);
     expect(dataStorageMock.writeFile).toHaveBeenCalledTimes(2);
     const [, serializedTeam] = dataStorageMock.writeFile.mock.calls[1];
     const actualTeam = JSON.parse(serializedTeam) as TeamExtended;
-    expect(actualTeam).toMatchObjectExcept(modifiedTeam, ['lastUpdated']);
+    delete actualTeam.lastUpdated;
+    expect(actualTeam).toEqual(modifiedTeam);
+    expect(dataStorageMock.writeFile).toHaveBeenCalledWith(
+      filePath,
+      JSON.stringify(nonDefaultTeamsListMock),
+    )
+    expect(dataStorageMock.writeFile).toHaveBeenCalledWith(
+      filePath,
+      JSON.stringify(actualTeam),
+    )
   });
   it('should handle null data', async () => {
     await expect(adapter.updateTeam(null, username, teamId)).rejects.toThrow(
