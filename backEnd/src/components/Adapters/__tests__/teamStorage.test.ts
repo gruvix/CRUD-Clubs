@@ -6,8 +6,10 @@ import * as us from '../../storage/userPath';
 import FileNotFoundError from '../../errors/FileNotFoundError';
 import TeamExtended from '../../models/TeamExtended';
 import TeamListTeam from 'src/components/models/TeamListTeam';
+import { toMatchObjectExcept } from './customMatchers';
 jest.spyOn(console, 'log').getMockImplementation();
 
+expect.extend({ toMatchObjectExcept });
 const dataStorageMock = ds as jest.Mocked<typeof ds>;
 const userPathMock = us as jest.Mocked<typeof us>;
 const adapter = new TeamStorageAdapter();
@@ -217,7 +219,6 @@ describe('updateTeam', () => {
       .mockResolvedValueOnce(defaultTeamsListMock) //updateTeamListTeam (ensureTeamIsUnDefault)
       .mockResolvedValueOnce(defaultTeamsListMock) //updateTeamListParameter
       .mockResolvedValueOnce(nonDefaultTeamMock); //readTeamFile
-    dataStorageMock.writeFile.mockResolvedValue(undefined as never);
 
     const clonedDefaultTeamsList = JSON.parse(
       JSON.stringify(defaultTeamsListMock),
@@ -225,7 +226,7 @@ describe('updateTeam', () => {
     clonedDefaultTeamsList[teamId].isDefault = false;
 
     await adapter.updateTeam(newNameProp, username, teamId);
-
+    expect(dataStorageMock.writeFile).toHaveBeenCalledTimes(4);
     expect(dataStorageMock.writeFile).toHaveBeenCalledWith(
       filePath,
       JSON.stringify(defaultTeamMock),
@@ -234,10 +235,64 @@ describe('updateTeam', () => {
       filePath,
       JSON.stringify(clonedDefaultTeamsList),
     );
+    expect(dataStorageMock.writeFile).toHaveBeenCalledWith(
+      filePath,
+      JSON.stringify(defaultTeamsListMock),
+    );
+    expect(dataStorageMock.writeFile).toHaveBeenCalledWith(
+      filePath,
+      JSON.stringify(defaultTeamMock),
+    );
+  });
+  it('should update a non-default team', async () => {
+    dataStorageMock.readJSONFile
+      .mockResolvedValueOnce(nonDefaultTeamsListMock) //isTeamDefault
+      .mockResolvedValueOnce(nonDefaultTeamsListMock) //updateTeamListParameter
+      .mockResolvedValueOnce(nonDefaultTeamMock); //readTeamFile
+    const modifiedTeam = JSON.parse(
+      JSON.stringify(nonDefaultTeamMock),
+    ) as TeamExtended;
+    Object.assign(modifiedTeam, newNameProp);
+
+    await adapter.updateTeam(newNameProp, username, teamId);
+    expect(dataStorageMock.writeFile).toHaveBeenCalledTimes(2);
+    const [, serializedTeam] = dataStorageMock.writeFile.mock.calls[1];
+    const actualTeam = JSON.parse(serializedTeam) as TeamExtended;
+    expect(actualTeam).toMatchObjectExcept(modifiedTeam, ['lastUpdated']);
   });
   it('should handle null data', async () => {
     await expect(adapter.updateTeam(null, username, teamId)).rejects.toThrow(
       Error('No data provided'),
     );
+  });
+  it('should handle errors on isTeamDefault', async () => {
+    dataStorageMock.readJSONFile
+    .mockImplementationOnce(() => {
+      throw new FileNotFoundError();
+    });
+    await expect(
+      adapter.updateTeam(newNameProp, username, teamId),
+    ).rejects.toThrow(FileNotFoundError);
+  });
+  it('should handle errors on updateTeamlistTeam', async () => {
+    dataStorageMock.readJSONFile
+    .mockResolvedValueOnce(nonDefaultTeamsListMock)
+    .mockImplementationOnce(() => {
+      throw new Error();
+    })
+    await expect(
+      adapter.updateTeam(newNameProp, username, teamId),
+    ).rejects.toThrow(Error);
+  });
+  it('should handle errors on saveTeam', async () => {
+    dataStorageMock.readJSONFile
+    .mockResolvedValueOnce(nonDefaultTeamsListMock)
+    .mockResolvedValueOnce(nonDefaultTeamMock)
+    .mockImplementationOnce(() => {
+      throw new Error();
+    })
+    await expect(
+      adapter.updateTeam(newNameProp, username, teamId),
+    ).rejects.toThrow(Error);
   });
 });
