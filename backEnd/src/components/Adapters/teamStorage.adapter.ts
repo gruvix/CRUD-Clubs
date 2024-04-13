@@ -241,10 +241,8 @@ export default class TeamStorageAdapter {
   async deleteTeam(username: string, teamId: number): Promise<void> {
     try {
       const teamPath = getUserTeamJSONPath(username, teamId);
-      Promise.all([
-        deleteFile(teamPath),
-        deleteTeamFromTeamlist(username, teamId),
-      ]);
+      await deleteFile(teamPath);
+      await deleteTeamFromTeamlist(username, teamId);
     } catch (error) {
       throw error;
     }
