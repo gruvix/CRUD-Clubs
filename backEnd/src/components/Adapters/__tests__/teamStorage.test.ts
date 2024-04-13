@@ -306,17 +306,57 @@ describe('validateTeam', () => {
     const result = await adapter.validateTeam(username, teamId);
     expect(result).toEqual(nonDefaultTeamsListMock[teamId]);
   });
-  it('should failt to validate a default team', async () => {
+  it('should fail to validate a default team', async () => {
     dataStorageMock.readJSONFile.mockResolvedValueOnce(defaultTeamsListMock);
     const UNEXPECTED_TEAM_ID = -1;
     const result = await adapter.validateTeam(username, UNEXPECTED_TEAM_ID);
     expect(result).toEqual(false);
   });
-  it('should failt to validate a default team', async () => {
+  it('should fail to validate a default team', async () => {
     dataStorageMock.readJSONFile.mockImplementationOnce(() => {
       throw new FileNotFoundError();
     });
     await expect(adapter.validateTeam(username, teamId)).rejects.toThrow(
+      FileNotFoundError,
+    );
+  });
+});
+describe('deleteTeam', () => {
+  it('should delete a team', async () => {
+    dataStorageMock.readJSONFile.mockResolvedValueOnce(nonDefaultTeamsListMock);
+
+    const clonedTeamsList = JSON.parse(
+      JSON.stringify(nonDefaultTeamsListMock),
+    ) as TeamListTeam[];
+    delete clonedTeamsList[teamId];
+
+    await adapter.deleteTeam(username, teamId);
+    expect(dataStorageMock.deleteFile).toHaveBeenCalledWith(filePath);
+    expect(dataStorageMock.writeFile).toHaveBeenCalledWith(
+      filePath,
+      JSON.stringify(clonedTeamsList),
+    );
+  });
+  it('should delete a team', async () => {
+    dataStorageMock.readJSONFile.mockResolvedValueOnce(nonDefaultTeamsListMock);
+
+    const expectedTeamsList = JSON.parse(
+      JSON.stringify(nonDefaultTeamsListMock),
+    ) as TeamListTeam[];
+    delete expectedTeamsList[teamId];
+
+    await adapter.deleteTeam(username, teamId);
+    expect(dataStorageMock.deleteFile).toHaveBeenCalledWith(filePath);
+    expect(dataStorageMock.writeFile).toHaveBeenCalledWith(
+      filePath,
+      JSON.stringify(expectedTeamsList),
+    );
+  });
+  it('should handle errors', async () => {
+    dataStorageMock.readJSONFile.mockRejectedValueOnce(() => {
+      throw new FileNotFoundError();
+    });
+    await expect(adapter.deleteTeam(username, teamId)).rejects.toThrow(
       FileNotFoundError,
     );
   });
