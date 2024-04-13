@@ -239,11 +239,15 @@ export default class TeamStorageAdapter {
     }
   }
   async deleteTeam(username: string, teamId: number): Promise<void> {
-    const teamPath = getUserTeamJSONPath(username, teamId);
-    Promise.all([
-      deleteFile(teamPath),
-      deleteTeamFromTeamlist(username, teamId),
-    ]);
+    try {
+      const teamPath = getUserTeamJSONPath(username, teamId);
+      Promise.all([
+        deleteFile(teamPath),
+        deleteTeamFromTeamlist(username, teamId),
+      ]);
+    } catch (error) {
+      throw error;
+    }
   }
   async addPlayer(
     username: string,
