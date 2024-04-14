@@ -251,22 +251,27 @@ describe('updateTeam', () => {
       JSON.stringify(nonDefaultTeamMock),
     ) as TeamExtended;
     Object.assign(modifiedTeam, newNameProp);
-      delete modifiedTeam.lastUpdated;
+    delete modifiedTeam.lastUpdated;
+
+    const modifiedTeamsList = JSON.parse(
+      JSON.stringify(nonDefaultTeamsListMock),
+    ) as TeamListTeam[];
+    Object.assign(modifiedTeamsList[teamId], newNameProp);
+    delete modifiedTeamsList[teamId].lastUpdated;
 
     await adapter.updateTeam(newNameProp, username, teamId);
     expect(dataStorageMock.writeFile).toHaveBeenCalledTimes(2);
+
+    const [, serializedTeamsList] = dataStorageMock.writeFile.mock.calls[0];
     const [, serializedTeam] = dataStorageMock.writeFile.mock.calls[1];
+
+    const actualTeamsList = JSON.parse(serializedTeamsList) as TeamListTeam[];
     const actualTeam = JSON.parse(serializedTeam) as TeamExtended;
+
     delete actualTeam.lastUpdated;
     expect(actualTeam).toEqual(modifiedTeam);
-    expect(dataStorageMock.writeFile).toHaveBeenCalledWith(
-      filePath,
-      JSON.stringify(nonDefaultTeamsListMock),
-    )
-    expect(dataStorageMock.writeFile).toHaveBeenCalledWith(
-      filePath,
-      JSON.stringify(actualTeam),
-    )
+    delete actualTeamsList[teamId].lastUpdated;
+    expect(actualTeamsList[teamId]).toEqual(modifiedTeamsList[teamId]);
   });
   it('should handle null data', async () => {
     await expect(adapter.updateTeam(null, username, teamId)).rejects.toThrow(
