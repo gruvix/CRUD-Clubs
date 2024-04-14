@@ -34,7 +34,6 @@ const nonDefaultTeamsListMock = {
     lastUpdated: 'Long Time Ago',
   },
 };
-
 const nonDefaultTeamMock = new TeamExtended({
   name: 'name',
   area: 'area',
@@ -61,7 +60,6 @@ const nonDefaultTeamMock = new TeamExtended({
   isDefault: false,
   lastUpdated: '2024-04-11T21:47:40.430Z',
 });
-
 const defaultTeamMock = new TeamExtended({
   name: 'name',
   area: 'area',
@@ -88,6 +86,9 @@ const defaultTeamMock = new TeamExtended({
   isDefault: true,
   lastUpdated: '2024-04-11T21:47:40.430Z',
 });
+function cloneObject<T>(obj: T): any {
+  return JSON.parse(JSON.stringify(obj)) as T;
+}
 beforeAll(() => {
   userPathMock.getUserTeamsListJSONPath.mockReturnValue(filePath);
   userPathMock.getUserTeamJSONPath.mockReturnValue(filePath);
