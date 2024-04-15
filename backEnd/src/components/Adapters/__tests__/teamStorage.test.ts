@@ -6,6 +6,7 @@ import * as us from '../../storage/userPath';
 import FileNotFoundError from '../../errors/FileNotFoundError';
 import TeamExtended from '../../models/TeamExtended';
 import TeamListTeam from 'src/components/models/TeamListTeam';
+import Player from 'src/components/models/Player';
 import mockUtils from './mockUtils';
 jest.spyOn(console, 'log').getMockImplementation();
 
@@ -329,5 +330,25 @@ describe('deleteTeam', () => {
     ).rejects.toThrow(FileNotFoundError);
   });
 });
+describe('addPlayer', () => {
+  test('should add a player to a non-default team', async () => {
+    dataStorageMock.readJSONFile
+      .mockResolvedValueOnce(mock.getNonDefaultTeamsList()) //isTeamDefault
+      .mockResolvedValueOnce(mock.getNonDefaultTeam()); //readTeamFile
+
+    const modifiedTeam: TeamExtended = mock.getNonDefaultTeam();
+    const newPlayer = {
+      id: adapter.findNextFreePlayerId(modifiedTeam.squad), //This is to ensure it isn't stored with an invalid id
+      name: 'newname',
+      position: 'newposition',
+      dateOfBirth: 'newdateOfBirth',
+      countryOfBirth: 'newcountryOfBirth',
+      nationality: 'newnationality',
+      role: 'newrole',
+    } as Player;
+    modifiedTeam.squad.unshift(newPlayer);
+    await adapter.addPlayer(mock.username, mock.teamId, newPlayer);
+    const actualTeam = JSON.parse(dataStorageMock.writeFile.mock.calls[0][1]);
+    expect(actualTeam).toEqual(modifiedTeam);
   });
 });
