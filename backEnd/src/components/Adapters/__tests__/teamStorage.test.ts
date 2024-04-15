@@ -56,8 +56,8 @@ const nonDefaultTeamMock = new TeamExtended({
     },
   ],
   hasCustomCrest: true,
-  hasDefault: false,
   isDefault: false,
+  hasDefault: false,
   lastUpdated: '2024-04-11T21:47:40.430Z',
 });
 const defaultTeamMock = new TeamExtended({
@@ -82,21 +82,18 @@ const defaultTeamMock = new TeamExtended({
     },
   ],
   hasCustomCrest: false,
-  hasDefault: true,
   isDefault: true,
+  hasDefault: true,
   lastUpdated: '2024-04-11T21:47:40.430Z',
 });
 function cloneObject<T>(obj: T): any {
   return JSON.parse(JSON.stringify(obj)) as T;
 }
 beforeAll(() => {
+  jest.resetAllMocks();
   userPathMock.getUserTeamsListJSONPath.mockReturnValue(filePath);
   userPathMock.getUserTeamJSONPath.mockReturnValue(filePath);
   dataStorageMock.writeFile.mockResolvedValue(undefined as never);
-});
-afterEach(() => {
-  dataStorageMock.readJSONFile.mockClear();
-  dataStorageMock.writeFile.mockClear();
 });
 describe('isTeamDefault', () => {
   it('should return true when team is default', async () => {
