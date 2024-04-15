@@ -160,12 +160,15 @@ describe('getTeam', () => {
 describe('copyTeamListTeam', () => {
   it('should copy a team', async () => {
     dataStorageMock.readJSONFile
-      .mockResolvedValueOnce(defaultTeamsListMock)
-      .mockResolvedValueOnce(nonDefaultTeamsListMock);
+      .mockResolvedValueOnce(nonDefaultTeamsListMock)
+      .mockResolvedValueOnce(defaultTeamsListMock);
+
+    const expectedTeamsList = cloneObject(nonDefaultTeamsListMock);
+    expectedTeamsList[teamId] = cloneObject(defaultTeamsListMock[teamId]);
+
     await adapter.copyTeamListTeam(defaultUsername, username, teamId);
-    expect(dataStorageMock.writeFile).toHaveBeenCalledWith(
-      filePath,
-      JSON.stringify(defaultTeamsListMock),
+    expect(JSON.parse(dataStorageMock.writeFile.mock.calls[0][1])).toEqual(
+      expectedTeamsList,
     );
   });
   it('should handle same source and target users', async () => {
