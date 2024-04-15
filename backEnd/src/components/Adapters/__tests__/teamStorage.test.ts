@@ -237,6 +237,7 @@ describe('updateTeam', () => {
 
     await adapter.updateTeam(newNameProp, username, teamId);
     expect(dataStorageMock.writeFile).toHaveBeenCalledTimes(4);
+    expect(dataStorageMock.readJSONFile).toHaveBeenCalledTimes(5);
 
     const writeFileContents = dataStorageMock.writeFile.mock.calls.map(
       ([, serializedContent]) => {
