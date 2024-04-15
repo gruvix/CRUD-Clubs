@@ -52,9 +52,6 @@ async function addTeamToTeamlist(
   const userTeams = await readJSONFile(userTeamsPath);
   userTeams[newTeam.id] = new TeamListTeam(
     newTeam as unknown as TeamListTeam,
-    true,
-    false,
-    false,
   );
   await writeFile(userTeamsPath, JSON.stringify(userTeams));
 }
@@ -148,7 +145,6 @@ export default class TeamStorageAdapter {
       !teamDefaultBool ? (sourceUserName = username) : null;
       const team = new TeamExtended({
         ...(await readTeamFile(sourceUserName, teamId)),
-        isDefault: teamDefaultBool,
         hasDefault: await hasTeamDefault(username, teamId),
       });
       return team;

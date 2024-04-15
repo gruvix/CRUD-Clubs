@@ -3,7 +3,7 @@ class TeamListTeam {
   id: number;
   crestUrl: string;
   hasCustomCrest: boolean;
-  isDefault: boolean;
+  readonly isDefault: boolean;
   hasDefault: boolean;
   lastUpdated: string;
   constructor(
@@ -16,16 +16,13 @@ class TeamListTeam {
       hasDefault: boolean;
       lastUpdated: string;
     },
-    customCrest = false,
-    isDefault = true,
-    hasDefault = true
   ) {
     this.name = team.name;
     this.id = team.id;
     this.crestUrl = team.crestUrl;
-    this.hasCustomCrest = customCrest;
-    this.isDefault = isDefault;
-    this.hasDefault = hasDefault;
+    this.hasCustomCrest = team.hasCustomCrest;
+    this.isDefault = team.isDefault;
+    this.hasDefault = team.hasDefault;
     this.lastUpdated = team.lastUpdated;
   }
 

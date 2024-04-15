@@ -6,6 +6,7 @@ export default class TeamExtended extends Team {
   crestUrl: string;
   squad: Player[];
   hasCustomCrest: boolean;
+  isDefault: boolean;
   lastUpdated: string;
   constructor(
     data: TeamData & {
@@ -14,7 +15,7 @@ export default class TeamExtended extends Team {
       squad: Player[];
       hasCustomCrest: boolean;
       lastUpdated: string;
-      isDefault: boolean,
+      isDefault: boolean;
       readonly hasDefault: boolean
     },
   ) {
@@ -22,6 +23,7 @@ export default class TeamExtended extends Team {
     this.id = data.id;
     this.crestUrl = data.crestUrl;
     this.squad = data.squad;
+    this.isDefault = data.isDefault;
     this.hasCustomCrest = data.hasCustomCrest;
     this.lastUpdated = data.lastUpdated;
   }
