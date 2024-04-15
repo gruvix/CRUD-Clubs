@@ -219,31 +219,34 @@ describe('updateTeam', () => {
       .mockResolvedValueOnce(defaultTeamMock) //cloneTeamFromDefault
       .mockResolvedValueOnce(defaultTeamsListMock) //updateTeamListTeam (ensureTeamIsUnDefault)
       .mockResolvedValueOnce(defaultTeamsListMock) //updateTeamListParameter
-      .mockResolvedValueOnce(nonDefaultTeamMock); //readTeamFile
+      .mockResolvedValueOnce(defaultTeamMock); //readTeamFile
 
-    const clonedDefaultTeamsList = JSON.parse(
-      JSON.stringify(defaultTeamsListMock),
-    ) as TeamListTeam[];
-    clonedDefaultTeamsList[teamId].isDefault = false;
+    const expectedDefaultTeamsList = cloneObject(defaultTeamsListMock);
+    expectedDefaultTeamsList[teamId] = cloneObject({
+      ...defaultTeamsListMock[teamId],
+      isDefault: false,
+      lastUpdated: lastUpdated,
+    });
+
+    const expectedDefaultTeam: TeamExtended = cloneObject({
+      ...defaultTeamMock,
+      ...newNameProp,
+      lastUpdated: lastUpdated,
+    });
 
     await adapter.updateTeam(newNameProp, username, teamId);
     expect(dataStorageMock.writeFile).toHaveBeenCalledTimes(4);
-    expect(dataStorageMock.writeFile).toHaveBeenCalledWith(
-      filePath,
-      JSON.stringify(defaultTeamMock),
+
+    const writeFileContents = dataStorageMock.writeFile.mock.calls.map(
+      ([, serializedContent]) => {
+        return JSON.parse(serializedContent);
+      },
     );
-    expect(dataStorageMock.writeFile).toHaveBeenCalledWith(
-      filePath,
-      JSON.stringify(clonedDefaultTeamsList),
-    );
-    expect(dataStorageMock.writeFile).toHaveBeenCalledWith(
-      filePath,
-      JSON.stringify(defaultTeamsListMock),
-    );
-    expect(dataStorageMock.writeFile).toHaveBeenCalledWith(
-      filePath,
-      JSON.stringify(defaultTeamMock),
-    );
+
+    expect(writeFileContents[0]).toEqual(defaultTeamMock);
+    expect(writeFileContents[1]).toEqual(expectedDefaultTeamsList);
+    expect(writeFileContents[2]).toEqual(defaultTeamsListMock);
+    expect(writeFileContents[3]).toEqual(expectedDefaultTeam);
   });
   it('should update a non-default team', async () => {
     dataStorageMock.readJSONFile
