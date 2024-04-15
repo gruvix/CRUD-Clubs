@@ -351,4 +351,35 @@ describe('addPlayer', () => {
     const actualTeam = JSON.parse(dataStorageMock.writeFile.mock.calls[0][1]);
     expect(actualTeam).toEqual(modifiedTeam);
   });
+  it('should add a player to an empty non-default team', async () => {
+    const modifiedTeam: TeamExtended = {
+      ...mock.getNonDefaultTeam(),
+      squad: [],
+    };
+    dataStorageMock.readJSONFile
+      .mockResolvedValueOnce(mock.getNonDefaultTeamsList()) //isTeamDefault
+      .mockResolvedValueOnce(mock.cloneObject(modifiedTeam)); //readTeamFile
+      const newPlayer: Player = {
+        id: adapter.findNextFreePlayerId(modifiedTeam.squad), 
+        name: 'newname',
+        position: 'newposition',
+        dateOfBirth: 'newdateOfBirth',
+      countryOfBirth: 'newcountryOfBirth',
+      nationality: 'newnationality',
+      role: 'newrole',
+    };
+    modifiedTeam.squad.push(newPlayer);
+
+    await adapter.addPlayer(mock.username, mock.teamId, newPlayer);
+    const actualTeam = JSON.parse(dataStorageMock.writeFile.mock.calls[0][1]);
+    expect(actualTeam).toEqual(modifiedTeam);
+  });
+  test('should handle errors', async () => {
+    dataStorageMock.readJSONFile.mockImplementationOnce(() => {
+      throw new FileNotFoundError();
+    });
+    await expect(
+      adapter.addPlayer(mock.username, mock.teamId, {} as Player),
+    ).rejects.toThrow(FileNotFoundError);
+  });
 });
