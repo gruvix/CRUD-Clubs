@@ -169,6 +169,8 @@ describe('copyTeamListTeam', () => {
     expectedTeamsList[teamId] = cloneObject(defaultTeamsListMock[teamId]);
 
     await adapter.copyTeamListTeam(defaultUsername, username, teamId);
+    expect(dataStorageMock.readJSONFile).toHaveBeenCalledTimes(2);
+    expect(dataStorageMock.writeFile).toHaveBeenCalledTimes(1);
     expect(JSON.parse(dataStorageMock.writeFile.mock.calls[0][1])).toEqual(
       expectedTeamsList,
     );
