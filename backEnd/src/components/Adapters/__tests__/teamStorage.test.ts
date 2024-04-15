@@ -162,7 +162,7 @@ describe('getTeam', () => {
 describe('copyTeamListTeam', () => {
   test('should copy a team', async () => {
     dataStorageMock.readJSONFile
-      .mockResolvedValueOnce(nonDefaultTeamsListMock)
+      .mockResolvedValueOnce(cloneObject(nonDefaultTeamsListMock))
       .mockResolvedValueOnce(defaultTeamsListMock);
 
     const expectedTeamsList = cloneObject(nonDefaultTeamsListMock);
