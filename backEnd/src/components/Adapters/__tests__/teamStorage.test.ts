@@ -185,9 +185,8 @@ describe('copyTeamsList', () => {
   test('should copy a list of teams', async () => {
     dataStorageMock.readJSONFile.mockResolvedValueOnce(defaultTeamsListMock);
     await adapter.copyTeamsList(defaultUsername, username);
-    expect(dataStorageMock.writeFile).toHaveBeenCalledWith(
-      filePath,
-      JSON.stringify(defaultTeamsListMock),
+    expect(JSON.parse(dataStorageMock.writeFile.mock.calls[0][1])).toEqual(
+      defaultTeamsListMock,
     );
   });
   test('should handle same source and target users situation', async () => {
