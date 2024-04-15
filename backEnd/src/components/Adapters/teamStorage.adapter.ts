@@ -69,7 +69,7 @@ async function deleteTeamFromTeamlist(
     throw error;
   }
 }
-function getDate(): string {
+export function getDate(): string {
   const now = new Date();
   return now.toISOString();
 }
