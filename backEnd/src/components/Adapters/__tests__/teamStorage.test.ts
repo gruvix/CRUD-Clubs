@@ -7,6 +7,8 @@ import FileNotFoundError from '../../errors/FileNotFoundError';
 import TeamExtended from '../../models/TeamExtended';
 import TeamListTeam from 'src/components/models/TeamListTeam';
 jest.spyOn(console, 'log').getMockImplementation();
+const lastUpdated = new Date('0000-01-01T00:00:00Z');
+jest.useFakeTimers().setSystemTime(lastUpdated);
 
 const dataStorageMock = ds as jest.Mocked<typeof ds>;
 const userPathMock = us as jest.Mocked<typeof us>;
