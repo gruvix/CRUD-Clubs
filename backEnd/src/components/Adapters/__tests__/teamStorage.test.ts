@@ -91,7 +91,7 @@ const defaultTeamMock = new TeamExtended({
 function cloneObject<T>(obj: T): any {
   return JSON.parse(JSON.stringify(obj)) as T;
 }
-beforeAll(() => {
+beforeEach(() => {
   jest.resetAllMocks();
   userPathMock.getUserTeamsListJSONPath.mockReturnValue(filePath);
   userPathMock.getUserTeamJSONPath.mockReturnValue(filePath);
