@@ -256,29 +256,30 @@ describe('updateTeam', () => {
       .mockResolvedValueOnce(nonDefaultTeamsListMock) //updateTeamListParameter
       .mockResolvedValueOnce(nonDefaultTeamMock); //readTeamFile
 
-    const modifiedTeam: TeamExtended = cloneObject(nonDefaultTeamMock);
-    Object.assign(modifiedTeam, newNameProp);
-    delete modifiedTeam.lastUpdated;
-
-    const modifiedTeamsList: TeamListTeam[] = cloneObject(nonDefaultTeamsListMock);
-    Object.assign(modifiedTeamsList[teamId], newNameProp);
-    delete modifiedTeamsList[teamId].lastUpdated;
+    const modifiedTeamsList: TeamListTeam[] = cloneObject({
+      ...nonDefaultTeamsListMock,
+      [teamId]: {
+        ...nonDefaultTeamsListMock[teamId],
+        ...newNameProp,
+        lastUpdated: lastUpdated,
+      },
+    });
+    const modifiedTeam: TeamExtended = cloneObject({
+      ...nonDefaultTeamMock,
+      ...newNameProp,
+      lastUpdated: lastUpdated,
+    });
 
     await adapter.updateTeam(newNameProp, username, teamId);
 
+    const writeFileContents = dataStorageMock.writeFile.mock.calls.map(
+      ([, serializedContent]) => {
+        return JSON.parse(serializedContent);
+      },
+    );
+    expect(writeFileContents[0][teamId]).toEqual(modifiedTeamsList[teamId]);
+    expect(writeFileContents[1]).toEqual(modifiedTeam);
     expect(dataStorageMock.writeFile).toHaveBeenCalledTimes(2);
-
-    const [, serializedTeamsList] = dataStorageMock.writeFile.mock.calls[0];
-    const [, serializedTeam] = dataStorageMock.writeFile.mock.calls[1];
-
-    const actualTeamsList = JSON.parse(serializedTeamsList) as TeamListTeam[];
-    const actualTeam = JSON.parse(serializedTeam) as TeamExtended;
-
-    delete actualTeamsList[teamId].lastUpdated;
-    delete actualTeam.lastUpdated;
-
-    expect(actualTeamsList[teamId]).toEqual(modifiedTeamsList[teamId]);
-    expect(actualTeam).toEqual(modifiedTeam);
   });
   test('should handle null data', async () => {
     await expect(adapter.updateTeam(null, username, teamId)).rejects.toThrow(
