@@ -177,7 +177,7 @@ describe('copyTeamListTeam', () => {
   });
   test('should handle same source and target users', async () => {
     await expect(
-      adapter.copyTeamListTeam(defaultUsername, defaultUsername, 1),
+      adapter.copyTeamListTeam(defaultUsername, defaultUsername, teamId),
     ).rejects.toThrow('Source and target users must be different');
   });
 });
