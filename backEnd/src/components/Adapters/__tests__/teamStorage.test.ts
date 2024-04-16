@@ -331,7 +331,7 @@ describe('deleteTeam', () => {
   });
 });
 describe('addPlayer', () => {
-  test('should add a player to a non-default team', async () => {
+  test('should add a player to a non-empty non-default team', async () => {
     dataStorageMock.readJSONFile
       .mockResolvedValueOnce(mock.getNonDefaultTeamsList()) //isTeamDefault
       .mockResolvedValueOnce(mock.getNonDefaultTeam()); //readTeamFile
