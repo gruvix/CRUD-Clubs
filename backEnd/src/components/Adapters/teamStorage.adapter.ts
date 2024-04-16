@@ -38,7 +38,6 @@ async function updateTeamlistTeam(
   try {
     const teamsPath = getUserTeamsListJSONPath(username);
     const teams = await readJSONFile(teamsPath);
-    newData.lastUpdated = getDate();
     Object.assign(teams[teamId], newData);
     await writeFile(teamsPath, JSON.stringify(teams));
   } catch (error) {

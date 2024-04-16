@@ -171,7 +171,6 @@ describe('updateTeam', () => {
     expectedDefaultTeamsList[mock.teamId] = {
       ...mock.getDefaultTeamsList()[mock.teamId],
       isDefault: false,
-      lastUpdated: getDate(),
     };
 
     const expectedModifiedTeamsList = mock.getDefaultTeamsList();
