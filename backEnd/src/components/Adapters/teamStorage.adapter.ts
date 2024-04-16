@@ -253,6 +253,7 @@ export default class TeamStorageAdapter {
       await this.ensureTeamIsUnDefault(username, teamId);
       const player = new Player(playerData);
       const team = await readTeamFile(username, teamId);
+      team.lastUpdated = getDate();
       if (!team.squad.length) {
         team.squad.push(player);
       } else {
@@ -272,6 +273,7 @@ export default class TeamStorageAdapter {
     try {
       await this.ensureTeamIsUnDefault(username, teamId);
       const team = await readTeamFile(username, teamId);
+      team.lastUpdated = getDate();
       console.log(`Updating player ${player.id} in team ${teamId}`);
       const playerIndex = team.squad.findIndex(
         (squadPlayer: Player) => Number(squadPlayer.id) === Number(player.id),
