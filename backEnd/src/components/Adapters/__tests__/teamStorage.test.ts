@@ -6,7 +6,7 @@ import * as us from '../../storage/userPath';
 import FileNotFoundError from '../../errors/FileNotFoundError';
 import TeamExtended from '../../models/TeamExtended';
 import TeamListTeam from 'src/components/models/TeamListTeam';
-import Player from 'src/components/models/Player';
+import Player from '../../models/Player';
 import mockUtils from './mockUtils';
 jest.spyOn(console, 'log').getMockImplementation();
 
@@ -351,7 +351,7 @@ describe('addPlayer', () => {
     const actualTeam = JSON.parse(dataStorageMock.writeFile.mock.calls[0][1]);
     expect(actualTeam).toEqual(modifiedTeam);
   });
-  it('should add a player to an empty non-default team', async () => {
+  test('should add a player to an empty non-default team', async () => {
     const modifiedTeam: TeamExtended = {
       ...mock.getNonDefaultTeam(),
       squad: [],
@@ -359,15 +359,7 @@ describe('addPlayer', () => {
     dataStorageMock.readJSONFile
       .mockResolvedValueOnce(mock.getNonDefaultTeamsList()) //isTeamDefault
       .mockResolvedValueOnce(mock.cloneObject(modifiedTeam)); //readTeamFile
-      const newPlayer: Player = {
-        id: adapter.findNextFreePlayerId(modifiedTeam.squad), 
-        name: 'newname',
-        position: 'newposition',
-        dateOfBirth: 'newdateOfBirth',
-      countryOfBirth: 'newcountryOfBirth',
-      nationality: 'newnationality',
-      role: 'newrole',
-    };
+    const newPlayer = mock.getNewPlayer(modifiedTeam.squad);
     modifiedTeam.squad.push(newPlayer);
 
     await adapter.addPlayer(mock.username, mock.teamId, newPlayer);
