@@ -369,9 +369,15 @@ describe('addPlayer', () => {
       nationality: 'newnationality',
       role: 'newrole',
     } as Player;
-    modifiedTeam.squad.unshift(newPlayer);
     await adapter.addPlayer(mock.username, mock.teamId, newPlayer);
+
+    modifiedTeam.squad.unshift(newPlayer);
+    modifiedTeam.lastUpdated = getDate();
+
     const actualTeam = JSON.parse(dataStorageMock.writeFile.mock.calls[0][1]);
+
+    expect(dataStorageMock.writeFile).toHaveBeenCalledTimes(1);
+    expect(dataStorageMock.readJSONFile).toHaveBeenCalledTimes(2);
     expect(actualTeam).toEqual(modifiedTeam);
   });
   test('should add a player to an empty non-default team', async () => {
@@ -384,9 +390,13 @@ describe('addPlayer', () => {
       .mockResolvedValueOnce(mock.cloneObject(modifiedTeam)); //readTeamFile
     const newPlayer = mock.getNewPlayer(modifiedTeam.squad);
     modifiedTeam.squad.push(newPlayer);
+    modifiedTeam.lastUpdated = getDate();
 
     await adapter.addPlayer(mock.username, mock.teamId, newPlayer);
     const actualTeam = JSON.parse(dataStorageMock.writeFile.mock.calls[0][1]);
+
+    expect(dataStorageMock.writeFile).toHaveBeenCalledTimes(1);
+    expect(dataStorageMock.readJSONFile).toHaveBeenCalledTimes(2);
     expect(actualTeam).toEqual(modifiedTeam);
   });
   test('should handle errors', async () => {
