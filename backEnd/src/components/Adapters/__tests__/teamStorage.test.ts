@@ -331,6 +331,29 @@ describe('deleteTeam', () => {
   });
 });
 describe('addPlayer', () => {
+  test('should add a player to a non-empty default team', async () => {
+    dataStorageMock.readJSONFile
+      .mockResolvedValueOnce(mock.getDefaultTeamsList()) //isTeamDefault
+      .mockResolvedValueOnce(mock.getDefaultTeam()) //cloneTeamFromDefault
+      .mockResolvedValueOnce(mock.getDefaultTeamsList()) //updateTeamListTeam (ensureTeamIsUnDefault)
+      .mockResolvedValueOnce(mock.getDefaultTeam()); //readTeamFile
+
+    const modifiedTeam: TeamExtended = mock.getDefaultTeam();
+
+    await adapter.addPlayer(
+      mock.username,
+      mock.teamId,
+      mock.getNewPlayer(modifiedTeam.squad),
+    );
+    modifiedTeam.squad.unshift(mock.getNewPlayer(modifiedTeam.squad));
+    modifiedTeam.lastUpdated = getDate();
+
+    const actualTeam = JSON.parse(dataStorageMock.writeFile.mock.calls[2][1]);
+
+    expect(dataStorageMock.writeFile).toHaveBeenCalledTimes(3);
+    expect(dataStorageMock.readJSONFile).toHaveBeenCalledTimes(4);
+    expect(actualTeam).toEqual(modifiedTeam);
+  });
   test('should add a player to a non-empty non-default team', async () => {
     dataStorageMock.readJSONFile
       .mockResolvedValueOnce(mock.getNonDefaultTeamsList()) //isTeamDefault
