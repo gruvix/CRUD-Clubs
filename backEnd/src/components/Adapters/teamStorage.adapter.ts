@@ -342,7 +342,8 @@ export default class TeamStorageAdapter {
       throw new TeamIsNotResettableError();
     }
     try {
-      await this.deleteTeam(username, teamId);
+      const teamPath = getUserTeamJSONPath(username, teamId);
+      await deleteFile(teamPath);
       const defaultUsername = 'default';
       Promise.all([
         this.cloneTeamFromDefault(username, teamId),
