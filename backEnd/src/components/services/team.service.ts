@@ -12,8 +12,9 @@ export default class TeamService {
     imageFileName: string,
   ): Promise<number> {
     try {
-      const id = await storage.addTeam(username, teamData, imageFileName);
-      return id;
+      const teamId = await storage.findNextFreeTeamId(username);
+      await storage.addTeam(username, teamData, teamId, imageFileName);
+      return teamId;
     } catch (error) {
       console.log(error);
       throw new HttpException(

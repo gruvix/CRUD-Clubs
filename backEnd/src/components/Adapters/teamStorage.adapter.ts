@@ -335,18 +335,18 @@ export default class TeamStorageAdapter {
   async addTeam(
     username: string,
     teamData: any,
+    teamId: number,
     imageFileName: string,
-  ): Promise<number> {
+  ): Promise<void> {
     try {
       if (!teamData || !Object.keys(teamData).length) {
         throw new NoDataProvidedError();
       }
-      const id = await this.findNextFreeTeamId(username);
       const team = new TeamExtended({
         ...teamData,
-        id,
+        id: teamId,
         lastUpdated: getDate(),
-        crestUrl: generateCustomCrestUrl(id, imageFileName),
+        crestUrl: generateCustomCrestUrl(teamId, imageFileName),
         hasCustomCrest: true,
         isDefault: false,
         hasDefault: false,
@@ -355,7 +355,6 @@ export default class TeamStorageAdapter {
         saveTeam(team, username),
         addTeamToTeamlist(team, username),
       ]);
-      return id;
     } catch (error) {
       throw error;
     }
