@@ -626,3 +626,86 @@ describe('findNextFreePlayerId', () => {
     expect(adapter.findNextFreePlayerId(squad)).toEqual(0);
   });
 });
+describe('addTeam', () => {
+  test('should add a team to an empty teams list', async () => {
+    dataStorageMock.readJSONFile.mockResolvedValueOnce({});
+    const newTeam = {
+      ...mock.getNonDefaultTeam(),
+      crestUrl: mock.crestUrl,
+    };
+    console.log(newTeam.crestUrl);
+    await adapter.addTeam(mock.username, newTeam);
+
+    const actualTeam = JSON.parse(dataStorageMock.writeFile.mock.calls[0][1]);
+    const actualTeamsList = JSON.parse(
+      dataStorageMock.writeFile.mock.calls[1][1],
+    );
+    const expectedTeam = {
+      ...mock.getNonDefaultTeam(),
+      crestUrl: mock.crestUrl,
+      lastUpdated: getDate(),
+    };
+    const expectedTeamsList = {
+      [mock.teamId]: {
+        ...new TeamListTeam(mock.getNonDefaultTeam() as TeamListTeam),
+        crestUrl: mock.crestUrl,
+        lastUpdated: getDate(),
+      },
+    };
+
+    expect(dataStorageMock.writeFile).toHaveBeenCalledTimes(2);
+    expect(actualTeam).toEqual(expectedTeam);
+    expect(actualTeamsList).toEqual(expectedTeamsList);
+  });
+  test('should add a team to a non-empty teams list', async () => {
+    dataStorageMock.readJSONFile.mockResolvedValueOnce(
+      mock.getNonDefaultTeamsList(),
+    );
+    const newTeamId = adapter.findNextFreeTeamId(mock.getNonDefaultTeamsList());
+    const newTeam = {
+      ...mock.getNonDefaultTeam(),
+      id: newTeamId,
+      crestUrl: mock.crestUrl,
+    };
+    console.log(newTeam.crestUrl);
+    await adapter.addTeam(mock.username, newTeam);
+
+    const actualTeam = JSON.parse(dataStorageMock.writeFile.mock.calls[0][1]);
+    const actualTeamsList = JSON.parse(
+      dataStorageMock.writeFile.mock.calls[1][1],
+    );
+    const expectedTeam = {
+      ...mock.getNonDefaultTeam(),
+      id: newTeamId,
+      crestUrl: mock.crestUrl,
+      lastUpdated: getDate(),
+    };
+    const expectedTeamsList = {
+      ...mock.getNonDefaultTeamsList(),
+      [newTeamId]: {
+        ...new TeamListTeam(mock.getNonDefaultTeam() as TeamListTeam),
+        id: newTeamId,
+        crestUrl: mock.crestUrl,
+        lastUpdated: getDate(),
+      },
+    };
+
+    expect(dataStorageMock.writeFile).toHaveBeenCalledTimes(2);
+    expect(actualTeam).toEqual(expectedTeam);
+    expect(actualTeamsList).toEqual(expectedTeamsList);
+  });
+  test('should handle empty data', async () => {
+    await expect(
+      adapter.addTeam(mock.username, {} as TeamExtended),
+    ).rejects.toThrow(NoDataProvidedError);
+  });
+  test('should handle errors', async () => {
+    dataStorageMock.writeFile.mockImplementationOnce(() => {
+      throw new Error('Error');
+    });
+
+    await expect(
+      adapter.addTeam(mock.username, mock.getNonDefaultTeam()),
+    ).rejects.toThrow(Error('Error'));
+  });
+});
