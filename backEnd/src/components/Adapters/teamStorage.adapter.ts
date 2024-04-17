@@ -104,15 +104,12 @@ export default class TeamStorageAdapter {
     const sortedPlayers = [...players].sort(
       (a: Player, b: Player) => a.id - b.id,
     );
-
     let nextFreeId = 0;
-
     for (let index = 0; index < sortedPlayers.length; index += 1) {
       if (sortedPlayers[index].id > nextFreeId) {
         return nextFreeId;
       }
       nextFreeId = sortedPlayers[index].id + 1;
-      console.log(`Next free ID: ${nextFreeId}`);
     }
     return nextFreeId;
   }
@@ -310,7 +307,6 @@ export default class TeamStorageAdapter {
     }
   }
   findNextFreeTeamId(teamsList: TeamListTeam[]): number {
-    if (!teamsList) return 0;
     const sortedTeams = Object.values(teamsList).sort(
       (a: TeamListTeam, b: TeamListTeam) => a.id - b.id,
     );
@@ -321,7 +317,6 @@ export default class TeamStorageAdapter {
       }
       nextFreeId = sortedTeams[index].id + 1;
     }
-    console.log(`New team ID: ${nextFreeId}`);
     return nextFreeId;
   }
   async addTeam(

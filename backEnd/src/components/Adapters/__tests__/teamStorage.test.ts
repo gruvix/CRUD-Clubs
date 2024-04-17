@@ -592,7 +592,7 @@ describe('removePlayer', () => {
 });
 describe('findNextFreeTeamId', () => {
   test('should find the next free team id on an empty list', async () => {
-    expect(await adapter.findNextFreeTeamId([])).toEqual(0);
+    expect(adapter.findNextFreeTeamId([])).toEqual(0);
   });
   test('should find the next free team id on a non-empty list', async () => {
     const teamsList = [
@@ -601,10 +601,12 @@ describe('findNextFreeTeamId', () => {
       { id: 2 },
       { id: 4 }, //Missing id: 3, but should be added as a new team
     ] as TeamListTeam[];
-    expect(await adapter.findNextFreeTeamId(teamsList)).toEqual(3);
+    expect(adapter.findNextFreeTeamId(teamsList)).toEqual(3);
   });
-  test('should handle a null list', async () => {
-    dataStorageMock.readJSONFile.mockResolvedValueOnce(null);
-    expect(await adapter.findNextFreeTeamId(null)).toEqual(0);
+  test('should find 0 as the next free team id on a non-empty list', async () => {
+    const teamsList = [
+      { id: 2 },
+    ] as TeamListTeam[];
+    expect(adapter.findNextFreeTeamId(teamsList)).toEqual(0);
   });
 });
