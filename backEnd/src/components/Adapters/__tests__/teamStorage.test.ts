@@ -8,6 +8,7 @@ import TeamExtended from '../../models/TeamExtended';
 import TeamListTeam from 'src/components/models/TeamListTeam';
 import Player from '../../models/Player';
 import mockUtils from './mockUtils';
+import NoDataProvidedError from '../../errors/NoDataProvidedError';
 jest.spyOn(console, 'log').getMockImplementation();
 
 const dataStorageMock = ds as jest.Mocked<typeof ds>;
@@ -234,10 +235,10 @@ describe('updateTeam', () => {
     expect(writeFileContents[1]).toEqual(modifiedTeam);
     expect(dataStorageMock.writeFile).toHaveBeenCalledTimes(2);
   });
-  test('should handle null data', async () => {
+  test('should handle empty data', async () => {
     await expect(
       adapter.updateTeam(null, mock.username, mock.teamId),
-    ).rejects.toThrow(Error('No data provided'));
+    ).rejects.toThrow(NoDataProvidedError);
   });
   test('should handle errors on isTeamDefault', async () => {
     dataStorageMock.readJSONFile.mockImplementationOnce(() => {
@@ -398,12 +399,17 @@ describe('addPlayer', () => {
     expect(dataStorageMock.readJSONFile).toHaveBeenCalledTimes(2);
     expect(actualTeam).toEqual(modifiedTeam);
   });
+  test('should handle empty data', async () => {
+      await expect(
+        adapter.addPlayer(mock.username, mock.teamId, {} as Player),
+      ).rejects.toThrow(NoDataProvidedError);
+  })
   test('should handle errors', async () => {
     dataStorageMock.readJSONFile.mockImplementationOnce(() => {
       throw new FileNotFoundError();
     });
     await expect(
-      adapter.addPlayer(mock.username, mock.teamId, {} as Player),
+      adapter.addPlayer(mock.username, mock.teamId, mock.getNewPlayer([])),
     ).rejects.toThrow(FileNotFoundError);
   });
 });
@@ -496,6 +502,11 @@ describe('updatePlayer', () => {
 
     expect(dataStorageMock.writeFile).not.toHaveBeenCalled();
     expect(dataStorageMock.readJSONFile).toHaveBeenCalledTimes(2);
+  });
+  test('should handle empty data', async () => {
+    await expect(
+      adapter.updatePlayer(mock.username, mock.teamId, {} as Player),
+    ).rejects.toThrow(NoDataProvidedError);
   });
   test('should handle errors', async () => {
     dataStorageMock.readJSONFile.mockImplementationOnce(() => {
