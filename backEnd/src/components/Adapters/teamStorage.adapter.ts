@@ -320,10 +320,10 @@ export default class TeamStorageAdapter {
     return nextFreeId;
   }
   async addTeam(username: string, teamData: any): Promise<void> {
+    if (!teamData || !Object.keys(teamData).length) {
+      throw new NoDataProvidedError();
+    }
     try {
-      if (!teamData || !Object.keys(teamData).length) {
-        throw new NoDataProvidedError();
-      }
       const team = new TeamExtended({
         ...teamData,
         lastUpdated: getDate(),
