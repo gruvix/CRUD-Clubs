@@ -12,6 +12,7 @@ export default class mockUtils {
   filePath = 'path/to/file' as never;
   newNameProp = { name: 'newName' };
   lastUpdated = new Date('0000-01-01T00:00:00Z');
+  crestUrl = '/crest/url/file.png';
 
   private defaultTeamsListMock = {
     [this.teamId]: {
