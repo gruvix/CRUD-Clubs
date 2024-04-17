@@ -11,6 +11,12 @@ export default class TeamService {
     teamData: any,
     imageFileName: string,
   ): Promise<number> {
+    if(!teamData || !Object.keys(teamData).length) {
+      throw new HttpException(
+        'No team data provided',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
     try {
       const teamId = await storage.findNextFreeTeamId(username);
       await storage.addTeam(username, teamData, teamId, imageFileName);
