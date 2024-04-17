@@ -592,28 +592,19 @@ describe('removePlayer', () => {
 });
 describe('findNextFreeTeamId', () => {
   test('should find the next free team id on an empty list', async () => {
-    dataStorageMock.readJSONFile.mockResolvedValueOnce([]);
-    expect(await adapter.findNextFreeTeamId(mock.username)).toEqual(0);
+    expect(await adapter.findNextFreeTeamId([])).toEqual(0);
   });
   test('should find the next free team id on a non-empty list', async () => {
-    dataStorageMock.readJSONFile.mockResolvedValueOnce([
+    const teamsList = [
       { id: 0 },
       { id: 1 },
       { id: 2 },
       { id: 4 }, //Missing id: 3, but should be added as a new team
-    ]);
-    expect(await adapter.findNextFreeTeamId(mock.username)).toEqual(3);
+    ] as TeamListTeam[];
+    expect(await adapter.findNextFreeTeamId(teamsList)).toEqual(3);
   });
   test('should handle a null list', async () => {
     dataStorageMock.readJSONFile.mockResolvedValueOnce(null);
-    expect(await adapter.findNextFreeTeamId(mock.username)).toEqual(0);
-  });
-  test('should handle errors', async () => {
-    dataStorageMock.readJSONFile.mockImplementationOnce(() => {
-      throw new FileNotFoundError();
-    });
-    await expect(adapter.findNextFreeTeamId(mock.username)).rejects.toThrow(
-      FileNotFoundError,
-    );
+    expect(await adapter.findNextFreeTeamId(null)).toEqual(0);
   });
 });
