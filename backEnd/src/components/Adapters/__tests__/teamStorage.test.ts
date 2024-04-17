@@ -400,10 +400,10 @@ describe('addPlayer', () => {
     expect(actualTeam).toEqual(modifiedTeam);
   });
   test('should handle empty data', async () => {
-      await expect(
-        adapter.addPlayer(mock.username, mock.teamId, {} as Player),
-      ).rejects.toThrow(NoDataProvidedError);
-  })
+    await expect(
+      adapter.addPlayer(mock.username, mock.teamId, {} as Player),
+    ).rejects.toThrow(NoDataProvidedError);
+  });
   test('should handle errors', async () => {
     dataStorageMock.readJSONFile.mockImplementationOnce(() => {
       throw new FileNotFoundError();
@@ -519,6 +519,74 @@ describe('updatePlayer', () => {
 
     await expect(
       adapter.updatePlayer(mock.username, mock.teamId, modifiedPlayer),
+    ).rejects.toThrow(FileNotFoundError);
+  });
+});
+describe('removePlayer', () => {
+  test('should remove a player from a default team', async () => {
+    dataStorageMock.readJSONFile
+      .mockResolvedValueOnce(mock.getDefaultTeamsList()) //isTeamDefault
+      .mockResolvedValueOnce(mock.getDefaultTeam()) //cloneTeamFromDefault
+      .mockResolvedValueOnce(mock.getDefaultTeamsList()) //updateTeamListTeam (ensureTeamIsUnDefault)
+      .mockResolvedValueOnce(mock.getDefaultTeam()); //readTeamFile
+
+    const modifiedTeamsList = {
+      ...mock.getDefaultTeamsList(),
+      [mock.teamId]: {
+        ...mock.getDefaultTeamsList()[mock.teamId],
+        isDefault: false,
+      },
+    };
+
+    const modifiedTeam: TeamExtended = {
+      ...mock.getDefaultTeam(),
+      lastUpdated: getDate(),
+    };
+    delete modifiedTeam.squad[
+      modifiedTeam.squad.findIndex((player) => player.id === mock.playerId)
+    ];
+
+    await adapter.removePlayer(mock.username, mock.teamId, mock.playerId);
+
+    const writeFileContents = dataStorageMock.writeFile.mock.calls.map(
+      ([, serializedContent]) => {
+        return JSON.parse(serializedContent);
+      },
+    );
+
+    expect(dataStorageMock.readJSONFile).toHaveBeenCalledTimes(4);
+    expect(dataStorageMock.writeFile).toHaveBeenCalledTimes(3);
+    expect(writeFileContents[0]).toEqual(mock.getDefaultTeam());
+    expect(writeFileContents[1]).toEqual(modifiedTeamsList);
+    expect(writeFileContents[2]).toEqual(modifiedTeam);
+  });
+  test('should remove a player from a non-default team', async () => {
+    dataStorageMock.readJSONFile
+      .mockResolvedValueOnce(mock.getNonDefaultTeamsList()) //isTeamDefault
+      .mockResolvedValueOnce(mock.getNonDefaultTeam()); //readTeamFile
+
+    const modifiedTeam: TeamExtended = {
+      ...mock.getNonDefaultTeam(),
+      lastUpdated: getDate(),
+    };
+    delete modifiedTeam.squad[
+      modifiedTeam.squad.findIndex((player) => player.id === mock.playerId)
+    ];
+
+    await adapter.removePlayer(mock.username, mock.teamId, mock.playerId);
+
+    expect(dataStorageMock.writeFile).toHaveBeenCalledTimes(1);
+    expect(dataStorageMock.readJSONFile).toHaveBeenCalledTimes(2);
+    expect(JSON.parse(dataStorageMock.writeFile.mock.calls[0][1])).toEqual(
+      modifiedTeam,
+    );
+  });
+  test('should handle errors', async () => {
+    dataStorageMock.readJSONFile.mockImplementationOnce(() => {
+      throw new FileNotFoundError();
+    });
+    await expect(
+      adapter.removePlayer(mock.username, mock.teamId, mock.playerId),
     ).rejects.toThrow(FileNotFoundError);
   });
 });
