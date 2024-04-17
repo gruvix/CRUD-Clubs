@@ -610,3 +610,23 @@ describe('findNextFreeTeamId', () => {
     expect(adapter.findNextFreeTeamId(teamsList)).toEqual(0);
   });
 });
+describe('findNextFreePlayerId', () => {
+  test('should find the next free player id on an empty list', async () => {
+    expect(adapter.findNextFreePlayerId([])).toEqual(0);
+  });
+  test('should find the next free player id on a non-empty list', async () => {
+    const squad = [
+      { id: 0 },
+      { id: 1 },
+      { id: 2 },
+      { id: 4 }, //Missing id: 3, but should be added as a new player
+    ] as Player[];
+    expect(adapter.findNextFreePlayerId(squad)).toEqual(3);
+  });
+  test('should find 0 as the next free player id on a non-empty list', async () => {
+    const squad = [
+      { id: 2 },
+    ] as Player[];
+    expect(adapter.findNextFreePlayerId(squad)).toEqual(0);
+  });
+})
