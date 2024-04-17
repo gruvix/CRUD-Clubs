@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import TeamExtended from 'src/components/models/TeamExtended';
 import TeamStorageAdapter from 'src/components/Adapters/teamStorage.adapter';
 import TeamIsNotResettableError from '../errors/TeamIsNotResettableError';
+import { generateCustomCrestUrl } from '../storage/userPath';
 const storage = new TeamStorageAdapter();
 
 @Injectable()
@@ -21,7 +22,9 @@ export default class TeamService {
       const teamId = storage.findNextFreeTeamId(
         await storage.getTeamsList(username),
       );
-      await storage.addTeam(username, teamData, teamId, imageFileName);
+      teamData.id = teamId;
+      teamData.crestUrl = generateCustomCrestUrl(teamData.id, imageFileName),
+      await storage.addTeam(username, teamData);
       return teamId;
     } catch (error) {
       console.log(error);

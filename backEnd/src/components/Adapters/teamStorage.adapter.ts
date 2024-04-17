@@ -319,29 +319,20 @@ export default class TeamStorageAdapter {
     }
     return nextFreeId;
   }
-  async addTeam(
-    username: string,
-    teamData: any,
-    teamId: number,
-    imageFileName: string,
-  ): Promise<void> {
+  async addTeam(username: string, teamData: any): Promise<void> {
     try {
       if (!teamData || !Object.keys(teamData).length) {
         throw new NoDataProvidedError();
       }
       const team = new TeamExtended({
         ...teamData,
-        id: teamId,
         lastUpdated: getDate(),
-        crestUrl: generateCustomCrestUrl(teamId, imageFileName),
         hasCustomCrest: true,
         isDefault: false,
         hasDefault: false,
       }); // Replace TeamExtended with custom class that stores team in original (default) format
-      Promise.all([
-        saveTeam(team, username),
-        addTeamToTeamlist(team, username),
-      ]);
+      await saveTeam(team, username);
+      await addTeamToTeamlist(team, username);
     } catch (error) {
       throw error;
     }
