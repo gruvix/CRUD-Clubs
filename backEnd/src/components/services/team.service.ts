@@ -11,14 +11,16 @@ export default class TeamService {
     teamData: any,
     imageFileName: string,
   ): Promise<number> {
-    if(!teamData || !Object.keys(teamData).length) {
+    if (!teamData || !Object.keys(teamData).length) {
       throw new HttpException(
         'No team data provided',
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
     }
     try {
-      const teamId = await storage.findNextFreeTeamId(username);
+      const teamId = await storage.findNextFreeTeamId(
+        await storage.getTeamsList(username),
+      );
       await storage.addTeam(username, teamData, teamId, imageFileName);
       return teamId;
     } catch (error) {
@@ -50,10 +52,7 @@ export default class TeamService {
     }
   }
 
-  async getTeamData(
-    username: string,
-    teamId: number,
-  ): Promise<TeamExtended> {
+  async getTeamData(username: string, teamId: number): Promise<TeamExtended> {
     try {
       return await storage.getTeam(username, teamId);
     } catch (error) {

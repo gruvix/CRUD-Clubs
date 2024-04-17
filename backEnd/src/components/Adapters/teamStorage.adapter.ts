@@ -51,9 +51,7 @@ async function addTeamToTeamlist(
 ): Promise<void> {
   const userTeamsPath = getUserTeamsListJSONPath(username);
   const userTeams = await readJSONFile(userTeamsPath);
-  userTeams[newTeam.id] = new TeamListTeam(
-    newTeam as unknown as TeamListTeam,
-  );
+  userTeams[newTeam.id] = new TeamListTeam(newTeam as unknown as TeamListTeam);
   await writeFile(userTeamsPath, JSON.stringify(userTeams));
 }
 async function deleteTeamFromTeamlist(
@@ -106,9 +104,9 @@ export default class TeamStorageAdapter {
     const sortedPlayers = [...players].sort(
       (a: Player, b: Player) => a.id - b.id,
     );
-  
+
     let nextFreeId = 0;
-  
+
     for (let index = 0; index < sortedPlayers.length; index += 1) {
       if (sortedPlayers[index].id > nextFreeId) {
         return nextFreeId;
@@ -311,26 +309,20 @@ export default class TeamStorageAdapter {
       throw error;
     }
   }
-  async findNextFreeTeamId(username: string): Promise<number> {
-    try{
-      const teamsPath = getUserTeamsListJSONPath(username);
-      const teamsData: TeamListTeam[] = await readJSONFile(teamsPath);
-      if(!teamsData) return 0;
-      const sortedTeams = Object.values(teamsData).sort(
-        (a: TeamListTeam, b: TeamListTeam) => a.id - b.id,
-      );
-      let nextFreeId = 0;
-      for (let index = 0; index < sortedTeams.length; index += 1) {
-        if (sortedTeams[index].id > nextFreeId) {
-          return nextFreeId;
-        }
-        nextFreeId = sortedTeams[index].id + 1;
+  async findNextFreeTeamId(teamsList: TeamListTeam[]): Promise<number> {
+    if (!teamsList) return 0;
+    const sortedTeams = Object.values(teamsList).sort(
+      (a: TeamListTeam, b: TeamListTeam) => a.id - b.id,
+    );
+    let nextFreeId = 0;
+    for (let index = 0; index < sortedTeams.length; index += 1) {
+      if (sortedTeams[index].id > nextFreeId) {
+        return nextFreeId;
       }
-      console.log(`New team ID: ${nextFreeId}`);
-      return nextFreeId;
-    } catch (error) {
-      throw error;
+      nextFreeId = sortedTeams[index].id + 1;
     }
+    console.log(`New team ID: ${nextFreeId}`);
+    return nextFreeId;
   }
   async addTeam(
     username: string,
