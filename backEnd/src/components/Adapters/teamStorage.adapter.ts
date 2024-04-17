@@ -309,7 +309,7 @@ export default class TeamStorageAdapter {
       throw error;
     }
   }
-  async findNextFreeTeamId(teamsList: TeamListTeam[]): Promise<number> {
+  findNextFreeTeamId(teamsList: TeamListTeam[]): number {
     if (!teamsList) return 0;
     const sortedTeams = Object.values(teamsList).sort(
       (a: TeamListTeam, b: TeamListTeam) => a.id - b.id,

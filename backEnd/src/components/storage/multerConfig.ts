@@ -33,7 +33,7 @@ const storage = multer.diskStorage({
     if (!teamId) {
       const { username } = req.session;
       teamId = (
-        await adapter.findNextFreeTeamId(await adapter.getTeamsList(username))
+        adapter.findNextFreeTeamId(await adapter.getTeamsList(username))
       ).toString();
     }
     const filename = `${teamId}${path.extname(file.originalname)}`;

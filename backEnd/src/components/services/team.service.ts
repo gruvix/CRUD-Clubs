@@ -18,7 +18,7 @@ export default class TeamService {
       );
     }
     try {
-      const teamId = await storage.findNextFreeTeamId(
+      const teamId = storage.findNextFreeTeamId(
         await storage.getTeamsList(username),
       );
       await storage.addTeam(username, teamData, teamId, imageFileName);
