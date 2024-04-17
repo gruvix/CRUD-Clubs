@@ -8,6 +8,7 @@ import {
 } from '../storage/userPath';
 import { readJSONFile, writeFile, deleteFile } from '../storage/dataStorage';
 import TeamIsNotResettableError from '../errors/TeamIsNotResettableError';
+import NoDataProvidedError from '../errors/NoDataProvidedError';
 
 async function readTeamFile(
   username: string,
@@ -200,8 +201,8 @@ export default class TeamStorageAdapter {
     teamId: number,
   ): Promise<void> {
     const updatedData = newData;
-    if (!updatedData) {
-      throw new Error('No data provided');
+    if (!updatedData || !Object.keys(updatedData)) {
+      throw new NoDataProvidedError();
     }
     try {
       await this.ensureTeamIsUnDefault(username, teamId);
@@ -249,6 +250,9 @@ export default class TeamStorageAdapter {
     playerData: Player,
   ): Promise<void> {
     try {
+      if (!playerData || !Object.keys(playerData).length) {
+        throw new NoDataProvidedError();
+      }
       await this.ensureTeamIsUnDefault(username, teamId);
       const player = new Player(playerData);
       const team = await readTeamFile(username, teamId);
@@ -270,6 +274,9 @@ export default class TeamStorageAdapter {
     player: Player,
   ): Promise<void> {
     try {
+      if (!player || !Object.keys(player).length) {
+        throw new NoDataProvidedError();
+      }
       await this.ensureTeamIsUnDefault(username, teamId);
       const team = await readTeamFile(username, teamId);
       team.lastUpdated = getDate();
@@ -325,6 +332,9 @@ export default class TeamStorageAdapter {
     imageFileName: string,
   ): Promise<number> {
     try {
+      if (!teamData || !Object.keys(teamData).length) {
+        throw new NoDataProvidedError();
+      }
       const id = await this.findNextFreeTeamId(username);
       const team = new TeamExtended({
         ...teamData,
