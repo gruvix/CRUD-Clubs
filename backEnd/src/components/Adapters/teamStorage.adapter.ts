@@ -312,20 +312,24 @@ export default class TeamStorageAdapter {
     }
   }
   async findNextFreeTeamId(username: string): Promise<number> {
-    const teamsPath = getUserTeamsListJSONPath(username);
-    const teamsData: TeamListTeam[] = await readJSONFile(teamsPath);
-    const sortedTeams = Object.values(teamsData).sort(
-      (a: TeamListTeam, b: TeamListTeam) => a.id - b.id,
-    );
-    let nextFreeId = 0;
-    for (let index = 0; index < sortedTeams.length; index += 1) {
-      if (sortedTeams[index].id > nextFreeId) {
-        return nextFreeId;
+    try{
+      const teamsPath = getUserTeamsListJSONPath(username);
+      const teamsData: TeamListTeam[] = await readJSONFile(teamsPath);
+      const sortedTeams = Object.values(teamsData).sort(
+        (a: TeamListTeam, b: TeamListTeam) => a.id - b.id,
+      );
+      let nextFreeId = 0;
+      for (let index = 0; index < sortedTeams.length; index += 1) {
+        if (sortedTeams[index].id > nextFreeId) {
+          return nextFreeId;
+        }
+        nextFreeId = sortedTeams[index].id + 1;
       }
-      nextFreeId = sortedTeams[index].id + 1;
+      console.log(`New team ID: ${nextFreeId}`);
+      return nextFreeId;
+    } catch (error) {
+      throw error;
     }
-    console.log(`New team ID: ${nextFreeId}`);
-    return nextFreeId;
   }
   async addTeam(
     username: string,
