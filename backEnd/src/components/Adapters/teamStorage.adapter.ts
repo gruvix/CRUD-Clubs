@@ -315,6 +315,7 @@ export default class TeamStorageAdapter {
     try{
       const teamsPath = getUserTeamsListJSONPath(username);
       const teamsData: TeamListTeam[] = await readJSONFile(teamsPath);
+      if(!teamsData) return 0;
       const sortedTeams = Object.values(teamsData).sort(
         (a: TeamListTeam, b: TeamListTeam) => a.id - b.id,
       );
