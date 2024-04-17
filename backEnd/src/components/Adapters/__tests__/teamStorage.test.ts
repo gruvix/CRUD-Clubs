@@ -5,7 +5,7 @@ import * as ds from '../../storage/dataStorage';
 import * as us from '../../storage/userPath';
 import FileNotFoundError from '../../errors/FileNotFoundError';
 import TeamExtended from '../../models/TeamExtended';
-import TeamListTeam from 'src/components/models/TeamListTeam';
+import TeamListTeam from '../../models/TeamListTeam';
 import Player from '../../models/Player';
 import mockUtils from './mockUtils';
 import NoDataProvidedError from '../../errors/NoDataProvidedError';
@@ -604,9 +604,7 @@ describe('findNextFreeTeamId', () => {
     expect(adapter.findNextFreeTeamId(teamsList)).toEqual(3);
   });
   test('should find 0 as the next free team id on a non-empty list', async () => {
-    const teamsList = [
-      { id: 2 },
-    ] as TeamListTeam[];
+    const teamsList = [{ id: 2 }] as TeamListTeam[];
     expect(adapter.findNextFreeTeamId(teamsList)).toEqual(0);
   });
 });
@@ -624,9 +622,7 @@ describe('findNextFreePlayerId', () => {
     expect(adapter.findNextFreePlayerId(squad)).toEqual(3);
   });
   test('should find 0 as the next free player id on a non-empty list', async () => {
-    const squad = [
-      { id: 2 },
-    ] as Player[];
+    const squad = [{ id: 2 }] as Player[];
     expect(adapter.findNextFreePlayerId(squad)).toEqual(0);
   });
-})
+});
