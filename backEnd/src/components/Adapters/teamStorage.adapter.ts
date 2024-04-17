@@ -302,6 +302,7 @@ export default class TeamStorageAdapter {
     try {
       await this.ensureTeamIsUnDefault(username, teamId);
       const team = await readTeamFile(username, teamId);
+      team.lastUpdated = getDate();
       team.squad = team.squad.filter(
         (player: Player) => Number(player.id) !== Number(playerId),
       );
