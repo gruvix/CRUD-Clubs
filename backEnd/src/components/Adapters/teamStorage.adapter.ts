@@ -350,7 +350,7 @@ export default class TeamStorageAdapter {
         this.copyTeamListTeam(defaultUsername, username, teamId),
       ]);
     } catch (error) {
-      throw new Error('Team reset failed' + error);
+      throw new Error('Team reset failed - ' + error);
     }
   }
 }
