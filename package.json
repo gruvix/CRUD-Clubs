@@ -1,14 +1,15 @@
 {
   "name": "crud-clubs",
-  "version": "2.0.0",
-  "description": "crud app splitted in front end and back ends servers, front end serves react UX while backend serves all user related data",
+  "version": "3.0.0",
+  "description": "crud app splitted in front end and back ends servers, NextJs serves frontend with react UX while NestJs serves RESTfull endpoints for reading and modifying user data",
   "main": "NA",
   "scripts": {
-    "test": "cd frontEnd && npm run test",
-    "startLinux": "gnome-terminal --tab -- bash -c \"cd frontEnd && npm run start\" & gnome-terminal --tab -- bash -c \"cd backEnd && npm run start\"",
-    "startWindows": "start cmd /k \"cd frontEnd && npm run start\" & start cmd /k \"cd backEnd && npm run start\"",
-    "startBackWindows": "start cmd /k \"cd backEnd && npm run start\"",
-    "startFronWindows": "start cmd /k \"cd frontEnd && npm run start\""
+    "installApp": "npm install && cd frontEnd && npm install && cd ../backEnd && npm install",
+    "dev": "concurrently \"cd frontEnd && npm run dev\" \"cd backEnd && npm run dev\"",
+    "dev:windows": "start cmd /k \"cd frontEnd && npm run dev\" & start cmd /k \"cd backEnd && npm run dev\"",
+    "jest": "cd backEnd && npm run jest",
+    "jest:windows": "start cmd /k \"cd backEnd && npm run jest\"",
+    "cypress": "cd frontEnd && npm run test"
   },
   "repository": {
     "type": "git",
@@ -19,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/gruvix/CRUD-Clubs/issues"
   },
-  "homepage": "https://github.com/gruvix/CRUD-Clubs/tree/dev_split#readme"
+  "homepage": "https://github.com/gruvix/CRUD-Clubs/tree/dev_split#readme",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
 }

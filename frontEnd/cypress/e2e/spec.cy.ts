@@ -12,7 +12,7 @@ const TEST_TEAM_PATH = webAppPaths.team(TEST_TEAM_ID);
 const TEST_TEAM_PLAYER_PATH = apiRequestPaths.player(TEST_TEAM_ID);
 const CUSTOM_CREST_UPLOAD_PATH = apiRequestPaths.updateCrest(TEST_TEAM_ID);
 const TEST_TEAM_EXPECTED_IMG_SRC = `${apiRequestPaths.updateCrest(TEST_TEAM_ID)}/${TEST_TEAM_ID}.jpg`;
-const LOGIN_PATH = apiRequestPaths.login;
+const LOGIN_PATH = apiRequestPaths.user;
 
 function generateRandomString(length = 5) {
   const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
@@ -61,6 +61,14 @@ describe("test login", () => {
 
   it('should login with "test"', () => {
     cy.get("#username").type(TEST_USER).get("#enter-page-button").click();
+    cy.get("#username").should("have.text", TEST_USER);
+  });
+
+  it('should login then visit login page and get redirected to user page', () => {
+    cy.get("#username").type(TEST_USER).get("#enter-page-button").click();
+    cy.get("#username").should("have.text", TEST_USER);
+    cy.visit(WEB_APP_BASE_URL);
+    cy.get("#username").should("have.text", TEST_USER);
   });
 });
 
@@ -119,6 +127,7 @@ describe("test the team editor page with the first team", () => {
         .parent()
         .parent()
         .find("input")
+        .clear()
         .type(randomString)
         .get("#team-table .apply")
         .then(($applyButton) => {

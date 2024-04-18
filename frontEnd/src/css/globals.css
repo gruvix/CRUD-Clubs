@@ -1,0 +1,159 @@
+body{
+  background-image: url('../img/messi-grey.png');
+  background-size: cover;
+  background-repeat: repeat;
+  background-position: center;
+  height: 100vh;
+  cursor: url('../img/cursor-ball.cur'), auto;
+}
+
+table {
+  border-collapse:separate;
+  border:solid black 1px;
+  border-radius:6px;
+}
+
+td, th {
+  border-left:solid black 1px;
+  border-top:solid black 1px;
+}
+
+th {
+  background-color: blue;
+  border-top: none;
+}
+
+td:first-child, th:first-child {
+   border-left: none;
+}
+
+.table-title {
+  font-size: 50px;
+  font-family: "Courier New", monospace;
+}
+
+.team-crest-image {
+  padding-top: 25px;
+  max-width: 400px;
+  max-height: 400px;
+}
+
+.teams-page-title {
+  font-family: "Courier New", monospace;
+  display: flex;
+  margin-top: -30px;
+  margin-bottom: 33px;
+  margin-left: 95px;
+  color: rgb(255, 187, 0);
+}
+
+.list-team-crest-image {
+  padding-top: 5%;
+  max-width: 120px;
+  max-height: 120px;
+  align-self: center;
+}
+.img-container {
+  position:relative;
+  display:inline-block;
+  text-align:center;
+}
+.img-container:hover .overlay-button {
+  opacity: 1;
+}
+.card-container {
+  width: 16rem;
+  background-color: rgba(141, 119, 90, 0.603);
+}
+.card-container:hover .overlay-button-dark {
+  opacity: 1;
+}
+.overlay-button-dark {
+  float: left;
+  font-size: 110%;
+  padding: 5px 10px;
+  transition: opacity 0.3s;
+  opacity: 0;
+  background-color: rgba(46, 40, 40, 0.548);
+}
+.overlay-button {
+  float: left;
+  font-size: 130%;
+  padding: 5px 10px;
+  transition: opacity 0.3s;
+  opacity: 0;
+  background-color: rgba(187, 179, 179, 0.938);
+}
+.team-card-title {
+  font-size: 135%;
+  font-family: "Courier New", monospace;
+  color: rgb(238, 210, 179);
+  text-align: center;
+  border-radius: 25%;
+  text-shadow: 5px 5px 5px black;
+}
+
+.btn-shadow {
+  text-shadow: 1px 1px 4px rgb(0, 0, 0);
+}
+
+.modal-content {
+  background-color: rgba(216, 194, 164, 0.973);
+}
+
+.btn-outline-warning:hover {
+  cursor: url('../img/cursor-red.cur'), auto;
+}
+.btn-outline-success:hover {
+  cursor: url('../img/cursor-red.cur'), auto;
+}
+.btn-outline-danger:hover {
+  cursor: url('../img/cursor-yellow.cur'), auto;
+}
+.btn-outline-dark:hover {
+  cursor: url('../img/cursor-yellow.cur'), auto;
+}
+
+.invalid-input {
+  border: 4px solid red;
+}
+
+.username-error-show {
+  transition-property: opacity;
+  transition-duration: 0.1s;
+  transition-timing-function: linear;
+}
+.username-error-hide {
+  transition-property: opacity;
+  transition-duration: 4s;
+  transition-timing-function: ease-out;
+}
+
+.loader {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  left: 50%;
+  top: 7%;
+  background: #4188da;
+  position: absolute !important;
+  animation: roll 1s ease-in-out infinite alternate;
+  border-top-left-radius: 50% !important;
+  border-bottom-left-radius: 50% !important;
+}
+.loader:after{
+  content:"";
+  position: absolute;
+  inset: 5px;
+  border-radius: 50%;
+  border: 5px solid ;
+  border-color: #0bf1c0 transparent;
+}
+@keyframes roll {
+  0% {
+    transform: translateX(-300%) rotate(0deg) ;
+  }
+  100% {
+    transform:  translateX(300%) rotate(720deg);
+  }
+}

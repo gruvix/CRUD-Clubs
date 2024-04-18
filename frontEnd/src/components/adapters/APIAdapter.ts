@@ -1,22 +1,12 @@
 import { BASE_API_URL, apiRequestPaths, webAppPaths } from "../../paths";
+import UnauthorizedError from "@/components/errors/UnauthorizedError";
 import validateUsername from "../shared/usernameValidation";
 import Player from "./Player";
 import Team, { TeamParameters } from "./Team";
 import TeamCard from "./TeamCard";
-
-function responseRedirect(status: number) {
-  if (status === 401) {
-    return { redirect: webAppPaths.home };
-  }
-  if (status === 404) {
-    return { redirect: `${webAppPaths.error}/404` };
-  }
-  return null;
-}
-
-export interface RedirectData {
-  redirect: string;
-}
+import TeamNotFoundError from "../errors/TeamNotFoundError";
+import TeamNotResettableError from "../errors/TeamNotResettableError";
+import UnsupportedMediaTypeError from "../errors/UnsupportedMediaTypeError";
 
 export default class APIAdapter {
   async login(username: string) {
@@ -24,7 +14,7 @@ export default class APIAdapter {
     if (error) {
       throw new Error(error);
     }
-    const response = await fetch(apiRequestPaths.login, {
+    const response = await fetch(apiRequestPaths.user, {
       method: "POST",
       credentials: "include",
       headers: {
@@ -36,25 +26,33 @@ export default class APIAdapter {
       throw new Error(`Login failed with status: ${response.status}`);
     }
   }
-  async getUserStatus() {
-    const response = await fetch(apiRequestPaths.userStatus, {
+  async logout() {
+    const response = await fetch(apiRequestPaths.user, {
+      method: "DELETE",
+      credentials: "include",
+    });
+    if (!response.ok) {
+      throw new Error(`Logout failed with status: ${response.status}`);
+    }
+  }
+  async getUserStatus(): Promise<boolean> {
+    const response = await fetch(apiRequestPaths.user, {
       method: "GET",
       credentials: "include",
     });
-    try {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+    if (!response.ok) {
+      switch (response.status) {
+        case 401:
+          return false;
+        case 403:
+          return false; //this function works different to other adapter unAuthorized status returns, since its job is to get the login status
+        default:
+          throw new Error(`${response.status} - ${response.statusText}`);
       }
-      return true;
-    } catch (error) {
-      const redirect = responseRedirect(response.status);
-      if (redirect) {
-        return false; //this function works different to other adapter unAuthorized status returns, since its job is to get the login status
-      }
-      throw error;
     }
+    return true;
   }
-  async getTeam(teamId: number | string) {
+  async getTeam(teamId: number | string): Promise<Team> {
     const response = await fetch(apiRequestPaths.team(teamId), {
       method: "GET",
       credentials: "include",
@@ -62,21 +60,19 @@ export default class APIAdapter {
         "Content-Type": "application/json",
       },
     });
-
-    try {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+    if (!response.ok) {
+      switch (response.status) {
+        case 403:
+          throw new UnauthorizedError();
+        case 404:
+          throw new TeamNotFoundError();
+        default:
+          throw new Error(`${response.status} - ${response.statusText}`);
       }
-      const data = await response.json();
-      const teamData = new Team(data);
-      return teamData;
-    } catch (error) {
-      const redirect = responseRedirect(response.status);
-      if (redirect) {
-        return redirect;
-      }
-      throw error;
     }
+    const data = await response.json();
+    const teamData = new Team(data);
+    return teamData;
   }
   async updateTeam(
     teamId: number | string,
@@ -94,20 +90,18 @@ export default class APIAdapter {
       },
       body: JSON.stringify(parsedData),
     });
-
-    try {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+    if (!response.ok) {
+      switch (response.status) {
+        case 403:
+          throw new UnauthorizedError();
+        case 404:
+          throw new TeamNotFoundError();
+        default:
+          throw new Error(`${response.status} - ${response.statusText}`);
       }
-      const data = response;
-      return data;
-    } catch (error) {
-      const redirect = responseRedirect(response.status);
-      if (redirect) {
-        return redirect;
-      }
-      throw error;
     }
+    const data = response;
+    return data;
   }
   async getTeams() {
     const response = await fetch(apiRequestPaths.teams, {
@@ -117,83 +111,77 @@ export default class APIAdapter {
         "Content-Type": "application/json",
       },
     });
-    try {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+    if (!response.ok) {
+      switch (response.status) {
+        case 403:
+          throw new UnauthorizedError();
+        default:
+          throw new Error(`${response.status} - ${response.statusText}`);
       }
-      const data = await response.json();
-      const teamsData = {
-        teams: {} as TeamCard[],
-        username: data.username as string,
-      };
-      Object.keys(data.teams).forEach((key) => {
-        teamsData.teams[Number(key)] = new TeamCard(data.teams[key]);
-      });
-      return teamsData;
-    } catch (error) {
-      const redirect = responseRedirect(response.status);
-      if (redirect) {
-        return redirect;
-      }
-      throw error;
     }
+    const data = await response.json();
+    const teamsData = {
+      teams: {} as TeamCard[],
+      username: data.username as string,
+    };
+    Object.keys(data.teams).forEach((key) => {
+      teamsData.teams[Number(key)] = new TeamCard(data.teams[key]);
+    });
+    return teamsData;
   }
   async deleteTeam(teamId: number | string) {
     const response = await fetch(apiRequestPaths.team(teamId), {
       method: "DELETE",
       credentials: "include",
     });
-    try {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+    if (!response.ok) {
+      switch (response.status) {
+        case 403:
+          throw new UnauthorizedError();
+        case 404:
+          throw new TeamNotFoundError();
+        default:
+          throw new Error(`${response.status} - ${response.statusText}`);
       }
-      const data = response;
-      return data;
-    } catch (error) {
-      const redirect = responseRedirect(response.status);
-      if (redirect) {
-        return redirect;
-      }
-      throw error;
     }
+    const data = response;
+    return data;
   }
   async resetTeamsList() {
-    const response = await fetch(apiRequestPaths.resetAll, {
+    const response = await fetch(apiRequestPaths.teams, {
       method: "PUT",
       credentials: "include",
     });
-    try {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+    if (!response.ok) {
+      switch (response.status) {
+        case 403:
+          throw new UnauthorizedError();
+        default:
+          throw new Error(`${response.status} - ${response.statusText}`);
       }
-      const data = response;
-      return data;
-    } catch (error) {
-      const redirect = responseRedirect(response.status);
-      if (redirect) {
-        return redirect;
-      }
-      throw error;
     }
+    const data = response;
+    return data;
   }
   async resetTeam(teamId: number | string) {
-    const response = await fetch(apiRequestPaths.resetTeam(teamId), {
+    const response = await fetch(apiRequestPaths.team(teamId), {
       method: "PUT",
       credentials: "include",
     });
-    try {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+    if (!response.ok) {
+      switch (response.status) {
+        case 403:
+          throw new UnauthorizedError();
+        case 404:
+          throw new TeamNotFoundError();
+        case 422:
+          throw new TeamNotResettableError();
+        default:
+          throw new Error(`${response.status} - ${response.statusText}`);
       }
-      const data = response;
-      return data;
-    } catch (error) {
-      const redirect = responseRedirect(response.status);
-      if (redirect) {
-        return redirect;
-      }
-      throw error;
     }
+    const data = response;
+    return data;
   }
   async updatePlayer(teamId: number | string, playerData: Player) {
     const response = await fetch(apiRequestPaths.player(teamId), {
@@ -204,21 +192,23 @@ export default class APIAdapter {
       },
       body: JSON.stringify(playerData),
     });
-    try {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+    if (!response.ok) {
+      switch (response.status) {
+        case 403:
+          throw new UnauthorizedError();
+        case 404:
+          throw new TeamNotFoundError();
+        default:
+          throw new Error(`${response.status} - ${response.statusText}`);
       }
-      const data = response;
-      return data;
-    } catch (error) {
-      const redirect = responseRedirect(response.status);
-      if (redirect) {
-        return redirect;
-      }
-      throw error;
     }
+    const data = response;
+    return data;
   }
-  async addPlayer(teamId: number | string, playerData: Player) {
+  async addPlayer(
+    teamId: number | string,
+    playerData: Player,
+  ): Promise<number> {
     const response = await fetch(apiRequestPaths.player(teamId), {
       method: "POST",
       credentials: "include",
@@ -227,19 +217,18 @@ export default class APIAdapter {
       },
       body: JSON.stringify(playerData),
     });
-    try {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+    if (!response.ok) {
+      switch (response.status) {
+        case 403:
+          throw new UnauthorizedError();
+        case 404:
+          throw new TeamNotFoundError();
+        default:
+          throw new Error(`${response.status} - ${response.statusText}`);
       }
-      const newId = await response.json();
-      return newId;
-    } catch (error) {
-      const redirect = responseRedirect(response.status);
-      if (redirect) {
-        return redirect;
-      }
-      throw error;
     }
+    const newId = await response.json();
+    return newId;
   }
   async removePlayer(teamId: number, playerId: number) {
     const response = await fetch(apiRequestPaths.player(teamId), {
@@ -250,24 +239,23 @@ export default class APIAdapter {
       },
       body: JSON.stringify({ playerId }),
     });
-    try {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+    if (!response.ok) {
+      switch (response.status) {
+        case 403:
+          throw new UnauthorizedError();
+        case 404:
+          throw new TeamNotFoundError();
+        default:
+          throw new Error(`${response.status} - ${response.statusText}`);
       }
-      return true;
-    } catch (error) {
-      const redirect = responseRedirect(response.status);
-      if (redirect) {
-        return redirect;
-      }
-      throw error;
     }
+    return true;
   }
   async addTeam(
     teamParameters: TeamParameters,
     players: Player[],
     imageFile: File,
-  ) {
+  ): Promise<number> {
     const squad = [] as object[];
     Object.keys(players).forEach((player, index) => {
       squad.push({ ...players[Number(player)], id: index });
@@ -281,19 +269,18 @@ export default class APIAdapter {
       credentials: "include",
       body: formData,
     });
-    try {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+    if (!response.ok) {
+      switch (response.status) {
+        case 403:
+          throw new UnauthorizedError();
+        case 415:
+          throw new UnsupportedMediaTypeError();
+        default:
+          throw new Error(`${response.status} - ${response.statusText}`);
       }
-      const newTeamId = await response.json();
-      return { redirect: webAppPaths.team(newTeamId) };
-    } catch (error) {
-      const redirect = responseRedirect(response.status);
-      if (redirect) {
-        return redirect;
-      }
-      throw error;
     }
+    const newTeamId = await response.json();
+    return newTeamId;
   }
   async updateTeamCrest(teamId: number | string, image: File) {
     const formData = new FormData();
@@ -303,18 +290,17 @@ export default class APIAdapter {
       credentials: "include",
       body: formData,
     });
-    try {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+    if (!response.ok) {
+      switch (response.status) {
+        case 403:
+          throw new UnauthorizedError();
+        case 415:
+          throw new UnsupportedMediaTypeError();
+        default:
+          throw new Error(`${response.status} - ${response.statusText}`);
       }
-      const newCrestUrl = BASE_API_URL + (await response.json());
-      return newCrestUrl;
-    } catch (error) {
-      const redirect = responseRedirect(response.status);
-      if (redirect) {
-        return redirect;
-      }
-      throw error;
     }
+    const newCrestUrl = BASE_API_URL + (await response.json());
+    return newCrestUrl;
   }
 }
