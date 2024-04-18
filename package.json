@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/gruvix/CRUD-Clubs/issues"
   },
-  "homepage": "https://github.com/gruvix/CRUD-Clubs/tree/dev_split#readme"
+  "homepage": "https://github.com/gruvix/CRUD-Clubs/tree/dev_split#readme",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
 }
