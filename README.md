@@ -67,15 +67,17 @@ See the diagram below for a visual representation of the application's structure
 
 -Run the server in development mode:
 
-### Windows:
 
-`npm run dev:Windows`
+Run on windows:
+
+`npm run dev:windows`
 
 2 windows will popup - one for NextJs and the other one for NestJs
 
-### Other:
+Run on any:
 
 `npm run dev`
+
 
 
 The front-end server will run on port 8080 and the back-end server will run on port 3000.
