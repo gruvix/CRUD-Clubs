@@ -145,10 +145,12 @@ describe('cloneTeamFromDefault', () => {
   test('should clone a team', async () => {
     dataStorageMock.readJSONFile.mockResolvedValueOnce(mock.getDefaultTeam());
     await adapter.cloneTeamFromDefault(mock.username, mock.teamId);
-    expect(dataStorageMock.writeFile).toHaveBeenCalledWith(
-      mock.filePath,
-      JSON.stringify(mock.getDefaultTeam()),
+    const writeFileContents = dataStorageMock.writeFile.mock.calls.map(
+      ([, serializedContent]) => {
+        return JSON.parse(serializedContent);
+      },
     );
+    expect(writeFileContents[0]).toEqual(mock.getDefaultTeam());
   });
   test('should handle errors', async () => {
     dataStorageMock.readJSONFile.mockImplementationOnce(() => {
