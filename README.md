@@ -6,7 +6,7 @@
 
 This project serves as a playground for exploring full-stack web development concepts. It began
 with a basic Express/Handlebars structure and evolved to incorporate React, NestJS, NextJS, and
-TypeScript for a comprehensive frontend and backend experience. I also integrated Cypress and Jest
+TypeScript for a comprehensive frontend and backend experience as well as Cypress and Jest
 for robust testing.
 
 ## Expanded Description of Key Features: <a name="team-management"></a>
@@ -55,7 +55,7 @@ for robust testing.
 This project follows a hexagonal architecture pattern. This promotes a clean separation of concerns,
 making the core application logic independent from external systems like the UI and database
 
-See the diagram below for a visual representation of the application's structure:
+See the diagram below for a visual representation of the application structure:
 
 ![Architecture Diagram](app_hex.png)
 
