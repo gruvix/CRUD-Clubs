@@ -67,45 +67,47 @@ See the diagram below for a visual representation of the application's structure
 
 -Run the server in development mode:
 
-# Windows:
+### Windows:
 
 `npm run dev:Windows`
 
 2 windows will popup - one for NextJs and the other one for NestJs
 
-# Other:
+### Other:
 
 `npm run dev`
 
 
 The front-end server will run on port 8080 and the back-end server will run on port 3000.
 
-Access from a web browser to `localhost:8080`
+-Access from a web browser to `localhost:8080`
 
 -Login with any username
 
 -Do stuff, see [Team and Player Management](#team-management)
 
-Running front and back end server separately
+### Running front and back end server separately
 
-# Front:
+Front:
 
 `cd frontend`
 
 `npm run dev`
 
-# Back:
+Back:
 
 `cd backend`
 
 `npm run dev`
 
 
+
 For test runs see [Tests](#tests)
 
 ## Tests <a name="tests"></a>
 
-# Cypress - UX/UI Testing
+
+### Cypress - UX/UI Testing
 
 -Run the servers
 
@@ -119,7 +121,7 @@ For test runs see [Tests](#tests)
 
 There's a disabled test for removing all players from a team, but it lacks any assertions
 
-# Jest - Unit Testing
+### Jest - Unit Testing
 
 -Run jest (currently only for backend) `npm run jest`
 
