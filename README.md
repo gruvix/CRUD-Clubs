@@ -63,7 +63,7 @@ See the diagram below for a visual representation of the application's structure
 
 -Have [Node.js](https://nodejs.org/en) installed
 
--Install dependencies `npm install`
+-Install dependencies `npm run installApp`
 
 -Run the server in development mode:
 
