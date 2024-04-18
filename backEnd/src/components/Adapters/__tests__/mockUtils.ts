@@ -30,7 +30,7 @@ export default class mockUtils {
       lastUpdated: 'Long Time Ago',
     },
   };
-  private nonDefaultTeamMock = new TeamExtended({
+  private nonDefaultTeamMock = {
     name: 'name',
     area: 'area',
     address: 'address',
@@ -55,8 +55,8 @@ export default class mockUtils {
     isDefault: false,
     hasDefault: false,
     lastUpdated: '2024-04-11T21:47:40.430Z',
-  });
-  private defaultTeamMock = new TeamExtended({
+  };
+  private defaultTeamMock = {
     name: 'name',
     area: 'area',
     address: 'address',
@@ -81,7 +81,7 @@ export default class mockUtils {
     isDefault: true,
     hasDefault: true,
     lastUpdated: '2024-04-11T21:47:40.430Z',
-  });
+  };
   addNewPlayer(team: TeamExtended)
   {
     if (!team.squad.length) {
