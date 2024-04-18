@@ -49,7 +49,7 @@
   "scripts": {
     "dev": "nest start --watch",
     "dev:cmd": "start cmd /k \"nest start --watch",
-    "jest": "start cmd /k \"jest --watch --coverage --config ./src/jest.config.ts\""
+    "jest": "jest --watch --coverage --config ./src/jest.config.ts"
   },
   "rootDir": "src",
   "repository": {

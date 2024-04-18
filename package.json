@@ -4,9 +4,11 @@
   "description": "crud app splitted in front end and back ends servers, NextJs serves frontend with react UX while NestJs serves RESTfull endpoints for reading and modifying user data",
   "main": "NA",
   "scripts": {
-    "test": "cd frontEnd && npm run test",
     "dev": "concurrently \"cd frontEnd && npm run dev\" \"cd backEnd && npm run dev\"",
-    "devWindows": "start cmd /k \"cd frontEnd && npm run dev\" & start cmd /k \"cd backEnd && npm run dev\""
+    "dev:windows": "start cmd /k \"cd frontEnd && npm run dev\" & start cmd /k \"cd backEnd && npm run dev\"",
+    "jest": "cd backEnd && npm run jest",
+    "jest:windows": "start cmd /k \"cd backEnd && npm run jest\"",
+    "cypress": "cd frontEnd && npm run test"
   },
   "repository": {
     "type": "git",
