@@ -9,6 +9,7 @@ import TeamListTeam from '../../models/TeamListTeam';
 import Player from '../../models/Player';
 import mockUtils from './mockUtils';
 import NoDataProvidedError from '../../errors/NoDataProvidedError';
+import TeamIsNotResettableError from '../../errors/TeamIsNotResettableError';
 jest.spyOn(console, 'log').getMockImplementation();
 
 const dataStorageMock = ds as jest.Mocked<typeof ds>;
@@ -22,6 +23,7 @@ beforeEach(() => {
   userPathMock.getUserTeamsListJSONPath.mockReturnValue(mock.filePath);
   userPathMock.getUserTeamJSONPath.mockReturnValue(mock.filePath);
   dataStorageMock.writeFile.mockResolvedValue(undefined as never);
+  dataStorageMock.deleteFile.mockResolvedValue(undefined as never);
 });
 describe('isTeamDefault', () => {
   test('should return true when team is default', async () => {
@@ -709,5 +711,51 @@ describe('addTeam', () => {
     await expect(
       adapter.addTeam(mock.username, mock.getNonDefaultTeam()),
     ).rejects.toThrow(Error('Error'));
+  });
+});
+describe('resetTeam', () => {
+  test('should reset a team', async () => {
+    dataStorageMock.readJSONFile
+      .mockResolvedValueOnce(mock.getDefaultTeamsList()) //hasTeamDefault
+      .mockResolvedValueOnce(mock.getDefaultTeam()) //cloneTeamFromDefault
+      .mockResolvedValueOnce(mock.getDefaultTeamsList()) //copyTeamListTeam
+      .mockResolvedValueOnce(mock.getDefaultTeamsList()); //copyTeamListTeam
+
+    await adapter.resetTeam(mock.username, mock.teamId);
+
+    const writeFileContents = dataStorageMock.writeFile.mock.calls.map(
+      ([, serializedContent]) => {
+        return JSON.parse(serializedContent);
+      },
+    );
+
+    expect(dataStorageMock.deleteFile).toHaveBeenCalledTimes(1);
+    expect(dataStorageMock.deleteFile).toHaveBeenCalledWith(mock.filePath);
+    expect(dataStorageMock.readJSONFile).toHaveBeenCalledTimes(4);
+    expect(dataStorageMock.writeFile).toHaveBeenCalledTimes(2);
+    expect(writeFileContents[0]).toEqual(mock.getDefaultTeam());
+    expect(writeFileContents[1]).toEqual(mock.getDefaultTeamsList());
+  });
+  test('should not reset a non-default team', async () => {
+    dataStorageMock.readJSONFile.mockResolvedValueOnce(
+      mock.getNonDefaultTeamsList(), //hasTeamDefault
+    );
+    await expect(adapter.resetTeam(mock.username, mock.teamId)).rejects.toThrow(
+      TeamIsNotResettableError,
+    );
+    expect(dataStorageMock.writeFile).toHaveBeenCalledTimes(0);
+    expect(dataStorageMock.deleteFile).toHaveBeenCalledTimes(0);
+    expect(dataStorageMock.readJSONFile).toHaveBeenCalledTimes(1);
+  });
+  test('should handle errors', async () => {
+    dataStorageMock.readJSONFile.mockResolvedValueOnce(
+      mock.getDefaultTeamsList(), //hasTeamDefault
+    );
+    userPathMock.getUserTeamJSONPath.mockImplementationOnce(() => {
+      throw new Error('Error');
+    });
+    await expect(adapter.resetTeam(mock.username, mock.teamId)).rejects.toThrow(
+      Error('Team reset failed - Error: Error'),
+    );
   });
 });
