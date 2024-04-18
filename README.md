@@ -5,10 +5,10 @@
 ![User teams page overview](user_overview.png)
 
 This project serves as a playground for exploring web development concepts.
-It started with basic Express/Handlebars structure, but to practice full-stack skills, i
-introduced React and WebPack for the frontend, NestJs for the backend, and Typescript in both ends.
-I'm currently enhancing modularity with NestJs and hexagonal architecture on the backend
-Future plans include transitioning to NextJs and expanding test coverage with Jest
+It started with basic Express/Handlebars structure with Cypress for UX/UI testing, but to
+practice full-stack skills, i introduced React and WebPack for the frontend, but then went
+for the next level and brought NestJs for the backend, NextJs for the frontend, and Typescript
+for both and lastly i added Jest to expand test coverage.
 
 ## Expanded Description of Key Features: <a name="team-management"></a>
 
@@ -30,21 +30,21 @@ Future plans include transitioning to NextJs and expanding test coverage with Je
 ![Add team page](add_team.png)
 ![User specific team page overview](team_overview.png)
 
-## Technologies
+## Main Technologies
 
     FrontEnd:
-    - React
+    - NextJs w/React
     - Bootstrap
-    - WebPack
     - TypeScript
 
     BackEnd:
-    - NestJs (with Express)
+    - NestJs w/Express
     - session-file-store
     - TypeScript
 
     Tests:
     - Cypress
+    - Jest
 
     Other:
     - Eslint
@@ -66,29 +66,51 @@ See the diagram below for a visual representation of the application's structure
 
 -Install dependencies `npm install`
 
--Run the server:
+-Run the server in development mode:
 
-If running from Windows: `npm run startWindows`
+# Windows:
 
-If running from Linux: `npm run startLinux` (uses gnome, it's currently un-tested, feedback is appreciated)
+`npm run dev:Windows`
 
-The server will run on port 8080.
+2 windows will popup - one for NextJs and the other one for NestJs
 
-2 windows will popup - one for WebPack and the other one for Express
+# Other:
 
-After that a web browser should open with the app, if not, access from a web browser to `localhost:8080`
+`npm run dev`
+
+
+The front-end server will run on port 8080 and the back-end server will run on port 3000.
+
+Access from a web browser to `localhost:8080`
 
 -Login with any username
 
 -Do stuff, see [Team and Player Management](#team-management)
 
+Running front and back end server separately
+
+# Front:
+
+`cd frontend`
+
+`npm run dev`
+
+# Back:
+
+`cd backend`
+
+`npm run dev`
+
+
 For test runs see [Tests](#tests)
 
 ## Tests <a name="tests"></a>
 
+# Cypress - UX/UI Testing
+
 -Run the servers
 
--Run cypress `npm run test`
+-Run cypress `npm run cypress`
 
 -Select end to end testing
 
@@ -97,6 +119,14 @@ For test runs see [Tests](#tests)
 -Select file `spec.cy.js`
 
 There's a disabled test for removing all players from a team, but it lacks any assertions
+
+# Jest - Unit Testing
+
+-Run jest (currently only for backend) `npm run jest`
+
+If on Windows, you can run it on a separate console `npm run jest:windows`
+
+Currently jest tests cover only most essential files from the backend, future development could include increasing jest tests coverage
 
 ## Known Limitations
 
@@ -110,10 +140,6 @@ There's a disabled test for removing all players from a team, but it lacks any a
 
     The app lacks mechanisms to prevent unauthorized access or data manipulation since
     password protection is not implemented, making accounts vulnerable to unauthorized access.
-
-### Limited Test Coverage: absence of Unit Tests
-
-    This application lacks unit tests focused on individual functions and logic components
 
 ### Simple File Storage Solution
 
