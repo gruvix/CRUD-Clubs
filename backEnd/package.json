@@ -36,6 +36,7 @@
     "@nestjs/common": "^10.3.4",
     "@nestjs/core": "^10.3.4",
     "@nestjs/platform-express": "^10.3.4",
+    "better-sqlite3": "^9.6.0",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "express": "^4.18.2",
@@ -44,6 +45,7 @@
     "nestjs-session": "^3.0.1",
     "reflect-metadata": "^0.2.1",
     "rxjs": "^7.8.1",
+    "sequelize": "^6.37.3",
     "session-file-store": "^1.5.0"
   },
   "scripts": {
