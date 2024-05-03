@@ -14,6 +14,7 @@ import UserService from 'src/components/services/user.service';
 import NewTeamController from '../controllers/newTeam.controller';
 import CrestController from '../controllers/crest.controller';
 import CrestService from '../services/crest.service';
+import 'dotenv/config';
 
 @Module({
   imports: [
@@ -25,7 +26,7 @@ import CrestService from '../services/crest.service';
           logFn: () => {},
           reapInterval: 60 * 60,
         }),
-        secret: 'keyboard-cat',
+        secret: process.env.SECRET_KEY,
         resave: false,
         saveUninitialized: true,
         cookie: {
