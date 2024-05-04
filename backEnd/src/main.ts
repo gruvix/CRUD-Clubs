@@ -1,9 +1,9 @@
+import 'dotenv/config';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './components/modules/app.module';
 
-const CLIENT_BASE_URL = 'http://localhost:8080';
 const corsOptions = {
-  origin: CLIENT_BASE_URL,
+  origin: process.env.CLIENT_BASE_URL,
   credentials: true,
 };
 async function bootstrap() {
