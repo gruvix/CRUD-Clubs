@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { SessionModule } from 'nestjs-session';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import * as session from 'express-session';
 import * as FileStore from 'session-file-store';
 import { getSessionsFolderPath } from 'src/components/storage/userPath';
@@ -35,6 +36,13 @@ import 'dotenv/config';
           secure: false,
         },
       },
+    }),
+    TypeOrmModule.forRoot({
+      type: 'better-sqlite3',
+      database: "./src/userData/userData.db",
+      entities: [],
+      synchronize: process.env.PRODUCTION === 'false'? true : false,
+      logging: true,
     }),
   ],
   controllers: [
