@@ -15,7 +15,10 @@ import UserService from 'src/components/services/user.service';
 import NewTeamController from '../controllers/newTeam.controller';
 import CrestController from '../controllers/crest.controller';
 import CrestService from '../services/crest.service';
+import Team from '../entities/team.entity';
 import 'dotenv/config';
+import User from '../entities/user.entity';
+import Player from '../entities/player.entity';
 
 @Module({
   imports: [
@@ -39,9 +42,9 @@ import 'dotenv/config';
     }),
     TypeOrmModule.forRoot({
       type: 'better-sqlite3',
-      database: "./src/userData/userData.db",
-      entities: [],
-      synchronize: process.env.PRODUCTION === 'false'? true : false,
+      database: './src/userData/userData.db',
+      entities: [Team, User, Player],
+      synchronize: process.env.PRODUCTION === 'false' ? true : false,
       logging: true,
     }),
   ],
@@ -53,6 +56,12 @@ import 'dotenv/config';
     NewTeamController,
     CrestController,
   ],
-  providers: [UserService, TeamsService, TeamService, PlayerService, CrestService],
+  providers: [
+    UserService,
+    TeamsService,
+    TeamService,
+    PlayerService,
+    CrestService,
+  ],
 })
 export class AppModule {}

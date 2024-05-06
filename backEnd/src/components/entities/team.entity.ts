@@ -7,6 +7,7 @@ import {
   ManyToOne,
 } from 'typeorm';
 import User from './user.entity';
+import Player from './player.entity';
 
 @Entity()
 export default class Team {
@@ -42,6 +43,9 @@ export default class Team {
 
   @Column()
   crestUrl: string;
+
+  @OneToMany(() => Player, (player) => player.team)
+  squad: Player[];
 
   @Column()
   hasCustomCrest: boolean;
