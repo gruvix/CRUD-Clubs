@@ -1,4 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, CreateDateColumn, Column } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  Column,
+  OneToMany,
+  ManyToOne,
+} from 'typeorm';
+import User from './user.entity';
 
 @Entity()
 export default class Team {
@@ -6,7 +14,10 @@ export default class Team {
   id: number;
 
   @Column({ unique: true })
-  user: string;
+  userId: number;
+
+  @ManyToOne(() => User, (user) => user.teams)
+  user: User;
 
   @Column()
   name: string;
