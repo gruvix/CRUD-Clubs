@@ -44,7 +44,7 @@ export default class Team {
   @Column()
   crestUrl: string;
 
-  @OneToMany(() => Player, (player) => player.team)
+  @OneToMany(() => Player, (player) => player.team, { cascade: true })
   squad: Player[];
 
   @Column()
