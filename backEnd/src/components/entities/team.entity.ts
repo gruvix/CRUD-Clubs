@@ -5,6 +5,7 @@ import {
   Column,
   OneToMany,
   ManyToOne,
+  UpdateDateColumn,
 } from 'typeorm';
 import User from './user.entity';
 import Player from './player.entity';
@@ -53,6 +54,6 @@ export default class Team {
   @CreateDateColumn({ type: 'date' })
   createdAt: Date;
 
-  @CreateDateColumn({ type: 'date' })
+  @UpdateDateColumn({ type: 'date' })
   updatedAt: Date;
 }

@@ -4,6 +4,7 @@ import {
   OneToMany,
   CreateDateColumn,
   Column,
+  UpdateDateColumn,
 } from 'typeorm';
 import Team from './team.entity';
 
@@ -21,7 +22,7 @@ export default class User {
   @CreateDateColumn({ type: 'date' })
   createdAt: Date;
 
-  @CreateDateColumn({ type: 'date' })
+  @UpdateDateColumn({ type: 'date' })
   updatedAt: Date;
 
   @OneToMany(() => Team, (team) => team.user, { cascade: true })
