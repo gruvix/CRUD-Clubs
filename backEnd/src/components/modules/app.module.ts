@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import PlayerService from 'src/components/services/player.service';
 import SessionModule from './session.module';
+import DataBaseModule from './dataBase.module';
+
 import UserController from 'src/components/controllers/user.controller';
 import TeamsController from 'src/components/controllers/teams.controller';
 import TeamController from 'src/components/controllers/team.controller';
@@ -19,14 +20,8 @@ import Player from '../entities/player.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'better-sqlite3',
-      database: './src/userData/userData.db',
-      entities: [Team, User, Player],
-      synchronize: process.env.PRODUCTION === 'false' ? true : false,
-      logging: true,
-    }),
     SessionModule,
+    DataBaseModule,
   ],
   controllers: [
     UserController,
