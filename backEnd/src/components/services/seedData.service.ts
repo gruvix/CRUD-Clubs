@@ -28,6 +28,14 @@ export default class SeedDataService implements OnModuleInit {
   }
 
   private async seedBaseTeams(): Promise<void> {
+    const baseUser = await this.generateUserFromJSON();
+    await this.userRepository.manager.transaction(
+      async (transactionalEntityManager) => {
+        await transactionalEntityManager.save(baseUser);
+      },
+    );
+  }
+
   private async generateUserFromJSON(
     username: string = 'default',
     password: string = 'default',
