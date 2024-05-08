@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import User from '../entities/user.entity';
+import SeedDataService from '../services/seedData.service';
 import Team from '../entities/team.entity';
 import Player from '../entities/player.entity';
 
@@ -14,5 +15,7 @@ import Player from '../entities/player.entity';
       logging: true,
     }),
   ],
+  providers: [SeedDataService],
+  exports: [SeedDataService],
 })
 export default class DataBaseModule {}
