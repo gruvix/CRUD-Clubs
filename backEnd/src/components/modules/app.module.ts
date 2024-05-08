@@ -15,6 +15,7 @@ import TeamService from 'src/components/services/team.service';
 import TeamsService from 'src/components/services/teams.service';
 import CrestService from '../services/crest.service';
 
+import SeedDataService from '../services/seedData.service';
 import 'dotenv/config';
 
 @Module({
@@ -36,6 +37,7 @@ import 'dotenv/config';
     TeamService,
     PlayerService,
     CrestService,
+    SeedDataService,
   ],
 })
 export class AppModule {}
