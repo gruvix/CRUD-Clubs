@@ -14,11 +14,8 @@ export default class Team {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true })
-  userId: number;
-
-  @ManyToOne(() => User, (user) => user.teams)
-  user: User;
+  @ManyToOne(() => User, (user) => user.id)
+  user: number;
 
   @Column()
   name: string;
