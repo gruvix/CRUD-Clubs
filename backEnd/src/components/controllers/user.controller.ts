@@ -17,20 +17,32 @@ export default class UserController {
   @Get()
   async getUserStatus(@Req() req: CustomRequest) {
     console.log(`User is requesting user status: ${req.session.username}`);
-    if (!(this.userService.isLoggedIn(req))) {
+    if (!this.userService.isLoggedIn(req)) {
       throw new HttpException('Not logged in', HttpStatus.UNAUTHORIZED);
     }
     return;
   }
   @Post()
-  async login(@Req() request: CustomRequest, @Body() data: { username: string }) {
-    const success = await this.userService.handleUserLogin(data.username);
-    if (success) {
-      request.session.username = data.username;
-      console.log(`User ${data.username} logged in`);
-      return;
-    } else {
-      throw new HttpException('Failed to login user', HttpStatus.BAD_REQUEST);
+  async login(
+    @Req() request: CustomRequest,
+    @Body() data: { username: string },
+  ) {
+    try {
+      const success = await this.userService.handleUserLogin(data.username);
+      if (success) {
+        request.session.username = data.username;
+        console.log(`User ${data.username} logged in`);
+        return;
+      } else {
+        throw new HttpException('Failed to login user', HttpStatus.BAD_REQUEST);
+      }
+    } catch (error) {
+      console.log(error)
+      throw new HttpException(
+        'Failed to login user',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        error,
+      );
     }
   }
   @Delete()
