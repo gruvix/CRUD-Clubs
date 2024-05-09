@@ -34,6 +34,7 @@ export default class UserController {
         console.log(`User ${data.username} logged in`);
         return;
       } else {
+        console.log('Failed to login user');
         throw new HttpException('Failed to login user', HttpStatus.BAD_REQUEST);
       }
     } catch (error) {
