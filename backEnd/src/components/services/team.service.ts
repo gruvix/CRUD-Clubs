@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import TeamExtended from 'src/components/models/TeamExtended';
+import TeamExtendedOld from 'src/components/models/TeamExtended.old';
 import TeamStorageAdapter from 'src/components/Adapters/teamStorage.adapter';
 import TeamIsNotResettableError from '../errors/TeamIsNotResettableError';
 import { generateCustomCrestUrl } from '../storage/userPath';
@@ -55,7 +55,7 @@ export default class TeamService {
     }
   }
 
-  async getTeamData(username: string, teamId: number): Promise<TeamExtended> {
+  async getTeamData(username: string, teamId: number): Promise<TeamExtendedOld> {
     try {
       return await storage.getTeam(username, teamId);
     } catch (error) {

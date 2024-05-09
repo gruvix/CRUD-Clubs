@@ -1,6 +1,6 @@
 import TeamListTeam from '../models/TeamListTeam';
 import Player from '../models/Player';
-import TeamExtended from '../models/TeamExtended';
+import TeamExtendedOld from '../models/TeamExtended.old';
 import {
   generateCustomCrestUrl,
   getUserTeamJSONPath,
@@ -13,16 +13,16 @@ import NoDataProvidedError from '../errors/NoDataProvidedError';
 async function readTeamFile(
   username: string,
   teamId: number,
-): Promise<TeamExtended> {
+): Promise<TeamExtendedOld> {
   try {
     const teamPath = getUserTeamJSONPath(username, teamId);
-    const team = new TeamExtended(await readJSONFile(teamPath));
+    const team = new TeamExtendedOld(await readJSONFile(teamPath));
     return team;
   } catch (error) {
     throw error;
   }
 }
-async function saveTeam(team: TeamExtended, username: string): Promise<void> {
+async function saveTeam(team: TeamExtendedOld, username: string): Promise<void> {
   try {
     const targetPath = getUserTeamJSONPath(username, team.id);
     console.log(`Saving team ${team.id} to ${username} on ${targetPath}`);
@@ -46,7 +46,7 @@ async function updateTeamlistTeam(
   }
 }
 async function addTeamToTeamlist(
-  newTeam: TeamExtended,
+  newTeam: TeamExtendedOld,
   username: string,
 ): Promise<void> {
   const userTeamsPath = getUserTeamsListJSONPath(username);
@@ -134,12 +134,12 @@ export default class TeamStorageAdapter {
       throw error;
     }
   }
-  async getTeam(username: string, teamId: number): Promise<TeamExtended> {
+  async getTeam(username: string, teamId: number): Promise<TeamExtendedOld> {
     const teamDefaultBool = await this.isTeamDefault(username, teamId);
     try {
       let sourceUserName = 'default';
       !teamDefaultBool ? (sourceUserName = username) : null;
-      const team = new TeamExtended({
+      const team = new TeamExtendedOld({
         ...(await readTeamFile(sourceUserName, teamId)),
         hasDefault: await hasTeamDefault(username, teamId),
       });
@@ -324,7 +324,7 @@ export default class TeamStorageAdapter {
       throw new NoDataProvidedError();
     }
     try {
-      const team = new TeamExtended({
+      const team = new TeamExtendedOld({
         ...teamData,
         lastUpdated: getDate(),
         hasCustomCrest: true,

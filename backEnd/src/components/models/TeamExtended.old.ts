@@ -1,7 +1,7 @@
 import Player from "./Player";
-import Team, { TeamData } from "./Team";
+import TeamOld, { TeamDataOld } from "./Team.old";
 
-export default class TeamExtended extends Team {
+export default class TeamExtendedOld extends TeamOld {
   id: string | number;
   crestUrl: string;
   squad: Player[];
@@ -9,7 +9,7 @@ export default class TeamExtended extends Team {
   isDefault: boolean;
   lastUpdated: string;
   constructor(
-    data: TeamData & {
+    data: TeamDataOld & {
       readonly id: string | number;
       crestUrl: string;
       squad: Player[];

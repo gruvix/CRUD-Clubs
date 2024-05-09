@@ -1,6 +1,6 @@
 import TeamListTeam from 'src/components/models/TeamListTeam';
 import Player from '../../models/Player';
-import TeamExtended from '../../models/TeamExtended';
+import TeamExtendedOld from '../../models/TeamExtended.old';
 import TeamStorageAdapter from '../teamStorage.adapter';
 
 const adapter = new TeamStorageAdapter();
@@ -82,7 +82,7 @@ export default class mockUtils {
     hasDefault: true,
     lastUpdated: '2024-04-11T21:47:40.430Z',
   };
-  addNewPlayer(team: TeamExtended)
+  addNewPlayer(team: TeamExtendedOld)
   {
     if (!team.squad.length) {
       team.squad.push(this.getNewPlayer(team.squad));
@@ -110,10 +110,10 @@ export default class mockUtils {
   getNonDefaultTeamsList(): TeamListTeam[] {
     return this.cloneObject(this.nonDefaultTeamsListMock);
   }
-  getNonDefaultTeam(): TeamExtended {
+  getNonDefaultTeam(): TeamExtendedOld {
     return this.cloneObject(this.nonDefaultTeamMock);
   }
-  getDefaultTeam(): TeamExtended {
+  getDefaultTeam(): TeamExtendedOld {
     return this.cloneObject(this.defaultTeamMock);
   }
 }

@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import CustomRequest from 'src/components/models/CustomRequest.interface';
 import TeamData from 'src/components/models/TeamData.interface';
-import TeamExtended from 'src/components/models/TeamExtended';
+import TeamExtendedOld from 'src/components/models/TeamExtended.old';
 import { AuthGuard } from 'src/components/guards/auth.guard';
 import { TeamGuard } from 'src/components/guards/team.guard';
 import TeamService from 'src/components/services/team.service';
@@ -25,7 +25,7 @@ export default class TeamController {
   async getTeam(
     @Req() req: CustomRequest,
     @Param() params: any,
-  ): Promise<TeamExtended> {
+  ): Promise<TeamExtendedOld> {
     const { username } = req.session;
     const { teamId } = params;
     console.log(`User ${username} requested team ${teamId}`);

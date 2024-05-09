@@ -4,7 +4,7 @@ jest.mock('../../storage/userPath');
 import * as ds from '../../storage/dataStorage';
 import * as us from '../../storage/userPath';
 import FileNotFoundError from '../../errors/FileNotFoundError';
-import TeamExtended from '../../models/TeamExtended';
+import TeamExtendedOld from '../../models/TeamExtended.old';
 import TeamListTeam from '../../models/TeamListTeam';
 import Player from '../../models/Player';
 import mockUtils from './mockUtils';
@@ -185,7 +185,7 @@ describe('updateTeam', () => {
       lastUpdated: getDate(),
     };
 
-    const expectedDefaultTeam: TeamExtended = {
+    const expectedDefaultTeam: TeamExtendedOld = {
       ...mock.getDefaultTeam(),
       ...mock.newNameProp,
       lastUpdated: getDate(),
@@ -220,7 +220,7 @@ describe('updateTeam', () => {
         lastUpdated: getDate(),
       },
     };
-    const modifiedTeam: TeamExtended = {
+    const modifiedTeam: TeamExtendedOld = {
       ...mock.getNonDefaultTeam(),
       ...mock.newNameProp,
       lastUpdated: getDate(),
@@ -342,7 +342,7 @@ describe('addPlayer', () => {
       .mockResolvedValueOnce(mock.getDefaultTeamsList()) //updateTeamListTeam (ensureTeamIsUnDefault)
       .mockResolvedValueOnce(mock.getDefaultTeam()); //readTeamFile
 
-    const modifiedTeam: TeamExtended = mock.getDefaultTeam();
+    const modifiedTeam: TeamExtendedOld = mock.getDefaultTeam();
 
     await adapter.addPlayer(
       mock.username,
@@ -363,7 +363,7 @@ describe('addPlayer', () => {
       .mockResolvedValueOnce(mock.getNonDefaultTeamsList()) //isTeamDefault
       .mockResolvedValueOnce(mock.getNonDefaultTeam()); //readTeamFile
 
-    const modifiedTeam: TeamExtended = mock.getNonDefaultTeam();
+    const modifiedTeam: TeamExtendedOld = mock.getNonDefaultTeam();
     const newPlayer = {
       id: adapter.findNextFreePlayerId(modifiedTeam.squad), //This is to ensure it isn't stored with an invalid id
       name: 'newname',
@@ -385,7 +385,7 @@ describe('addPlayer', () => {
     expect(actualTeam).toEqual(modifiedTeam);
   });
   test('should add a player to an empty non-default team', async () => {
-    const modifiedTeam: TeamExtended = {
+    const modifiedTeam: TeamExtendedOld = {
       ...mock.getNonDefaultTeam(),
       squad: [],
     };
@@ -433,7 +433,7 @@ describe('updatePlayer', () => {
       },
     };
 
-    const modifiedTeam: TeamExtended = {
+    const modifiedTeam: TeamExtendedOld = {
       ...mock.getDefaultTeam(),
       squad: [
         {
@@ -467,7 +467,7 @@ describe('updatePlayer', () => {
       .mockResolvedValueOnce(mock.getNonDefaultTeamsList()) //isTeamDefault
       .mockResolvedValueOnce(mock.getNonDefaultTeam()); //readTeamFile
 
-    const modifiedTeam: TeamExtended = {
+    const modifiedTeam: TeamExtendedOld = {
       ...mock.getNonDefaultTeam(),
       squad: [
         {
@@ -542,7 +542,7 @@ describe('removePlayer', () => {
       },
     };
 
-    const modifiedTeam: TeamExtended = {
+    const modifiedTeam: TeamExtendedOld = {
       ...mock.getDefaultTeam(),
       lastUpdated: getDate(),
     };
@@ -569,7 +569,7 @@ describe('removePlayer', () => {
       .mockResolvedValueOnce(mock.getNonDefaultTeamsList()) //isTeamDefault
       .mockResolvedValueOnce(mock.getNonDefaultTeam()); //readTeamFile
 
-    const modifiedTeam: TeamExtended = {
+    const modifiedTeam: TeamExtendedOld = {
       ...mock.getNonDefaultTeam(),
       lastUpdated: getDate(),
     };
@@ -700,7 +700,7 @@ describe('addTeam', () => {
   });
   test('should handle empty data', async () => {
     await expect(
-      adapter.addTeam(mock.username, {} as TeamExtended),
+      adapter.addTeam(mock.username, {} as TeamExtendedOld),
     ).rejects.toThrow(NoDataProvidedError);
   });
   test('should handle errors', async () => {

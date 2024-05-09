@@ -1,4 +1,4 @@
-export interface TeamData {
+export interface TeamDataOld {
   name: string;
   area: string | { name: string };
   address: string;
@@ -8,7 +8,7 @@ export interface TeamData {
   venue: string;
 }
 
-export default class Team {
+export default class TeamOld {
   name: string;
   area: string;
   address: string;
@@ -18,7 +18,7 @@ export default class Team {
   venue: string;
   readonly hasDefault: boolean;
   constructor(
-    data: TeamData,
+    data: TeamDataOld,
     hasDefault = false
   ) {
     this.name = data.name;
