@@ -10,4 +10,4 @@ import Player from '../entities/player.entity';
   providers: [SeedDataService],
   exports: [SeedDataService],
 })
-export default class DataBaseModule {}
+export default class DatabaseModule {}

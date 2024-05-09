@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import SessionModule from './session.module';
-import DataBaseModule from './dataBase.module';
+import DatabaseModule from './database.module';
 
 import UserController from 'src/components/controllers/user.controller';
 import TeamsController from 'src/components/controllers/teams.controller';
@@ -21,7 +21,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 @Module({
   imports: [
     SessionModule,
-    DataBaseModule,
+    DatabaseModule,
     TypeOrmModule.forRoot({
       type: 'better-sqlite3',
       database: './src/userData/userData.db',
