@@ -26,9 +26,9 @@ export default class Player {
   @Column()
   nationality: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'date' })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: 'date' })
   updatedAt: Date;
 }
