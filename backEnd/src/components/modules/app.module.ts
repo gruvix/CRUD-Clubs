@@ -17,6 +17,7 @@ import CrestService from '../services/crest.service';
 
 import 'dotenv/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import UserModule from './user.module';
 
 @Module({
   imports: [
@@ -29,9 +30,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       autoLoadEntities: true,
       logging: true,
     }),
+    UserModule,
   ],
   controllers: [
-    UserController,
     TeamsController,
     TeamController,
     PlayerController,
@@ -39,7 +40,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     CrestController,
   ],
   providers: [
-    UserService,
     TeamsService,
     TeamService,
     PlayerService,
