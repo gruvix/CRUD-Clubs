@@ -1,7 +1,7 @@
-export function validateUsername(username: string) {
+export function isUsernameValid(username: string): boolean {
   const regexLettersWithNoDefault = /^[^\W\d_](?!default$)[^\W\d_]*$/i;
-  if (!regexLettersWithNoDefault.test(username)) {
-    return 'Invalid username';
+  if (regexLettersWithNoDefault.test(username)) {
+    return true;
   }
-  return '';
+  return false;
 }
