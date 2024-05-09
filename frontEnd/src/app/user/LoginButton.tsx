@@ -1,11 +1,10 @@
-'use client';
+"use client";
 import React, { useEffect } from "react";
-import loginErrorHandler from "./loginErrorHandler";
 import { webAppPaths } from "@/paths";
 import APIAdapter from "@/components/adapters/APIAdapter";
 import { useRouter } from "next/navigation";
 import LoginSpiner from "@/components/shared/loginSpinner";
-export default function LoginButton() {
+export default function LoginButton({ setLoginError, setLoginErrorMessage }: { setLoginError: any, setLoginErrorMessage: any }) {
   const router = useRouter();
   const [username, setUsername] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(true);
@@ -17,7 +16,11 @@ export default function LoginButton() {
       await request.login(username);
       router.push(webAppPaths.teams);
     } catch (error) {
-      loginErrorHandler(error as Error);
+      setLoginErrorMessage(error.message);
+      setLoginError(true);
+      setTimeout(() => {
+        setLoginError(false);
+      }, 1500);
     }
     setIsLoading(false);
   };
