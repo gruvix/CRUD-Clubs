@@ -47,7 +47,7 @@ describe("test login", () => {
       .get("#enter-page-button")
       .click()
       .get("#username-error")
-      .should("contain", "Error: Username may only contain letters");
+      .should("contain", "Username may only contain letters");
   });
 
   it('should show an error indicating that the username may not be "Default"', () => {
@@ -56,7 +56,7 @@ describe("test login", () => {
       .get("#enter-page-button")
       .click()
       .get("#username-error")
-      .should("contain", 'Error: "Default" is not available');
+      .should("contain", '"Default" is not available');
   });
 
   it('should login with "test"', () => {
