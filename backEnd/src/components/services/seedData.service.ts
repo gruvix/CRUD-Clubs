@@ -51,7 +51,7 @@ export default class SeedDataService implements OnModuleInit {
     return user;
   }
 
-  private async createTeamFromJSON(teamJSON: any): Promise<Team> {
+  private async createTeamFromJSON(teamJSON: TeamJSON): Promise<Team> {
     const newTeam = new Team();
     newTeam.id = teamJSON.id;
     newTeam.name = teamJSON.name;
