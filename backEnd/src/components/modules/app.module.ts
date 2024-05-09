@@ -16,11 +16,19 @@ import TeamsService from 'src/components/services/teams.service';
 import CrestService from '../services/crest.service';
 
 import 'dotenv/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
     SessionModule,
     DataBaseModule,
+    TypeOrmModule.forRoot({
+      type: 'better-sqlite3',
+      database: './src/userData/userData.db',
+      synchronize: process.env.PRODUCTION === 'false' ? true : false,
+      autoLoadEntities: true,
+      logging: true,
+    }),
   ],
   controllers: [
     UserController,
