@@ -43,7 +43,7 @@ export default class Team {
   crestUrl: string;
 
   @OneToMany(() => Player, (player) => player.team, { cascade: true })
-  squad: Player[];
+  squad?: Player[];
 
   @Column()
   hasCustomCrest: boolean;
