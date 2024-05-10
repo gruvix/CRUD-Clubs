@@ -14,7 +14,7 @@ export default class Player {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Team, (team) => team.squad)
+  @ManyToOne(() => Team, (team) => team.id)
   team: Team;
 
   @Column()
