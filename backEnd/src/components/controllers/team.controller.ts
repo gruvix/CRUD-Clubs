@@ -9,7 +9,7 @@ import {
   Delete,
   Put,
 } from '@nestjs/common';
-import CustomRequest from 'src/components/models/CustomRequest.interface';
+import CustomRequest from 'src/components/interfaces/CustomRequest.interface';
 import TeamData from 'src/components/models/TeamData.interface';
 import TeamExtendedOld from 'src/components/models/TeamExtended.old';
 import { AuthGuard } from 'src/components/guards/auth.guard';

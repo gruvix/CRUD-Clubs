@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { isUsernameValid } from 'src/components/userValidation';
 import { Repository } from 'typeorm';
-import CustomRequest from '../models/CustomRequest.interface';
+import CustomRequest from '../interfaces/CustomRequest.interface';
 import User from '../entities/user.entity';
 import Team from '../entities/team.entity';
 import Player from '../entities/player.entity';

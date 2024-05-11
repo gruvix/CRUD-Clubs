@@ -8,7 +8,7 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
-import CustomRequest from 'src/components/models/CustomRequest.interface';
+import CustomRequest from 'src/components/interfaces/CustomRequest.interface';
 import UserService from 'src/components/services/user.service';
 
 @Controller('user')

@@ -10,7 +10,7 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import CustomRequest from 'src/components/models/CustomRequest.interface';
+import CustomRequest from 'src/components/interfaces/CustomRequest.interface';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from 'src/components/guards/auth.guard';
 import CrestService from '../services/crest.service';

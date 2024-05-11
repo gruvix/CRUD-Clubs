@@ -9,7 +9,7 @@ import {
   HttpException,
   Res,
 } from '@nestjs/common';
-import CustomRequest from 'src/components/models/CustomRequest.interface';
+import CustomRequest from 'src/components/interfaces/CustomRequest.interface';
 import { AuthGuard } from 'src/components/guards/auth.guard';
 import TeamService from 'src/components/services/team.service';
 import { FileInterceptor } from '@nestjs/platform-express';

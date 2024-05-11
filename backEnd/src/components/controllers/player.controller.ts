@@ -8,7 +8,7 @@ import {
   Post,
   Delete,
 } from '@nestjs/common';
-import CustomRequest from 'src/components/models/CustomRequest.interface';
+import CustomRequest from 'src/components/interfaces/CustomRequest.interface';
 import Player from 'src/components/models/Player';
 import { AuthGuard } from 'src/components/guards/auth.guard';
 import { TeamGuard } from 'src/components/guards/team.guard';
