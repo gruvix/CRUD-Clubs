@@ -19,10 +19,10 @@ export default class User {
   @Column()
   password: string;
 
-  @CreateDateColumn({ type: 'date' })
+  @CreateDateColumn({ select: false, type: 'date' })
   createdAt: Date;
 
-  @UpdateDateColumn({ type: 'date' })
+  @UpdateDateColumn({ select: false, type: 'date' })
   updatedAt: Date;
 
   @OneToMany(() => Team, (team) => team.user, { cascade: true })
