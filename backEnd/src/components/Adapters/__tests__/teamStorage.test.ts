@@ -182,7 +182,7 @@ describe('updateTeam', () => {
     expectedModifiedTeamsList[mock.teamId] = {
       ...mock.getDefaultTeamsList()[mock.teamId],
       ...mock.newNameProp,
-      lastUpdated: getDate(),
+      updatedAt: getDate() as unknown as Date,
     };
 
     const expectedDefaultTeam: TeamExtendedOld = {
@@ -217,7 +217,7 @@ describe('updateTeam', () => {
       [mock.teamId]: {
         ...mock.getNonDefaultTeamsList()[mock.teamId],
         ...mock.newNameProp,
-        lastUpdated: getDate(),
+        updatedAt: getDate() as unknown as Date,
       },
     };
     const modifiedTeam: TeamExtendedOld = {
@@ -651,7 +651,7 @@ describe('addTeam', () => {
     };
     const expectedTeamsList = {
       [mock.teamId]: {
-        ...new TeamListTeam(mock.getNonDefaultTeam() as TeamListTeam),
+        ...new TeamListTeam(mock.getNonDefaultTeam() as unknown as TeamListTeam),
         crestUrl: mock.crestUrl,
         lastUpdated: getDate(),
       },
@@ -687,7 +687,7 @@ describe('addTeam', () => {
     const expectedTeamsList = {
       ...mock.getNonDefaultTeamsList(),
       [newTeamId]: {
-        ...new TeamListTeam(mock.getNonDefaultTeam() as TeamListTeam),
+        ...new TeamListTeam(mock.getNonDefaultTeam() as unknown as TeamListTeam),
         id: newTeamId,
         crestUrl: mock.crestUrl,
         lastUpdated: getDate(),
