@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { isUsernameValid } from 'src/components/userValidation';
 import { Repository } from 'typeorm';
+import UserNotFoundError from '../errors/UserNotFoundError';
 import CustomRequest from '../interfaces/CustomRequest.interface';
 import User from '../entities/user.entity';
 import Team from '../entities/team.entity';
@@ -20,10 +21,15 @@ export default class UserService {
     const username = req.session.username;
     return !!username;
   }
-  private copyPlayersToTeam(
-    team: Team,
-    players: Player[],
-  ): void {
+
+  async getUserId(username: string): Promise<number> {
+    const user = await this.userRepository.findOneBy({ username });
+    if(!user){
+      throw new UserNotFoundError(`User ${username} not found`);
+    }
+    return user.id;
+  }
+  private copyPlayersToTeam(team: Team, players: Player[]): void {
     for (const player of players) {
       player.team = team;
       delete player.id;
