@@ -62,6 +62,7 @@ export default class SeedDataService implements OnModuleInit {
     newTeam.email = teamJSON.email;
     newTeam.venue = teamJSON.venue;
     newTeam.crestUrl = teamJSON.crestUrl;
+    newTeam.hasDefault = true;
     newTeam.hasCustomCrest = teamJSON.hasCustomCrest || false;
     newTeam.squad = [];
     newTeam.updatedAt = teamJSON.lastUpdated;
