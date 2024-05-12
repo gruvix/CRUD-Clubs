@@ -24,7 +24,7 @@ export default class UserService {
 
   async getUserId(username: string): Promise<number> {
     const user = await this.userRepository.findOneBy({ username });
-    if(!user){
+    if (!user) {
       throw new UserNotFoundError(`User ${username} not found`);
     }
     return user.id;
