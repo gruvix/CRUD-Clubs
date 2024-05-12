@@ -4,7 +4,7 @@ import SessionModule from './session.module';
 import DatabaseModule from './database.module';
 import 'dotenv/config';
 import UserModule from './user.module';
-import FootBallModule from './football.module';
+import FootballModule from './football.module';
 
 @Module({
   imports: [
@@ -12,13 +12,13 @@ import FootBallModule from './football.module';
     DatabaseModule,
     TypeOrmModule.forRoot({
       type: 'better-sqlite3',
-      database: './src/userData/userData.db',
+      database: process.env.DB_PATH,
       synchronize: process.env.PRODUCTION === 'false' ? true : false,
       autoLoadEntities: true,
       logging: true,
     }),
     UserModule,
-    FootBallModule,
+    FootballModule,
   ],
   controllers: [],
   providers: [],
