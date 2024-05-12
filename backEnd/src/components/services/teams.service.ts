@@ -1,18 +1,35 @@
 import { Injectable } from '@nestjs/common';
-import TeamStorageAdapter from 'src/components/Adapters/teamStorage.adapter';
-import UserStorageAdapter from '../Adapters/userStorage.adapter';
 import TeamListTeam from '../models/TeamListTeam';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import Team from '../entities/team.entity';
+import UserService from './user.service';
 
-const userStorage = new UserStorageAdapter();
-const teamsStorage = new TeamStorageAdapter();
 @Injectable()
 export default class TeamsService {
-  async getTeamsData(username: string): Promise<TeamListTeam[]> {
-    const data = await teamsStorage.getTeamsList(username);
-    return data;
+  constructor(
+    @InjectRepository(Team)
+    private readonly teamRepository: Repository<Team>,
+    readonly userService: UserService,
+  ) {}
+
+  async getTeamsList(
+    userId: number,
+  ): Promise<TeamListTeam[]> {
+    if (!userId) {
+      {
+        console.log('Missing userId parameter');
+        throw new Error('Missing userId parameter');
+      }
+    }
+    const queryBuilder = this.teamRepository
+      .createQueryBuilder('team')
+      .where('team.user = :userId', { userId });
+
+    const teams = await queryBuilder.getMany();
+    const teamsData = teams.map((team) => new TeamListTeam(team));
+    return teamsData;
   }
 
-  async resetTeamsList(username: string) {
-    await userStorage.resetUser(username);
-  }
+  async resetTeamsList(username: string) {}
 }
