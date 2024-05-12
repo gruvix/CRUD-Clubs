@@ -6,6 +6,7 @@ import {
   OneToMany,
   ManyToOne,
   UpdateDateColumn,
+  Index,
 } from 'typeorm';
 import User from './user.entity';
 import Player from './player.entity';
@@ -15,6 +16,7 @@ export default class Team {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Index()
   @ManyToOne(() => User, (user) => user.id)
   user: number;
 
