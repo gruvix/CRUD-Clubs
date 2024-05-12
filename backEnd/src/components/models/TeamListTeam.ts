@@ -3,7 +3,6 @@ class TeamListTeam {
   name: string;
   crestUrl: string;
   hasCustomCrest: boolean;
-  readonly isDefault: boolean;
   hasDefault: boolean;
   updatedAt: Date;
   constructor(
@@ -25,8 +24,8 @@ class TeamListTeam {
   }
 
   static properties = () => [
-    "name",
     "id",
+    "name",
     "crestUrl",
     "hasCustomCrest",
     "hasDefault",
