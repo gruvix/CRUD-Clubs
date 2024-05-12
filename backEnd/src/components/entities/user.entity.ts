@@ -5,6 +5,7 @@ import {
   CreateDateColumn,
   Column,
   UpdateDateColumn,
+  Index,
 } from 'typeorm';
 import Team from './team.entity';
 
@@ -13,6 +14,7 @@ export default class User {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Index({ unique: true })
   @Column()
   username: string;
 
