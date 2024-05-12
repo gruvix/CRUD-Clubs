@@ -1,29 +1,27 @@
 class TeamListTeam {
+  readonly id: number;
   name: string;
-  id: number;
   crestUrl: string;
   hasCustomCrest: boolean;
   readonly isDefault: boolean;
   hasDefault: boolean;
-  lastUpdated: string;
+  updatedAt: Date;
   constructor(
     team: {
-      name: string;
       id: number;
+      name: string;
       crestUrl: string;
       hasCustomCrest: boolean;
-      isDefault: boolean;
       hasDefault: boolean;
-      lastUpdated: string;
+      updatedAt: Date;
     },
   ) {
-    this.name = team.name;
     this.id = team.id;
+    this.name = team.name;
     this.crestUrl = team.crestUrl;
     this.hasCustomCrest = team.hasCustomCrest;
-    this.isDefault = team.isDefault;
     this.hasDefault = team.hasDefault;
-    this.lastUpdated = team.lastUpdated;
+    this.updatedAt = team.updatedAt;
   }
 
   static properties = () => [
@@ -32,7 +30,7 @@ class TeamListTeam {
     "crestUrl",
     "hasCustomCrest",
     "hasDefault",
-    "lastUpdated",
+    "updatedAt",
   ];
 }
 
