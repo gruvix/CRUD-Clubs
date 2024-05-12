@@ -13,22 +13,25 @@ export default class TeamsService {
     readonly userService: UserService,
   ) {}
 
-  async getTeamsList(
-    userId: number,
-  ): Promise<TeamListTeam[]> {
-    if (!userId) {
-      {
-        console.log('Missing userId parameter');
-        throw new Error('Missing userId parameter');
+  async getTeamsList(userId: number): Promise<TeamListTeam[]> {
+    try {
+      if (!userId) {
+        {
+          throw new Error('Missing userId parameter');
+        }
       }
+      const queryBuilder = this.teamRepository
+        .createQueryBuilder('team')
+        .where('team.user = :userId', { userId });
+      const teamsProps = TeamListTeam.properties();
+      const teamsData: TeamListTeam[] = (await queryBuilder
+        .select(teamsProps.map((prop) => 'team.' + prop))
+        .getMany()) as TeamListTeam[];
+      return teamsData;
+    } catch (error) {
+      console.log(error);
+      throw error;
     }
-    const queryBuilder = this.teamRepository
-      .createQueryBuilder('team')
-      .where('team.user = :userId', { userId });
-
-    const teams = await queryBuilder.getMany();
-    const teamsData = teams.map((team) => new TeamListTeam(team));
-    return teamsData;
   }
 
   async resetTeamsList(username: string) {}
