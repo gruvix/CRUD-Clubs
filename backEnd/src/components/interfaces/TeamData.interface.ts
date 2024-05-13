@@ -1,3 +1,10 @@
 export default interface TeamData {
-    [key: string]: string | boolean | number;
+    name: string;
+    area: string;
+    address: string;
+    phone: string | number;
+    website: string;
+    email: string;
+    venue: string;
+    readonly hasDefault: boolean;
 }
