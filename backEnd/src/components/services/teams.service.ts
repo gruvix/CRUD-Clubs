@@ -3,14 +3,12 @@ import TeamListTeam from '../models/TeamListTeam';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import Team from '../entities/team.entity';
-import UserService from './user.service';
 
 @Injectable()
 export default class TeamsService {
   constructor(
     @InjectRepository(Team)
     private readonly teamRepository: Repository<Team>,
-    readonly userService: UserService,
   ) {}
 
   async getTeamsList(userId: number): Promise<TeamListTeam[]> {
