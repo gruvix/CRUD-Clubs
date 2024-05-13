@@ -18,14 +18,16 @@ export default class TeamsService {
           throw new Error('Missing userId parameter');
         }
       }
-      const queryBuilder = this.teamRepository
-        .createQueryBuilder('team')
-        .where('team.user = :userId', { userId });
       const teamsProps = TeamListTeam.properties();
-      const teamsData: TeamListTeam[] = (await queryBuilder
+
+      const teamsData: TeamListTeam[] = await this.teamRepository
+        .createQueryBuilder('team')
         .select(teamsProps.map((prop) => 'team.' + prop))
-        .getMany()) as TeamListTeam[];
+        .where('team.user = :userId', { userId })
+        .getMany();
+
       return teamsData;
+      
     } catch (error) {
       console.log(error);
       throw error;
