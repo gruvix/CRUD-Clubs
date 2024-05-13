@@ -28,8 +28,6 @@ class TeamListTeam {
     "name",
     "crestUrl",
     "hasCustomCrest",
-    "hasDefault",
-    "updatedAt",
   ];
 }
 
