@@ -2,7 +2,7 @@ export default class TeamData {
   name: string;
   area: string;
   address: string;
-  phone: string | number;
+  phone: string;
   website: string;
   email: string;
   venue: string;
