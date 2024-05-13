@@ -1,12 +1,19 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import TeamExtendedOld from 'src/components/models/TeamExtended.old';
 import TeamStorageAdapter from 'src/components/Adapters/teamStorage.adapter';
 import TeamIsNotResettableError from '../errors/TeamIsNotResettableError';
 import { generateCustomCrestUrl } from '../storage/userPath';
+import Team from '../entities/team.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import TeamData from '../interfaces/TeamData.interface';
 const storage = new TeamStorageAdapter();
 
 @Injectable()
 export default class TeamService {
+  constructor(
+    @InjectRepository(Team)
+    private readonly teamRepository: Repository<Team>,
+  ) {}
   async addTeam(
     username: string,
     teamData: any,
@@ -23,14 +30,31 @@ export default class TeamService {
         await storage.getTeamsList(username),
       );
       teamData.id = teamId;
-      teamData.crestUrl = generateCustomCrestUrl(teamData.id, imageFileName),
-      await storage.addTeam(username, teamData);
+      (teamData.crestUrl = generateCustomCrestUrl(teamData.id, imageFileName)),
+        await storage.addTeam(username, teamData);
       return teamId;
     } catch (error) {
       console.log(error);
       throw new HttpException(
         'Failed to add team',
         HttpStatus.INTERNAL_SERVER_ERROR,
+        error,
+      );
+    }
+  }
+
+  async getTeam(teamId: number): Promise<TeamData> {
+    try {
+      const team: TeamData = await this.teamRepository.findOne({
+        where: { id: teamId },
+        relations: ['squad'],
+      });
+      return team;
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(
+        'Failed to get team',
+        HttpStatus.BAD_REQUEST,
         error,
       );
     }
@@ -55,20 +79,7 @@ export default class TeamService {
     }
   }
 
-  async getTeamData(username: string, teamId: number): Promise<TeamExtendedOld> {
-    try {
-      return await storage.getTeam(username, teamId);
-    } catch (error) {
-      console.log(error);
-      throw new HttpException(
-        'Failed to get team',
-        HttpStatus.BAD_REQUEST,
-        error,
-      );
-    }
-  }
-
-  async updateTeamData(
+  async updateTeam(
     username: string,
     teamId: number,
     newData: { [key: string]: string | number | boolean },
