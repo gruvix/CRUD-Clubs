@@ -43,7 +43,8 @@ export default class TeamController {
     const { username } = req.session;
     const { teamId } = params;
     console.log(`User ${username} is updating team ${teamId}`);
-    await this.teamService.updateTeamData(username, teamId, data);
+
+    await this.teamService.updateTeam(teamId, data);
   }
 
   @Delete()
