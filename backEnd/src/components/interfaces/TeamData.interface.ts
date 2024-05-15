@@ -6,5 +6,5 @@ export default interface TeamData {
     website: string;
     email: string;
     venue: string;
-    readonly hasDefault: boolean;
+    readonly defaultTeam: number;
 }

@@ -6,7 +6,7 @@ export default class TeamData {
   website: string;
   email: string;
   venue: string;
-  readonly hasDefault: boolean;
+  readonly defaultTeam: number;
   constructor(data: TeamData) {
     this.name = data.name;
     this.area = data.area;
@@ -15,6 +15,6 @@ export default class TeamData {
     this.website = data.website;
     this.email = data.email;
     this.venue = data.venue;
-    this.hasDefault = data.hasDefault;
+    this.defaultTeam = data.defaultTeam;
   }
 }

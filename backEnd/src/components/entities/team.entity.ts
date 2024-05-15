@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import User from './user.entity';
 import Player from './player.entity';
+import DefaultTeam from './defaultTeam.entity';
 
 @Entity()
 export default class Team {
@@ -50,8 +51,8 @@ export default class Team {
   @Column()
   hasCustomCrest: boolean;
 
-  @Column({ default: false })
-  hasDefault: boolean;
+  @ManyToOne(() => DefaultTeam, (defaultTeam) => defaultTeam.id || null)
+  defaultTeam: number;
 
   @CreateDateColumn({ select: false, type: 'date' })
   createdAt: Date;
