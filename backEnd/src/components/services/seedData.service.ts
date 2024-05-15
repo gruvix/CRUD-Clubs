@@ -1,16 +1,19 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { readJSONFile } from '../storage/dataStorage';
 import User from '../entities/user.entity';
 import Team from '../entities/team.entity';
 import Player from '../entities/player.entity';
+import DefaultTeam from '../entities/defaultTeam.entity';
 
 @Injectable()
 export default class SeedDataService implements OnModuleInit {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @InjectDataSource()
+    private readonly dataSource: DataSource,
   ) {}
   async onModuleInit() {
     const valueExists = await this.userRepository
@@ -23,14 +26,35 @@ export default class SeedDataService implements OnModuleInit {
 
   private async seedBaseTeams(): Promise<void> {
     const JSONFolderPath = process.env.BASE_USER_FOLDER_PATH;
-    const baseUser = await this.generateUserFromJSON(JSONFolderPath);
-    const manager = this.userRepository.manager;
-    await manager.transaction(async (transactionalEntityManager) => {
-      await transactionalEntityManager.save(baseUser);
-    });
+
+    const baseUser = await this.createUserFromJSON(JSONFolderPath);
+    const defaultTeams = this.createDefaultTeamsList(baseUser.teams)
+
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      await queryRunner.manager.save(baseUser);
+      await queryRunner.manager.save(defaultTeams);
+      await queryRunner.commitTransaction();
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
+    }
+  }
+  createDefaultTeamsList(teams: Team[]): DefaultTeam[] {
+    return teams.map((team) => {
+      const defaultTeam = new DefaultTeam()
+      defaultTeam.id = team.id;
+      defaultTeam.teams = [team];
+      return defaultTeam;
+    }) 
   }
 
-  private async generateUserFromJSON(
+  private async createUserFromJSON(
     JSONFolderPath: string,
     username: string = 'default',
     password: string = 'default',
@@ -62,7 +86,6 @@ export default class SeedDataService implements OnModuleInit {
     newTeam.email = teamJSON.email;
     newTeam.venue = teamJSON.venue;
     newTeam.crestUrl = teamJSON.crestUrl;
-    newTeam.hasDefault = true;
     newTeam.hasCustomCrest = teamJSON.hasCustomCrest || false;
     newTeam.squad = [];
     newTeam.updatedAt = teamJSON.lastUpdated;
