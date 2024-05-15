@@ -80,12 +80,16 @@ export default class TeamService {
   }
 
   async updateTeam(
-    username: string,
     teamId: number,
-    newData: { [key: string]: string | number | boolean },
+    newData: TeamData,
   ): Promise<void> {
     try {
-      await storage.updateTeam(newData, username, teamId);
+      await this.teamRepository
+        .createQueryBuilder()
+        .update(Team)
+        .set(newData)
+        .where('id = :id', { id: teamId })
+        .execute();
     } catch (error) {
       console.log(error);
       throw new HttpException(
