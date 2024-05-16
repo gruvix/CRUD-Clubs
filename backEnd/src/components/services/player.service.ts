@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import Player from 'src/components/models/Player';
-import TeamStorageAdapter from '../Adapters/teamStorage.adapter';
+import Player from '@comp/models/Player';
+import TeamStorageAdapter from '@comp/Adapters/teamStorage.adapter';
 
 const storage = new TeamStorageAdapter();
 @Injectable()

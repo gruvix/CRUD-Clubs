@@ -10,12 +10,12 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import CustomRequest from 'src/components/interfaces/CustomRequest.interface';
+import CustomRequest from '@comp/interfaces/CustomRequest.interface';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { AuthGuard } from 'src/components/guards/auth.guard';
-import CrestService from '../services/crest.service';
+import { AuthGuard } from '@comp/guards/auth.guard';
+import CrestService from '@comp/services/crest.service';
 import { Response } from 'express';
-import multerOptions from '../storage/multerConfig';
+import multerOptions from '@comp/storage/multerConfig';
 
 @UseGuards(AuthGuard)
 @Controller('user/customCrest')

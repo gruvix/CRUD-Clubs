@@ -8,11 +8,11 @@ import {
   Post,
   Delete,
 } from '@nestjs/common';
-import CustomRequest from 'src/components/interfaces/CustomRequest.interface';
-import Player from 'src/components/models/Player';
-import { AuthGuard } from 'src/components/guards/auth.guard';
-import { TeamGuard } from 'src/components/guards/team.guard';
-import PlayerService from 'src/components/services/player.service';
+import CustomRequest from '@comp/interfaces/CustomRequest.interface';
+import Player from '@comp/models/Player';
+import { AuthGuard } from '@comp/guards/auth.guard';
+import { TeamGuard } from '@comp/guards/team.guard';
+import PlayerService from '@comp/services/player.service';
 
 @UseGuards(AuthGuard, TeamGuard)
 @Controller('user/team/:teamId/player')

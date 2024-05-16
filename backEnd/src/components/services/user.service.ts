@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { isUsernameValid } from 'src/components/userValidation';
+import { isUsernameValid } from '@comp/validators/userValidation';
 import { Repository } from 'typeorm';
-import UserNotFoundError from '../errors/UserNotFoundError';
-import CustomRequest from '../interfaces/CustomRequest.interface';
-import User from '../entities/user.entity';
-import Team from '../entities/team.entity';
-import Player from '../entities/player.entity';
+import UserNotFoundError from '@comp/errors/UserNotFoundError';
+import CustomRequest from '@comp/interfaces/CustomRequest.interface';
+import User from '@comp/entities/user.entity';
+import Team from '@comp/entities/team.entity';
+import Player from '@comp/entities/player.entity';
 
 @Injectable()
 export default class UserService {

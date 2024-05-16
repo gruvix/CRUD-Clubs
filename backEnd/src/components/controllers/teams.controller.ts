@@ -7,11 +7,11 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import CustomRequest from 'src/components/interfaces/CustomRequest.interface';
-import { AuthGuard } from 'src/components/guards/auth.guard';
-import TeamsService from 'src/components/services/teams.service';
-import TeamListTeam from '../models/TeamListTeam';
-import UserService from '../services/user.service';
+import CustomRequest from '@comp/interfaces/CustomRequest.interface';
+import { AuthGuard } from '@comp/guards/auth.guard';
+import TeamsService from '@comp/services/teams.service';
+import TeamListTeam from '@comp/models/TeamListTeam';
+import UserService from '@comp/services/user.service';
 
 interface TeamsData {
   username: string;

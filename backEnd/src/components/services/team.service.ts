@@ -1,11 +1,11 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import TeamStorageAdapter from 'src/components/Adapters/teamStorage.adapter';
-import TeamIsNotResettableError from '../errors/TeamIsNotResettableError';
-import { generateCustomCrestUrl } from '../storage/userPath';
-import Team from '../entities/team.entity';
+import TeamStorageAdapter from '@comp/Adapters/teamStorage.adapter';
+import TeamIsNotResettableError from '@comp/errors/TeamIsNotResettableError';
+import { generateCustomCrestUrl } from '@comp/storage/userPath';
+import Team from '@comp/entities/team.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import TeamData from '../interfaces/TeamData.interface';
+import TeamData from '@comp/interfaces/TeamData.interface';
 const storage = new TeamStorageAdapter();
 
 @Injectable()

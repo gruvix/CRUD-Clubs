@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import CrestStorageAdapter from '../Adapters/crestStorage.adapter';
-import TeamStorageAdapter from '../Adapters/teamStorage.adapter';
-import { generateCustomCrestUrl } from '../storage/userPath';
+import CrestStorageAdapter from '@comp/Adapters/crestStorage.adapter';
+import TeamStorageAdapter from '@comp/Adapters/teamStorage.adapter';
+import { generateCustomCrestUrl } from '@comp/storage/userPath';
 
 const crestStorage = new CrestStorageAdapter();
 const teamStorage = new TeamStorageAdapter();

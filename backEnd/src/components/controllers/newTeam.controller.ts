@@ -9,11 +9,11 @@ import {
   HttpException,
   Res,
 } from '@nestjs/common';
-import CustomRequest from 'src/components/interfaces/CustomRequest.interface';
-import { AuthGuard } from 'src/components/guards/auth.guard';
-import TeamService from 'src/components/services/team.service';
+import CustomRequest from '@comp/interfaces/CustomRequest.interface';
+import { AuthGuard } from '@comp/guards/auth.guard';
+import TeamService from '@comp/services/team.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import multerOptions from '../storage/multerConfig';
+import multerOptions from '@comp/storage/multerConfig';
 import { Response } from 'express';
 
 @UseGuards(AuthGuard)

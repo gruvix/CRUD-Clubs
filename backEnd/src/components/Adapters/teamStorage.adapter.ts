@@ -1,14 +1,14 @@
-import TeamListTeam from '../models/TeamListTeam';
-import Player from '../models/Player';
-import TeamExtendedOld from '../models/TeamExtended.old';
+import TeamListTeam from '@comp/models/TeamListTeam';
+import Player from '@comp/models/Player';
+import TeamExtendedOld from '@comp/models/TeamExtended.old';
 import {
   generateCustomCrestUrl,
   getUserTeamJSONPath,
   getUserTeamsListJSONPath,
-} from '../storage/userPath';
-import { readJSONFile, writeFile, deleteFile } from '../storage/dataStorage';
-import TeamIsNotResettableError from '../errors/TeamIsNotResettableError';
-import NoDataProvidedError from '../errors/NoDataProvidedError';
+} from '@comp/storage/userPath';
+import { readJSONFile, writeFile, deleteFile } from '@comp/storage/dataStorage';
+import TeamIsNotResettableError from '@comp/errors/TeamIsNotResettableError';
+import NoDataProvidedError from '@comp/errors/NoDataProvidedError';
 
 async function readTeamFile(
   username: string,

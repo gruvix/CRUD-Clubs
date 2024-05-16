@@ -5,11 +5,11 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
-import isNonNegativeNumber from './isNonNegativeNumber';
-import UserService from '../services/user.service';
+import isNonNegativeNumber from '@comp/validators/isNonNegativeNumber';
+import UserService from '@comp/services/user.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import Team from '../entities/team.entity';
+import Team from '@comp/entities/team.entity';
 
 @Injectable()
 export class TeamGuard implements CanActivate {

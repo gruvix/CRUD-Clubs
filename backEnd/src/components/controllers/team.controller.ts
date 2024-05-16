@@ -9,11 +9,11 @@ import {
   Delete,
   Put,
 } from '@nestjs/common';
-import CustomRequest from 'src/components/interfaces/CustomRequest.interface';
-import TeamData from 'src/components/interfaces/TeamData.interface';
-import { AuthGuard } from 'src/components/guards/auth.guard';
-import { TeamGuard } from 'src/components/guards/team.guard';
-import TeamService from 'src/components/services/team.service';
+import CustomRequest from '@comp/interfaces/CustomRequest.interface';
+import TeamData from '@comp/interfaces/TeamData.interface';
+import { AuthGuard } from '@comp/guards/auth.guard';
+import { TeamGuard } from '@comp/guards/team.guard';
+import TeamService from '@comp/services/team.service';
 
 @UseGuards(AuthGuard, TeamGuard)
 @Controller('user/team/:teamId')

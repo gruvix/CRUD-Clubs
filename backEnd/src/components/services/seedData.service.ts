@@ -1,11 +1,11 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
-import { readJSONFile } from '../storage/dataStorage';
-import User from '../entities/user.entity';
-import Team from '../entities/team.entity';
-import Player from '../entities/player.entity';
-import DefaultTeam from '../entities/defaultTeam.entity';
+import { readJSONFile } from '@comp/storage/dataStorage';
+import User from '@comp/entities/user.entity';
+import Team from '@comp/entities/team.entity';
+import Player from '@comp/entities/player.entity';
+import DefaultTeam from '@comp/entities/defaultTeam.entity';
 
 @Injectable()
 export default class SeedDataService implements OnModuleInit {

@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import TeamListTeam from '../models/TeamListTeam';
+import TeamListTeam from '@comp/models/TeamListTeam';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import Team from '../entities/team.entity';
+import Team from '@comp/entities/team.entity';
 
 @Injectable()
 export default class TeamsService {
