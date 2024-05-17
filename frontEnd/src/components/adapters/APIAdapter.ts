@@ -115,6 +115,9 @@ export default class APIAdapter {
       switch (response.status) {
         case 403:
           throw new UnauthorizedError();
+        case 409:
+          await this.logout();
+          throw new UnauthorizedError();
         default:
           throw new Error(`${response.status} - ${response.statusText}`);
       }

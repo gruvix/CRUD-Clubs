@@ -36,7 +36,7 @@ export default function TeamsList(): React.ReactElement {
 
   const errorHandler = (error: Error) => {
     if (error instanceof UnauthorizedError) {
-      router.push(webAppPaths.user);
+      router.push(webAppPaths.home);
     } else {
       setAsyncError(error);
     }

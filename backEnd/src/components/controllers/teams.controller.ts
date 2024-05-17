@@ -12,6 +12,7 @@ import { AuthGuard } from '@comp/guards/auth.guard';
 import TeamsService from '@comp/services/teams.service';
 import TeamListTeam from '@comp/models/TeamListTeam';
 import UserService from '@comp/services/user.service';
+import UserNotFoundError from '@comp/errors/UserNotFoundError';
 
 interface TeamsData {
   username: string;
@@ -30,14 +31,17 @@ export default class TeamsController {
   async getTeamsList(@Req() req: CustomRequest): Promise<TeamsData> {
     const { username } = req.session;
     console.log(`User ${username} requested teams list`);
-    const userId = await this.userService.getUserId(username);
     try {
+      const userId = await this.userService.getUserId(username);
       const data: TeamsData = {
         username, //Create custom endpoint to get username, remove username from other requests
         teams: await this.teamsService.getTeamsList(userId),
       };
       return data;
     } catch (error) {
+      if (error instanceof UserNotFoundError) {
+        throw new HttpException('User data not found', HttpStatus.CONFLICT);
+      }
       if (error)
         throw new HttpException(
           'Failed to get teams',

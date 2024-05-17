@@ -28,7 +28,7 @@ export default class SeedDataService implements OnModuleInit {
     const JSONFolderPath = process.env.BASE_USER_FOLDER_PATH;
 
     const baseUser = await this.createUserFromJSON(JSONFolderPath);
-    const defaultTeams = this.createDefaultTeamsList(baseUser.teams)
+    const defaultTeams = this.createDefaultTeamsList(baseUser.teams);
 
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
