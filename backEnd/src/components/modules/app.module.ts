@@ -1,15 +1,15 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import SessionModule from './session.module';
-import DatabaseModule from './database.module';
-import 'dotenv/config';
+import SeedDatabaseModule from './seedDatabase.module';
 import UserModule from './user.module';
 import FootballModule from './football.module';
+import 'dotenv/config';
 
 @Module({
   imports: [
     SessionModule,
-    DatabaseModule,
+    SeedDatabaseModule,
     TypeOrmModule.forRoot({
       type: 'better-sqlite3',
       database: process.env.DB_PATH,

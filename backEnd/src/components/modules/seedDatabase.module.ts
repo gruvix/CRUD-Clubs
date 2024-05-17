@@ -11,4 +11,4 @@ import DefaultTeam from '../entities/defaultTeam.entity';
   providers: [SeedDataService],
   exports: [SeedDataService],
 })
-export default class DatabaseModule {}
+export default class SeedDatabaseModule {}
