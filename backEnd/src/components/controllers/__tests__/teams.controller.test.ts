@@ -17,6 +17,10 @@ describe('TeamsController', () => {
   const username = 'test';
   const userId = 1;
 
+  const mockRequest = {
+    session: { username, userId },
+  } as CustomRequest;
+
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       controllers: [TeamsController],
@@ -33,10 +37,6 @@ describe('TeamsController', () => {
     teamsController = module.get<TeamsController>(TeamsController);
   });
   describe('getTeamsList', () => {
-    const mockRequest = {
-      session: { username },
-    } as CustomRequest;
-
     it('should return an array of teams', async () => {
       const mockResult = [
         {
@@ -83,6 +83,25 @@ describe('TeamsController', () => {
     });
   });
 
+  describe('resetTeamsList', () => {
+    it('should call the resetTeamsList method from teams service', async () => {
+      jest.spyOn(teamsService, 'resetTeamsList').mockResolvedValueOnce();
+
+      expect(await teamsController.resetTeamsList(mockRequest)).toBeUndefined();
+      expect(teamsService.resetTeamsList).toHaveBeenCalledWith(userId);
+    });
+
+    it('should handle errors', async () => {
+      jest
+        .spyOn(teamsService, 'resetTeamsList')
+        .mockRejectedValueOnce(new Error());
+      await expect(teamsController.resetTeamsList(mockRequest)).rejects.toThrow(
+        new HttpException(
+          'Failed to reset teams',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        ),
+      );
+      expect(teamsService.resetTeamsList).toHaveBeenCalledWith(userId);
     });
   });
 });
