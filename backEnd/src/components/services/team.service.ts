@@ -60,9 +60,9 @@ export default class TeamService {
     }
   }
 
-  async resetTeam(username: string, teamId: number): Promise<void> {
+  async resetTeam(teamId: number): Promise<void> {
     try {
-      await storage.resetTeam(username, teamId);
+      // implement ORM query to reset team
     } catch (error) {
       if (error instanceof TeamIsNotResettableError) {
         throw new HttpException(
@@ -79,10 +79,7 @@ export default class TeamService {
     }
   }
 
-  async updateTeam(
-    teamId: number,
-    newData: TeamData,
-  ): Promise<void> {
+  async updateTeam(teamId: number, newData: TeamData): Promise<void> {
     try {
       await this.teamRepository
         .createQueryBuilder()
@@ -100,9 +97,9 @@ export default class TeamService {
     }
   }
 
-  async deleteTeam(username: string, teamId: number): Promise<void> {
+  async deleteTeam(teamId: number): Promise<void> {
     try {
-      await storage.deleteTeam(username, teamId);
+      //await storage.deleteTeam(username, teamId);
     } catch (error) {
       console.log(error);
       throw new HttpException(
