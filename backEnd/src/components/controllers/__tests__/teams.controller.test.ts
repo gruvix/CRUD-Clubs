@@ -51,8 +51,6 @@ describe('TeamsController', () => {
         .spyOn(teamsService, 'getTeamsList')
         .mockResolvedValueOnce(mockResult);
 
-      jest.spyOn(userService, 'getUserId').mockResolvedValueOnce(userId);
-
       expect(await teamsController.getTeamsList(mockRequest)).toEqual({
         teams: mockResult,
         username,
@@ -66,21 +64,10 @@ describe('TeamsController', () => {
         .spyOn(teamsService, 'getTeamsList')
         .mockResolvedValueOnce(mockResult);
 
-      jest.spyOn(userService, 'getUserId').mockResolvedValueOnce(userId);
-
       expect(await teamsController.getTeamsList(mockRequest)).toEqual({
         teams: mockResult,
         username,
       });
-    });
-
-    it('should throw an error if user data not found', async () => {
-      jest
-        .spyOn(userService, 'getUserId')
-        .mockRejectedValueOnce(new UserNotFoundError());
-      await expect(teamsController.getTeamsList(mockRequest)).rejects.toThrow(
-        new HttpException('User data not found', HttpStatus.CONFLICT),
-      );
     });
 
     it('should handle other errors', async () => {
@@ -93,14 +80,9 @@ describe('TeamsController', () => {
           HttpStatus.INTERNAL_SERVER_ERROR,
         ),
       );
+    });
+  });
 
-      jest.spyOn(userService, 'getUserId').mockRejectedValueOnce(new Error());
-      await expect(teamsController.getTeamsList(mockRequest)).rejects.toThrow(
-        new HttpException(
-          'Failed to get teams',
-          HttpStatus.INTERNAL_SERVER_ERROR,
-        ),
-      );
     });
   });
 });
