@@ -7,7 +7,6 @@ import CustomRequest from '@comp/interfaces/CustomRequest.interface';
 import UserService from '@comp/services/user.service';
 import Team from '@comp/entities/team.entity';
 import User from '@comp/entities/user.entity';
-import UserNotFoundError from '@comp/errors/UserNotFoundError';
 
 describe('TeamsController', () => {
   let teamsController: TeamsController;
