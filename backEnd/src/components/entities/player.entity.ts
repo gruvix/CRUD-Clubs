@@ -14,7 +14,7 @@ export default class Player {
   id: number;
 
   @ManyToOne(() => Team, (team) => team.id)
-  team: Team;
+  team: number;
 
   @Column()
   name: string;

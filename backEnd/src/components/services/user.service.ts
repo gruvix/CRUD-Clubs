@@ -31,7 +31,7 @@ export default class UserService {
   }
   private copyPlayersToTeam(team: Team, players: Player[]): void {
     for (const player of players) {
-      player.team = team;
+      player.team = team.id;
       delete player.id;
       team.squad.push(player);
     }
