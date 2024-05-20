@@ -43,10 +43,10 @@ export default class TeamsController {
   }
 
   @Put()
-  async resetTeamsList(@UserId() userId: number) {
+  async resetTeams(@UserId() userId: number) {
     console.log(`User ${userId} requested teams list reset`);
     try {
-      await this.teamsService.resetTeamsList(userId);
+      await this.teamsService.resetTeams(userId);
     } catch (error) {
       throw new HttpException(
         'Failed to reset teams',

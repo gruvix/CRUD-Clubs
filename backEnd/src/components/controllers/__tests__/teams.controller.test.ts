@@ -82,23 +82,23 @@ describe('TeamsController', () => {
 
   describe('resetTeamsList', () => {
     it('should call the resetTeamsList method from teams service', async () => {
-      jest.spyOn(teamsService, 'resetTeamsList').mockResolvedValueOnce();
+      jest.spyOn(teamsService, 'resetTeams').mockResolvedValueOnce();
 
-      expect(await teamsController.resetTeamsList(userId)).toBeUndefined();
-      expect(teamsService.resetTeamsList).toHaveBeenCalledWith(userId);
+      expect(await teamsController.resetTeams(userId)).toBeUndefined();
+      expect(teamsService.resetTeams).toHaveBeenCalledWith(userId);
     });
 
     it('should handle errors', async () => {
       jest
-        .spyOn(teamsService, 'resetTeamsList')
+        .spyOn(teamsService, 'resetTeams')
         .mockRejectedValueOnce(new Error());
-      await expect(teamsController.resetTeamsList(userId)).rejects.toThrow(
+      await expect(teamsController.resetTeams(userId)).rejects.toThrow(
         new HttpException(
           'Failed to reset teams',
           HttpStatus.INTERNAL_SERVER_ERROR,
         ),
       );
-      expect(teamsService.resetTeamsList).toHaveBeenCalledWith(userId);
+      expect(teamsService.resetTeams).toHaveBeenCalledWith(userId);
     });
   });
 });
