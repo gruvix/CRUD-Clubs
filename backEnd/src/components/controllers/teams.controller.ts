@@ -11,8 +11,8 @@ import CustomRequest from '@comp/interfaces/CustomRequest.interface';
 import { AuthGuard } from '@comp/guards/auth.guard';
 import TeamsService from '@comp/services/teams.service';
 import TeamListTeam from '@comp/models/TeamListTeam';
-import UserService from '@comp/services/user.service';
-import UserNotFoundError from '@comp/errors/UserNotFoundError';
+import { UserId } from '@comp/decorators/userId.decorator';
+import { Username } from '@comp/decorators/username.decorator';
 
 interface TeamsListData {
   username: string;
@@ -25,9 +25,8 @@ export default class TeamsController {
   constructor(private readonly teamsService: TeamsService) {}
 
   @Get()
-  async getTeamsList(@Req() req: CustomRequest): Promise<TeamsListData> {
-    const { username, userId } = req.session;
-    console.log(`User ${username} requested teams list`);
+  async getTeamsList(@UserId() userId: number, @Username() username: string): Promise<TeamsListData> {
+    console.log(`User ${userId} requested teams list`);
     try {
       const data: TeamsListData = {
         username, //Create custom endpoint to get username, remove username from other requests
@@ -44,8 +43,7 @@ export default class TeamsController {
   }
 
   @Put()
-  async resetTeamsList(@Req() req: CustomRequest) {
-    const { userId } = req.session;
+  async resetTeamsList(@UserId() userId: number) {
     console.log(`User ${userId} requested teams list reset`);
     try {
       await this.teamsService.resetTeamsList(userId);
