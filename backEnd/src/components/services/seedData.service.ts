@@ -47,11 +47,11 @@ export default class SeedDataService implements OnModuleInit {
   }
   createDefaultTeamsList(teams: Team[]): DefaultTeam[] {
     return teams.map((team) => {
-      const defaultTeam = new DefaultTeam()
+      const defaultTeam = new DefaultTeam();
       defaultTeam.id = team.id;
       defaultTeam.teams = [team];
       return defaultTeam;
-    }) 
+    });
   }
 
   private async createUserFromJSON(
