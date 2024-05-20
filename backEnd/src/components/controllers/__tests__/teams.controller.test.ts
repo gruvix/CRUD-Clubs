@@ -59,5 +59,20 @@ describe('TeamsController', () => {
       });
     });
 
+    it('should return an empty array of teams', async () => {
+      const mockResult = [];
+
+      jest
+        .spyOn(teamsService, 'getTeamsList')
+        .mockResolvedValueOnce(mockResult);
+
+      jest.spyOn(userService, 'getUserId').mockResolvedValueOnce(userId);
+
+      expect(await teamsController.getTeamsList(mockRequest)).toEqual({
+        teams: mockResult,
+        username,
+      });
+    });
+
   });
 });
