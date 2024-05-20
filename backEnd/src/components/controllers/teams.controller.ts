@@ -14,7 +14,7 @@ import TeamListTeam from '@comp/models/TeamListTeam';
 import UserService from '@comp/services/user.service';
 import UserNotFoundError from '@comp/errors/UserNotFoundError';
 
-interface TeamsData {
+interface TeamsListData {
   username: string;
   teams: TeamListTeam[];
 }
@@ -28,12 +28,12 @@ export default class TeamsController {
   ) {}
 
   @Get()
-  async getTeamsList(@Req() req: CustomRequest): Promise<TeamsData> {
+  async getTeamsList(@Req() req: CustomRequest): Promise<TeamsListData> {
     const { username } = req.session;
     console.log(`User ${username} requested teams list`);
     try {
       const userId = await this.userService.getUserId(username);
-      const data: TeamsData = {
+      const data: TeamsListData = {
         username, //Create custom endpoint to get username, remove username from other requests
         teams: await this.teamsService.getTeamsList(userId),
       };
