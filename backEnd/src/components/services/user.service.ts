@@ -47,6 +47,7 @@ export default class UserService {
         id: undefined,
         user: user.id,
         squad: [],
+        defaultTeam: team.id,
       };
 
       const players: Player[] = (
