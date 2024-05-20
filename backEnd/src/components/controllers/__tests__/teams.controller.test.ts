@@ -55,6 +55,7 @@ describe('TeamsController', () => {
         teams: mockResult,
         username,
       });
+      expect(teamsService.getTeamsList).toHaveBeenCalledWith(userId);
     });
 
     it('should return an empty array of teams', async () => {
@@ -68,9 +69,10 @@ describe('TeamsController', () => {
         teams: mockResult,
         username,
       });
+      expect(teamsService.getTeamsList).toHaveBeenCalledWith(userId);
     });
 
-    it('should handle other errors', async () => {
+    it('should handle errors', async () => {
       jest
         .spyOn(teamsService, 'getTeamsList')
         .mockRejectedValueOnce(new Error());
@@ -80,6 +82,7 @@ describe('TeamsController', () => {
           HttpStatus.INTERNAL_SERVER_ERROR,
         ),
       );
+      expect(teamsService.getTeamsList).toHaveBeenCalledWith(userId);
     });
   });
 
