@@ -32,4 +32,32 @@ describe('TeamsController', () => {
     userService = module.get<UserService>(UserService);
     teamsController = module.get<TeamsController>(TeamsController);
   });
+  describe('getTeamsList', () => {
+    const mockRequest = {
+      session: { username },
+    } as CustomRequest;
+
+    it('should return an array of teams', async () => {
+      const mockResult = [
+        {
+          id: 1,
+          name: 'test',
+          crestUrl: 'test',
+          hasCustomCrest: true,
+        },
+      ];
+
+      jest
+        .spyOn(teamsService, 'getTeamsList')
+        .mockResolvedValueOnce(mockResult);
+
+      jest.spyOn(userService, 'getUserId').mockResolvedValueOnce(userId);
+
+      expect(await teamsController.getTeamsList(mockRequest)).toEqual({
+        teams: mockResult,
+        username,
+      });
+    });
+
+  });
 });
