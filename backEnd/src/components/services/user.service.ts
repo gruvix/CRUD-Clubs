@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { isUsernameValid } from '@comp/validators/userValidation';
 import { Repository } from 'typeorm';
@@ -7,6 +7,7 @@ import CustomRequest from '@comp/interfaces/CustomRequest.interface';
 import User from '@comp/entities/user.entity';
 import Team from '@comp/entities/team.entity';
 import Player from '@comp/entities/player.entity';
+import TeamsService from './teams.service';
 
 @Injectable()
 export default class UserService {
@@ -15,6 +16,7 @@ export default class UserService {
     private readonly userRepository: Repository<User>,
     @InjectRepository(Team)
     private readonly teamRepository: Repository<Team>,
+    @Inject(TeamsService) private readonly teamsService: TeamsService,
   ) {}
 
   isLoggedIn(req: CustomRequest): boolean {
@@ -54,7 +56,7 @@ export default class UserService {
         })
       ).squad;
       this.copyPlayersToTeam(newTeam, players);
-      
+
       return newTeam;
     });
     user.teams = await Promise.all(teamsCopy);
@@ -73,12 +75,7 @@ export default class UserService {
       async (transactionalEntityManager) => {
         let savedUser = await transactionalEntityManager.save(newUser);
 
-        const baseTeams = (
-          await transactionalEntityManager.findOne(User, {
-            where: { username: 'default' },
-            relations: ['teams'],
-          })
-        ).teams;
+        const baseTeams = await this.teamsService.getDefaultTeams();
         await this.copyTeamsToUser(savedUser, baseTeams);
         await transactionalEntityManager.save(savedUser);
       },
