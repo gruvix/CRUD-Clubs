@@ -38,19 +38,26 @@ export default class UserService {
   }
 
   private async copyTeamsToUser(user: User, teams: Team[]): Promise<void> {
-    for (const team of teams) {
-      team.user = user.id;
+    const teamsCopy = teams.map(async (team) => {
+      let newTeam = new Team();
+      newTeam = {
+        ...team,
+        id: undefined,
+        user: user.id,
+        squad: [],
+      };
+
       const players: Player[] = (
-        await this.teamRepository.manager.findOne(Team, {
-          where: { user: user.id },
+        await this.teamRepository.findOne({
+          where: { id: team.id },
           relations: ['squad'],
         })
       ).squad;
-      delete team.id;
-      team.squad = [];
-      this.copyPlayersToTeam(team, players);
-      user.teams.push(team);
-    }
+      this.copyPlayersToTeam(newTeam, players);
+      
+      return newTeam;
+    });
+    user.teams = await Promise.all(teamsCopy);
   }
 
   private async createNewUser(
