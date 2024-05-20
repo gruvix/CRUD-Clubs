@@ -18,8 +18,8 @@ export default class UserService {
   ) {}
 
   isLoggedIn(req: CustomRequest): boolean {
-    const username = req.session.username;
-    return !!username;
+    const userId = req.session.userId;
+    return !!userId;
   }
 
   async getUserId(username: string): Promise<number> {

@@ -31,7 +31,8 @@ export default class UserController {
       const success = await this.userService.handleUserLogin(data.username);
       if (success) {
         request.session.username = data.username;
-        console.log(`User ${data.username} logged in`);
+        request.session.userId = await this.userService.getUserId(data.username);
+        console.log(`User ${data.username} ID ${request.session.userId} is logged in`);
         return;
       } else {
         console.log('Failed to login user');
