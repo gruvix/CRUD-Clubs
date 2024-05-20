@@ -27,10 +27,9 @@ export default class TeamController {
     @Req() req: CustomRequest,
     @Param() params: any,
   ): Promise<TeamData> {
-    const { username } = req.session;
+    const { userId } = req.session;
     const { teamId } = params;
-    console.log(`User ${username} requested team ${teamId}`);
-
+    console.log(`User ${userId} requested team ${teamId}`);
     return await this.teamService.getTeam(teamId);
   }
 
@@ -40,9 +39,9 @@ export default class TeamController {
     @Param() params: any,
     @Body() data: TeamData,
   ): Promise<void> {
-    const { username } = req.session;
+    const { userId } = req.session;
     const { teamId } = params;
-    console.log(`User ${username} is updating team ${teamId}`);
+    console.log(`User ${userId} is updating team ${teamId}`);
 
     await this.teamService.updateTeam(teamId, data);
   }
@@ -52,10 +51,10 @@ export default class TeamController {
     @Req() req: CustomRequest,
     @Param() params: any,
   ): Promise<void> {
-    const { username } = req.session;
+    const { userId } = req.session;
     const { teamId } = params;
-    console.log(`User ${username} is deleting team ${teamId}`);
-    await this.teamService.deleteTeam(username, teamId);
+    console.log(`User ${userId} is deleting team ${teamId}`);
+    await this.teamService.deleteTeam(teamId);
   }
 
   @Put()
@@ -63,9 +62,9 @@ export default class TeamController {
     @Req() req: CustomRequest,
     @Param() params: any,
   ): Promise<void> {
-    const { username } = req.session;
+    const { userId } = req.session;
     const { teamId } = params;
-    console.log(`User ${username} is resetting team ${teamId}`);
-    await this.teamService.resetTeam(username, teamId);
+    console.log(`User ${userId} is resetting team ${teamId}`);
+    await this.teamService.resetTeam(teamId);
   }
 }

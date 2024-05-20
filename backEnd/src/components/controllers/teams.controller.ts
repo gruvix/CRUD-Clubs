@@ -22,26 +22,19 @@ interface TeamsListData {
 @UseGuards(AuthGuard)
 @Controller('user/teams')
 export default class TeamsController {
-  constructor(
-    private readonly teamsService: TeamsService,
-    private readonly userService: UserService,
-  ) {}
+  constructor(private readonly teamsService: TeamsService) {}
 
   @Get()
   async getTeamsList(@Req() req: CustomRequest): Promise<TeamsListData> {
-    const { username } = req.session;
+    const { username, userId } = req.session;
     console.log(`User ${username} requested teams list`);
     try {
-      const userId = await this.userService.getUserId(username);
       const data: TeamsListData = {
         username, //Create custom endpoint to get username, remove username from other requests
         teams: await this.teamsService.getTeamsList(userId),
       };
       return data;
     } catch (error) {
-      if (error instanceof UserNotFoundError) {
-        throw new HttpException('User data not found', HttpStatus.CONFLICT);
-      }
       if (error)
         throw new HttpException(
           'Failed to get teams',
@@ -52,10 +45,10 @@ export default class TeamsController {
 
   @Put()
   async resetTeamsList(@Req() req: CustomRequest) {
-    const { username } = req.session;
-    console.log(`User ${username} requested teams list reset`);
+    const { userId } = req.session;
+    console.log(`User ${userId} requested teams list reset`);
     try {
-      await this.teamsService.resetTeamsList(username);
+      await this.teamsService.resetTeamsList(userId);
     } catch (error) {
       throw new HttpException(
         'Failed to reset teams',

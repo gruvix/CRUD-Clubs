@@ -16,7 +16,7 @@ export default class UserController {
   constructor(private readonly userService: UserService) {}
   @Get()
   async getUserStatus(@Req() req: CustomRequest) {
-    console.log(`User is requesting user status: ${req.session.username}`);
+    console.log(`User ${req.session.userId} requested user status`);
     if (!this.userService.isLoggedIn(req)) {
       throw new HttpException('Not logged in', HttpStatus.UNAUTHORIZED);
     }
@@ -49,7 +49,7 @@ export default class UserController {
   }
   @Delete()
   logout(@Req() request: CustomRequest) {
-    console.log(`User ${request.session.username} is logging out`);
+    console.log(`User ${request.session.userId} is logging out`);
     request.session.destroy((error) => {
       if (error) {
         throw new HttpException(
