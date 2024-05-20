@@ -69,7 +69,7 @@ export default class UserService {
     newUser.password = password;
     newUser.teams = [];
 
-    this.userRepository.manager.transaction(
+    await this.userRepository.manager.transaction(
       async (transactionalEntityManager) => {
         let savedUser = await transactionalEntityManager.save(newUser);
 
