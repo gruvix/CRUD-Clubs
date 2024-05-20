@@ -1,13 +1,13 @@
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { HttpException, HttpStatus } from '@nestjs/common';
 import TeamsService from '@comp/services/teams.service';
 import TeamsController from '@comp/controllers/teams.controller';
-import TeamListTeam from '@comp/models/TeamListTeam';
 import CustomRequest from '@comp/interfaces/CustomRequest.interface';
-import Team from '@comp/entities/team.entity';
 import UserService from '@comp/services/user.service';
 import Team from '@comp/entities/team.entity';
 import User from '@comp/entities/user.entity';
+import UserNotFoundError from '@comp/errors/UserNotFoundError';
 
 describe('TeamsController', () => {
   let teamsController: TeamsController;
@@ -74,5 +74,33 @@ describe('TeamsController', () => {
       });
     });
 
+    it('should throw an error if user data not found', async () => {
+      jest
+        .spyOn(userService, 'getUserId')
+        .mockRejectedValueOnce(new UserNotFoundError());
+      await expect(teamsController.getTeamsList(mockRequest)).rejects.toThrow(
+        new HttpException('User data not found', HttpStatus.CONFLICT),
+      );
+    });
+
+    it('should handle other errors', async () => {
+      jest
+        .spyOn(teamsService, 'getTeamsList')
+        .mockRejectedValueOnce(new Error());
+      await expect(teamsController.getTeamsList(mockRequest)).rejects.toThrow(
+        new HttpException(
+          'Failed to get teams',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        ),
+      );
+
+      jest.spyOn(userService, 'getUserId').mockRejectedValueOnce(new Error());
+      await expect(teamsController.getTeamsList(mockRequest)).rejects.toThrow(
+        new HttpException(
+          'Failed to get teams',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        ),
+      );
+    });
   });
 });
