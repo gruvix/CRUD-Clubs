@@ -81,6 +81,7 @@ export default class TeamService {
       })
     ).defaultTeam as unknown as DefaultTeam;
     //typescript above strongly believes defaultTeam is just a number
+    if(!defaultTeam) throw new TeamIsNotResettableError('Team has no default team');
     return defaultTeam.id;
   }
 
