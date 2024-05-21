@@ -66,6 +66,15 @@ export default class PlayerService {
     }
   }
 
+  async getSquad(teamId: number): Promise<Player[]> {
+    return (
+      await this.entityManager.findOne(Team, {
+        where: { id: teamId },
+        relations: ['squad'],
+      })
+    ).squad;
+  }
+
   copyPlayersToTeam(team: Team, players: Player[]): void {
     for (const player of players) {
       player.team = team.id;
