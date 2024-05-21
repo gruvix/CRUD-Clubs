@@ -14,6 +14,7 @@ import TeamData from '@comp/interfaces/TeamData.interface';
 import { AuthGuard } from '@comp/guards/auth.guard';
 import { TeamGuard } from '@comp/guards/team.guard';
 import TeamService from '@comp/services/team.service';
+import { UserId } from '@comp/decorators/userId.decorator';
 
 @UseGuards(AuthGuard, TeamGuard)
 @Controller('user/team/:teamId')
@@ -38,8 +39,8 @@ export default class TeamController {
     @Req() req: CustomRequest,
     @Param() params: any,
     @Body() data: TeamData,
+    @UserId() userId: number,
   ): Promise<void> {
-    const { userId } = req.session;
     const { teamId } = params;
     console.log(`User ${userId} is updating team ${teamId}`);
 
@@ -48,10 +49,9 @@ export default class TeamController {
 
   @Delete()
   async deleteTeam(
-    @Req() req: CustomRequest,
     @Param() params: any,
+    @UserId() userId: number,
   ): Promise<void> {
-    const { userId } = req.session;
     const { teamId } = params;
     console.log(`User ${userId} is deleting team ${teamId}`);
     await this.teamService.deleteTeam(teamId);
