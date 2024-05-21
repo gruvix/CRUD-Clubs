@@ -19,7 +19,7 @@ export default class PlayerService {
         throw new Error('Failed to add player, unkown server error');
       }
       player.id = newId;
-      await storage.addPlayer(username, teamId, player);
+      //await storage.addPlayer(username, teamId, player);
     } catch (error) {
       console.log(error);
       throw new HttpException(
@@ -35,7 +35,7 @@ export default class PlayerService {
     newData: PlayerData,
   ): Promise<void> {
     try {
-      await storage.updatePlayer(username, teamId, newData);
+      //await storage.updatePlayer(username, teamId, newData);
     } catch (error) {
       console.log(error);
       throw new HttpException(
