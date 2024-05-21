@@ -73,7 +73,6 @@ export default class TeamService {
     }
   }
 
-  async resetTeam(teamId: number): Promise<void> {
   private async getDefaultTeamId(teamId: number): Promise<number> {
     const defaultTeam = (
       await this.teamRepository.findOne({
@@ -92,8 +91,29 @@ export default class TeamService {
     });
   }
 
+  async resetTeam(teamId: number, userId: number): Promise<void> {
     try {
-      // implement ORM query to reset team
+      await this.entityManager.transaction(
+        async (transactionalEntityManager) => {
+          await this.playerService.clearSquad(teamId);
+
+          const defaultTeamId = await this.getDefaultTeamId(teamId);
+          const defaultTeam = await this.getDefaultTeam(defaultTeamId);
+
+          let team = new Team();
+          team = {
+            ...defaultTeam,
+            id: teamId,
+            user: userId,
+            squad: [],
+            defaultTeam: defaultTeamId,
+          };
+
+          this.playerService.copyPlayersToTeam(team, defaultTeam.squad);
+
+          await transactionalEntityManager.save(Team, team);
+        },
+      );
     } catch (error) {
       if (error instanceof TeamIsNotResettableError) {
         throw new HttpException(

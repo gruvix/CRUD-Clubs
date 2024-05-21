@@ -55,6 +55,6 @@ export default class TeamController {
     @TeamId() teamId: number,
   ): Promise<void> {
     console.log(`User ${userId} is resetting team ${teamId}`);
-    await this.teamService.resetTeam(teamId);
+    await this.teamService.resetTeam(teamId, userId);
   }
 }
