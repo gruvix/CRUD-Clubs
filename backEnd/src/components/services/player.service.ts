@@ -1,10 +1,15 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import TeamStorageAdapter from '@comp/Adapters/teamStorage.adapter';
+import { InjectEntityManager } from '@nestjs/typeorm';
+import { EntityManager } from 'typeorm';
+import Player from '@comp/entities/player.entity';
 import PlayerData from '@comp/models/playerData';
 
 const storage = new TeamStorageAdapter();
 @Injectable()
 export default class PlayerService {
+  @InjectEntityManager() private readonly entityManager: EntityManager;
+
   async addPlayer(
     username: string,
     teamId: number,
@@ -55,6 +60,23 @@ export default class PlayerService {
       console.log(error);
       throw new HttpException(
         'Server failed to remove player',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async clearSquad(teamId: number): Promise<void> {
+    try {
+      await this.entityManager
+        .createQueryBuilder()
+        .delete()
+        .from(Player)
+        .where({ team: teamId })
+        .execute();
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(
+        'server failed to clear team\'s squad',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
