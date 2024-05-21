@@ -16,6 +16,7 @@ export default class UserService {
     private readonly userRepository: Repository<User>,
     @InjectRepository(Team)
     private readonly teamRepository: Repository<Team>,
+    @Inject(PlayerService) private readonly playerService: PlayerService,
     @Inject(TeamsService) private readonly teamsService: TeamsService,
   ) {}
 
@@ -31,13 +32,7 @@ export default class UserService {
     }
     return user.id;
   }
-  private copyPlayersToTeam(team: Team, players: Player[]): void {
-    for (const player of players) {
-      player.team = team.id;
-      delete player.id;
-      team.squad.push(player);
-    }
-  }
+
 
   private async copyTeamsToUser(user: User, teams: Team[]): Promise<void> {
     const teamsCopy = teams.map(async (team) => {
@@ -57,6 +52,7 @@ export default class UserService {
         })
       ).squad;
       this.copyPlayersToTeam(newTeam, players);
+      this.playerService.copyPlayersToTeam(newTeam, players);
 
       return newTeam;
     });

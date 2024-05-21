@@ -4,6 +4,7 @@ import { InjectEntityManager } from '@nestjs/typeorm';
 import { EntityManager } from 'typeorm';
 import Player from '@comp/entities/player.entity';
 import PlayerData from '@comp/models/playerData';
+import Team from '@comp/entities/team.entity';
 
 const storage = new TeamStorageAdapter();
 @Injectable()
@@ -65,6 +66,14 @@ export default class PlayerService {
     }
   }
 
+  copyPlayersToTeam(team: Team, players: Player[]): void {
+    for (const player of players) {
+      player.team = team.id;
+      delete player.id;
+      team.squad.push(player);
+    }
+  }
+
   async clearSquad(teamId: number): Promise<void> {
     try {
       await this.entityManager
@@ -76,7 +85,7 @@ export default class PlayerService {
     } catch (error) {
       console.log(error);
       throw new HttpException(
-        'server failed to clear team\'s squad',
+        "server failed to clear team's squad",
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }

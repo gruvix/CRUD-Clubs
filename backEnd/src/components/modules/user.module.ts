@@ -6,11 +6,12 @@ import Player from '../entities/player.entity';
 import UserService from '../services/user.service';
 import UserController from '../controllers/user.controller';
 import TeamsService from '@comp/services/teams.service';
+import PlayerService from '@comp/services/player.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User, Team, Player])],
   controllers: [UserController],
-  providers: [UserService, TeamsService],
+  providers: [UserService, TeamsService, PlayerService],
   exports: [UserService],
 })
 export default class UserModule {}
