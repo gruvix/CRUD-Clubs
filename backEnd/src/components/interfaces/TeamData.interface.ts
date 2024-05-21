@@ -1,4 +1,7 @@
+import Player from "@comp/entities/player.entity";
+
 export default interface TeamData {
+    id: number
     name: string;
     area: string;
     address: string;
@@ -6,5 +9,8 @@ export default interface TeamData {
     website: string;
     email: string;
     venue: string;
+    crestUrl: string;
+    hasCustomCrest: boolean;
+    squad?: Player[];
     readonly defaultTeam: number;
 }
