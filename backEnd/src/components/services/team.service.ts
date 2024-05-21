@@ -75,12 +75,21 @@ export default class TeamService {
 
   async resetTeam(teamId: number): Promise<void> {
   private async getDefaultTeamId(teamId: number): Promise<number> {
-    const defaultTeam = (await this.teamRepository.findOne({
-      where: { id: teamId },
-      relations: ['defaultTeam'],
-    })).defaultTeam as unknown as DefaultTeam;
+    const defaultTeam = (
+      await this.teamRepository.findOne({
+        where: { id: teamId },
+        relations: ['defaultTeam'],
+      })
+    ).defaultTeam as unknown as DefaultTeam;
     //typescript above strongly believes defaultTeam is just a number
     return defaultTeam.id;
+  }
+
+  private async getDefaultTeam(teamId: number): Promise<Team> {
+    return await this.teamRepository.findOne({
+      where: { id: teamId },
+      relations: ['squad', 'defaultTeam'],
+    });
   }
 
     try {
