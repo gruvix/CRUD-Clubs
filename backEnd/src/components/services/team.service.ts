@@ -6,6 +6,7 @@ import Team from '@comp/entities/team.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import TeamData from '@comp/interfaces/TeamData.interface';
+import TeamDTO from '@comp/interfaces/teamDTO.interface';
 const storage = new TeamStorageAdapter();
 
 @Injectable()
@@ -41,6 +42,11 @@ export default class TeamService {
         error,
       );
     }
+  }
+  private transformTeamDataToDTO(teamData: TeamData): TeamDTO {
+    const { id, defaultTeam, ...rest } = teamData;
+    const teamDTO: TeamDTO = { ...rest, hasDefault: !!defaultTeam };
+    return teamDTO
   }
 
   async getTeam(teamId: number): Promise<TeamData> {
