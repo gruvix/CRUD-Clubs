@@ -8,6 +8,7 @@ import { EntityManager, Repository } from 'typeorm';
 import TeamData from '@comp/interfaces/TeamData.interface';
 import PlayerService from './player.service';
 import TeamDTO from '@comp/interfaces/teamDTO.interface';
+import DefaultTeam from '@comp/entities/defaultTeam.entity';
 const storage = new TeamStorageAdapter();
 
 @Injectable()
@@ -51,7 +52,7 @@ export default class TeamService {
   private transformTeamDataToDTO(teamData: TeamData): TeamDTO {
     const { id, defaultTeam, ...rest } = teamData;
     const teamDTO: TeamDTO = { ...rest, hasDefault: !!defaultTeam };
-    return teamDTO
+    return teamDTO;
   }
 
   async getTeam(teamId: number): Promise<TeamDTO> {
@@ -73,6 +74,15 @@ export default class TeamService {
   }
 
   async resetTeam(teamId: number): Promise<void> {
+  private async getDefaultTeamId(teamId: number): Promise<number> {
+    const defaultTeam = (await this.teamRepository.findOne({
+      where: { id: teamId },
+      relations: ['defaultTeam'],
+    })).defaultTeam as unknown as DefaultTeam;
+    //typescript above strongly believes defaultTeam is just a number
+    return defaultTeam.id;
+  }
+
     try {
       // implement ORM query to reset team
     } catch (error) {
