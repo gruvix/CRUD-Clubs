@@ -15,6 +15,7 @@ import { AuthGuard } from '@comp/guards/auth.guard';
 import { TeamGuard } from '@comp/guards/team.guard';
 import TeamService from '@comp/services/team.service';
 import { UserId } from '@comp/decorators/userId.decorator';
+import TeamDTO from '@comp/models/teamDTO.class';
 
 @UseGuards(AuthGuard, TeamGuard)
 @Controller('user/team/:teamId')
@@ -27,7 +28,7 @@ export default class TeamController {
   async getTeam(
     @Req() req: CustomRequest,
     @Param() params: any,
-  ): Promise<TeamData> {
+  ): Promise<TeamDTO> {
     const { userId } = req.session;
     const { teamId } = params;
     console.log(`User ${userId} requested team ${teamId}`);
@@ -36,7 +37,6 @@ export default class TeamController {
 
   @Patch()
   async updateTeam(
-    @Req() req: CustomRequest,
     @Param() params: any,
     @Body() data: TeamData,
     @UserId() userId: number,
