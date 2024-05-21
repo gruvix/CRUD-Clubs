@@ -15,7 +15,7 @@ import { AuthGuard } from '@comp/guards/auth.guard';
 import { TeamGuard } from '@comp/guards/team.guard';
 import TeamService from '@comp/services/team.service';
 import { UserId } from '@comp/decorators/userId.decorator';
-import TeamDTO from '@comp/models/teamDTO.class';
+import TeamDTO from '@comp/interfaces/teamDTO.interface';
 
 @UseGuards(AuthGuard, TeamGuard)
 @Controller('user/team/:teamId')
