@@ -49,18 +49,19 @@ export default class TeamService {
     return teamDTO
   }
 
-  async getTeam(teamId: number): Promise<TeamData> {
+  async getTeam(teamId: number): Promise<TeamDTO> {
     try {
       const team: TeamData = await this.teamRepository.findOne({
         where: { id: teamId },
-        relations: ['squad'],
+        relations: ['squad', 'defaultTeam'],
       });
-      return team;
+      if (!team) throw new Error('Team not found');
+      return this.transformTeamDataToDTO(team);
     } catch (error) {
       console.log(error);
       throw new HttpException(
         'Failed to get team',
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.INTERNAL_SERVER_ERROR,
         error,
       );
     }
