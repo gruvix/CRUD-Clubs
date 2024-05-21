@@ -1,11 +1,12 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import TeamStorageAdapter from '@comp/Adapters/teamStorage.adapter';
 import TeamIsNotResettableError from '@comp/errors/TeamIsNotResettableError';
 import { generateCustomCrestUrl } from '@comp/storage/userPath';
 import Team from '@comp/entities/team.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
+import { EntityManager, Repository } from 'typeorm';
 import TeamData from '@comp/interfaces/TeamData.interface';
+import PlayerService from './player.service';
 import TeamDTO from '@comp/interfaces/teamDTO.interface';
 const storage = new TeamStorageAdapter();
 
@@ -14,6 +15,10 @@ export default class TeamService {
   constructor(
     @InjectRepository(Team)
     private readonly teamRepository: Repository<Team>,
+    @InjectEntityManager()
+    private readonly entityManager: EntityManager,
+    @Inject(PlayerService)
+    private readonly playerService: PlayerService,
   ) {}
   async addTeam(
     username: string,
@@ -106,7 +111,17 @@ export default class TeamService {
 
   async deleteTeam(teamId: number): Promise<void> {
     try {
-      //await storage.deleteTeam(username, teamId);
+      await this.entityManager.transaction(
+        async (transactionalEntityManager) => {
+          await this.playerService.clearSquad(teamId);
+          await transactionalEntityManager
+            .createQueryBuilder()
+            .delete()
+            .from(Team)
+            .where('id = :id', { id: teamId })
+            .execute();
+        },
+      );
     } catch (error) {
       console.log(error);
       throw new HttpException(
