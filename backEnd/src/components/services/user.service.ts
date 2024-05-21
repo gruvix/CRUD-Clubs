@@ -8,6 +8,7 @@ import User from '@comp/entities/user.entity';
 import Team from '@comp/entities/team.entity';
 import Player from '@comp/entities/player.entity';
 import TeamsService from './teams.service';
+import PlayerService from './player.service';
 
 @Injectable()
 export default class UserService {
@@ -45,13 +46,7 @@ export default class UserService {
         defaultTeam: team.id,
       };
 
-      const players: Player[] = (
-        await this.teamRepository.findOne({
-          where: { id: team.id },
-          relations: ['squad'],
-        })
-      ).squad;
-      this.copyPlayersToTeam(newTeam, players);
+      const players = await this.playerService.getSquad(team.id);
       this.playerService.copyPlayersToTeam(newTeam, players);
 
       return newTeam;
