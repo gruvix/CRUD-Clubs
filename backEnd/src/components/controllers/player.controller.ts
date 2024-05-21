@@ -9,7 +9,7 @@ import {
   Delete,
 } from '@nestjs/common';
 import CustomRequest from '@comp/interfaces/CustomRequest.interface';
-import Player from '@comp/models/Player';
+import PlayerData from '@comp/models/playerData';
 import { AuthGuard } from '@comp/guards/auth.guard';
 import { TeamGuard } from '@comp/guards/team.guard';
 import PlayerService from '@comp/services/player.service';
@@ -23,7 +23,7 @@ export default class PlayerController {
   async addPlayer(
     @Req() req: CustomRequest,
     @Param() params: any,
-    @Body() newPlayer: Player,
+    @Body() newPlayer: PlayerData,
   ) {
     const { username } = req.session;
     console.log(`User ${username} is adding player to team ${params.teamId}`);
@@ -35,7 +35,7 @@ export default class PlayerController {
   async updatePlayer(
     @Req() req: CustomRequest,
     @Param() params: any,
-    @Body() playerData: Player,
+    @Body() playerData: PlayerData,
   ) {
     const { username } = req.session;
     console.log(`User ${username} is updating team ${params.teamId}'s player ${playerData.id}`);

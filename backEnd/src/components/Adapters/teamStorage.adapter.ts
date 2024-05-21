@@ -1,5 +1,5 @@
 import TeamListTeam from '@comp/models/TeamListTeam';
-import Player from '@comp/models/Player';
+import PlayerData from '@comp/models/playerData';
 import TeamExtendedOld from '@comp/models/TeamExtended.old';
 import {
   generateCustomCrestUrl,
@@ -100,9 +100,9 @@ export default class TeamStorageAdapter {
       throw error;
     }
   }
-  findNextFreePlayerId(players: Player[]): number {
+  findNextFreePlayerId(players: PlayerData[]): number {
     const sortedPlayers = [...players].sort(
-      (a: Player, b: Player) => a.id - b.id,
+      (a: PlayerData, b: PlayerData) => a.id - b.id,
     );
     let nextFreeId = 0;
     for (let index = 0; index < sortedPlayers.length; index += 1) {
@@ -242,14 +242,14 @@ export default class TeamStorageAdapter {
   async addPlayer(
     username: string,
     teamId: number,
-    playerData: Player,
+    playerData: PlayerData,
   ): Promise<void> {
     try {
       if (!playerData || !Object.keys(playerData).length) {
         throw new NoDataProvidedError();
       }
       await this.ensureTeamIsUnDefault(username, teamId);
-      const player = new Player(playerData);
+      const player = new PlayerData(playerData);
       const team = await readTeamFile(username, teamId);
       team.lastUpdated = getDate();
       if (!team.squad.length) {
@@ -266,7 +266,7 @@ export default class TeamStorageAdapter {
   async updatePlayer(
     username: string,
     teamId: number,
-    player: Player,
+    player: PlayerData,
   ): Promise<void> {
     try {
       if (!player || !Object.keys(player).length) {
@@ -277,7 +277,7 @@ export default class TeamStorageAdapter {
       team.lastUpdated = getDate();
       console.log(`Updating player ${player.id} in team ${teamId}`);
       const playerIndex = team.squad.findIndex(
-        (squadPlayer: Player) => Number(squadPlayer.id) === Number(player.id),
+        (squadPlayer: PlayerData) => Number(squadPlayer.id) === Number(player.id),
       );
       if (playerIndex !== -1) {
         team.squad[playerIndex] = player;
@@ -299,7 +299,7 @@ export default class TeamStorageAdapter {
       const team = await readTeamFile(username, teamId);
       team.lastUpdated = getDate();
       team.squad = team.squad.filter(
-        (player: Player) => Number(player.id) !== Number(playerId),
+        (player: PlayerData) => Number(player.id) !== Number(playerId),
       );
       await saveTeam(team, username);
     } catch (error) {

@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import Player from '@comp/models/Player';
 import TeamStorageAdapter from '@comp/Adapters/teamStorage.adapter';
+import PlayerData from '@comp/models/playerData';
 
 const storage = new TeamStorageAdapter();
 @Injectable()
@@ -8,7 +8,7 @@ export default class PlayerService {
   async addPlayer(
     username: string,
     teamId: number,
-    player: Player,
+    player: PlayerData,
   ): Promise<number | Error> {
     let newId: number;
     try {
@@ -32,7 +32,7 @@ export default class PlayerService {
   async updatePlayer(
     username: string,
     teamId: number,
-    newData: Player,
+    newData: PlayerData,
   ): Promise<void> {
     try {
       await storage.updatePlayer(username, teamId, newData);

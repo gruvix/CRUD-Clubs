@@ -1,5 +1,5 @@
 import TeamListTeam from 'src/components/models/TeamListTeam';
-import Player from '../../models/Player';
+import PlayerData from '../../models/playerData';
 import TeamExtendedOld from '../../models/TeamExtended.old';
 import TeamStorageAdapter from '../teamStorage.adapter';
 
@@ -90,8 +90,8 @@ export default class mockUtils {
       team.squad.unshift(this.getNewPlayer(team.squad));
     }
   }
-  getNewPlayer(squad: Player[]) {
-    return new Player({
+  getNewPlayer(squad: PlayerData[]) {
+    return new PlayerData({
       id: adapter.findNextFreePlayerId(squad),
       name: 'newname',
       position: 'newposition',
