@@ -28,7 +28,10 @@ export default function Login() {
         }, 1500);
       });
   };
-  checkLoginStatus();
+  
+  React.useEffect(() => {
+    checkLoginStatus();
+  }, []);
 
   return isLoading ? (
     <>
