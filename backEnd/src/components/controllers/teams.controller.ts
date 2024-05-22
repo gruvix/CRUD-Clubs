@@ -4,10 +4,8 @@ import {
   HttpException,
   HttpStatus,
   Put,
-  Req,
   UseGuards,
 } from '@nestjs/common';
-import CustomRequest from '@comp/interfaces/CustomRequest.interface';
 import { AuthGuard } from '@comp/guards/auth.guard';
 import TeamsService from '@comp/services/teams.service';
 import TeamListTeam from '@comp/models/TeamListTeam';
