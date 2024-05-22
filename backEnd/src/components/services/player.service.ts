@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import TeamStorageAdapter from '@comp/Adapters/teamStorage.adapter';
-import { InjectEntityManager } from '@nestjs/typeorm';
-import { EntityManager } from 'typeorm';
+import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
+import { EntityManager, Repository } from 'typeorm';
 import Player from '@comp/entities/player.entity';
 import PlayerData from '@comp/models/playerData';
 import Team from '@comp/entities/team.entity';
@@ -9,7 +9,12 @@ import Team from '@comp/entities/team.entity';
 const storage = new TeamStorageAdapter();
 @Injectable()
 export default class PlayerService {
-  @InjectEntityManager() private readonly entityManager: EntityManager;
+  constructor(
+    @InjectRepository(Player)
+    private readonly playerRepository: Repository<Player>,
+    @InjectRepository(Team)
+    private readonly teamRepository: Repository<Team>,
+  ) {}
 
   async addPlayer(
     username: string,
@@ -68,7 +73,7 @@ export default class PlayerService {
 
   async getSquad(teamId: number): Promise<Player[]> {
     return (
-      await this.entityManager.findOne(Team, {
+      await this.teamRepository.findOne({
         where: { id: teamId },
         relations: ['squad'],
       })
@@ -85,12 +90,13 @@ export default class PlayerService {
 
   async clearSquad(teamId: number): Promise<void> {
     try {
-      await this.entityManager
+      await this.playerRepository
         .createQueryBuilder()
         .delete()
         .from(Player)
         .where({ team: teamId })
         .execute();
+
     } catch (error) {
       console.log(error);
       throw new HttpException(
