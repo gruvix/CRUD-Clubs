@@ -38,7 +38,6 @@ export default class TeamsService {
     }
   }
 
-  async resetTeamsList(username: string) {}
   async copyTeamsToUser(user: User, teams: Team[]): Promise<void> {
     const teamsCopy = teams.map(async (team) => {
       let newTeam = new Team();
@@ -57,6 +56,44 @@ export default class TeamsService {
     });
     user.teams = await Promise.all(teamsCopy);
   }
+
+  async resetTeams(userId: number) {
+    try {
+      if (!userId) throw new Error('Missing userId parameter');
+
+      await this.teamRepository.manager.transaction(
+        async (transactionalEntityManager) => {
+          await this.teamRepository
+            .createQueryBuilder('team')
+            .select('team.id')
+            .where('team.user = :userId', { userId })
+            .getMany()
+            .then((teams) =>
+              teams.forEach(async (team) => {
+                this.playerService.clearSquad(team.id);
+              }),
+            );
+          await transactionalEntityManager
+            .createQueryBuilder()
+            .delete()
+            .from(Team)
+            .where({ user: userId })
+            .execute();
+
+          const defaultTeams = await this.getDefaultTeams();
+          const user = await this.userRepository.findOne({
+            where: { id: userId },
+          });
+          await this.copyTeamsToUser(user, defaultTeams);
+          this.userRepository.save(user);
+        },
+      );
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+
   async getDefaultTeams(): Promise<Team[]> {
     const defaultUser = await this.userRepository.findOne({
       where: { username: 'default' },
