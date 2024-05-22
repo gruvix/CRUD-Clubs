@@ -90,6 +90,7 @@ export default class PlayerService {
 
   async clearSquad(teamId: number): Promise<void> {
     try {
+      if(!teamId) throw new Error('No team id provided');
       await this.playerRepository
         .createQueryBuilder()
         .delete()
