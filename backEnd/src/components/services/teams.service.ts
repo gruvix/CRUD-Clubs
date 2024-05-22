@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import TeamListTeam from '@comp/models/TeamListTeam';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import Team from '@comp/entities/team.entity';
 import User from '@comp/entities/user.entity';
+import PlayerService from './player.service';
 
 @Injectable()
 export default class TeamsService {
@@ -12,6 +13,7 @@ export default class TeamsService {
     private readonly teamRepository: Repository<Team>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @Inject(PlayerService) private readonly playerService: PlayerService,
   ) {}
 
   async getTeamsList(userId: number): Promise<TeamListTeam[]> {
@@ -30,7 +32,6 @@ export default class TeamsService {
         .getMany();
 
       return teamsData;
-      
     } catch (error) {
       console.log(error);
       throw error;
@@ -38,6 +39,24 @@ export default class TeamsService {
   }
 
   async resetTeamsList(username: string) {}
+  async copyTeamsToUser(user: User, teams: Team[]): Promise<void> {
+    const teamsCopy = teams.map(async (team) => {
+      let newTeam = new Team();
+      newTeam = {
+        ...team,
+        id: undefined,
+        user: user.id,
+        squad: [],
+        defaultTeam: team.id,
+      };
+
+      const players = await this.playerService.getSquad(team.id);
+      this.playerService.copyPlayersToTeam(newTeam, players);
+
+      return newTeam;
+    });
+    user.teams = await Promise.all(teamsCopy);
+  }
   async getDefaultTeams(): Promise<Team[]> {
     const defaultUser = await this.userRepository.findOne({
       where: { username: 'default' },

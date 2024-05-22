@@ -6,7 +6,6 @@ import UserNotFoundError from '@comp/errors/UserNotFoundError';
 import CustomRequest from '@comp/interfaces/CustomRequest.interface';
 import User from '@comp/entities/user.entity';
 import Team from '@comp/entities/team.entity';
-import Player from '@comp/entities/player.entity';
 import TeamsService from './teams.service';
 import PlayerService from './player.service';
 
@@ -15,8 +14,6 @@ export default class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-    @InjectRepository(Team)
-    private readonly teamRepository: Repository<Team>,
     @Inject(PlayerService) private readonly playerService: PlayerService,
     @Inject(TeamsService) private readonly teamsService: TeamsService,
   ) {}
@@ -34,26 +31,6 @@ export default class UserService {
     return user.id;
   }
 
-
-  private async copyTeamsToUser(user: User, teams: Team[]): Promise<void> {
-    const teamsCopy = teams.map(async (team) => {
-      let newTeam = new Team();
-      newTeam = {
-        ...team,
-        id: undefined,
-        user: user.id,
-        squad: [],
-        defaultTeam: team.id,
-      };
-
-      const players = await this.playerService.getSquad(team.id);
-      this.playerService.copyPlayersToTeam(newTeam, players);
-
-      return newTeam;
-    });
-    user.teams = await Promise.all(teamsCopy);
-  }
-
   private async createNewUser(
     username: string,
     password: string = 'default',
@@ -68,7 +45,7 @@ export default class UserService {
         let savedUser = await transactionalEntityManager.save(newUser);
 
         const baseTeams = await this.teamsService.getDefaultTeams();
-        await this.copyTeamsToUser(savedUser, baseTeams);
+        await this.teamsService.copyTeamsToUser(savedUser, baseTeams);
         await transactionalEntityManager.save(savedUser);
       },
     );
