@@ -69,10 +69,12 @@ export default function TeamsList(): React.ReactElement {
     setModalText(`Are you sure you want to delete team ${teamName}?`);
   };
   const resetTeams = () => async () => {
+    setIsLoading(true);
     request
       .resetTeamsList()
       .then(() => {
         updateTeamsData();
+        setIsLoading(false);
       })
       .catch((error) => {
         errorHandler(error);
