@@ -8,13 +8,13 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@comp/guards/auth.guard';
 import TeamsService from '@comp/services/teams.service';
-import TeamListTeam from '@comp/models/TeamListTeam';
 import { UserId } from '@comp/decorators/userId.decorator';
 import { Username } from '@comp/decorators/username.decorator';
+import TeamShortDTO from '@comp/interfaces/TeamShortDTO.interface';
 
 interface TeamsListData {
   username: string;
-  teams: TeamListTeam[];
+  teams: TeamShortDTO[];
 }
 
 @UseGuards(AuthGuard)
