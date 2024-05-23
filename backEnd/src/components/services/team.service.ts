@@ -7,7 +7,7 @@ import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, Repository } from 'typeorm';
 import TeamData from '@comp/interfaces/TeamData.interface';
 import PlayerService from './player.service';
-import TeamDTO from '@comp/interfaces/teamDTO.interface';
+import TeamDTO from '@comp/interfaces/TeamDTO.interface';
 import DefaultTeam from '@comp/entities/defaultTeam.entity';
 const storage = new TeamStorageAdapter();
 

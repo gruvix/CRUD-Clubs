@@ -13,7 +13,7 @@ import TeamService from '@comp/services/team.service';
 import { UserId } from '@comp/decorators/userId.decorator';
 import { TeamId } from '@comp/decorators/teamId.decorator';
 import TeamData from '@comp/interfaces/TeamData.interface';
-import TeamDTO from '@comp/interfaces/teamDTO.interface';
+import TeamDTO from '@comp/interfaces/TeamDTO.interface';
 
 @UseGuards(AuthGuard, TeamGuard)
 @Controller('user/team/:teamId')
