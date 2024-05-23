@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import Team from '@comp/entities/team.entity';
 import User from '@comp/entities/user.entity';
 import PlayerService from './player.service';
+import TeamShortDTO from '@comp/interfaces/TeamShortDTO.interface';
 
 @Injectable()
 export default class TeamsService {
@@ -17,6 +18,13 @@ export default class TeamsService {
   ) {}
 
   async getTeamsList(userId: number): Promise<TeamListTeam[]> {
+  private transformTeamShortToDTO(team: TeamShort): TeamShortDTO {
+    const { defaultTeam, ...rest } = team;
+    const teamDTO: TeamShortDTO = { ...rest, hasDefault: !!defaultTeam };
+    console.log(team);
+    return teamDTO;
+  }
+
     try {
       if (!userId) {
         {
