@@ -41,6 +41,7 @@ describe('TeamsController', () => {
           id: 1,
           name: 'test',
           crestUrl: 'test',
+          hasDefault: true,
           hasCustomCrest: true,
         },
       ];
