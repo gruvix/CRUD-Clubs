@@ -20,7 +20,6 @@ export default class TeamsService {
   private transformTeamShortToDTO(team: TeamShort): TeamShortDTO {
     const { defaultTeam, ...rest } = team;
     const teamDTO: TeamShortDTO = { ...rest, hasDefault: !!defaultTeam };
-    console.log(team);
     return teamDTO;
   }
 
