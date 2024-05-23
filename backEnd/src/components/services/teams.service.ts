@@ -17,7 +17,6 @@ export default class TeamsService {
     @Inject(PlayerService) private readonly playerService: PlayerService,
   ) {}
 
-  async getTeamsList(userId: number): Promise<TeamListTeam[]> {
   private transformTeamShortToDTO(team: TeamShort): TeamShortDTO {
     const { defaultTeam, ...rest } = team;
     const teamDTO: TeamShortDTO = { ...rest, hasDefault: !!defaultTeam };
@@ -25,21 +24,29 @@ export default class TeamsService {
     return teamDTO;
   }
 
+  async getTeamsList(userId: number): Promise<TeamShortDTO[]> {
     try {
       if (!userId) {
         {
           throw new Error('Missing userId parameter');
         }
       }
-      const teamsProps = TeamListTeam.properties();
+      const teamsProps = TeamShort.properties();
 
-      const teamsData: TeamListTeam[] = await this.teamRepository
-        .createQueryBuilder('team')
-        .select(teamsProps.map((prop) => 'team.' + prop))
+      const queryProps = teamsProps.map((prop) => 'team.' + prop);
+      queryProps.push('dt.id AS defaultTeam');
+      //this includes the default team id
+      const teamsData: TeamShort[] = await this.teamRepository.createQueryBuilder('team')
+        .select(queryProps)
+        .leftJoinAndSelect('team.defaultTeam', 'dt')
         .where('team.user = :userId', { userId })
         .getMany();
+      
+      const teamsDTO = teamsData.map((team) =>
+        this.transformTeamShortToDTO(team),
+      );
 
-      return teamsData;
+      return teamsDTO;
     } catch (error) {
       console.log(error);
       throw error;
