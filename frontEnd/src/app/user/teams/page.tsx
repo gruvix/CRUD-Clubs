@@ -31,7 +31,7 @@ export default function TeamsList(): React.ReactElement {
   );
   const [modalText, setModalText] = React.useState("");
   const [asyncError, setAsyncError] = React.useState<Error>();
-  const pageTitle = `CRUD ${username}'s teams`
+  const pageTitle = `CRUD ${username}'s teams`;
   const request = new APIAdapter();
 
   const errorHandler = (error: Error) => {
@@ -82,8 +82,8 @@ export default function TeamsList(): React.ReactElement {
     updateTeamsData();
   }, []);
   useEffect(() => {
-    setShouldTeamShow(
-      Object.keys(teamCards).map((teamIndex) => {
+    const shouldTeamShowArray: boolean[] = Object.keys(teamCards).map(
+      (teamIndex) => {
         const team = teamCards[Number(teamIndex)];
         if (
           team.name
@@ -95,13 +95,16 @@ export default function TeamsList(): React.ReactElement {
             case "All teams":
               return true;
             case "Default teams":
-              return team.isDefault;
+              return team.hasDefault;
             case "Custom teams":
-              return !team.isDefault;
+              return !team.hasDefault;
+            default:
+              return true;
           }
         }
-      }),
-    );
+      },
+    ) as boolean[];
+    setShouldTeamShow(shouldTeamShowArray);
   }, [searchPattern, searchOption, teamCards]);
   useEffect(() => {
     if (asyncError) {
