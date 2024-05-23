@@ -1,4 +1,4 @@
-import TeamListTeam from 'src/components/models/TeamListTeam';
+import TeamShort from '@comp/models/TeamShort';
 import PlayerData from '../../models/playerData';
 import TeamExtendedOld from '../../models/TeamExtended.old';
 import TeamStorageAdapter from '../teamStorage.adapter';
@@ -104,10 +104,10 @@ export default class mockUtils {
   cloneObject<T>(obj: T): any {
     return JSON.parse(JSON.stringify(obj)) as T;
   }
-  getDefaultTeamsList(): TeamListTeam[] {
+  getDefaultTeamsList(): TeamShort[] {
     return this.cloneObject(this.defaultTeamsListMock);
   }
-  getNonDefaultTeamsList(): TeamListTeam[] {
+  getNonDefaultTeamsList(): TeamShort[] {
     return this.cloneObject(this.nonDefaultTeamsListMock);
   }
   getNonDefaultTeam(): TeamExtendedOld {

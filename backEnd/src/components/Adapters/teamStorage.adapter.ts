@@ -1,4 +1,4 @@
-import TeamListTeam from '@comp/models/TeamListTeam';
+import TeamShort from '@comp/models/TeamShort';
 import PlayerData from '@comp/models/playerData';
 import TeamExtendedOld from '@comp/models/TeamExtended.old';
 import {
@@ -51,7 +51,7 @@ async function addTeamToTeamlist(
 ): Promise<void> {
   const userTeamsPath = getUserTeamsListJSONPath(username);
   const userTeams = await readJSONFile(userTeamsPath);
-  userTeams[newTeam.id] = new TeamListTeam(newTeam as unknown as TeamListTeam);
+  userTeams[newTeam.id] = new TeamShort(newTeam as unknown as TeamShort);
   await writeFile(userTeamsPath, JSON.stringify(userTeams));
 }
 async function deleteTeamFromTeamlist(
@@ -126,7 +126,7 @@ export default class TeamStorageAdapter {
       throw error;
     }
   }
-  async getTeamsList(username: string): Promise<TeamListTeam[]> {
+  async getTeamsList(username: string): Promise<TeamShort[]> {
     try {
       return await readJSONFile(getUserTeamsListJSONPath(username));
     } catch (error) {
@@ -158,12 +158,12 @@ export default class TeamStorageAdapter {
         throw new Error('Source and target users must be different');
       const sourceTeamsPath = getUserTeamsListJSONPath(sourceUser);
       const targetTeamsPath = getUserTeamsListJSONPath(targetUser);
-      const userTeams: TeamListTeam[] = await readJSONFile(targetTeamsPath);
-      const sourceTeams: TeamListTeam[] = await readJSONFile(sourceTeamsPath);
-      const newTeam: TeamListTeam = Object.values(sourceTeams).find(
-        (team: TeamListTeam) => team.id === Number(teamId),
-      ) as TeamListTeam;
-      userTeams[teamId] = new TeamListTeam(newTeam);
+      const userTeams: TeamShort[] = await readJSONFile(targetTeamsPath);
+      const sourceTeams: TeamShort[] = await readJSONFile(sourceTeamsPath);
+      const newTeam: TeamShort = Object.values(sourceTeams).find(
+        (team: TeamShort) => team.id === Number(teamId),
+      ) as TeamShort;
+      userTeams[teamId] = new TeamShort(newTeam);
       await writeFile(targetTeamsPath, JSON.stringify(userTeams));
     } catch (error) {
       throw error;
@@ -203,7 +203,7 @@ export default class TeamStorageAdapter {
       await this.ensureTeamIsUnDefault(username, teamId);
       updatedData.lastUpdated = getDate();
       const teamlistData = {};
-      TeamListTeam.properties().forEach((property) => {
+      TeamShort.properties().forEach((property) => {
         if (!updatedData[property]) return;
         teamlistData[property] = updatedData[property];
       });
@@ -306,9 +306,9 @@ export default class TeamStorageAdapter {
       throw error;
     }
   }
-  findNextFreeTeamId(teamsList: TeamListTeam[]): number {
+  findNextFreeTeamId(teamsList: TeamShort[]): number {
     const sortedTeams = Object.values(teamsList).sort(
-      (a: TeamListTeam, b: TeamListTeam) => a.id - b.id,
+      (a: TeamShort, b: TeamShort) => a.id - b.id,
     );
     let nextFreeId = 0;
     for (let index = 0; index < sortedTeams.length; index += 1) {
