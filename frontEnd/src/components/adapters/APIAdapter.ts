@@ -1,4 +1,4 @@
-import { BASE_API_URL, apiRequestPaths, webAppPaths } from "../../paths";
+import { BASE_API_URL, apiRequestPaths } from "../../paths";
 import UnauthorizedError from "@/components/errors/UnauthorizedError";
 import validateUsername from "../shared/usernameValidation";
 import Player from "./Player";
