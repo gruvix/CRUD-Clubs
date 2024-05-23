@@ -1,4 +1,4 @@
-import PlayerDTO from "./playerDTO.interface";
+import PlayerDTO from "./PlayerDTO.interface";
 
 export default interface TeamDTO {
     name: string;
