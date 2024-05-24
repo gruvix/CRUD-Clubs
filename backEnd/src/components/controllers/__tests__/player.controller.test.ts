@@ -74,4 +74,37 @@ describe('PlayerController', () => {
       );
     });
   });
+
+  describe('updatePlayer', () => {
+    const playerDataMock: PlayerData = {
+      id: 1,
+      name: 'test name',
+      position: 'test position',
+      nationality: 'test land',
+    };
+
+    it('should update a player', async () => {
+      jest.spyOn(playerService, 'updatePlayer').mockResolvedValueOnce(void 0);
+
+      expect(
+        await playerController.updatePlayer(userId, teamId, playerDataMock),
+      ).toBeUndefined();
+      expect(playerService.updatePlayer).toHaveBeenCalledWith(playerDataMock);
+    });
+
+    it('should handle errors', async () => {
+      jest
+        .spyOn(playerService, 'updatePlayer')
+        .mockRejectedValueOnce(new Error());
+      await expect(
+        playerController.updatePlayer(userId, teamId, playerDataMock),
+      ).rejects.toThrow(
+        new HttpException(
+          'Failed to update player',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        ),
+      );
+      expect(playerService.updatePlayer).toHaveBeenCalledWith(playerDataMock);
+    });
+  });
 });
