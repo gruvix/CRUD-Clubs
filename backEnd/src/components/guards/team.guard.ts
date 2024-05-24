@@ -32,7 +32,7 @@ export class TeamGuard implements CanActivate {
     }
 
     const userId = await this.userService.getUserId(username);
-    if (await this.teamExistsOnUser(userId, teamId)) {
+    if (!await this.teamExistsOnUser(userId, teamId)) {
       console.log(
         `User ${username} tried to access team ${teamId}, but there is no team related to userId ${userId}`,
       );
@@ -52,7 +52,7 @@ export class TeamGuard implements CanActivate {
         .andWhere('team.user = :userId', { userId })
         .getOne();
 
-      if (team) {
+      if (!team) {
         return false;
       }
       return true;
