@@ -235,13 +235,14 @@ export default class APIAdapter {
     return newId;
   }
   async removePlayer(teamId: number, playerId: number) {
+    const playerData = { id: playerId };
     const response = await fetch(apiRequestPaths.player(teamId), {
       method: "DELETE",
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ playerId }),
+      body: JSON.stringify(playerData),
     });
     if (!response.ok) {
       switch (response.status) {
