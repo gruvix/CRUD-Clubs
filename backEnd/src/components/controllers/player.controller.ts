@@ -11,9 +11,9 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import CustomRequest from '@comp/interfaces/CustomRequest.interface';
-import PlayerDataOld from '@comp/models/playerData.old';
 import { AuthGuard } from '@comp/guards/auth.guard';
 import { TeamGuard } from '@comp/guards/team.guard';
+import { PlayerGuard } from '@comp/guards/player.guard';
 import PlayerService from '@comp/services/player.service';
 import { UserId } from '@comp/decorators/userId.decorator';
 import { TeamId } from '@comp/decorators/teamId.decorator';
@@ -35,22 +35,33 @@ export default class PlayerController {
       const newId = await this.playerService.addPlayer(teamId, newPlayer);
       return newId;
     } catch (error) {
+      console.log(error);
       throw new HttpException(
         'Failed to add player',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }
-
+  
+  @UseGuards(PlayerGuard)
   @Patch()
   async updatePlayer(
-    @Req() req: CustomRequest,
-    @Param() params: any,
-    @Body() playerData: PlayerDataOld,
+    @UserId() userId: number,
+    @TeamId() teamId: number,
+    @Body() playerData: PlayerData,
   ) {
-    const { username } = req.session;
-    console.log(`User ${username} is updating team ${params.teamId}'s player ${playerData.id}`);
-    await this.playerService.updatePlayer(username, params.teamId, playerData);
+    try {
+      console.log(
+        `User ${userId} is updating team ${teamId}'s player ${playerData.id}`,
+      );
+      await this.playerService.updatePlayer(playerData);
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(
+        'Failed to update player',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   @Delete()

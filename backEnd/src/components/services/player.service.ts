@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import Player from '@comp/entities/player.entity';
 import Team from '@comp/entities/team.entity';
 import PlayerData from '@comp/interfaces/PlayerData.interface';
+import { PlayerGuard } from '@comp/guards/player.guard';
 
 const storage = new TeamStorageAdapter();
 @Injectable()
@@ -43,12 +44,15 @@ export default class PlayerService {
     }
   }
   async updatePlayer(
-    username: string,
-    teamId: number,
     newData: PlayerData,
   ): Promise<void> {
     try {
-      //await storage.updatePlayer(username, teamId, newData);
+      await this.teamRepository
+        .createQueryBuilder()
+        .update(Player)
+        .set(newData)
+        .where('id = :id', { id: newData.id })
+        .execute();
     } catch (error) {
       console.log(error);
       throw new HttpException(
