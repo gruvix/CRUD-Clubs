@@ -10,7 +10,6 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
-import CustomRequest from '@comp/interfaces/CustomRequest.interface';
 import { AuthGuard } from '@comp/guards/auth.guard';
 import { TeamGuard } from '@comp/guards/team.guard';
 import { PlayerGuard } from '@comp/guards/player.guard';
@@ -64,15 +63,17 @@ export default class PlayerController {
     }
   }
 
+  @UseGuards(PlayerGuard)
   @Delete()
   async deletePlayer(
-    @Req() req: CustomRequest,
-    @Param() params: any,
-    @Body() data: { playerId: number },
+    @UserId() userId: string,
+    @TeamId() teamId: number,
+    @Body() playerData: PlayerData,
+
   ) {
-    const { playerId } = data;
-    const { username } = req.session;
-    console.log(`User ${username} is deleting team ${params.teamId}'s player ${playerId}`);
-    await this.playerService.removePlayer(username, params.teamId, playerId);
+    console.log(
+      `User ${userId} is deleting team ${teamId}'s player ${playerData.id}`,
+    );
+    await this.playerService.removePlayer(playerData.id);
   }
 }
