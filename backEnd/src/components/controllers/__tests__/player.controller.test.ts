@@ -38,4 +38,36 @@ describe('PlayerController', () => {
     playerController = module.get<PlayerController>(PlayerController);
   });
 
+  describe('addPlayer', () => {
+    const playerDataMock: PlayerData = {
+      id: undefined,
+      name: 'test name',
+      position: 'test position',
+      nationality: 'test land',
+    };
+
+    it('should add a player to the database', async () => {
+      jest.spyOn(playerService, 'addPlayer').mockResolvedValueOnce(void 0);
+
+      expect(
+        await playerController.addPlayer(userId, teamId, playerDataMock),
+      ).toBeUndefined();
+    });
+
+    it('should handle errors', async () => {
+      jest.spyOn(playerService, 'addPlayer').mockRejectedValueOnce(new Error());
+      await expect(
+        playerController.addPlayer(userId, teamId, playerDataMock),
+      ).rejects.toThrow(
+        new HttpException(
+          'Failed to add player',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        ),
+      );
+      expect(playerService.addPlayer).toHaveBeenCalledWith(
+        teamId,
+        playerDataMock,
+      );
+    });
+  });
 });
