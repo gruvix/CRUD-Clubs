@@ -52,6 +52,10 @@ describe('PlayerController', () => {
       expect(
         await playerController.addPlayer(userId, teamId, playerDataMock),
       ).toBeUndefined();
+      expect(playerService.addPlayer).toHaveBeenCalledWith(
+        teamId,
+        playerDataMock,
+      );
     });
 
     it('should handle errors', async () => {
