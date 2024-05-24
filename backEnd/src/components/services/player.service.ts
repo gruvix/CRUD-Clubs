@@ -1,10 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import TeamStorageAdapter from '@comp/Adapters/teamStorage.adapter';
-import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
-import { EntityManager, Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import Player from '@comp/entities/player.entity';
-import PlayerData from '@comp/models/playerData';
 import Team from '@comp/entities/team.entity';
+import PlayerData from '@comp/interfaces/PlayerData.interface';
 
 const storage = new TeamStorageAdapter();
 @Injectable()
@@ -17,20 +17,22 @@ export default class PlayerService {
   ) {}
 
   async addPlayer(
-    username: string,
     teamId: number,
-    player: PlayerData,
-  ): Promise<number | Error> {
-    let newId: number;
+    newPlayerData: PlayerData,
+  ): Promise<number> {
     try {
-      newId = storage.findNextFreePlayerId(
-        (await storage.getTeam(username, teamId)).squad,
-      );
-      if (newId !== 0 && !newId) {
-        throw new Error('Failed to add player, unkown server error');
-      }
-      player.id = newId;
-      //await storage.addPlayer(username, teamId, player);
+      const newPlayer = {
+        ...newPlayerData,
+        team: teamId,
+      };
+      const insertResult = await this.playerRepository
+        .createQueryBuilder()
+        .insert()
+        .into(Player)
+        .values(newPlayer)
+        .execute();
+      const newPlayerId = insertResult.raw;
+      return newPlayerId;
     } catch (error) {
       console.log(error);
       throw new HttpException(
@@ -38,7 +40,6 @@ export default class PlayerService {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
-    return newId;
   }
   async updatePlayer(
     username: string,
@@ -90,14 +91,13 @@ export default class PlayerService {
 
   async clearSquad(teamId: number): Promise<void> {
     try {
-      if(!teamId) throw new Error('No team id provided');
+      if (!teamId) throw new Error('No team id provided');
       await this.playerRepository
         .createQueryBuilder()
         .delete()
         .from(Player)
         .where({ team: teamId })
         .execute();
-
     } catch (error) {
       console.log(error);
       throw new HttpException(

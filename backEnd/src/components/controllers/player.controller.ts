@@ -13,6 +13,8 @@ import PlayerData from '@comp/models/playerData';
 import { AuthGuard } from '@comp/guards/auth.guard';
 import { TeamGuard } from '@comp/guards/team.guard';
 import PlayerService from '@comp/services/player.service';
+import { UserId } from '@comp/decorators/userId.decorator';
+import { TeamId } from '@comp/decorators/teamId.decorator';
 
 @UseGuards(AuthGuard, TeamGuard)
 @Controller('user/team/:teamId/player')
@@ -21,13 +23,12 @@ export default class PlayerController {
 
   @Post()
   async addPlayer(
-    @Req() req: CustomRequest,
-    @Param() params: any,
+    @UserId() userId: number,
+    @TeamId() teamId: number,
     @Body() newPlayer: PlayerData,
   ) {
-    const { username } = req.session;
-    console.log(`User ${username} is adding player to team ${params.teamId}`);
-    const newId = await this.playerService.addPlayer(username, params.teamId, newPlayer);
+    console.log(`User ${userId} is adding player to team ${teamId}`);
+    const newId = await this.playerService.addPlayer(teamId, newPlayer);
     return newId;
   }
 
