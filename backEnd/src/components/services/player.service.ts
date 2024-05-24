@@ -25,6 +25,7 @@ export default class PlayerService {
         ...newPlayerData,
         team: teamId,
       };
+      delete newPlayer.id;
       const insertResult = await this.playerRepository
         .createQueryBuilder()
         .insert()
