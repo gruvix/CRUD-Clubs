@@ -1,10 +1,10 @@
-import PlayerData from "./playerData";
+import PlayerDataOld from "./playerData.old";
 import TeamOld, { TeamDataOld } from "./Team.old";
 
 export default class TeamExtendedOld extends TeamOld {
   id: string | number;
   crestUrl: string;
-  squad: PlayerData[];
+  squad: PlayerDataOld[];
   hasCustomCrest: boolean;
   isDefault: boolean;
   lastUpdated: string;
@@ -12,7 +12,7 @@ export default class TeamExtendedOld extends TeamOld {
     data: TeamDataOld & {
       readonly id: string | number;
       crestUrl: string;
-      squad: PlayerData[];
+      squad: PlayerDataOld[];
       hasCustomCrest: boolean;
       lastUpdated: string;
       isDefault: boolean;

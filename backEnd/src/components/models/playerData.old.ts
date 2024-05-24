@@ -1,4 +1,4 @@
-export default class PlayerData {
+export default class PlayerDataOld {
   id: number;
   name: string;
   position: string;
