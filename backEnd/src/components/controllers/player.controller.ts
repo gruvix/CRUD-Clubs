@@ -7,6 +7,8 @@ import {
   UseGuards,
   Post,
   Delete,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import CustomRequest from '@comp/interfaces/CustomRequest.interface';
 import PlayerDataOld from '@comp/models/playerData.old';
@@ -15,6 +17,7 @@ import { TeamGuard } from '@comp/guards/team.guard';
 import PlayerService from '@comp/services/player.service';
 import { UserId } from '@comp/decorators/userId.decorator';
 import { TeamId } from '@comp/decorators/teamId.decorator';
+import PlayerData from '@comp/interfaces/PlayerData.interface';
 
 @UseGuards(AuthGuard, TeamGuard)
 @Controller('user/team/:teamId/player')
@@ -27,9 +30,16 @@ export default class PlayerController {
     @TeamId() teamId: number,
     @Body() newPlayer: PlayerData,
   ) {
-    console.log(`User ${userId} is adding player to team ${teamId}`);
-    const newId = await this.playerService.addPlayer(teamId, newPlayer);
-    return newId;
+    try {
+      console.log(`User ${userId} is adding player to team ${teamId}`);
+      const newId = await this.playerService.addPlayer(teamId, newPlayer);
+      return newId;
+    } catch (error) {
+      throw new HttpException(
+        'Failed to add player',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   @Patch()
