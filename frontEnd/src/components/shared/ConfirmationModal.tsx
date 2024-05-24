@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function ConfirmationModal({ callback = () => {}, confirmationText }: { callback?: () => void, confirmationText: string }) {
+export default function ConfirmationModal({ callback = () => {}, confirmationText, cancelCallback = () => {} }: { callback?: () => void, confirmationText: string, cancelCallback: Function }) {
   return (
     <div className="modal fade" id="confirmationModal" tabIndex={-1} aria-labelledby="confirmationModalLabel" aria-hidden="true">
       <div className="modal-dialog">
@@ -14,7 +14,7 @@ export default function ConfirmationModal({ callback = () => {}, confirmationTex
           </div>
           <div className="modal-footer">
             <button type="button" className="btn btn-outline-success" id="confirmation-modal-button" data-bs-dismiss="modal" onClick={() => callback()}>Confirm</button>
-            <button type="button" className="btn btn-outline-dark" id="cancel-modal-button" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" className="btn btn-outline-dark" id="cancel-modal-button" data-bs-dismiss="modal" onClick={() => cancelCallback()}>Cancel</button>
           </div>
         </div>
       </div>
