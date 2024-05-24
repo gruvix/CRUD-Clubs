@@ -8,7 +8,7 @@ import LoadingSpinner from "@/components/shared/LoadingSpinner";
 interface TeamCardProps {
   team: TeamCardClass;
   visibility: boolean;
-  deleteTeamCallback: (teamId: string | number, teamName: string) => void;
+  deleteTeamCallback: (teamId: string | number, teamName: string, modalCancelCallback: Function) => void;
   router: AppRouterInstance;
 }
 
@@ -58,7 +58,7 @@ export default function TeamCard({
           data-bs-target="#confirmationModal"
           onClick={() => {
             setIsLoading(true);
-            deleteTeamCallback(team.id, team.name);
+            deleteTeamCallback(team.id, team.name, () => () => setIsLoading(false));
           }}
         >
           delete

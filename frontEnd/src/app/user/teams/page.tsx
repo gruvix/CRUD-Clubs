@@ -29,6 +29,9 @@ export default function TeamsList(): React.ReactElement {
   const [modalCallback, setModalCallback] = React.useState(
     () => (): void => {},
   );
+  const [modalCancelCallback, setModalCancelCallback] = React.useState<Function>(
+    () => (): void => {},
+  )
   const [modalText, setModalText] = React.useState("");
   const [asyncError, setAsyncError] = React.useState<Error>();
   const pageTitle = `CRUD ${username}'s teams`;
@@ -64,9 +67,10 @@ export default function TeamsList(): React.ReactElement {
         errorHandler(error);
       });
   };
-  const setUpDeleteTeamModal = (teamId: number | string, teamName: string) => {
+  const setUpDeleteTeamModal = (teamId: number | string, teamName: string, modalCancelCallback: Function) => {
     setModalCallback(() => deleteTeam(Number(teamId)));
     setModalText(`Are you sure you want to delete team ${teamName}?`);
+    setModalCancelCallback(modalCancelCallback)
   };
   const resetTeams = () => async () => {
     setIsLoading(true);
@@ -239,6 +243,7 @@ export default function TeamsList(): React.ReactElement {
       <ConfirmationModal
         callback={modalCallback}
         confirmationText={modalText}
+        cancelCallback={modalCancelCallback}
       />
     </div>
   );
