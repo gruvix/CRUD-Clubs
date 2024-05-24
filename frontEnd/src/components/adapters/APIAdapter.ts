@@ -7,6 +7,7 @@ import TeamCard from "./TeamCard";
 import TeamNotFoundError from "../errors/TeamNotFoundError";
 import TeamNotResettableError from "../errors/TeamNotResettableError";
 import UnsupportedMediaTypeError from "../errors/UnsupportedMediaTypeError";
+import PlayerNotFoundError from "../errors/PlayerNotFoundError";
 
 export default class APIAdapter {
   async login(username: string) {
@@ -200,7 +201,7 @@ export default class APIAdapter {
         case 403:
           throw new UnauthorizedError();
         case 404:
-          throw new TeamNotFoundError();
+          throw new PlayerNotFoundError();
         default:
           throw new Error(`${response.status} - ${response.statusText}`);
       }
