@@ -17,7 +17,7 @@ export default function TeamDataTable({
   router,
 }: TeamDataTableProps): React.ReactElement {
   const [rowsTeamData, setRowsTeamData] = React.useState<TeamDataRows>({});
-  const [editingRowKey, setEditingRowKey] = React.useState<string>('');
+  const [editingRowKey, setEditingRowKey] = React.useState<string>("");
   const [inputValue, setInputValue] = React.useState<TeamDataRows>({});
   const inputReferece = useRef(null);
   const requestAdapter = new APIAdapter();
@@ -27,7 +27,7 @@ export default function TeamDataTable({
     setInputValue({ ...inputValue, [key]: rowsTeamData[key] });
   };
   const disableRowEditing = () => {
-    setEditingRowKey('');
+    setEditingRowKey("");
   };
   const updateTeamRow = (key: string) => {
     const newState = { ...rowsTeamData, [key]: inputValue[key] };
@@ -37,12 +37,8 @@ export default function TeamDataTable({
     const updatedData = { [key]: [inputValue[key]] };
     try {
       requestAdapter.updateTeam(teamId, updatedData).then((data) => {
-        if ("redirect" in data) {
-          router.push(data.redirect);
-        } else {
-          disableRowEditing();
-          updateTeamRow(key);
-        }
+        disableRowEditing();
+        updateTeamRow(key);
       });
     } catch (error) {
       console.log(error);
@@ -82,7 +78,7 @@ export default function TeamDataTable({
                   onFocus={handleInputFocus}
                   type="text"
                   className="form-control"
-                  value={inputValue[key]? inputValue[key] : ""}
+                  value={inputValue[key] ? inputValue[key] : ""}
                   style={{ display: editingRowKey === key ? "inline" : "none" }}
                   id={`input-field-${key}`}
                   onChange={(e) =>
@@ -99,7 +95,7 @@ export default function TeamDataTable({
                   className="btn btn-shadow btn-outline-warning edit"
                   onClick={() => enableRowEditing(key)}
                   style={{
-                    display: editingRowKey === '' ? "inline" : "none",
+                    display: editingRowKey === "" ? "inline" : "none",
                   }}
                 >
                   edit
