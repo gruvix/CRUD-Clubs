@@ -16,7 +16,6 @@ describe('PlayerController', () => {
   let teamsService: TeamsService;
   let playerService: PlayerService;
 
-  const username = 'test';
   const userId = 1;
   const teamId = 1;
 
