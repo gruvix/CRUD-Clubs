@@ -4,7 +4,13 @@ import { webAppPaths } from "@/paths";
 import APIAdapter from "@/components/adapters/APIAdapter";
 import { useRouter } from "next/navigation";
 import LoginSpiner from "@/components/shared/loginSpinner";
-export default function LoginButton({ setLoginError, setLoginErrorMessage }: { setLoginError: any, setLoginErrorMessage: any }) {
+export default function LoginButton({
+  setLoginError,
+  setLoginErrorMessage,
+}: {
+  setLoginError: any;
+  setLoginErrorMessage: any;
+}) {
   const router = useRouter();
   const [username, setUsername] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(true);
@@ -15,7 +21,7 @@ export default function LoginButton({ setLoginError, setLoginErrorMessage }: { s
     try {
       await request.login(username);
       router.push(webAppPaths.teams);
-    } catch (error) {
+    } catch (error: any) {
       setLoginErrorMessage(error.message);
       setLoginError(true);
       setTimeout(() => {
@@ -42,6 +48,8 @@ export default function LoginButton({ setLoginError, setLoginErrorMessage }: { s
       {isLoading ? (
         <LoginSpiner
           style={{
+            left: "50%",
+            top: "7%",
             width: "2rem",
             height: "2rem",
           }}
