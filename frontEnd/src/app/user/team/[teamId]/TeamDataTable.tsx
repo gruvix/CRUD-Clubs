@@ -1,12 +1,10 @@
 import React, { useEffect, useRef } from "react";
 import APIAdapter from "@/components/adapters/APIAdapter";
 import { TeamParameters } from "@/components/adapters/Team";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 interface TeamDataTableProps {
   teamData: TeamParameters;
   teamId: number;
-  router: AppRouterInstance;
 }
 interface TeamDataRows {
   [key: string]: string | number;
@@ -14,7 +12,6 @@ interface TeamDataRows {
 export default function TeamDataTable({
   teamData,
   teamId,
-  router,
 }: TeamDataTableProps): React.ReactElement {
   const [rowsTeamData, setRowsTeamData] = React.useState<TeamDataRows>({});
   const [editingRowKey, setEditingRowKey] = React.useState<string>("");
