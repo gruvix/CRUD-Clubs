@@ -41,7 +41,7 @@ export default class PlayerController {
       );
     }
   }
-  
+
   @UseGuards(PlayerGuard)
   @Patch()
   async updatePlayer(
@@ -65,15 +65,22 @@ export default class PlayerController {
 
   @UseGuards(PlayerGuard)
   @Delete()
-  async deletePlayer(
-    @UserId() userId: string,
+  async removePlayer(
+    @UserId() userId: number,
     @TeamId() teamId: number,
     @Body() playerData: PlayerData,
-
   ) {
-    console.log(
-      `User ${userId} is deleting team ${teamId}'s player ${playerData.id}`,
-    );
-    await this.playerService.removePlayer(playerData.id);
+    try {
+      console.log(
+        `User ${userId} is deleting team ${teamId}'s player ${playerData.id}`,
+      );
+      await this.playerService.removePlayer(playerData.id);
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(
+        'Failed to remove player',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }
