@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function ConfirmationModal({ callback = () => {}, confirmationText, cancelCallback = () => {} }: { callback?: () => void, confirmationText: string, cancelCallback: Function }) {
+export default function ConfirmationModal({ callback = () => {}, confirmationText, cancelCallback = () => {} }: { callback?: () => void, confirmationText: string, cancelCallback?: Function }) {
   return (
     <div className="modal fade" id="confirmationModal" tabIndex={-1} aria-labelledby="confirmationModalLabel" aria-hidden="true">
       <div className="modal-dialog">
