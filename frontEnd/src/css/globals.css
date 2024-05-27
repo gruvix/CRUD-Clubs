@@ -132,11 +132,9 @@ td:first-child, th:first-child {
 .loader {
   width: 48px;
   height: 48px;
+  position: absolute;
   border-radius: 50%;
-  left: 50%;
-  top: 7%;
-  background: #4188da;
-  position: absolute !important;
+  background: #313131;
   animation: roll 1s ease-in-out infinite alternate;
   border-top-left-radius: 50% !important;
   border-bottom-left-radius: 50% !important;
