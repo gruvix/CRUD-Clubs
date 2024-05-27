@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import APIAdapter from "@/components/adapters/APIAdapter";
 import Player, { playerKeys } from "@/components/adapters/Player";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import LoginSpiner from "@/components/shared/loginSpinner";
 
 interface PlayersDataTableProps {
   playersData: Player[];
@@ -25,6 +26,7 @@ export default function PlayersDataTable({
   const [playerInputRows, setPlayerInputRows] = React.useState([] as Player[]);
   const [editingRowKey, setEditingRowKey] = React.useState<number>(NaN);
   const [newPlayerRow, setNewPlayerRow] = React.useState({} as Player);
+  const [rowLoading, setRowLoading] = React.useState<number>(NaN);
   const inputReferece = useRef(null);
   const requestAdapter = new APIAdapter();
   const updateInputValue = (
@@ -59,6 +61,7 @@ export default function PlayersDataTable({
     setPlayerRows(newState);
   };
   const handleRowUpdate = (index: number) => {
+    setRowLoading(index);
     const updatedPlayerData = new Player({
       ...playerInputRows[index],
       id: playerRows[index].id,
@@ -71,6 +74,9 @@ export default function PlayersDataTable({
       })
       .catch((error) => {
         errorHandler(error);
+      })
+      .finally(() => {
+        setRowLoading(NaN);
       });
   };
   const addPlayerRow = (newId: number) => {
@@ -205,94 +211,143 @@ export default function PlayersDataTable({
           {
             <>
               {playerRows.map((player, index) => (
-                <tr
-                  className="table-dark table-bordered"
-                  key={player.id}
-                  data-id={player.id}
-                >
-                  {playerKeys.map((parameter, keysIndex) => (
-                    <td key={`${parameter}-${player.id}`}>
-                      <span
-                        style={{
-                          display: editingRowKey === index ? "none" : "inline",
-                        }}
-                      >
-                        {player[parameter]}
-                      </span>
-                      <input
-                        ref={
-                          editingRowKey === index && keysIndex === 0
-                            ? inputReferece
-                            : null
-                        }
-                        onFocus={handleInputFocus}
-                        type="text"
-                        className="form-control"
-                        value={
-                          playerInputRows[index][parameter]
-                            ? playerInputRows[index][parameter]
-                            : ""
-                        }
-                        onChange={(e) => updateInputValue(e, index, parameter)}
-                        style={{
-                          display: editingRowKey === index ? "inline" : "none",
-                        }}
-                        onKeyDown={(e) =>
-                          e.key === "Enter" ? handleRowUpdate(index) : null
-                        }
-                      />
-                    </td>
-                  ))}
-                  <td
-                    className="buttons-column"
-                    style={{ display: "flex", minHeight: "42px" }}
+                <>
+                  <tr
+                    className="table-dark table-bordered"
+                    key={player.id}
+                    data-id={player.id}
                   >
-                    <button
-                      type="button"
-                      className="btn btn-outline-warning edit"
-                      onClick={() => enableRowEditing(index)}
-                      style={{
-                        marginRight: "10px",
-                        display: editingRowKey !== index ? "inline" : "none",
-                      }}
-                    >
-                      edit
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn-outline-danger remove"
-                      data-bs-toggle="modal"
-                      data-bs-target="#confirmationModal"
-                      style={{
-                        display: editingRowKey !== index ? "inline" : "none",
-                      }}
-                      onClick={() => setModal(index)}
-                    >
-                      remove
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn-outline-success apply"
-                      onClick={() => handleRowUpdate(index)}
-                      style={{
-                        display: editingRowKey === index ? "inline" : "none",
-                        marginRight: "10px",
-                      }}
-                    >
-                      apply
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn-outline-secondary cancel"
-                      onClick={() => disableRowEditing()}
-                      style={{
-                        display: editingRowKey === index ? "inline" : "none",
-                      }}
-                    >
-                      cancel
-                    </button>
-                  </td>
-                </tr>
+                    {rowLoading === index ? (
+                      <>
+                        {playerKeys.map((parameter, keysIndex) => (
+                          <td style={{ position: "relative" }}>
+                            <>
+                              {keysIndex === 0 ? (
+                                <LoginSpiner
+                                  style={{
+                                    left: "100%",
+                                    bottom: "25%",
+                                    width: "2rem",
+                                    height: "2rem",
+                                    zIndex: "100",
+                                  }}
+                                />
+                              ) : (
+                                <></>
+                              )}
+                            </>
+                          </td>
+                        ))}
+                        <td>
+                          <button
+                            className="btn btn-outline-success disabled"
+                            disabled
+                          >
+                            Updating...
+                          </button>
+                        </td>
+                      </>
+                    ) : (
+                      <>
+                        {playerKeys.map((parameter, keysIndex) => (
+                          <td key={`${parameter}-${player.id}`}>
+                            <>
+                              <span
+                                style={{
+                                  display:
+                                    editingRowKey === index ? "none" : "inline",
+                                }}
+                              >
+                                {player[parameter]}
+                              </span>
+                              <input
+                                ref={
+                                  editingRowKey === index && keysIndex === 0
+                                    ? inputReferece
+                                    : null
+                                }
+                                onFocus={handleInputFocus}
+                                type="text"
+                                className="form-control"
+                                value={
+                                  playerInputRows[index][parameter]
+                                    ? playerInputRows[index][parameter]
+                                    : ""
+                                }
+                                onChange={(e) =>
+                                  updateInputValue(e, index, parameter)
+                                }
+                                style={{
+                                  display:
+                                    editingRowKey === index ? "inline" : "none",
+                                }}
+                                onKeyDown={(e) =>
+                                  e.key === "Enter"
+                                    ? handleRowUpdate(index)
+                                    : null
+                                }
+                              />
+                            </>
+                          </td>
+                        ))}
+
+                        <td
+                          className="buttons-column"
+                          style={{ display: "flex", minHeight: "42px" }}
+                        >
+                          <button
+                            type="button"
+                            className="btn btn-outline-warning edit"
+                            onClick={() => enableRowEditing(index)}
+                            style={{
+                              marginRight: "10px",
+                              display:
+                                editingRowKey !== index ? "inline" : "none",
+                            }}
+                          >
+                            edit
+                          </button>
+                          <button
+                            type="button"
+                            className="btn btn-outline-danger remove"
+                            data-bs-toggle="modal"
+                            data-bs-target="#confirmationModal"
+                            style={{
+                              display:
+                                editingRowKey !== index ? "inline" : "none",
+                            }}
+                            onClick={() => setModal(index)}
+                          >
+                            remove
+                          </button>
+                          <button
+                            type="button"
+                            className="btn btn-outline-success apply"
+                            onClick={() => handleRowUpdate(index)}
+                            style={{
+                              display:
+                                editingRowKey === index ? "inline" : "none",
+                              marginRight: "10px",
+                            }}
+                          >
+                            apply
+                          </button>
+                          <button
+                            type="button"
+                            className="btn btn-outline-secondary cancel"
+                            onClick={() => disableRowEditing()}
+                            style={{
+                              display:
+                                editingRowKey === index ? "inline" : "none",
+                            }}
+                          >
+                            cancel
+                          </button>
+                        </td>
+                      </>
+                    )}
+                  </tr>
+                </>
               ))}
             </>
           }
