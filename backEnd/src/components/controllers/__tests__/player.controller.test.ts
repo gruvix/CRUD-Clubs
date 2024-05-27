@@ -107,4 +107,30 @@ describe('PlayerController', () => {
       expect(playerService.updatePlayer).toHaveBeenCalledWith(playerDataMock);
     });
   });
+
+  describe('removePlayer', () => {
+    const playerDataMock: PlayerData = {
+      id: 1,
+      name: 'test name',
+      position: 'test position',
+      nationality: 'test land',
+    };
+    it('should delete a player', async () => {
+      jest.spyOn(playerService, 'removePlayer').mockResolvedValueOnce(void 0);
+      expect(await playerController.removePlayer(userId, teamId, playerDataMock)).toBeUndefined();
+      expect(playerService.removePlayer).toHaveBeenCalledWith(playerDataMock.id)
+    })
+    it('should handle errors', async () => {
+      jest.spyOn(playerService, 'removePlayer').mockRejectedValueOnce(new Error());
+      await expect(
+        playerController.removePlayer(userId, teamId, playerDataMock),
+      ).rejects.toThrow(
+        new HttpException(
+          'Failed to remove player',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        ),
+      );
+      expect(playerService.removePlayer).toHaveBeenCalledWith(playerDataMock.id);
+    })
+  })
 });
