@@ -5,16 +5,15 @@ import { Repository } from 'typeorm';
 import UserNotFoundError from '@comp/errors/UserNotFoundError';
 import CustomRequest from '@comp/interfaces/CustomRequest.interface';
 import User from '@comp/entities/user.entity';
-import Team from '@comp/entities/team.entity';
 import TeamsService from './teams.service';
-import PlayerService from './player.service';
+import { createFolder } from '@comp/storage/dataStorage';
+import { getUserRootPath } from '@comp/storage/userPath';
 
 @Injectable()
 export default class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-    @Inject(PlayerService) private readonly playerService: PlayerService,
     @Inject(TeamsService) private readonly teamsService: TeamsService,
   ) {}
 
@@ -49,6 +48,7 @@ export default class UserService {
         await transactionalEntityManager.save(savedUser);
       },
     );
+    await createFolder(getUserRootPath(username));
   }
 
   async handleUserLogin(username: string): Promise<boolean> {
