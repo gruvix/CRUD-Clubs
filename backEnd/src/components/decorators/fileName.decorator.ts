@@ -11,6 +11,7 @@ import {
       const fileName = request.params.fileName;
   
       if (!fileName) {
+        console.log('Image file name is required');
         throw new HttpException('Image file name is required', HttpStatus.BAD_REQUEST);
       }
       return fileName;
