@@ -64,20 +64,20 @@ export default class TeamService {
       );
     }
   }
-  private transformTeamDataToDTO(teamData: TeamData): TeamDTO {
+  transformTeamDataToDTO(teamData: TeamData): TeamDTO {
     const { id, defaultTeam, ...rest } = teamData;
     const teamDTO: TeamDTO = { ...rest, hasDefault: !!defaultTeam };
     return teamDTO;
   }
 
-  async getTeam(teamId: number): Promise<TeamDTO> {
+  async getTeam(teamId: number): Promise<Team> {
     try {
-      const team: TeamData = await this.teamRepository.findOne({
+      const team = await this.teamRepository.findOne({
         where: { id: teamId },
         relations: ['squad', 'defaultTeam'],
       });
       if (!team) throw new Error('Team not found');
-      return this.transformTeamDataToDTO(team);
+      return team;
     } catch (error) {
       console.log(error);
       throw new HttpException(
@@ -96,15 +96,9 @@ export default class TeamService {
       })
     ).defaultTeam as unknown as DefaultTeam;
     //typescript above strongly believes defaultTeam is just a number
-    if(!defaultTeam) throw new TeamIsNotResettableError('Team has no default team');
+    if (!defaultTeam)
+      throw new TeamIsNotResettableError('Team has no default team');
     return defaultTeam.id;
-  }
-
-  private async getDefaultTeam(teamId: number): Promise<Team> {
-    return await this.teamRepository.findOne({
-      where: { id: teamId },
-      relations: ['squad', 'defaultTeam'],
-    });
   }
 
   async resetTeam(teamId: number, userId: number): Promise<void> {
@@ -114,7 +108,7 @@ export default class TeamService {
           await this.playerService.clearSquad(teamId);
 
           const defaultTeamId = await this.getDefaultTeamId(teamId);
-          const defaultTeam = await this.getDefaultTeam(defaultTeamId);
+          const defaultTeam = await this.getTeam(defaultTeamId);
 
           let team = new Team();
           team = {
