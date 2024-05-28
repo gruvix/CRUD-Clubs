@@ -1,5 +1,4 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
-import TeamStorageAdapter from '@comp/Adapters/teamStorage.adapter';
 import TeamIsNotResettableError from '@comp/errors/TeamIsNotResettableError';
 import { generateCustomCrestUrl } from '@comp/storage/userPath';
 import Team from '@comp/entities/team.entity';
@@ -9,7 +8,6 @@ import TeamData from '@comp/interfaces/TeamData.interface';
 import PlayerService from './player.service';
 import TeamDTO from '@comp/interfaces/TeamDTO.interface';
 import DefaultTeam from '@comp/entities/defaultTeam.entity';
-const storage = new TeamStorageAdapter();
 
 @Injectable()
 export default class TeamService {
@@ -22,8 +20,8 @@ export default class TeamService {
     private readonly playerService: PlayerService,
   ) {}
   async addTeam(
-    username: string,
-    teamData: any,
+    userId: number,
+    teamData: TeamData,
     imageFileName: string,
   ): Promise<number> {
     if (!teamData || !Object.keys(teamData).length) {
@@ -33,12 +31,29 @@ export default class TeamService {
       );
     }
     try {
-      const teamId = storage.findNextFreeTeamId(
-        await storage.getTeamsList(username),
+      let newTeam = new Team();
+      newTeam = {
+        ...newTeam,
+        ...teamData,
+        user: userId,
+        crestUrl: '',
+        hasCustomCrest: true,
+        crestFileName: imageFileName,
+      };
+      const teamId = await this.teamRepository.manager.transaction(
+        async (transactionalEntityManager) => {
+          const team = (await transactionalEntityManager.save(Team, newTeam));
+          newTeam.crestUrl = generateCustomCrestUrl(team.id, imageFileName);
+          await transactionalEntityManager
+            .createQueryBuilder()
+            .update(Team)
+            .set({crestUrl: newTeam.crestUrl})
+            .where('id = :id', { id: team.id })
+            .execute();
+          return team.id;
+        },
       );
-      teamData.id = teamId;
-      (teamData.crestUrl = generateCustomCrestUrl(teamData.id, imageFileName)),
-        await storage.addTeam(username, teamData);
+
       return teamId;
     } catch (error) {
       console.log(error);
