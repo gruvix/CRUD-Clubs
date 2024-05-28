@@ -51,6 +51,9 @@ export default class Team {
   @Column()
   hasCustomCrest: boolean;
 
+  @Column({ nullable: true, select: false })
+  crestFileName: string;
+
   @ManyToOne(() => DefaultTeam, (defaultTeam) => defaultTeam.id || null)
   defaultTeam: number;
 
