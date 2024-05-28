@@ -1,12 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import TeamStorageAdapter from '@comp/Adapters/teamStorage.adapter';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import Player from '@comp/entities/player.entity';
 import Team from '@comp/entities/team.entity';
 import PlayerData from '@comp/interfaces/PlayerData.interface';
 
-const storage = new TeamStorageAdapter();
 @Injectable()
 export default class PlayerService {
   constructor(
