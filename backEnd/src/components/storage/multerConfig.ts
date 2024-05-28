@@ -1,10 +1,9 @@
 import * as multer from 'multer';
-import * as path from 'path';
-import { getUserCustomCrestFolderPath } from './userPath';
-import TeamStorageAdapter from '../Adapters/teamStorage.adapter';
+import { getUserRootPath } from './userPath';
 import { Request } from 'express';
 import { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
 import { HttpException, HttpStatus } from '@nestjs/common';
+import { createFolder, validateFile } from './dataStorage';
 
 const imageFilter = (
   req: Request,
@@ -21,23 +20,12 @@ const imageFilter = (
   }
   cb(null, true);
 };
-const adapter = new TeamStorageAdapter();
 const storage = multer.diskStorage({
-  destination: (req: any, file, cb) => {
+  destination: async (req: any, file, cb) => {
     const { username } = req.session;
-    const userCrestsFolderPath = `${getUserCustomCrestFolderPath(username)}`;
+    const userCrestsFolderPath = `${getUserRootPath(username)}`;
+    if(!await validateFile(userCrestsFolderPath)) {createFolder(userCrestsFolderPath);}
     cb(null, userCrestsFolderPath);
-  },
-  filename: async (req: any, file, cb) => {
-    let { teamId } = req.params;
-    if (!teamId) {
-      const { username } = req.session;
-      teamId = (
-        adapter.findNextFreeTeamId(await adapter.getTeamsList(username))
-      ).toString();
-    }
-    const filename = `${teamId}${path.extname(file.originalname)}`;
-    cb(null, filename);
   },
 });
 

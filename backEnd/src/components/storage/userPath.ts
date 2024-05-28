@@ -76,7 +76,7 @@ export function getUserTeamJSONPath(
     ? `${getUserTeamsFolderPath(username)}/${teamId}.json`
     : `${getUserTeamsFolderPath(username, false)}/${teamId}.json`;
 }
-export function generateCustomCrestUrl (teamId: number | string, filename: string) { 
+export function generateCustomCrestUrl (teamId: number, filename: string) { 
   return `/user/customCrest/${teamId}/${filename}`
 }
 
