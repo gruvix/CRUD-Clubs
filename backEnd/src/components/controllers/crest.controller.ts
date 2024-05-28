@@ -2,56 +2,55 @@ import {
   Controller,
   Get,
   HttpException,
-  Param,
   Put,
-  Req,
   Res,
-  UploadedFile,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import CustomRequest from '@comp/interfaces/CustomRequest.interface';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from '@comp/guards/auth.guard';
 import CrestService from '@comp/services/crest.service';
 import { Response } from 'express';
 import multerOptions from '@comp/storage/multerConfig';
+import { UserId } from '@comp/decorators/userId.decorator';
+import { TeamId } from '@comp/decorators/teamId.decorator';
+import { FileName } from '@comp/decorators/fileName.decorator';
+import { Username } from '@comp/decorators/username.decorator';
+import { TeamGuard } from '@comp/guards/team.guard';
 
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, TeamGuard)
 @Controller('user/customCrest')
 export default class CrestController {
   constructor(private readonly crestService: CrestService) {}
 
-  @Get(':teamId/:filename')
+  @Get(':teamId/:fileName')
   async getCrest(
-    @Req() req: CustomRequest,
-    @Param() params: any,
+    @Username() username: string,
+    @UserId() userId: number,
+    @TeamId() teamId: number,
+    @FileName() fileName: string,
     @Res() res: Response,
   ) {
-    const { username } = req.session;
-    const { teamId, filename } = params;
-    console.log(`User ${username} is requesting crest for team ${teamId}`);
-    const file = await this.crestService.getCrest(username, filename);
+    console.log(`User ${userId} is requesting crest for team ${teamId}`);
+    const file = await this.crestService.getCrest(username, fileName);
     res.send(file);
   }
 
   @Put(':teamId')
   @UseInterceptors(FileInterceptor('image', multerOptions))
   async updateCrest(
-    @Req() req: CustomRequest,
-    @Param() params: any,
-    @UploadedFile() image: Express.Multer.File,
+    @Username() username: string,
+    @UserId() userId: number,
+    @TeamId() teamId: number,
+    @FileName() fileName: string,
     @Res() res: Response,
   ) {
-    const { username } = req.session;
-    const { teamId } = params;
-    const { filename } = image;
-    console.log(`User ${username} is updating crest for team ${teamId}`);
+    console.log(`User ${userId} is updating crest for team ${teamId}`);
     try {
       const newCrestUrl = await this.crestService.updateCrest(
         username,
         teamId,
-        filename,
+        fileName,
       );
       res.send(JSON.stringify(newCrestUrl));
     } catch (error) {
