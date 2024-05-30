@@ -155,3 +155,10 @@ td:first-child, th:first-child {
     transform:  translateX(300%) rotate(720deg);
   }
 }
+
+.spinner-black{
+  border: #1d1d1d 25px solid;
+  border-radius: 50%;
+  clip-path: polygon(0 0, 100% 0, 100% 20%, 0% 80%);
+}
+
