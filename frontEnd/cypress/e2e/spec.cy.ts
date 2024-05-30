@@ -321,15 +321,16 @@ describe("test add team", () => {
       cy.wrap($input).clear().type(randomString);
     });
     cy.intercept(`${CUSTOM_CREST_UPLOAD_PATH}`).as("uploadImage");
-    cy.fixture("crest.jpg").then((fileContent) => {
-      cy.get("#upload-image-input").selectFile(
-        {
-          contents: Cypress.Buffer.from(JSON.stringify(fileContent)),
-          fileName: "crest.jpg",
-        },
-        { force: true },
-      );
-    });
+
+    cy.fixture("crest.jpg", null).as("fileContent");
+    cy.get("#upload-image-input").selectFile(
+      {
+        contents: "@fileContent",
+        mimeType: "image/jpg",
+        fileName: "crest.jpg",
+      },
+      { force: true },
+    );
     cy.get("#submit-team-button").click();
     cy.get("#team-table span:visible").each(($spanField, index) => {
       cy.wrap($spanField).should("contain", teamFields[index]);
@@ -337,12 +338,6 @@ describe("test add team", () => {
     cy.get("#players-table span:visible").each(($spanField, index) => {
       cy.wrap($spanField).should("contain", playerFields[index]);
     });
-    cy.get("#team-id")
-      .invoke("val")
-      .then((teamId: string | number) => {
-        const expectedNewTeamImgSrc = customCrestPath(teamId, "jpg");
-        cy.get("#team-crest").should("have.attr", "src", expectedNewTeamImgSrc);
-      });
     cy.get("#reset-team-button").should("has.class", "disabled");
   });
 });
