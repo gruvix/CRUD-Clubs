@@ -11,4 +11,9 @@ export default class CrestStorageAdapter {
     const imgPath = `${getUserRootPath(username)}/${fileName}`;
     await deleteFile(imgPath);
   }
+  async clearCrestFolder(userId: number): Promise<void> {
+    const folderPath = `${getUserRootPath(userId)}`;
+    await deleteFile(folderPath);
+    await createFolder(folderPath);
+  }
 }
