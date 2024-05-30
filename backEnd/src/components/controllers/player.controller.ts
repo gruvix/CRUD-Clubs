@@ -28,7 +28,7 @@ export default class PlayerController {
     @UserId() userId: number,
     @TeamId() teamId: number,
     @Body() newPlayer: PlayerData,
-  ) {
+  ): Promise<number> {
     try {
       console.log(`User ${userId} is adding player to team ${teamId}`);
       const newId = await this.playerService.addPlayer(teamId, newPlayer);
@@ -48,7 +48,7 @@ export default class PlayerController {
     @UserId() userId: number,
     @TeamId() teamId: number,
     @Body() playerData: PlayerData,
-  ) {
+  ): Promise<void> {
     try {
       console.log(
         `User ${userId} is updating team ${teamId}'s player ${playerData.id}`,
@@ -69,7 +69,7 @@ export default class PlayerController {
     @UserId() userId: number,
     @TeamId() teamId: number,
     @Body() playerData: PlayerData,
-  ) {
+  ): Promise<void> {
     try {
       console.log(
         `User ${userId} is deleting team ${teamId}'s player ${playerData.id}`,
