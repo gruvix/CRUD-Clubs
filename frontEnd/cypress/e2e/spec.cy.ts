@@ -90,7 +90,6 @@ describe("test teams view page", () => {
   });
 
   it("should delete a team and reset the teams", () => {
-    cy.intercept("PATCH", "/user/reset/all").as("resetTeams");
     cy.get("h5")
       .first()
       .then(($text) => {
