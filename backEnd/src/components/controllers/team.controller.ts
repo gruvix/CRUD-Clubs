@@ -26,7 +26,7 @@ export default class TeamController {
     @TeamId() teamId: number,
   ): Promise<TeamDTO> {
     console.log(`User ${userId} requested team ${teamId}`);
-    const team = await this.teamService.getTeam(teamId);
+    const team = await this.teamService.getTeam(teamId, ['squad', 'defaultTeam']);
     const teamDTO = this.teamService.transformTeamDataToDTO(team);
     return teamDTO;
   }
