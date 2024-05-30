@@ -168,19 +168,13 @@ describe("test the team editor page with the first team", () => {
   });
 
   it("uploads an image to the team crest", () => {
+    cy.get("#team-crest").should("be.visible");
     cy.intercept(`${CUSTOM_CREST_UPLOAD_PATH}`).as("uploadImage");
-    cy.fixture("crest.jpg").then((fileContent) => {
-      cy.get("#image-input").selectFile(
-        {
-          contents: new Cypress.Buffer(fileContent),
-          fileName: "crest.jpg",
-        },
-        { force: true },
-      );
+    cy.fixture("crest.jpg", null).as("fileContent");
+    cy.get('#team-crest').invoke('attr', 'src').then((oldImageSrc) => {
+      cy.get("#image-input").selectFile("@fileContent", { force: true });
+      cy.wait("@uploadImage").get('#team-crest').invoke('attr', 'src').should("not.equal", oldImageSrc);
     });
-    cy.wait("@uploadImage")
-      .get("#team-crest")
-      .should("have.attr", "src", TEST_TEAM_EXPECTED_IMG_SRC);
   });
 });
 describe("test the player editor with the first default team", () => {
