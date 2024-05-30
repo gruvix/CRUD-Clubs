@@ -64,7 +64,7 @@ describe("test login", () => {
     cy.get("#username").should("have.text", TEST_USER);
   });
 
-  it('should login then visit login page and get redirected to user page', () => {
+  it("should login then visit login page and get redirected to user page", () => {
     cy.get("#username").type(TEST_USER).get("#enter-page-button").click();
     cy.get("#username").should("have.text", TEST_USER);
     cy.visit(WEB_APP_BASE_URL);
@@ -143,7 +143,7 @@ describe("test the team editor page with the first team", () => {
       .first()
       .should("contain", randomString);
     selectFirstVisibleTeam();
-    cy.get("#team-table span").each(($spanField) => {
+    cy.get("#team-table span:visible").each(($spanField) => {
       cy.wrap($spanField).should("contain", randomString);
     });
   });
@@ -160,10 +160,12 @@ describe("test the team editor page with the first team", () => {
     cy.visit(WEB_APP_BASE_URL);
     filterTeams();
     selectFirstVisibleTeam();
-    cy.get("#team-table span").first().should("contain", randomString);
+    cy.get("#team-table span:visible").first().should("contain", randomString);
     cy.get("#reset-team-button").click().wait(MODAL_APPEAR_DELAY);
     cy.get("#confirmation-modal-button").click();
-    cy.get("#team-table span").first().should("not.contain", randomString);
+    cy.get("#team-table span:visible")
+      .first()
+      .should("not.contain", randomString);
   });
 
   it("uploads an image to the team crest", () => {
@@ -218,7 +220,7 @@ describe("test the player editor with the first default team", () => {
 
               cy.get(playerGetString).find(".apply").click();
               cy.get(playerGetString)
-                .find("span")
+                .find("span:visible")
                 .each(($spanField, index) => {
                   cy.wrap($spanField).should("contain", randomStrings[index]);
                 });
@@ -329,10 +331,10 @@ describe("test add team", () => {
       );
     });
     cy.get("#submit-team-button").click();
-    cy.get("#team-table span").each(($spanField, index) => {
+    cy.get("#team-table span:visible").each(($spanField, index) => {
       cy.wrap($spanField).should("contain", teamFields[index]);
     });
-    cy.get("#players-table span").each(($spanField, index) => {
+    cy.get("#players-table span:visible").each(($spanField, index) => {
       cy.wrap($spanField).should("contain", playerFields[index]);
     });
     cy.get("#team-id")
