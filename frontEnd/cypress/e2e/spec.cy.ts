@@ -188,11 +188,18 @@ describe("test the player editor with the first default team", () => {
   beforeEach(() => {
     cy.visit(WEB_APP_BASE_URL);
     cy.intercept("POST", LOGIN_PATH).as("login");
+    cy.intercept("GET", apiRequestPaths.teams).as("getTeams");
     cy.get("#username").type(TEST_USER).get("#enter-page-button").click();
     cy.wait("@login");
-    cy.get("#reset-teams-button").click().wait(MODAL_APPEAR_DELAY);
-    cy.get("#confirmation-modal-button").click();
-    cy.get(".edit").first().click();
+    cy.get("#reset-teams-button")
+      .click()
+      .wait(MODAL_APPEAR_DELAY)
+      .get("#confirmation-modal-button")
+      .click()
+      .wait("@getTeams")
+      cy.get(".card").first().should('be.visible');
+    filterTeams();
+    selectFirstVisibleTeam();
   });
 
   it("edits a random player from a team", () => {
@@ -218,13 +225,21 @@ describe("test the player editor with the first default team", () => {
                   cy.wrap($input).clear().type(randomStrings[index]);
                 });
 
-              cy.get(playerGetString).find(".apply").click();
+              cy.get(playerGetString)
+                .find(".apply")
+                .click()
+                .wait("@editPlayer");
               cy.get(playerGetString)
                 .find("span:visible")
                 .each(($spanField, index) => {
                   cy.wrap($spanField).should("contain", randomStrings[index]);
                 });
-              cy.visit(WEB_APP_BASE_URL + TEST_TEAM_PATH).wait("@editPlayer");
+
+              cy.visit(WEB_APP_BASE_URL)
+                .get(".edit")
+                .first()
+                .click()
+
               cy.get(playerGetString)
                 .find("span")
                 .each(($spanField, index) => {
