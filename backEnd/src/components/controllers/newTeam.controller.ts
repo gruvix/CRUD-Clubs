@@ -6,21 +6,18 @@ import {
   UseInterceptors,
   UploadedFile,
   HttpException,
-  Res,
+  HttpStatus,
 } from '@nestjs/common';
 import { AuthGuard } from '@comp/guards/auth.guard';
 import TeamService from '@comp/services/team.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import multerOptions from '@comp/storage/multerConfig';
-import { Response } from 'express';
 import { UserId } from '@comp/decorators/userId.decorator';
 
 @UseGuards(AuthGuard)
 @Controller('user/team')
 export default class NewTeamController {
-  constructor(
-    private readonly teamService: TeamService,
-  ) {}
+  constructor(private readonly teamService: TeamService) {}
 
   @Post('add')
   @UseInterceptors(FileInterceptor('image', multerOptions))
@@ -28,8 +25,7 @@ export default class NewTeamController {
     @UserId() userId: number,
     @Body() body: { teamData: string },
     @UploadedFile() image: Express.Multer.File,
-    @Res() res: Response,
-  ) {
+  ): Promise<number> {
     const parsedTeamData = JSON.parse(body.teamData);
     console.log(
       `User ${userId} is adding the new team "${parsedTeamData.name}"`,
@@ -40,13 +36,15 @@ export default class NewTeamController {
         parsedTeamData,
         image.filename,
       );
-      res.status(201).send(newTeamId.toString());
+      return newTeamId;
     } catch (error) {
       if (error instanceof HttpException) {
-        return res.status(error.getStatus()).send(error.message);
+        throw new HttpException(error.message, error.getStatus());
       } else {
-        console.log(error.message);
-        return res.status(500).send(error.message);
+        throw new HttpException(
+          'Failed to add team',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
       }
     }
   }
