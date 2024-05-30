@@ -5,6 +5,7 @@ import LoginButton from "./LoginButton";
 import APIAdapter from "@/components/adapters/APIAdapter";
 import { useRouter } from "next/navigation";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
+import "@/css/globals.css";
 
 export default function Login() {
   const [isLoading, setIsLoading] = React.useState(true);
