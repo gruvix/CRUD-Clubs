@@ -2,7 +2,7 @@
 /* eslint-disable cypress/unsafe-to-chain-command */
 /// <reference types="cypress" />
 
-import { BASE_API_URL, apiRequestPaths, webAppPaths } from "../../src/paths";
+import { apiRequestPaths, webAppPaths } from "../../src/paths";
 
 const TEST_USER = "cypress";
 const WEB_APP_BASE_URL = "http://localhost:8080";
@@ -11,7 +11,6 @@ const TEST_TEAM_ID = "*";
 const TEST_TEAM_PATH = webAppPaths.team(TEST_TEAM_ID);
 const TEST_TEAM_PLAYER_PATH = apiRequestPaths.player(TEST_TEAM_ID);
 const CUSTOM_CREST_UPLOAD_PATH = apiRequestPaths.updateCrest(TEST_TEAM_ID);
-const TEST_TEAM_EXPECTED_IMG_SRC = `${apiRequestPaths.updateCrest(TEST_TEAM_ID)}/${TEST_TEAM_ID}.jpg`;
 const LOGIN_PATH = apiRequestPaths.user;
 
 function generateRandomString(length = 5) {
@@ -32,10 +31,6 @@ function filterTeams(filterOption: string = "Default teams") {
 function selectFirstVisibleTeam() {
   cy.get(".card").filter(":visible").find(".edit").first().click();
 }
-function customCrestPath(teamId: number | string, fileExtension: string) {
-  return `${BASE_API_URL}/user/customCrest/${teamId}/${teamId}.${fileExtension}`;
-}
-
 describe("test login", () => {
   beforeEach(() => {
     cy.visit(WEB_APP_BASE_URL);
@@ -189,8 +184,8 @@ describe("test the player editor with the first default team", () => {
       .wait(MODAL_APPEAR_DELAY)
       .get("#confirmation-modal-button")
       .click()
-      .wait("@getTeams")
-      cy.get(".card").first().should('be.visible');
+      .wait("@getTeams");
+    cy.get(".card").first().should("be.visible");
     filterTeams();
     selectFirstVisibleTeam();
   });
@@ -228,10 +223,7 @@ describe("test the player editor with the first default team", () => {
                   cy.wrap($spanField).should("contain", randomStrings[index]);
                 });
 
-              cy.visit(WEB_APP_BASE_URL)
-                .get(".edit")
-                .first()
-                .click()
+              cy.visit(WEB_APP_BASE_URL).get(".edit").first().click();
 
               cy.get(playerGetString)
                 .find("span")
