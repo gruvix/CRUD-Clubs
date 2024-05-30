@@ -3,11 +3,14 @@ import TeamIsNotResettableError from '@comp/errors/TeamIsNotResettableError';
 import { generateCustomCrestUrl } from '@comp/storage/userPath';
 import Team from '@comp/entities/team.entity';
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
-import { EntityManager, Repository } from 'typeorm';
+import { EntityManager, FindOptionsSelect, Repository } from 'typeorm';
 import TeamData from '@comp/interfaces/TeamData.interface';
 import PlayerService from './player.service';
 import TeamDTO from '@comp/interfaces/TeamDTO.interface';
 import DefaultTeam from '@comp/entities/defaultTeam.entity';
+import CrestStorageAdapter from '@comp/Adapters/crestStorage.adapter';
+
+const crestStorage = new CrestStorageAdapter();
 
 @Injectable()
 export default class TeamService {
@@ -42,12 +45,12 @@ export default class TeamService {
       };
       const teamId = await this.teamRepository.manager.transaction(
         async (transactionalEntityManager) => {
-          const team = (await transactionalEntityManager.save(Team, newTeam));
+          const team = await transactionalEntityManager.save(Team, newTeam);
           newTeam.crestUrl = generateCustomCrestUrl(team.id, imageFileName);
           await transactionalEntityManager
             .createQueryBuilder()
             .update(Team)
-            .set({crestUrl: newTeam.crestUrl})
+            .set({ crestUrl: newTeam.crestUrl })
             .where('id = :id', { id: team.id })
             .execute();
           return team.id;
