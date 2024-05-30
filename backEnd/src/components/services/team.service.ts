@@ -70,11 +70,24 @@ export default class TeamService {
     return teamDTO;
   }
 
-  async getTeam(teamId: number): Promise<Team> {
+  async getTeam(
+    teamId: number,
+    relations?: string[],
+    selections?: string[],
+  ): Promise<Team> {
     try {
+      const selectObject: FindOptionsSelect<Team> = {};
+      if (selections) {
+        selections.forEach((selection) => {
+          selectObject[selection] = true;
+        });
+        if (!selectObject.id) selectObject.id = true;
+        //repository fails if id primary key isn't selected
+      }
       const team = await this.teamRepository.findOne({
         where: { id: teamId },
-        relations: ['squad', 'defaultTeam'],
+        select: selectObject,
+        relations: relations,
       });
       if (!team) throw new Error('Team not found');
       return team;
