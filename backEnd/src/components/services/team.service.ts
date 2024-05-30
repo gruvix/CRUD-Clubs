@@ -116,12 +116,15 @@ export default class TeamService {
 
   async resetTeam(teamId: number, userId: number): Promise<void> {
     try {
+      const oldCrestFileName = (
+        await this.getTeam(teamId, [], ['crestFileName'])
+      ).crestFileName;
       await this.entityManager.transaction(
         async (transactionalEntityManager) => {
           await this.playerService.clearSquad(teamId);
 
           const defaultTeamId = await this.getDefaultTeamId(teamId);
-          const defaultTeam = await this.getTeam(defaultTeamId);
+          const defaultTeam = await this.getTeam(defaultTeamId, ['squad']);
 
           let team = new Team();
           team = {
@@ -133,10 +136,10 @@ export default class TeamService {
           };
 
           this.playerService.copyPlayersToTeam(team, defaultTeam.squad);
-
           await transactionalEntityManager.save(Team, team);
         },
       );
+      crestStorage.deleteCrest(userId, oldCrestFileName);
     } catch (error) {
       if (error instanceof TeamIsNotResettableError) {
         throw new HttpException(
