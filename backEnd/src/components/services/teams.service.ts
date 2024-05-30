@@ -6,7 +6,9 @@ import Team from '@comp/entities/team.entity';
 import User from '@comp/entities/user.entity';
 import PlayerService from './player.service';
 import TeamShortDTO from '@comp/interfaces/TeamShortDTO.interface';
+import CrestStorageAdapter from '@comp/Adapters/crestStorage.adapter';
 
+const crestAdapter = new CrestStorageAdapter
 @Injectable()
 export default class TeamsService {
   constructor(
@@ -102,6 +104,7 @@ export default class TeamsService {
           this.userRepository.save(user);
         },
       );
+      crestAdapter.clearCrestFolder(userId);
     } catch (error) {
       console.log(error);
       throw error;
