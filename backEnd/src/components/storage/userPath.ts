@@ -5,9 +5,9 @@ import { join } from "path";
  * @param {string} username - username of the user
  * @returns the path to the root folder of the user E.g. ROOT/src/userData/USERNAME
  */
-export function getUserRootPath(username: string) {
-  const projectRoot = existsSync(join(__dirname, "..", "userData", username)) ? join(__dirname, '..') : process.cwd();
-  const path = join(projectRoot, "src", "userData", username);
+export function getUserRootPath(userId: string | number) {
+  const projectRoot = existsSync(join(__dirname, "..", "userData", userId.toString())) ? join(__dirname, '..') : process.cwd();
+  const path = join(projectRoot, "src", "userData", userId.toString());
   return path;
 }
 export function getSessionsFolderPath() {

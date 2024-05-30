@@ -22,8 +22,8 @@ const imageFilter = (
 };
 const storage = multer.diskStorage({
   destination: async (req: any, file, cb) => {
-    const { username } = req.session;
-    const userCrestsFolderPath = `${getUserRootPath(username)}`;
+    const { userId } = req.session;
+    const userCrestsFolderPath = `${getUserRootPath(userId)}`;
     if(!await validateFile(userCrestsFolderPath)) {createFolder(userCrestsFolderPath);}
     cb(null, userCrestsFolderPath);
   },

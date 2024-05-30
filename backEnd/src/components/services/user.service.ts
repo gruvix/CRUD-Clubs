@@ -39,16 +39,17 @@ export default class UserService {
     newUser.password = password;
     newUser.teams = [];
 
-    await this.userRepository.manager.transaction(
+    const userId = await this.userRepository.manager.transaction(
       async (transactionalEntityManager) => {
         let savedUser = await transactionalEntityManager.save(newUser);
 
         const baseTeams = await this.teamsService.getDefaultTeams();
         await this.teamsService.copyTeamsToUser(savedUser, baseTeams);
         await transactionalEntityManager.save(savedUser);
+        return savedUser.id;
       },
     );
-    await createFolder(getUserRootPath(username));
+    await createFolder(getUserRootPath(userId));
   }
 
   async handleUserLogin(username: string): Promise<boolean> {
