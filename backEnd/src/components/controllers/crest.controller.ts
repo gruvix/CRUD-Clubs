@@ -4,6 +4,7 @@ import {
   HttpException,
   Put,
   Res,
+  UploadedFile,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -25,32 +26,29 @@ export default class CrestController {
 
   @Get(':teamId/:fileName')
   async getCrest(
-    @Username() username: string,
     @UserId() userId: number,
     @TeamId() teamId: number,
     @FileName() fileName: string,
     @Res() res: Response,
   ) {
     console.log(`User ${userId} is requesting crest for team ${teamId}`);
-    const file = await this.crestService.getCrest(username, fileName);
+    const file = await this.crestService.getCrest(userId, fileName);
     res.send(file);
   }
 
   @Put(':teamId')
   @UseInterceptors(FileInterceptor('image', multerOptions))
   async updateCrest(
-    @Username() username: string,
     @UserId() userId: number,
     @TeamId() teamId: number,
-    @FileName() fileName: string,
+    @UploadedFile() image: Express.Multer.File,
     @Res() res: Response,
   ) {
     console.log(`User ${userId} is updating crest for team ${teamId}`);
     try {
       const newCrestUrl = await this.crestService.updateCrest(
-        username,
         teamId,
-        fileName,
+        image.filename,
       );
       res.send(JSON.stringify(newCrestUrl));
     } catch (error) {
