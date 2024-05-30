@@ -47,6 +47,7 @@ export default class CrestController {
     console.log(`User ${userId} is updating crest for team ${teamId}`);
     try {
       const newCrestUrl = await this.crestService.updateCrest(
+        userId,
         teamId,
         image.filename,
       );

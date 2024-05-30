@@ -6,7 +6,6 @@ import Team from '@comp/entities/team.entity';
 import User from '@comp/entities/user.entity';
 
 const crestStorage = new CrestStorageAdapter();
-const teamStorage = new TeamStorageAdapter();
 
 @Injectable()
 export default class CrestService {
@@ -26,14 +25,20 @@ export default class CrestService {
             await crestStorage.deleteCrest(userId, team.crestFileName);
         }
     }
-    async updateCrest(username: string, teamId: number, filename: string): Promise<string> {
-        crestStorage.deleteOldCrest(username, teamId, filename);
-        const crestUrl = generateCustomCrestUrl(teamId, filename);
-        const newData = {
-            crestUrl,
-            hasCustomCrest: true,
-          };
-          await teamStorage.updateTeam(newData, username, teamId);
-        return crestUrl
+    async updateCrest(userId: number, teamId: number, newImageFileName: string): Promise<string> {
+        try {
+            await this.deleteCrest(teamId);
+            const crestUrl = generateCustomCrestUrl(teamId, newImageFileName);
+            let newData = new Team();
+            newData.id = teamId;
+            newData.crestUrl = crestUrl;
+            newData.crestFileName = newImageFileName;
+            newData.hasCustomCrest = true;
+            await this.teamService.updateTeam(teamId, newData);
+            return crestUrl
+        } catch (error) {
+            await crestStorage.deleteCrest(userId, newImageFileName);
+            throw new Error(error);
+        }
     }
 }
