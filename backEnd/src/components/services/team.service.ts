@@ -36,6 +36,7 @@ export default class TeamService {
       newTeam = {
         ...newTeam,
         ...teamData,
+        id: undefined,
         user: userId,
         crestUrl: '',
         hasCustomCrest: true,
