@@ -2,8 +2,8 @@ import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import TeamIsNotResettableError from '@comp/errors/TeamIsNotResettableError';
 import { generateCustomCrestUrl } from '@comp/storage/userPath';
 import Team from '@comp/entities/team.entity';
-import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
-import { EntityManager, FindOptionsSelect, Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { FindOptionsSelect, Repository } from 'typeorm';
 import TeamData from '@comp/interfaces/TeamData.interface';
 import PlayerService from './player.service';
 import TeamDTO from '@comp/interfaces/TeamDTO.interface';
@@ -17,8 +17,6 @@ export default class TeamService {
   constructor(
     @InjectRepository(Team)
     private readonly teamRepository: Repository<Team>,
-    @InjectEntityManager()
-    private readonly entityManager: EntityManager,
     @Inject(PlayerService)
     private readonly playerService: PlayerService,
   ) {}
@@ -122,7 +120,7 @@ export default class TeamService {
       const oldCrestFileName = (
         await this.getTeam(teamId, [], ['crestFileName'])
       ).crestFileName;
-      await this.entityManager.transaction(
+      await this.teamRepository.manager.transaction(
         async (transactionalEntityManager) => {
           await this.playerService.clearSquad(teamId);
 
@@ -179,7 +177,7 @@ export default class TeamService {
 
   async deleteTeam(teamId: number): Promise<void> {
     try {
-      await this.entityManager.transaction(
+      await this.teamRepository.manager.transaction(
         async (transactionalEntityManager) => {
           await this.playerService.clearSquad(teamId);
           await transactionalEntityManager
