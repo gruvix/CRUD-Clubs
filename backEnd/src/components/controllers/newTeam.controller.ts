@@ -4,7 +4,6 @@ import {
   UseGuards,
   Post,
   UseInterceptors,
-  UploadedFile,
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
@@ -13,6 +12,7 @@ import TeamService from '@comp/services/team.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import multerOptions from '@comp/storage/multerConfig';
 import { UserId } from '@comp/decorators/userId.decorator';
+import { UploadedFileName } from '@comp/decorators/uploadedFileName.decorator';
 
 @UseGuards(AuthGuard)
 @Controller('user/team')
@@ -24,7 +24,7 @@ export default class NewTeamController {
   async addTeam(
     @UserId() userId: number,
     @Body() body: { teamData: string },
-    @UploadedFile() image: Express.Multer.File,
+    @UploadedFileName() imageFileName: string,
   ): Promise<number> {
     const parsedTeamData = JSON.parse(body.teamData);
     console.log(
@@ -34,7 +34,7 @@ export default class NewTeamController {
       const newTeamId = await this.teamService.addTeam(
         userId,
         parsedTeamData,
-        image.filename,
+        imageFileName,
       );
       return newTeamId;
     } catch (error) {
