@@ -16,6 +16,7 @@ import multerOptions from '@comp/storage/multerConfig';
 import { UserId } from '@comp/decorators/userId.decorator';
 import { TeamId } from '@comp/decorators/teamId.decorator';
 import { FileName } from '@comp/decorators/fileName.decorator';
+import { UploadedFileName } from '@comp/decorators/uploadedFileName.decorator';
 
 @UseGuards(AuthGuard, TeamGuard)
 @Controller('user/customCrest')
@@ -42,14 +43,14 @@ export default class CrestController {
   async updateCrest(
     @UserId() userId: number,
     @TeamId() teamId: number,
-    @UploadedFile() image: Express.Multer.File,
+    @UploadedFileName() imageFileName: string,
   ): Promise<string> {
     console.log(`User ${userId} is updating crest for team ${teamId}`);
     try {
       const newCrestUrl = await this.crestService.updateCrest(
         userId,
         teamId,
-        image.filename,
+        imageFileName,
       );
       return JSON.stringify(newCrestUrl);
     } catch (error) {
