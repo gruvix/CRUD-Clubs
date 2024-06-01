@@ -85,6 +85,7 @@ export default function PlayersDataTable({
     setPlayerInputRows((previousState) => [...previousState, newPlayerData]);
   };
   const handleNewPlayer = () => {
+    setRowLoading(NEW_PLAYER_ROW_KEY);
     requestAdapter
       .addPlayer(teamId, newPlayerRow)
       .then((newPlayerId) => {
@@ -93,6 +94,9 @@ export default function PlayersDataTable({
       })
       .catch((error) => {
         errorHandler(error);
+      })
+      .finally(() => {
+        setRowLoading(NaN);
       });
   };
   const updateNewPlayerInput = (
@@ -136,77 +140,130 @@ export default function PlayersDataTable({
       <table className="table" id="players-table">
         <thead>
           <tr className="table-dark" id="add-player-row">
-            {playerKeys.map((parameter, keysIndex) => (
-              <td className="text-warning" key={parameter}>
-                {parameter}
-                <input
-                  ref={
-                    editingRowKey === NEW_PLAYER_ROW_KEY && keysIndex === 0
-                      ? inputReferece
-                      : null
-                  }
-                  onKeyDown={(e) =>
-                    e.key === "Enter" ? handleNewPlayer() : null
-                  }
-                  onFocus={handleInputFocus}
-                  type="text"
-                  className="form-control"
-                  value={newPlayerRow[parameter] ? newPlayerRow[parameter] : ""}
-                  style={{
-                    display:
-                      editingRowKey === NEW_PLAYER_ROW_KEY ? "inline" : "none",
-                  }}
-                  onChange={(event) => updateNewPlayerInput(event, parameter)}
-                />
-              </td>
-            ))}
-            <td
-              style={{ display: "flex", minHeight: "80px", paddingTop: "20px" }}
-            >
-              <button
-                type="button"
-                className="btn btn-shadow btn-outline-warning"
-                id="add-player-button"
-                style={{
-                  maxHeight: "40px",
-                  minWidth: "120px",
-                  display:
-                    editingRowKey !== NEW_PLAYER_ROW_KEY ? "inline" : "none",
-                }}
-                onClick={() => enableRowEditing(NEW_PLAYER_ROW_KEY)}
-              >
-                new player
-              </button>
-              <button
-                type="button"
-                className="btn btn-shadow btn-outline-success"
-                id="confirm-player-button"
-                style={{
-                  maxHeight: "40px",
-                  minWidth: "50px",
-                  marginRight: "10px",
-                  display:
-                    editingRowKey === NEW_PLAYER_ROW_KEY ? "inline" : "none",
-                }}
-                onClick={() => handleNewPlayer()}
-              >
-                Add
-              </button>
-              <button
-                type="button"
-                className="btn btn-shadow btn-outline-secondary"
-                id="cancel-player-button"
-                style={{
-                  maxHeight: "40px",
-                  minWidth: "75px",
-                  display:
-                    editingRowKey === NEW_PLAYER_ROW_KEY ? "inline" : "none",
-                }}
-                onClick={disableRowEditing}
-              >
-                Cancel
-              </button>
-            </td>
+            <>
+              {rowLoading === NEW_PLAYER_ROW_KEY ? (
+                <>
+                  {playerKeys.map((parameter, keysIndex) => (
+                    <td style={{ position: "relative" }}>
+                      <>
+                        {keysIndex === 0 ? (
+                          <LoginSpiner
+                            style={{
+                              left: "100%",
+                              bottom: "25%",
+                              width: "2rem",
+                              height: "2rem",
+                              zIndex: "100",
+                            }}
+                          />
+                        ) : (
+                          <></>
+                        )}
+                      </>
+                    </td>
+                  ))}
+                  <td>
+                    <button
+                      className="btn btn-outline-success disabled"
+                      disabled
+                    >
+                      Adding Player...
+                    </button>
+                  </td>
+                </>
+              ) : (
+                <>
+                  {playerKeys.map((parameter, keysIndex) => (
+                    <td className="text-warning" key={parameter}>
+                      {parameter}
+                      <input
+                        ref={
+                          editingRowKey === NEW_PLAYER_ROW_KEY &&
+                          keysIndex === 0
+                            ? inputReferece
+                            : null
+                        }
+                        onKeyDown={(e) =>
+                          e.key === "Enter" ? handleNewPlayer() : null
+                        }
+                        onFocus={handleInputFocus}
+                        type="text"
+                        className="form-control"
+                        value={
+                          newPlayerRow[parameter] ? newPlayerRow[parameter] : ""
+                        }
+                        style={{
+                          display:
+                            editingRowKey === NEW_PLAYER_ROW_KEY
+                              ? "inline"
+                              : "none",
+                        }}
+                        onChange={(event) =>
+                          updateNewPlayerInput(event, parameter)
+                        }
+                      />
+                    </td>
+                  ))}
+                  <td
+                    style={{
+                      display: "flex",
+                      minHeight: "80px",
+                      paddingTop: "20px",
+                    }}
+                  >
+                    <button
+                      type="button"
+                      className="btn btn-shadow btn-outline-warning"
+                      id="add-player-button"
+                      style={{
+                        maxHeight: "40px",
+                        minWidth: "120px",
+                        display:
+                          editingRowKey !== NEW_PLAYER_ROW_KEY
+                            ? "inline"
+                            : "none",
+                      }}
+                      onClick={() => enableRowEditing(NEW_PLAYER_ROW_KEY)}
+                    >
+                      new player
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-shadow btn-outline-success"
+                      id="confirm-player-button"
+                      style={{
+                        maxHeight: "40px",
+                        minWidth: "50px",
+                        marginRight: "10px",
+                        display:
+                          editingRowKey === NEW_PLAYER_ROW_KEY
+                            ? "inline"
+                            : "none",
+                      }}
+                      onClick={() => handleNewPlayer()}
+                    >
+                      Add
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-shadow btn-outline-secondary"
+                      id="cancel-player-button"
+                      style={{
+                        maxHeight: "40px",
+                        minWidth: "75px",
+                        display:
+                          editingRowKey === NEW_PLAYER_ROW_KEY
+                            ? "inline"
+                            : "none",
+                      }}
+                      onClick={disableRowEditing}
+                    >
+                      Cancel
+                    </button>
+                  </td>
+                </>
+              )}
+            </>
           </tr>
           {
             <>
