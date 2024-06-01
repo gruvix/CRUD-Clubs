@@ -23,6 +23,7 @@ export default function Page({
   const router = useRouter();
   const { teamId } = params;
   const [isLoading, setIsLoading] = React.useState(true);
+  const [isCrestLoading, setIsCrestLoading] = React.useState(true);
   const [teamData, setTeamData] = React.useState({} as Team);
   const [modalCallback, setModalCallback] = React.useState(
     () => (): void => {},
@@ -44,21 +45,26 @@ export default function Page({
   };
   const updateLocalTeamData = async () => {
     setIsLoading(true);
+    setIsCrestLoading(true);
     request
       .getTeam(teamId)
       .then((data) => {
         setTeamData(data);
         setPageTitle(`CRUD Team ${teamId} - ${data.teamParameters.name}`);
-        setIsLoading(false);
       })
       .catch((error: Error) => {
         errorHandler(error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+        setIsCrestLoading(false);
       });
   };
   const handleImageUpdate = (image: File) => {
     if (!isImageTypeValid(image)) {
       alert("Error: invalid image type");
     } else {
+      setIsCrestLoading(true);
       request
         .updateTeamCrest(teamId, image)
         .then((newCrestUrl: string) => {
@@ -69,6 +75,9 @@ export default function Page({
         })
         .catch((error: Error) => {
           errorHandler(error);
+        })
+        .finally(() => {
+          setIsCrestLoading(false);
         });
     }
   };
@@ -106,7 +115,7 @@ export default function Page({
             Go back
           </button>
         </div>
-        {isLoading ? (
+        {isCrestLoading ? (
           <LoadingSpinner
             style={{
               marginLeft: "10rem",
