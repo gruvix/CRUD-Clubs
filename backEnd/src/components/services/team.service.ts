@@ -71,6 +71,17 @@ export default class TeamService {
     const teamDTO: TeamDTO = { ...rest, hasDefault: !!defaultTeam };
     return teamDTO;
   }
+  private generateSelectionsFromStringArray(
+    selections: string[],
+  ): FindOptionsSelect<Team> {
+    const selectOptions: FindOptionsSelect<Team> = {};
+    if (selections) {
+      selections.forEach((selection) => {
+        selectOptions[selection] = true;
+      });
+    }
+    return selectOptions;
+  }
 
   async getTeam(
     teamId: number,
@@ -78,14 +89,11 @@ export default class TeamService {
     selections?: string[],
   ): Promise<Team> {
     try {
-      const selectObject: FindOptionsSelect<Team> = {};
-      if (selections) {
-        selections.forEach((selection) => {
-          selectObject[selection] = true;
-        });
-        if (!selectObject.id) selectObject.id = true;
-        //repository fails if id primary key isn't selected
-      }
+      if (selections && !selections.some((item) => item === 'id'))
+        selections.push('id');
+      //repository fails if id primary key isn't selected
+      const selectObject = this.generateSelectionsFromStringArray(selections);
+
       const team = await this.teamRepository.findOne({
         where: { id: teamId },
         select: selectObject,

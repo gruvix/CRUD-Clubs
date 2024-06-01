@@ -43,4 +43,34 @@ describe('CrestController', () => {
     crestService = module.get<CrestService>(CrestService);
     crestController = module.get<CrestController>(CrestController);
   });
+
+  describe('getCrest', () => {
+    it('should get the image of the team', async () => {
+      const imageFile = await readFile(
+        './src/components/controllers/__fixtures__/image.jpg',
+      );
+
+      jest.spyOn(crestService, 'getCrest').mockResolvedValueOnce(imageFile);
+      expect(
+        await crestController.getCrest(userId, teamId, 'image.jpg'),
+      ).toMatchObject({
+        options: {
+          length: imageFile.length,
+        },
+      });
+      expect(crestService.getCrest).toHaveBeenCalledWith(userId, 'image.jpg');
+    });
+
+    it('should handle errors', async () => {
+      jest.spyOn(crestService, 'getCrest').mockRejectedValueOnce(new Error());
+      await expect(
+        crestController.getCrest(userId, teamId, 'image.jpg'),
+      ).rejects.toThrow(
+        new HttpException(
+          'Failed to get crest',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        ),
+      );
+    });
+  });
 });
