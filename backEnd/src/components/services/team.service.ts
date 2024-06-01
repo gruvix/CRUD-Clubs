@@ -126,9 +126,11 @@ export default class TeamService {
 
   async resetTeam(teamId: number, userId: number): Promise<void> {
     try {
-      const oldCrestFileName = (
-        await this.getTeam(teamId, [], ['crestFileName'])
-      ).crestFileName;
+      const oldImageData = await this.getTeam(
+        teamId,
+        [],
+        ['crestFileName', 'hasCustomCrest'],
+      );
       await this.teamRepository.manager.transaction(
         async (transactionalEntityManager) => {
           await this.playerService.clearSquad(teamId);
@@ -147,9 +149,10 @@ export default class TeamService {
 
           this.playerService.copyPlayersToTeam(team, defaultTeam.squad);
           await transactionalEntityManager.save(Team, team);
+          if (oldImageData.hasCustomCrest)
+            crestStorage.deleteCrest(userId, oldImageData.crestFileName);
         },
       );
-      crestStorage.deleteCrest(userId, oldCrestFileName);
     } catch (error) {
       if (error instanceof TeamIsNotResettableError) {
         throw new HttpException(
@@ -184,17 +187,23 @@ export default class TeamService {
     }
   }
 
-  async deleteTeam(teamId: number): Promise<void> {
+  async deleteTeam(userId: number, teamId: number): Promise<void> {
     try {
       await this.teamRepository.manager.transaction(
         async (transactionalEntityManager) => {
           await this.playerService.clearSquad(teamId);
+          const imageData = await this.getTeam(teamId, [
+            'crestFileName',
+            'hasCustomCrest',
+          ]);
           await transactionalEntityManager
             .createQueryBuilder()
             .delete()
             .from(Team)
             .where('id = :id', { id: teamId })
             .execute();
+          if (imageData.hasCustomCrest)
+            crestStorage.deleteCrest(userId, imageData.crestFileName);
         },
       );
     } catch (error) {
