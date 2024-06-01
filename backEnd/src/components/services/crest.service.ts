@@ -8,13 +8,13 @@ const crestStorage = new CrestStorageAdapter();
 
 @Injectable()
 export default class CrestService {
-    constructor(
-        @Inject(TeamService)
-        private readonly teamService: TeamService,
-    ) {}
-    async getCrest(userId: number, fileName: string): Promise<Buffer> {
-        return await crestStorage.getCrest(userId, fileName);
-    }
+  constructor(
+    @Inject(TeamService)
+    private readonly teamService: TeamService,
+  ) {}
+  async getCrest(userId: number, fileName: string): Promise<Buffer> {
+    return await crestStorage.getCrest(userId, fileName);
+  }
   async updateCrest(
     userId: number,
     teamId: number,
