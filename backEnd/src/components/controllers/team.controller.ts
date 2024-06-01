@@ -48,7 +48,7 @@ export default class TeamController {
     @TeamId() teamId: number,
   ): Promise<void> {
     console.log(`User ${userId} is deleting team ${teamId}`);
-    await this.teamService.deleteTeam(teamId);
+    await this.teamService.deleteTeam(userId, teamId);
   }
 
   @Put()
