@@ -21,6 +21,7 @@ describe('CrestController', () => {
   let crestService: CrestService;
   const userId = 1;
   const teamId = 1;
+  const imageFileName = 'image.jpg'
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -52,13 +53,13 @@ describe('CrestController', () => {
 
       jest.spyOn(crestService, 'getCrest').mockResolvedValueOnce(imageFile);
       expect(
-        await crestController.getCrest(userId, teamId, 'image.jpg'),
+        await crestController.getCrest(userId, teamId, imageFileName),
       ).toMatchObject({
         options: {
           length: imageFile.length,
         },
       });
-      expect(crestService.getCrest).toHaveBeenCalledWith(userId, 'image.jpg');
+      expect(crestService.getCrest).toHaveBeenCalledWith(userId, imageFileName);
     });
 
     it('should handle errors', async () => {
