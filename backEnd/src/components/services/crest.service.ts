@@ -3,7 +3,6 @@ import CrestStorageAdapter from '@comp/Adapters/crestStorage.adapter';
 import { generateCustomCrestUrl } from '@comp/storage/userPath';
 import TeamService from './team.service';
 import Team from '@comp/entities/team.entity';
-import User from '@comp/entities/user.entity';
 
 const crestStorage = new CrestStorageAdapter();
 
@@ -16,29 +15,30 @@ export default class CrestService {
     async getCrest(userId: number, fileName: string): Promise<Buffer> {
         return await crestStorage.getCrest(userId, fileName);
     }
-    private async deleteCrest(teamId: number) {
-        const crestRelatedProperties = ['crestFileName', 'hasCustomCrest', 'user'];
-        const team = await this.teamService.getTeam(teamId, ['user'], crestRelatedProperties);
-        const userId = (team.user as unknown as User).id
+  async updateCrest(
+    userId: number,
+    teamId: number,
+    newImageFileName: string,
+  ): Promise<string> {
+    const oldCrestFileData = await this.teamService.getTeam(
+      teamId,
+      [],
+      ['crestFileName', 'hasCustomCrest'],
+    );
+    try {
+      const crestUrl = generateCustomCrestUrl(teamId, newImageFileName);
+      let newData = new Team();
+      newData.id = teamId;
+      newData.crestUrl = crestUrl;
+      newData.crestFileName = newImageFileName;
+      newData.hasCustomCrest = true;
 
-        if (team.hasCustomCrest) {
-            await crestStorage.deleteCrest(userId, team.crestFileName);
-        }
+      await this.teamService.updateTeam(teamId, newData);
+      await crestStorage.deleteCrest(userId, oldCrestFileData.crestFileName);
+      return crestUrl;
+    } catch (error) {
+      await crestStorage.deleteCrest(userId, newImageFileName);
+      throw new Error(error);
     }
-    async updateCrest(userId: number, teamId: number, newImageFileName: string): Promise<string> {
-        try {
-            await this.deleteCrest(teamId);
-            const crestUrl = generateCustomCrestUrl(teamId, newImageFileName);
-            let newData = new Team();
-            newData.id = teamId;
-            newData.crestUrl = crestUrl;
-            newData.crestFileName = newImageFileName;
-            newData.hasCustomCrest = true;
-            await this.teamService.updateTeam(teamId, newData);
-            return crestUrl
-        } catch (error) {
-            await crestStorage.deleteCrest(userId, newImageFileName);
-            throw new Error(error);
-        }
-    }
+  }
 }
