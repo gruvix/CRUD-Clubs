@@ -10,16 +10,14 @@ import {
 } from '@nestjs/common';
 import CustomRequest from '@comp/interfaces/CustomRequest.interface';
 import UserService from '@comp/services/user.service';
+import { UserId } from '@comp/decorators/userId.decorator';
 
 @Controller('user')
 export default class UserController {
   constructor(private readonly userService: UserService) {}
   @Get()
-  async getUserStatus(@Req() req: CustomRequest) {
-    console.log(`User ${req.session.userId} requested user status`);
-    if (!this.userService.isLoggedIn(req)) {
-      throw new HttpException('Not logged in', HttpStatus.UNAUTHORIZED);
-    }
+  async getUserStatus(@UserId() userId: number) {
+    console.log(`User ${userId} is requesting user status`);
     return;
   }
   @Post()
@@ -58,5 +56,6 @@ export default class UserController {
         );
       }
     });
+    return;
   }
 }
