@@ -1,14 +1,11 @@
 import { Test } from '@nestjs/testing';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import PlayerService from '@comp/services/player.service';
 import UserService from '@comp/services/user.service';
-import Team from '@comp/entities/team.entity';
 import TeamService from '@comp/services/team.service';
 import NewTeamController from '../newTeam.controller';
-import Player from '@comp/entities/player.entity';
-import User from '@comp/entities/user.entity';
 import TeamsService from '@comp/services/teams.service';
+import { TestSetupModule } from './testSetup.module';
 
 describe('NewTeamController', () => {
   let newTeamController: NewTeamController;
@@ -28,16 +25,8 @@ describe('NewTeamController', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
+      imports: [TestSetupModule],
       controllers: [NewTeamController],
-      providers: [
-        TeamService,
-        PlayerService,
-        UserService,
-        TeamsService,
-        { provide: getRepositoryToken(User), useValue: jest.fn() },
-        { provide: getRepositoryToken(Team), useValue: jest.fn() },
-        { provide: getRepositoryToken(Player), useValue: jest.fn() },
-      ],
     }).compile();
     teamsService = module.get<TeamsService>(TeamsService);
     userService = module.get<UserService>(UserService);
