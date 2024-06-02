@@ -10,7 +10,7 @@ export const UserId = createParamDecorator(
     const request = context.switchToHttp().getRequest();
     const userId = request.session.userId;
     if (!userId) {
-      throw new HttpException('User ID is required', HttpStatus.BAD_REQUEST);
+      throw new HttpException('Not logged in', HttpStatus.UNAUTHORIZED);
     }
     return Number(userId);
   },
