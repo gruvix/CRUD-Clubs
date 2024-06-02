@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { isUsernameValid } from '@comp/validators/userValidation';
 import { Repository } from 'typeorm';
 import UserNotFoundError from '@comp/errors/UserNotFoundError';
-import CustomRequest from '@comp/interfaces/CustomRequest.interface';
 import User from '@comp/entities/user.entity';
 import TeamsService from './teams.service';
 import { createFolder } from '@comp/storage/dataStorage';
@@ -16,11 +15,6 @@ export default class UserService {
     private readonly userRepository: Repository<User>,
     @Inject(TeamsService) private readonly teamsService: TeamsService,
   ) {}
-
-  isLoggedIn(req: CustomRequest): boolean {
-    const userId = req.session.userId;
-    return !!userId;
-  }
 
   async getUserId(username: string): Promise<number> {
     const user = await this.userRepository.findOneBy({ username });
