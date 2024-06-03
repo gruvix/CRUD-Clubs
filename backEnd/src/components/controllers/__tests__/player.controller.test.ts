@@ -108,11 +108,17 @@ describe('PlayerController', () => {
     };
     it('should delete a player', async () => {
       jest.spyOn(playerService, 'removePlayer').mockResolvedValueOnce(void 0);
-      expect(await playerController.removePlayer(userId, teamId, playerDataMock)).toBeUndefined();
-      expect(playerService.removePlayer).toHaveBeenCalledWith(playerDataMock.id)
-    })
+      expect(
+        await playerController.removePlayer(userId, teamId, playerDataMock),
+      ).toBeUndefined();
+      expect(playerService.removePlayer).toHaveBeenCalledWith(
+        playerDataMock.id,
+      );
+    });
     it('should handle errors', async () => {
-      jest.spyOn(playerService, 'removePlayer').mockRejectedValueOnce(new Error());
+      jest
+        .spyOn(playerService, 'removePlayer')
+        .mockRejectedValueOnce(new Error());
       await expect(
         playerController.removePlayer(userId, teamId, playerDataMock),
       ).rejects.toThrow(
@@ -121,7 +127,9 @@ describe('PlayerController', () => {
           HttpStatus.INTERNAL_SERVER_ERROR,
         ),
       );
-      expect(playerService.removePlayer).toHaveBeenCalledWith(playerDataMock.id);
-    })
-  })
+      expect(playerService.removePlayer).toHaveBeenCalledWith(
+        playerDataMock.id,
+      );
+    });
+  });
 });

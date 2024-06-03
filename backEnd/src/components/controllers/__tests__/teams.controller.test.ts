@@ -66,7 +66,9 @@ describe('TeamsController', () => {
       jest
         .spyOn(teamsService, 'getTeamsList')
         .mockRejectedValueOnce(new Error());
-      await expect(teamsController.getTeamsList(userId, username)).rejects.toThrow(
+      await expect(
+        teamsController.getTeamsList(userId, username),
+      ).rejects.toThrow(
         new HttpException(
           'Failed to get teams',
           HttpStatus.INTERNAL_SERVER_ERROR,
@@ -85,9 +87,7 @@ describe('TeamsController', () => {
     });
 
     it('should handle errors', async () => {
-      jest
-        .spyOn(teamsService, 'resetTeams')
-        .mockRejectedValueOnce(new Error());
+      jest.spyOn(teamsService, 'resetTeams').mockRejectedValueOnce(new Error());
       await expect(teamsController.resetTeams(userId)).rejects.toThrow(
         new HttpException(
           'Failed to reset teams',
