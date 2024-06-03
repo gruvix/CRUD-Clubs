@@ -16,6 +16,8 @@ describe('PlayerController', () => {
   const userId = 1;
   const teamId = 1;
 
+  jest.spyOn(console, 'log').mockImplementation(jest.fn());
+
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       imports: [TestSetupModule],

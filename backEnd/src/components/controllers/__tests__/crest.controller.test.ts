@@ -20,6 +20,8 @@ describe('CrestController', () => {
   const teamId = 1;
   const imageFileName = 'image.jpg';
 
+  jest.spyOn(console, 'log').mockImplementation(jest.fn());
+  
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       imports: [TestSetupModule],

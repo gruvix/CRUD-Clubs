@@ -13,6 +13,8 @@ describe('TeamsController', () => {
   const username = 'test';
   const userId = 1;
 
+  jest.spyOn(console, 'log').mockImplementation(jest.fn());
+
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       imports: [TestSetupModule],
