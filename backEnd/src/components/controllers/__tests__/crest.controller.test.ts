@@ -18,7 +18,7 @@ describe('CrestController', () => {
   let crestService: CrestService;
   const userId = 1;
   const teamId = 1;
-  const imageFileName = 'image.jpg'
+  const imageFileName = 'image.jpg';
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -53,7 +53,7 @@ describe('CrestController', () => {
     it('should handle errors', async () => {
       jest.spyOn(crestService, 'getCrest').mockRejectedValueOnce(new Error());
       await expect(
-        crestController.getCrest(userId, teamId, 'image.jpg'),
+        crestController.getCrest(userId, teamId, imageFileName),
       ).rejects.toThrow(
         new HttpException(
           'Failed to get crest',
