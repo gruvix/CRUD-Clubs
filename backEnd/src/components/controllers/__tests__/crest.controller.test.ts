@@ -64,4 +64,35 @@ describe('CrestController', () => {
       );
     });
   });
+
+  describe('updateCrest', () => {
+    it('should update the image of the team', async () => {
+      const newCrestUrl = 'i/am/an/url';
+      jest
+        .spyOn(crestService, 'updateCrest')
+        .mockResolvedValueOnce(newCrestUrl);
+      expect(await crestController.updateCrest(userId, teamId, imageFileName));
+    });
+    it('should handle errors', async () => {
+      jest
+        .spyOn(crestService, 'updateCrest')
+        .mockRejectedValueOnce(new Error())
+        .mockRejectedValueOnce(
+          new HttpException('Im a test error', HttpStatus.BAD_REQUEST),
+        );
+      await expect(
+        crestController.updateCrest(userId, teamId, imageFileName),
+      ).rejects.toThrow(
+        new HttpException(
+          'Failed to update crest',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        ),
+      );
+      await expect(
+        crestController.updateCrest(userId, teamId, imageFileName),
+      ).rejects.toThrow(
+        new HttpException('Im a test error', HttpStatus.BAD_REQUEST),
+      );
+    });
+  });
 });
