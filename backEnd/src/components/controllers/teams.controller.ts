@@ -23,7 +23,10 @@ export default class TeamsController {
   constructor(private readonly teamsService: TeamsService) {}
 
   @Get()
-  async getTeamsList(@UserId() userId: number, @Username() username: string): Promise<TeamsListData> {
+  async getTeamsList(
+    @UserId() userId: number,
+    @Username() username: string,
+  ): Promise<TeamsListData> {
     console.log(`User ${userId} requested teams list`);
     try {
       const data: TeamsListData = {
@@ -32,11 +35,10 @@ export default class TeamsController {
       };
       return data;
     } catch (error) {
-      if (error)
-        throw new HttpException(
-          'Failed to get teams',
-          HttpStatus.INTERNAL_SERVER_ERROR,
-        );
+      throw new HttpException(
+        'Failed to get teams',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
