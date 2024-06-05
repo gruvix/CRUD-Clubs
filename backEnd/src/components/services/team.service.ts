@@ -124,7 +124,7 @@ export default class TeamService {
     return defaultTeam.id;
   }
 
-  async resetTeam(teamId: number, userId: number): Promise<void> {
+  async resetTeam(userId: number, teamId: number): Promise<void> {
     try {
       const oldImageData = await this.getTeam(
         teamId,

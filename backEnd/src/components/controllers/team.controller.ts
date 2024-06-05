@@ -98,7 +98,7 @@ export default class TeamController {
   ): Promise<void> {
     try {
       console.log(`User ${userId} is resetting team ${teamId}`);
-      await this.teamService.resetTeam(teamId, userId);
+      await this.teamService.resetTeam(userId, teamId);
     } catch (error) {
       if (!(error instanceof HttpException)) {
         throw new HttpException(
