@@ -6,6 +6,8 @@ import {
   UseGuards,
   Delete,
   Put,
+  HttpStatus,
+  HttpException,
 } from '@nestjs/common';
 import { AuthGuard } from '@comp/guards/auth.guard';
 import { TeamGuard } from '@comp/guards/team.guard';
@@ -25,10 +27,25 @@ export default class TeamController {
     @UserId() userId: number,
     @TeamId() teamId: number,
   ): Promise<TeamDTO> {
-    console.log(`User ${userId} requested team ${teamId}`);
-    const team = await this.teamService.getTeam(teamId, ['squad', 'defaultTeam']);
-    const teamDTO = this.teamService.transformTeamDataToDTO(team);
-    return teamDTO;
+    try {
+      console.log(`User ${userId} requested team ${teamId}`);
+      const team = await this.teamService.getTeam(teamId, [
+        'squad',
+        'defaultTeam',
+      ]);
+      const teamDTO = this.teamService.transformTeamDataToDTO(team);
+      return teamDTO;
+    } catch (error) {
+      if (!(error instanceof HttpException)) {
+        throw new HttpException(
+          'Failed to get team',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+          error,
+        );
+      } else {
+        throw error;
+      }
+    }
   }
 
   @Patch()
@@ -37,9 +54,20 @@ export default class TeamController {
     @TeamId() teamId: number,
     @Body() data: TeamData,
   ): Promise<void> {
-    console.log(`User ${userId} is updating team ${teamId}`);
-
-    await this.teamService.updateTeam(teamId, data);
+    try {
+      console.log(`User ${userId} is updating team ${teamId}`);
+      await this.teamService.updateTeam(teamId, data);
+    } catch (error) {
+      if (!(error instanceof HttpException)) {
+        throw new HttpException(
+          'Failed to update team',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+          error,
+        );
+      } else {
+        throw error;
+      }
+    }
   }
 
   @Delete()
@@ -47,8 +75,20 @@ export default class TeamController {
     @UserId() userId: number,
     @TeamId() teamId: number,
   ): Promise<void> {
-    console.log(`User ${userId} is deleting team ${teamId}`);
-    await this.teamService.deleteTeam(userId, teamId);
+    try {
+      console.log(`User ${userId} is deleting team ${teamId}`);
+      await this.teamService.deleteTeam(userId, teamId);
+    } catch (error) {
+      if (!(error instanceof HttpException)) {
+        throw new HttpException(
+          'Failed to delete team',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+          error,
+        );
+      } else {
+        throw error;
+      }
+    }
   }
 
   @Put()
@@ -56,7 +96,19 @@ export default class TeamController {
     @UserId() userId: number,
     @TeamId() teamId: number,
   ): Promise<void> {
-    console.log(`User ${userId} is resetting team ${teamId}`);
-    await this.teamService.resetTeam(teamId, userId);
+    try {
+      console.log(`User ${userId} is resetting team ${teamId}`);
+      await this.teamService.resetTeam(teamId, userId);
+    } catch (error) {
+      if (!(error instanceof HttpException)) {
+        throw new HttpException(
+          'Failed to delete team',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+          error,
+        );
+      } else {
+        throw error;
+      }
+    }
   }
 }
