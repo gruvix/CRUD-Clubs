@@ -192,7 +192,7 @@ export default class TeamService {
       await this.teamRepository.manager.transaction(
         async (transactionalEntityManager) => {
           await this.playerService.clearSquad(teamId);
-          const imageData = await this.getTeam(teamId, [
+          const imageData = await this.getTeam(teamId, [], [
             'crestFileName',
             'hasCustomCrest',
           ]);
