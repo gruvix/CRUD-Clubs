@@ -7,16 +7,13 @@ import {
 } from '@nestjs/common';
 import isNonNegativeNumber from '@comp/validators/isNonNegativeNumber';
 import UserService from '@comp/services/user.service';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import Team from '@comp/entities/team.entity';
+import TeamService from '@comp/services/team.service';
 
 @Injectable()
 export class TeamGuard implements CanActivate {
   constructor(
     private readonly userService: UserService,
-    @InjectRepository(Team)
-    private readonly teamRepository: Repository<Team>,
+private readonly teamService: TeamService
   ) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
@@ -46,12 +43,7 @@ export class TeamGuard implements CanActivate {
     teamId: number,
   ): Promise<boolean> {
     try {
-      const team = await this.teamRepository
-        .createQueryBuilder('team')
-        .where('team.id = :teamId', { teamId })
-        .andWhere('team.user = :userId', { userId })
-        .getOne();
-
+      const team = await this.teamService.getTeam(teamId, [], []);
       if (!team) {
         return false;
       }
