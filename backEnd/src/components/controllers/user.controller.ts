@@ -46,9 +46,9 @@ export default class UserController {
     }
   }
   @Delete()
-  logout(@Req() request: CustomRequest) {
+  async logout(@Req() request: CustomRequest) {
     console.log(`User ${request.session.userId} is logging out`);
-    request.session.destroy((error) => {
+    await request.session.destroy((error) => {
       if (error) {
         throw new HttpException(
           'Failed to logout',
