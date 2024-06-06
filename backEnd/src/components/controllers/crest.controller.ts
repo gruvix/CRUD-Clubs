@@ -17,6 +17,7 @@ import { UserId } from '@comp/decorators/userId.decorator';
 import { TeamId } from '@comp/decorators/teamId.decorator';
 import { FileName } from '@comp/decorators/fileName.decorator';
 import { UploadedFileName } from '@comp/decorators/uploadedFileName.decorator';
+import FileNotFoundError from '@comp/errors/fileNotFoundError';
 
 @UseGuards(AuthGuard, TeamGuard)
 @Controller('user/customCrest')
@@ -29,12 +30,17 @@ export default class CrestController {
     @TeamId() teamId: number,
     @FileName() fileName: string,
   ): Promise<StreamableFile> {
-    try{
+    try {
       console.log(`User ${userId} is requesting crest for team ${teamId}`);
       const fileBuffer = await this.crestService.getCrest(userId, fileName);
       return new StreamableFile(fileBuffer);
     } catch (error) {
-      throw new HttpException('Failed to get crest', HttpStatus.INTERNAL_SERVER_ERROR);
+      if (error instanceof FileNotFoundError)
+        throw new HttpException('Crest not found', HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        'Failed to get crest',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 

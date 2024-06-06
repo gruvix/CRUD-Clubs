@@ -13,7 +13,11 @@ export default class CrestService {
     private readonly teamService: TeamService,
   ) {}
   async getCrest(userId: number, fileName: string): Promise<Buffer> {
-    return await crestStorage.getCrest(userId, fileName);
+    try{
+      return await crestStorage.getCrest(userId, fileName);
+    } catch (error) {
+      throw new Error(error);
+    }
   }
   async updateCrest(
     userId: number,
