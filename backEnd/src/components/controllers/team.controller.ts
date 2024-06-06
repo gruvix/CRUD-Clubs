@@ -102,7 +102,7 @@ export default class TeamController {
     } catch (error) {
       if (!(error instanceof HttpException)) {
         throw new HttpException(
-          'Failed to delete team',
+          'Failed to reset team',
           HttpStatus.INTERNAL_SERVER_ERROR,
           error,
         );
