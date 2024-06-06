@@ -21,7 +21,7 @@ describe('CrestController', () => {
   const imageFileName = 'image.jpg';
 
   jest.spyOn(console, 'log').mockImplementation(jest.fn());
-  
+
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       imports: [TestSetupModule],
@@ -37,9 +37,9 @@ describe('CrestController', () => {
 
   describe('getCrest', () => {
     it('should get the image of the team', async () => {
-      const imageFile = await readFile(
-        './src/components/controllers/__fixtures__/image.jpg',
-      );
+      const fixtureImagePath =
+        './src/components/testing/__fixtures__/image.jpg';
+      const imageFile = await readFile(fixtureImagePath);
 
       jest.spyOn(crestService, 'getCrest').mockResolvedValueOnce(imageFile);
       expect(
