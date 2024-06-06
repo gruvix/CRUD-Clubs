@@ -1,7 +1,9 @@
+import { Injectable } from '@nestjs/common';
 import { createFolder, deleteFile, readFile } from '../storage/dataStorage';
 import { getUserRootPath } from '../storage/userPath';
 
-export default class CrestStorageAdapter {
+@Injectable()
+export default class CrestStorageService {
   async getCrest(userId: number, filename: string): Promise<Buffer> {
     const imgPath = `${getUserRootPath(userId)}/${filename}`;
     const file = await readFile(imgPath);
