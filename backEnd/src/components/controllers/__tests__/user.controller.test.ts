@@ -5,7 +5,7 @@ import UserService from '@comp/services/user.service';
 import TeamService from '@comp/services/team.service';
 import TeamsService from '@comp/services/teams.service';
 import CrestService from '@comp/services/crest.service';
-import { TestSetupModule } from './testSetup.module';
+import { TestSetupModule } from '@comp/testing/testSetup.module';
 import UserController from '../user.controller';
 import CustomRequest from '@comp/interfaces/CustomRequest.interface';
 import UserNotFoundError from '@comp/errors/UserNotFoundError';

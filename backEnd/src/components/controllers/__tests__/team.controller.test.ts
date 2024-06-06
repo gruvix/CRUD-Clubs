@@ -1,7 +1,7 @@
 import { Test } from '@nestjs/testing';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import UserService from '@comp/services/user.service';
-import { TestSetupModule } from './testSetup.module';
+import { TestSetupModule } from '@comp/testing/testSetup.module';
 import TeamService from '@comp/services/team.service';
 import TeamController from '../team.controller';
 import TeamDTO from '@comp/interfaces/TeamDTO.interface';

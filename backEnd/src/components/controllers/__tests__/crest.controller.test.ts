@@ -7,7 +7,7 @@ import TeamsService from '@comp/services/teams.service';
 import CrestService from '@comp/services/crest.service';
 import CrestController from '../crest.controller';
 import { readFile } from 'fs/promises';
-import { TestSetupModule } from './testSetup.module';
+import { TestSetupModule } from '@comp/testing/testSetup.module';
 
 describe('CrestController', () => {
   let crestController: CrestController;

@@ -5,7 +5,7 @@ import PlayerService from '@comp/services/player.service';
 import UserService from '@comp/services/user.service';
 import PlayerData from '@comp/interfaces/PlayerData.interface';
 import TeamsService from '@comp/services/teams.service';
-import { TestSetupModule } from './testSetup.module';
+import { TestSetupModule } from '@comp/testing/testSetup.module';
 
 describe('PlayerController', () => {
   let playerController: PlayerController;

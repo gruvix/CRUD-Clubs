@@ -3,7 +3,7 @@ import { HttpException, HttpStatus } from '@nestjs/common';
 import TeamsController from '@comp/controllers/teams.controller';
 import TeamsService from '@comp/services/teams.service';
 import UserService from '@comp/services/user.service';
-import { TestSetupModule } from './testSetup.module';
+import { TestSetupModule } from '@comp/testing/testSetup.module';
 
 describe('TeamsController', () => {
   let teamsController: TeamsController;
