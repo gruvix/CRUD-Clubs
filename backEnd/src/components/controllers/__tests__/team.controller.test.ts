@@ -151,7 +151,7 @@ describe('TeamsController', () => {
     it('should reset a team', async () => {
       jest.spyOn(teamService, 'resetTeam').mockResolvedValueOnce(void 0);
       expect(await teamController.resetTeam(userId, teamId)).toEqual(void 0);
-      expect(teamService.deleteTeam).toHaveBeenCalledWith(userId, teamId);
+      expect(teamService.resetTeam).toHaveBeenCalledWith(userId, teamId);
     });
 
     it('should throw an internal server error', async () => {
