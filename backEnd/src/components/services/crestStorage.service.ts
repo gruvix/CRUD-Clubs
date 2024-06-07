@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { createFolder, deleteFile, readFile } from '../storage/dataStorage';
-import { getUserRootPath } from '../storage/userPath';
+import { getImageFromUserPath, getUserRootPath } from '../storage/userPath';
 
 @Injectable()
 export default class CrestStorageService {
   async getCrest(userId: number, filename: string): Promise<Buffer> {
-    const imgPath = `${getUserRootPath(userId)}/${filename}`;
+    const imgPath = getImageFromUserPath(userId, filename);
     const file = await readFile(imgPath);
     return file;
   }
-  async deleteCrest(userId: number, fileName: string): Promise<void> {
-    const imgPath = `${getUserRootPath(userId)}/${fileName}`;
+  async deleteCrest(userId: number, filename: string): Promise<void> {
+    const imgPath = getImageFromUserPath(userId, filename);
     console.log('trying to delete image on path', imgPath);
     await deleteFile(imgPath);
   }
