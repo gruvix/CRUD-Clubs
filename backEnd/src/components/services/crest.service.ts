@@ -20,12 +20,12 @@ export default class CrestService {
     teamId: number,
     newImageFileName: string,
   ): Promise<string> {
-    const oldCrestFileData = await this.teamService.getTeam(
-      teamId,
-      [],
-      ['crestFileName', 'hasCustomCrest'],
-    );
     try {
+      const oldCrestFileData = await this.teamService.getTeam(
+        teamId,
+        [],
+        ['crestFileName', 'hasCustomCrest'],
+      );
       const crestUrl = generateCustomCrestUrl(teamId, newImageFileName);
       let newData = new Team();
       newData.id = teamId;
