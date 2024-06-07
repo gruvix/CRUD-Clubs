@@ -4,33 +4,17 @@ import UserService from '@comp/services/user.service';
 import { TestSetupModule } from '@comp/testing/testSetup.module';
 import TeamService from '@comp/services/team.service';
 import TeamController from '../team.controller';
-import TeamDTO from '@comp/interfaces/TeamDTO.interface';
-import Player from '@comp/entities/player.entity';
 import Team from '@comp/entities/team.entity';
 import TeamData from '@comp/interfaces/TeamData.interface';
+import MockTestUtils from '@comp/testing/MockTestUtils';
 
 describe('TeamsController', () => {
   let teamController: TeamController;
   let teamService: TeamService;
   let userService: UserService;
 
-  const teamId = 1;
-  const userId = 1;
+  const mocks = new MockTestUtils();
   const getTeamRelations = ['squad', 'defaultTeam'];
-
-  const mockTeamDTO: TeamDTO = {
-    name: 'test',
-    area: 'test',
-    address: 'test',
-    phone: 'test',
-    website: 'test',
-    email: 'test',
-    venue: 'test',
-    crestUrl: 'test',
-    hasCustomCrest: true,
-    squad: [] as Player[],
-    hasDefault: true,
-  };
 
   jest.spyOn(console, 'log').mockImplementation(jest.fn());
 
@@ -50,10 +34,10 @@ describe('TeamsController', () => {
       jest.spyOn(teamService, 'getTeam').mockResolvedValueOnce(new Team());
       jest
         .spyOn(teamService, 'transformTeamDataToDTO')
-        .mockImplementationOnce(() => mockTeamDTO);
-      expect(await teamController.getTeam(userId, teamId)).toEqual(mockTeamDTO);
+        .mockImplementationOnce(() => mocks.TeamDTO);
+      expect(await teamController.getTeam(mocks.userId, mocks.teamId)).toEqual(mocks.TeamDTO);
       expect(teamService.getTeam).toHaveBeenCalledWith(
-        teamId,
+        mocks.teamId,
         getTeamRelations,
       );
       expect(teamService.transformTeamDataToDTO).toHaveBeenCalledWith(
@@ -63,7 +47,7 @@ describe('TeamsController', () => {
 
     it('should throw an internal server error', async () => {
       jest.spyOn(teamService, 'getTeam').mockRejectedValueOnce(new Error());
-      await expect(teamController.getTeam(userId, teamId)).rejects.toThrow(
+      await expect(teamController.getTeam(mocks.userId, mocks.teamId)).rejects.toThrow(
         new HttpException(
           'Failed to get team',
           HttpStatus.INTERNAL_SERVER_ERROR,
@@ -77,7 +61,7 @@ describe('TeamsController', () => {
         .mockRejectedValueOnce(
           new HttpException('Team not found', HttpStatus.BAD_REQUEST),
         );
-      await expect(teamController.getTeam(userId, teamId)).rejects.toThrow(
+      await expect(teamController.getTeam(mocks.userId, mocks.teamId)).rejects.toThrow(
         new HttpException('Team not found', HttpStatus.BAD_REQUEST),
       );
     });
@@ -87,15 +71,15 @@ describe('TeamsController', () => {
     it('should update a team', async () => {
       jest.spyOn(teamService, 'updateTeam').mockResolvedValueOnce(void 0);
       expect(
-        await teamController.updateTeam(userId, teamId, {} as TeamData),
+        await teamController.updateTeam(mocks.userId, mocks.teamId, {} as TeamData),
       ).toEqual(void 0);
-      expect(teamService.updateTeam).toHaveBeenCalledWith(teamId, {});
+      expect(teamService.updateTeam).toHaveBeenCalledWith(mocks.teamId, {});
     });
 
     it('should throw an internal server error', async () => {
       jest.spyOn(teamService, 'updateTeam').mockRejectedValueOnce(new Error());
       await expect(
-        teamController.updateTeam(userId, teamId, {} as TeamData),
+        teamController.updateTeam(mocks.userId, mocks.teamId, {} as TeamData),
       ).rejects.toThrow(
         new HttpException(
           'Failed to update team',
@@ -111,7 +95,7 @@ describe('TeamsController', () => {
           new HttpException('Team not found', HttpStatus.BAD_REQUEST),
         );
       await expect(
-        teamController.updateTeam(userId, teamId, {} as TeamData),
+        teamController.updateTeam(mocks.userId, mocks.teamId, {} as TeamData),
       ).rejects.toThrow(
         new HttpException('Team not found', HttpStatus.BAD_REQUEST),
       );
@@ -121,13 +105,13 @@ describe('TeamsController', () => {
   describe('deleteTeam', () => {
     it('should delete a team', async () => {
       jest.spyOn(teamService, 'deleteTeam').mockResolvedValueOnce(void 0);
-      expect(await teamController.deleteTeam(userId, teamId)).toEqual(void 0);
-      expect(teamService.deleteTeam).toHaveBeenCalledWith(userId, teamId);
+      expect(await teamController.deleteTeam(mocks.userId, mocks.teamId)).toEqual(void 0);
+      expect(teamService.deleteTeam).toHaveBeenCalledWith(mocks.userId, mocks.teamId);
     });
 
     it('should throw an internal server error', async () => {
       jest.spyOn(teamService, 'deleteTeam').mockRejectedValueOnce(new Error());
-      await expect(teamController.deleteTeam(userId, teamId)).rejects.toThrow(
+      await expect(teamController.deleteTeam(mocks.userId, mocks.teamId)).rejects.toThrow(
         new HttpException(
           'Failed to delete team',
           HttpStatus.INTERNAL_SERVER_ERROR,
@@ -141,7 +125,7 @@ describe('TeamsController', () => {
         .mockRejectedValueOnce(
           new HttpException('Team not found', HttpStatus.BAD_REQUEST),
         );
-      await expect(teamController.deleteTeam(userId, teamId)).rejects.toThrow(
+      await expect(teamController.deleteTeam(mocks.userId, mocks.teamId)).rejects.toThrow(
         new HttpException('Team not found', HttpStatus.BAD_REQUEST),
       );
     });
@@ -150,13 +134,13 @@ describe('TeamsController', () => {
   describe('resetTeam', () => {
     it('should reset a team', async () => {
       jest.spyOn(teamService, 'resetTeam').mockResolvedValueOnce(void 0);
-      expect(await teamController.resetTeam(userId, teamId)).toEqual(void 0);
-      expect(teamService.resetTeam).toHaveBeenCalledWith(userId, teamId);
+      expect(await teamController.resetTeam(mocks.userId, mocks.teamId)).toEqual(void 0);
+      expect(teamService.resetTeam).toHaveBeenCalledWith(mocks.userId, mocks.teamId);
     });
 
     it('should throw an internal server error', async () => {
       jest.spyOn(teamService, 'resetTeam').mockRejectedValueOnce(new Error());
-      await expect(teamController.resetTeam(userId, teamId)).rejects.toThrow(
+      await expect(teamController.resetTeam(mocks.userId, mocks.teamId)).rejects.toThrow(
         new HttpException(
           'Failed to reset team',
           HttpStatus.INTERNAL_SERVER_ERROR,
@@ -170,7 +154,7 @@ describe('TeamsController', () => {
         .mockRejectedValueOnce(
           new HttpException('Team not found', HttpStatus.BAD_REQUEST),
         );
-      await expect(teamController.resetTeam(userId, teamId)).rejects.toThrow(
+      await expect(teamController.resetTeam(mocks.userId, mocks.teamId)).rejects.toThrow(
         new HttpException('Team not found', HttpStatus.BAD_REQUEST),
       );
     });

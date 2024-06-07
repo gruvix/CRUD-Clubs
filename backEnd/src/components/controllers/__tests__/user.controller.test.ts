@@ -9,6 +9,7 @@ import { TestSetupModule } from '@comp/testing/testSetup.module';
 import UserController from '../user.controller';
 import CustomRequest from '@comp/interfaces/CustomRequest.interface';
 import UserNotFoundError from '@comp/errors/UserNotFoundError';
+import MockTestUtils from '@comp/testing/MockTestUtils';
 
 describe('UserController', () => {
   let userController: UserController;
@@ -18,9 +19,8 @@ describe('UserController', () => {
   let playerService: PlayerService;
   let crestService: CrestService;
 
-  const userId = 1;
-  const username = 'test';
-
+  const mocks = new MockTestUtils();
+  
   jest.spyOn(console, 'log').mockImplementation(jest.fn());
 
   beforeEach(async () => {
@@ -37,7 +37,7 @@ describe('UserController', () => {
   });
   describe('getUserStatus', () => {
     it('should return user status', async () => {
-      await expect(userController.getUserStatus(userId)).resolves.toEqual(
+      await expect(userController.getUserStatus(mocks.userId)).resolves.toEqual(
         undefined,
       );
     });
@@ -45,7 +45,7 @@ describe('UserController', () => {
   describe('login', () => {
     it('should login the user on success', async () => {
       jest.spyOn(userService, 'handleUserLogin').mockResolvedValueOnce(true);
-      jest.spyOn(userService, 'getUserId').mockResolvedValueOnce(userId);
+      jest.spyOn(userService, 'getUserId').mockResolvedValueOnce(mocks.userId);
 
       const mockData = { username: 'test' };
       const mockRequest = { session: {} } as CustomRequest;
@@ -57,7 +57,7 @@ describe('UserController', () => {
         mockData.username,
       );
       expect(userService.getUserId).toHaveBeenCalledWith(mockData.username);
-      expect(mockRequest.session.userId).toBe(userId);
+      expect(mockRequest.session.userId).toBe(mocks.userId);
       expect(mockRequest.session.username).toBe(mockData.username);
     });
 
@@ -101,9 +101,11 @@ describe('UserController', () => {
     it('should destroy the session on logout success', async () => {
       const mockRequest = {
         session: {
-          userId,
-          username,
-          destroy: jest.fn().mockImplementation(() => mockRequest.session = undefined),
+          userId: mocks.userId,
+          username: mocks.username,
+          destroy: jest
+            .fn()
+            .mockImplementation(() => (mockRequest.session = undefined)),
         },
       } as any as CustomRequest;
 
@@ -116,9 +118,13 @@ describe('UserController', () => {
     it('should throw an error on logout failure', async () => {
       const mockRequest = {
         session: {
-          userId,
-          username,
-          destroy: jest.fn().mockImplementation((callback) => callback(new Error('im an error'))),
+          userId: mocks.userId,
+          username: mocks.username,
+          destroy: jest
+            .fn()
+            .mockImplementation((callback) =>
+              callback(new Error('im an error')),
+            ),
         },
       } as any as CustomRequest;
 
@@ -126,6 +132,6 @@ describe('UserController', () => {
         new HttpException('Failed to logout', HttpStatus.INTERNAL_SERVER_ERROR),
       );
       expect(mockRequest.session.destroy).toHaveBeenCalled();
-    })
+    });
   });
 });

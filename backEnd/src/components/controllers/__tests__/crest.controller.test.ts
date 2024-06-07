@@ -8,6 +8,8 @@ import CrestService from '@comp/services/crest.service';
 import CrestController from '../crest.controller';
 import { readFile } from 'fs/promises';
 import { TestSetupModule } from '@comp/testing/testSetup.module';
+import MockTestUtils from '@comp/testing/MockTestUtils';
+import PathTestUtils from '@comp/testing/PathTestUtils';
 
 describe('CrestController', () => {
   let crestController: CrestController;
@@ -16,9 +18,9 @@ describe('CrestController', () => {
   let teamsService: TeamsService;
   let playerService: PlayerService;
   let crestService: CrestService;
-  const userId = 1;
-  const teamId = 1;
-  const imageFileName = 'image.jpg';
+
+  const mocks = new MockTestUtils();
+  const paths = new PathTestUtils();
 
   jest.spyOn(console, 'log').mockImplementation(jest.fn());
 
@@ -37,25 +39,34 @@ describe('CrestController', () => {
 
   describe('getCrest', () => {
     it('should get the image of the team', async () => {
-      const fixtureImagePath =
-        './src/components/testing/__fixtures__/image.jpg';
-      const imageFile = await readFile(fixtureImagePath);
+      const imageFile = await readFile(paths.fixtureImagePath);
 
       jest.spyOn(crestService, 'getCrest').mockResolvedValueOnce(imageFile);
       expect(
-        await crestController.getCrest(userId, teamId, imageFileName),
+        await crestController.getCrest(
+          mocks.userId,
+          mocks.teamId,
+          mocks.crestFileName,
+        ),
       ).toMatchObject({
         options: {
           length: imageFile.length,
         },
       });
-      expect(crestService.getCrest).toHaveBeenCalledWith(userId, imageFileName);
+      expect(crestService.getCrest).toHaveBeenCalledWith(
+        mocks.userId,
+        mocks.crestFileName,
+      );
     });
 
     it('should handle errors', async () => {
       jest.spyOn(crestService, 'getCrest').mockRejectedValueOnce(new Error());
       await expect(
-        crestController.getCrest(userId, teamId, imageFileName),
+        crestController.getCrest(
+          mocks.userId,
+          mocks.teamId,
+          mocks.crestFileName,
+        ),
       ).rejects.toThrow(
         new HttpException(
           'Failed to get crest',
@@ -67,11 +78,16 @@ describe('CrestController', () => {
 
   describe('updateCrest', () => {
     it('should update the image of the team', async () => {
-      const newCrestUrl = 'i/am/an/url';
       jest
         .spyOn(crestService, 'updateCrest')
-        .mockResolvedValueOnce(newCrestUrl);
-      expect(await crestController.updateCrest(userId, teamId, imageFileName));
+        .mockResolvedValueOnce(mocks.newCrestUrl);
+      expect(
+        await crestController.updateCrest(
+          mocks.userId,
+          mocks.teamId,
+          mocks.crestFileName,
+        ),
+      );
     });
     it('should handle errors', async () => {
       jest
@@ -81,7 +97,11 @@ describe('CrestController', () => {
           new HttpException('Im a test error', HttpStatus.BAD_REQUEST),
         );
       await expect(
-        crestController.updateCrest(userId, teamId, imageFileName),
+        crestController.updateCrest(
+          mocks.userId,
+          mocks.teamId,
+          mocks.crestFileName,
+        ),
       ).rejects.toThrow(
         new HttpException(
           'Failed to update crest',
@@ -89,7 +109,11 @@ describe('CrestController', () => {
         ),
       );
       await expect(
-        crestController.updateCrest(userId, teamId, imageFileName),
+        crestController.updateCrest(
+          mocks.userId,
+          mocks.teamId,
+          mocks.crestFileName,
+        ),
       ).rejects.toThrow(
         new HttpException('Im a test error', HttpStatus.BAD_REQUEST),
       );

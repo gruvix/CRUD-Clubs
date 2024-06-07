@@ -6,6 +6,7 @@ import TeamService from '@comp/services/team.service';
 import NewTeamController from '../newTeam.controller';
 import TeamsService from '@comp/services/teams.service';
 import { TestSetupModule } from '@comp/testing/testSetup.module';
+import MockTestUtils from '@comp/testing/MockTestUtils';
 
 describe('NewTeamController', () => {
   let newTeamController: NewTeamController;
@@ -14,14 +15,7 @@ describe('NewTeamController', () => {
   let teamsService: TeamsService;
   let playerService: PlayerService;
 
-  const userId = 1;
-  const crestImageFilename = 'image.jpg';
-  const bodyMock = {
-    teamData: JSON.stringify({
-      name: 'test',
-      squad: [],
-    }),
-  };
+  const mocks = new MockTestUtils();
 
   jest.spyOn(console, 'log').mockImplementation(jest.fn());
 
@@ -41,11 +35,15 @@ describe('NewTeamController', () => {
       const NEW_TEAM_ID = 5000;
       jest.spyOn(teamService, 'addTeam').mockResolvedValueOnce(NEW_TEAM_ID);
       expect(
-        await newTeamController.addTeam(userId, bodyMock, crestImageFilename),
+        await newTeamController.addTeam(
+          mocks.userId,
+          mocks.teamBodyMock,
+          mocks.crestFileName,
+        ),
       ).toBe(NEW_TEAM_ID);
       expect(teamService.addTeam).toHaveBeenCalledWith(
-        userId,
-        JSON.parse(bodyMock.teamData),
+        mocks.userId,
+        JSON.parse(mocks.teamBodyMock.teamData),
         'image.jpg',
       );
     });
@@ -58,7 +56,11 @@ describe('NewTeamController', () => {
           new HttpException('Im a test error', HttpStatus.BAD_REQUEST),
         );
       await expect(
-        newTeamController.addTeam(userId, bodyMock, crestImageFilename),
+        newTeamController.addTeam(
+          mocks.userId,
+          mocks.teamBodyMock,
+          mocks.crestFileName,
+        ),
       ).rejects.toThrow(
         new HttpException(
           'Failed to add team',
@@ -66,7 +68,11 @@ describe('NewTeamController', () => {
         ),
       );
       await expect(
-        newTeamController.addTeam(userId, bodyMock, crestImageFilename),
+        newTeamController.addTeam(
+          mocks.userId,
+          mocks.teamBodyMock,
+          mocks.crestFileName,
+        ),
       ).rejects.toThrow(
         new HttpException('Im a test error', HttpStatus.BAD_REQUEST),
       );

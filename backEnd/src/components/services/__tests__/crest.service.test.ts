@@ -6,15 +6,14 @@ import { readFile } from 'fs/promises';
 import CrestStorageService from '@comp/services/crestStorage.service';
 import * as path from '@comp/storage/userPath';
 import Team from '@comp/entities/team.entity';
+import MockTestUtils from '@comp/testing/MockTestUtils';
 
 describe('CrestController', () => {
   let teamService: TeamService;
   let crestService: CrestService;
   let crestStorageService: CrestStorageService;
-  const userId = 1;
-  const teamId = 1;
-  const crestFileName = 'image.jpg';
-  const oldCrestFileName = 'iAmOld';
+
+  const mocks = new MockTestUtils();
 
   jest.spyOn(console, 'log').mockImplementation(jest.fn());
 
@@ -36,12 +35,12 @@ describe('CrestController', () => {
         .spyOn(crestStorageService, 'getCrest')
         .mockResolvedValueOnce(imageFile);
 
-      expect(await crestService.getCrest(userId, crestFileName)).toEqual(
+      expect(await crestService.getCrest(mocks.userId, mocks.crestFileName)).toEqual(
         imageFile,
       );
       expect(crestStorageService.getCrest).toHaveBeenCalledWith(
-        userId,
-        crestFileName,
+        mocks.userId,
+        mocks.crestFileName,
       );
     });
 
@@ -51,7 +50,7 @@ describe('CrestController', () => {
         .mockRejectedValueOnce(new Error("i'm an error"));
 
       await expect(
-        crestService.getCrest(userId, crestFileName),
+        crestService.getCrest(mocks.userId, mocks.crestFileName),
       ).rejects.toThrow(new Error("i'm an error"));
     });
   });
@@ -62,8 +61,8 @@ describe('CrestController', () => {
       const relations = [] as string[];
       const selections = ['crestFileName', 'hasCustomCrest'];
       jest.spyOn(teamService, 'getTeam').mockResolvedValueOnce({
-        id: teamId,
-        crestFileName: oldCrestFileName,
+        id: mocks.teamId,
+        crestFileName: mocks.oldCrestFileName,
         hasCustomCrest: true,
       } as Team);
       jest
@@ -75,27 +74,27 @@ describe('CrestController', () => {
         .mockResolvedValueOnce(void 0);
 
       expect(
-        await crestService.updateCrest(userId, teamId, crestFileName),
+        await crestService.updateCrest(mocks.userId, mocks.teamId, mocks.crestFileName),
       ).toEqual(newCrestUrl);
 
       expect(path.generateCustomCrestUrl).toHaveBeenCalledWith(
-        teamId,
-        crestFileName,
+        mocks.teamId,
+        mocks.crestFileName,
       );
       expect(teamService.getTeam).toHaveBeenCalledWith(
-        teamId,
+        mocks.teamId,
         relations,
         selections,
       );
-      expect(teamService.updateTeam).toHaveBeenCalledWith(teamId, {
-        id: teamId,
+      expect(teamService.updateTeam).toHaveBeenCalledWith(mocks.teamId, {
+        id: mocks.teamId,
         crestUrl: newCrestUrl,
-        crestFileName: crestFileName,
+        crestFileName: mocks.crestFileName,
         hasCustomCrest: true,
       } as Team);
       expect(crestStorageService.deleteCrest).toHaveBeenCalledWith(
-        userId,
-        oldCrestFileName,
+        mocks.userId,
+        mocks.oldCrestFileName,
       );
     });
 
@@ -107,11 +106,11 @@ describe('CrestController', () => {
         .spyOn(crestStorageService, 'deleteCrest')
         .mockResolvedValueOnce(void 0);
       await expect(
-        crestService.updateCrest(userId, teamId, crestFileName),
+        crestService.updateCrest(mocks.userId, mocks.teamId, mocks.crestFileName),
       ).rejects.toThrow("i'm an error");
       expect(crestStorageService.deleteCrest).toHaveBeenCalledWith(
-        userId,
-        crestFileName,
+        mocks.userId,
+        mocks.crestFileName,
       );
     });
   });

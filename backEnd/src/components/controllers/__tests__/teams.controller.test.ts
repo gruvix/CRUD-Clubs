@@ -4,14 +4,14 @@ import TeamsController from '@comp/controllers/teams.controller';
 import TeamsService from '@comp/services/teams.service';
 import UserService from '@comp/services/user.service';
 import { TestSetupModule } from '@comp/testing/testSetup.module';
+import MockTestUtils from '@comp/testing/MockTestUtils';
 
 describe('TeamsController', () => {
   let teamsController: TeamsController;
   let teamsService: TeamsService;
   let userService: UserService;
 
-  const username = 'test';
-  const userId = 1;
+  const mocks = new MockTestUtils();
 
   jest.spyOn(console, 'log').mockImplementation(jest.fn());
 
@@ -41,11 +41,13 @@ describe('TeamsController', () => {
         .spyOn(teamsService, 'getTeamsList')
         .mockResolvedValueOnce(mockResult);
 
-      expect(await teamsController.getTeamsList(userId, username)).toEqual({
+      expect(
+        await teamsController.getTeamsList(mocks.userId, mocks.username),
+      ).toEqual({
         teams: mockResult,
-        username,
+        username: mocks.username,
       });
-      expect(teamsService.getTeamsList).toHaveBeenCalledWith(userId);
+      expect(teamsService.getTeamsList).toHaveBeenCalledWith(mocks.userId);
     });
 
     it('should return an empty array of teams', async () => {
@@ -55,11 +57,13 @@ describe('TeamsController', () => {
         .spyOn(teamsService, 'getTeamsList')
         .mockResolvedValueOnce(mockResult);
 
-      expect(await teamsController.getTeamsList(userId, username)).toEqual({
+      expect(
+        await teamsController.getTeamsList(mocks.userId, mocks.username),
+      ).toEqual({
         teams: mockResult,
-        username,
+        username: mocks.username,
       });
-      expect(teamsService.getTeamsList).toHaveBeenCalledWith(userId);
+      expect(teamsService.getTeamsList).toHaveBeenCalledWith(mocks.userId);
     });
 
     it('should handle errors', async () => {
@@ -67,14 +71,14 @@ describe('TeamsController', () => {
         .spyOn(teamsService, 'getTeamsList')
         .mockRejectedValueOnce(new Error());
       await expect(
-        teamsController.getTeamsList(userId, username),
+        teamsController.getTeamsList(mocks.userId, mocks.username),
       ).rejects.toThrow(
         new HttpException(
           'Failed to get teams',
           HttpStatus.INTERNAL_SERVER_ERROR,
         ),
       );
-      expect(teamsService.getTeamsList).toHaveBeenCalledWith(userId);
+      expect(teamsService.getTeamsList).toHaveBeenCalledWith(mocks.userId);
     });
   });
 
@@ -82,19 +86,19 @@ describe('TeamsController', () => {
     it('should call the resetTeamsList method from teams service', async () => {
       jest.spyOn(teamsService, 'resetTeams').mockResolvedValueOnce();
 
-      expect(await teamsController.resetTeams(userId)).toBeUndefined();
-      expect(teamsService.resetTeams).toHaveBeenCalledWith(userId);
+      expect(await teamsController.resetTeams(mocks.userId)).toBeUndefined();
+      expect(teamsService.resetTeams).toHaveBeenCalledWith(mocks.userId);
     });
 
     it('should handle errors', async () => {
       jest.spyOn(teamsService, 'resetTeams').mockRejectedValueOnce(new Error());
-      await expect(teamsController.resetTeams(userId)).rejects.toThrow(
+      await expect(teamsController.resetTeams(mocks.userId)).rejects.toThrow(
         new HttpException(
           'Failed to reset teams',
           HttpStatus.INTERNAL_SERVER_ERROR,
         ),
       );
-      expect(teamsService.resetTeams).toHaveBeenCalledWith(userId);
+      expect(teamsService.resetTeams).toHaveBeenCalledWith(mocks.userId);
     });
   });
 });

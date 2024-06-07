@@ -6,6 +6,7 @@ import UserService from '@comp/services/user.service';
 import PlayerData from '@comp/interfaces/PlayerData.interface';
 import TeamsService from '@comp/services/teams.service';
 import { TestSetupModule } from '@comp/testing/testSetup.module';
+import MockTestUtils from '@comp/testing/MockTestUtils';
 
 describe('PlayerController', () => {
   let playerController: PlayerController;
@@ -13,8 +14,7 @@ describe('PlayerController', () => {
   let teamsService: TeamsService;
   let playerService: PlayerService;
 
-  const userId = 1;
-  const teamId = 1;
+  const mocks = new MockTestUtils();
 
   jest.spyOn(console, 'log').mockImplementation(jest.fn());
 
@@ -41,10 +41,14 @@ describe('PlayerController', () => {
       jest.spyOn(playerService, 'addPlayer').mockResolvedValueOnce(void 0);
 
       expect(
-        await playerController.addPlayer(userId, teamId, playerDataMock),
+        await playerController.addPlayer(
+          mocks.userId,
+          mocks.teamId,
+          playerDataMock,
+        ),
       ).toBeUndefined();
       expect(playerService.addPlayer).toHaveBeenCalledWith(
-        teamId,
+        mocks.teamId,
         playerDataMock,
       );
     });
@@ -52,7 +56,7 @@ describe('PlayerController', () => {
     it('should handle errors', async () => {
       jest.spyOn(playerService, 'addPlayer').mockRejectedValueOnce(new Error());
       await expect(
-        playerController.addPlayer(userId, teamId, playerDataMock),
+        playerController.addPlayer(mocks.userId, mocks.teamId, playerDataMock),
       ).rejects.toThrow(
         new HttpException(
           'Failed to add player',
@@ -60,7 +64,7 @@ describe('PlayerController', () => {
         ),
       );
       expect(playerService.addPlayer).toHaveBeenCalledWith(
-        teamId,
+        mocks.teamId,
         playerDataMock,
       );
     });
@@ -78,7 +82,11 @@ describe('PlayerController', () => {
       jest.spyOn(playerService, 'updatePlayer').mockResolvedValueOnce(void 0);
 
       expect(
-        await playerController.updatePlayer(userId, teamId, playerDataMock),
+        await playerController.updatePlayer(
+          mocks.userId,
+          mocks.teamId,
+          playerDataMock,
+        ),
       ).toBeUndefined();
       expect(playerService.updatePlayer).toHaveBeenCalledWith(playerDataMock);
     });
@@ -88,7 +96,11 @@ describe('PlayerController', () => {
         .spyOn(playerService, 'updatePlayer')
         .mockRejectedValueOnce(new Error());
       await expect(
-        playerController.updatePlayer(userId, teamId, playerDataMock),
+        playerController.updatePlayer(
+          mocks.userId,
+          mocks.teamId,
+          playerDataMock,
+        ),
       ).rejects.toThrow(
         new HttpException(
           'Failed to update player',
@@ -109,7 +121,11 @@ describe('PlayerController', () => {
     it('should delete a player', async () => {
       jest.spyOn(playerService, 'removePlayer').mockResolvedValueOnce(void 0);
       expect(
-        await playerController.removePlayer(userId, teamId, playerDataMock),
+        await playerController.removePlayer(
+          mocks.userId,
+          mocks.teamId,
+          playerDataMock,
+        ),
       ).toBeUndefined();
       expect(playerService.removePlayer).toHaveBeenCalledWith(
         playerDataMock.id,
@@ -120,7 +136,11 @@ describe('PlayerController', () => {
         .spyOn(playerService, 'removePlayer')
         .mockRejectedValueOnce(new Error());
       await expect(
-        playerController.removePlayer(userId, teamId, playerDataMock),
+        playerController.removePlayer(
+          mocks.userId,
+          mocks.teamId,
+          playerDataMock,
+        ),
       ).rejects.toThrow(
         new HttpException(
           'Failed to remove player',
