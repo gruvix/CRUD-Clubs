@@ -13,6 +13,7 @@ describe('CrestController', () => {
   let teamsService: TeamsService;
   let playerService: PlayerService;
   let crestService: CrestService;
+  let crestStorageService: CrestStorageService;
   const userId = 1;
   const teamId = 1;
   const imageFileName = 'image.jpg';
@@ -28,5 +29,6 @@ describe('CrestController', () => {
     teamService = module.get<TeamService>(TeamService);
     playerService = module.get<PlayerService>(PlayerService);
     crestService = module.get<CrestService>(CrestService);
+    crestStorageService = module.get<CrestStorageService>(CrestStorageService);
   });
 });

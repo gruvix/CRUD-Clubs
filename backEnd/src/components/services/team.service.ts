@@ -8,9 +8,7 @@ import TeamData from '@comp/interfaces/TeamData.interface';
 import PlayerService from './player.service';
 import TeamDTO from '@comp/interfaces/TeamDTO.interface';
 import DefaultTeam from '@comp/entities/defaultTeam.entity';
-import CrestStorageAdapter from '@comp/Adapters/crestStorage.adapter';
-
-const crestStorage = new CrestStorageAdapter();
+import CrestStorageService from '@comp/services/crestStorage.service';
 
 @Injectable()
 export default class TeamService {
@@ -19,6 +17,8 @@ export default class TeamService {
     private readonly teamRepository: Repository<Team>,
     @Inject(PlayerService)
     private readonly playerService: PlayerService,
+    @Inject(CrestStorageService)
+    private readonly crestStorage: CrestStorageService,
   ) {}
   async addTeam(
     userId: number,
@@ -150,7 +150,7 @@ export default class TeamService {
           this.playerService.copyPlayersToTeam(team, defaultTeam.squad);
           await transactionalEntityManager.save(Team, team);
           if (oldImageData.hasCustomCrest)
-            crestStorage.deleteCrest(userId, oldImageData.crestFileName);
+            this.crestStorage.deleteCrest(userId, oldImageData.crestFileName);
         },
       );
     } catch (error) {
@@ -203,7 +203,7 @@ export default class TeamService {
             .where('id = :id', { id: teamId })
             .execute();
           if (imageData.hasCustomCrest)
-            crestStorage.deleteCrest(userId, imageData.crestFileName);
+          this.crestStorage.deleteCrest(userId, imageData.crestFileName);
         },
       );
     } catch (error) {

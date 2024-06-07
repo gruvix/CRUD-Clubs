@@ -7,11 +7,12 @@ import UserService from '../services/user.service';
 import UserController from '../controllers/user.controller';
 import TeamsService from '@comp/services/teams.service';
 import PlayerService from '@comp/services/player.service';
+import CrestStorageService from '@comp/services/crestStorage.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User, Team, Player])],
   controllers: [UserController],
-  providers: [UserService, TeamsService, PlayerService],
+  providers: [UserService, TeamsService, PlayerService, CrestStorageService],
   exports: [UserService],
 })
 export default class UserModule {}

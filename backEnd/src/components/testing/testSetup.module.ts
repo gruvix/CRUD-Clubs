@@ -8,6 +8,7 @@ import Player from '@comp/entities/player.entity';
 import User from '@comp/entities/user.entity';
 import TeamsService from '@comp/services/teams.service';
 import CrestService from '@comp/services/crest.service';
+import CrestStorageService from '@comp/services/crestStorage.service';
 @Module({
   providers: [
     UserService,
@@ -15,6 +16,7 @@ import CrestService from '@comp/services/crest.service';
     TeamsService,
     PlayerService,
     CrestService,
+    CrestStorageService,
     { provide: getRepositoryToken(User), useValue: jest.fn() },
     { provide: getRepositoryToken(Team), useValue: jest.fn() },
     { provide: getRepositoryToken(Player), useValue: jest.fn() },
@@ -25,6 +27,7 @@ import CrestService from '@comp/services/crest.service';
     TeamsService,
     PlayerService,
     CrestService,
+    CrestStorageService,
     { provide: getRepositoryToken(User), useValue: jest.fn() },
     { provide: getRepositoryToken(Team), useValue: jest.fn() },
     { provide: getRepositoryToken(Player), useValue: jest.fn() },

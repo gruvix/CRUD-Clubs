@@ -13,6 +13,7 @@ import Team from '../entities/team.entity';
 import Player from '../entities/player.entity';
 import CrestController from '../controllers/crest.controller';
 import CrestService from '../services/crest.service';
+import CrestStorageService from '@comp/services/crestStorage.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User, Team, Player])],
@@ -23,7 +24,7 @@ import CrestService from '../services/crest.service';
     NewTeamController,
     CrestController,
   ],
-  providers: [UserService, TeamsService, TeamService, PlayerService, CrestService],
-  exports: [UserService, TeamsService, TeamService, PlayerService, CrestService],
+  providers: [UserService, TeamsService, TeamService, PlayerService, CrestService, CrestStorageService],
+  exports: [UserService, TeamsService, TeamService, PlayerService, CrestService, CrestStorageService],
 })
 export default class FootBallModule {}

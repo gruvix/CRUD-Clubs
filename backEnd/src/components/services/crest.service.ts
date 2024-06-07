@@ -1,23 +1,19 @@
 import { Inject, Injectable } from '@nestjs/common';
-import CrestStorageAdapter from '@comp/Adapters/crestStorage.adapter';
+import CrestStorageService from '@comp/services/crestStorage.service';
 import { generateCustomCrestUrl } from '@comp/storage/userPath';
 import TeamService from './team.service';
 import Team from '@comp/entities/team.entity';
-
-const crestStorage = new CrestStorageAdapter();
 
 @Injectable()
 export default class CrestService {
   constructor(
     @Inject(TeamService)
     private readonly teamService: TeamService,
+    @Inject(CrestStorageService)
+    private readonly crestStorageService: CrestStorageService,
   ) {}
   async getCrest(userId: number, fileName: string): Promise<Buffer> {
-    try{
-      return await crestStorage.getCrest(userId, fileName);
-    } catch (error) {
-      throw new Error(error);
-    }
+    return await this.crestStorageService.getCrest(userId, fileName);
   }
   async updateCrest(
     userId: number,
@@ -38,10 +34,13 @@ export default class CrestService {
       newData.hasCustomCrest = true;
 
       await this.teamService.updateTeam(teamId, newData);
-      await crestStorage.deleteCrest(userId, oldCrestFileData.crestFileName);
+      await this.crestStorageService.deleteCrest(
+        userId,
+        oldCrestFileData.crestFileName,
+      );
       return crestUrl;
     } catch (error) {
-      await crestStorage.deleteCrest(userId, newImageFileName);
+      await this.crestStorageService.deleteCrest(userId, newImageFileName);
       throw new Error(error);
     }
   }

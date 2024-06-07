@@ -6,9 +6,8 @@ import Team from '@comp/entities/team.entity';
 import User from '@comp/entities/user.entity';
 import PlayerService from './player.service';
 import TeamShortDTO from '@comp/interfaces/TeamShortDTO.interface';
-import CrestStorageAdapter from '@comp/Adapters/crestStorage.adapter';
+import CrestStorageService from '@comp/services/crestStorage.service';
 
-const crestAdapter = new CrestStorageAdapter
 @Injectable()
 export default class TeamsService {
   constructor(
@@ -16,7 +15,10 @@ export default class TeamsService {
     private readonly teamRepository: Repository<Team>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-    @Inject(PlayerService) private readonly playerService: PlayerService,
+    @Inject(PlayerService)
+    private readonly playerService: PlayerService,
+    @Inject(CrestStorageService)
+    private readonly crestStorage: CrestStorageService,
   ) {}
 
   private transformTeamShortToDTO(team: TeamShort): TeamShortDTO {
@@ -37,12 +39,13 @@ export default class TeamsService {
       const queryProps = teamsProps.map((prop) => 'team.' + prop);
       queryProps.push('dt.id AS defaultTeam');
       //this includes the default team id
-      const teamsData: TeamShort[] = await this.teamRepository.createQueryBuilder('team')
+      const teamsData: TeamShort[] = await this.teamRepository
+        .createQueryBuilder('team')
         .select(queryProps)
         .leftJoinAndSelect('team.defaultTeam', 'dt')
         .where('team.user = :userId', { userId })
         .getMany();
-      
+
       const teamsDTO = teamsData.map((team) =>
         this.transformTeamShortToDTO(team),
       );
@@ -104,7 +107,7 @@ export default class TeamsService {
           this.userRepository.save(user);
         },
       );
-      crestAdapter.clearCrestFolder(userId);
+      this.crestStorage.clearCrestFolder(userId);
     } catch (error) {
       console.log(error);
       throw error;
