@@ -146,6 +146,7 @@ describe("test the team editor page with the first team", () => {
     cy.get("#team-table .edit").first().click();
     cy.get("#team-table input")
       .first()
+      .should("be.visible")
       .type(randomString)
       .get("#team-table .apply")
       .first()
