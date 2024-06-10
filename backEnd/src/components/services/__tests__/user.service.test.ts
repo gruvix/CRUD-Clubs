@@ -37,4 +37,32 @@ describe('CrestController', () => {
     }).compile();
     userService = module.get<UserService>(UserService);
   });
+
+  describe('getUserId', () => {
+    it('should return user id', async () => {
+      jest
+        .spyOn(mockRepository, 'findOneBy')
+        .mockResolvedValueOnce(mocks.userEntityMock);
+
+      await expect(userService.getUserId(mocks.username)).resolves.toEqual(
+        mocks.userId,
+      );
+    });
+
+    it('should throw an error for user not found', async () => {
+      jest.spyOn(mockRepository, 'findOneBy').mockResolvedValueOnce(null);
+      await expect(userService.getUserId(mocks.username)).rejects.toThrow(
+        new UserNotFoundError(`User ${mocks.username} not found`),
+      );
+    });
+
+    it('should handle other errors', async () => {
+      jest
+        .spyOn(mockRepository, 'findOneBy')
+        .mockRejectedValueOnce(new Error('Something went wrong'));
+      await expect(userService.getUserId(mocks.username)).rejects.toThrow(
+        new Error('Something went wrong'),
+      );
+    });
+  });
 });
