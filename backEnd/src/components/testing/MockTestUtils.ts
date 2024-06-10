@@ -8,6 +8,7 @@ export default class MockTestUtils {
   crestFileName: string = 'image.jpg';
   oldCrestFileName: string = 'iAmOld.jpg';
   userRootPath: string = './path/to/user/root';
+  imageFilePath: string = './path/to/user/root/image.jpg';
   newCrestUrl: string = 'i/am/an/url';
   teamBodyMock: any = {
     teamData: JSON.stringify({
