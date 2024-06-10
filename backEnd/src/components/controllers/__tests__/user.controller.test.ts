@@ -10,6 +10,7 @@ import UserController from '../user.controller';
 import CustomRequest from '@comp/interfaces/CustomRequest.interface';
 import UserNotFoundError from '@comp/errors/UserNotFoundError';
 import MockTestUtils from '@comp/testing/MockTestUtils';
+import InvalidUsernameError from '@comp/errors/InvalidUsernameError';
 
 describe('UserController', () => {
   let userController: UserController;
@@ -20,7 +21,7 @@ describe('UserController', () => {
   let crestService: CrestService;
 
   const mocks = new MockTestUtils();
-  
+
   jest.spyOn(console, 'log').mockImplementation(jest.fn());
 
   beforeEach(async () => {
@@ -44,7 +45,7 @@ describe('UserController', () => {
   });
   describe('login', () => {
     it('should login the user on success', async () => {
-      jest.spyOn(userService, 'handleUserLogin').mockResolvedValueOnce(true);
+      jest.spyOn(userService, 'handleUserLogin').mockResolvedValueOnce(void 0);
       jest.spyOn(userService, 'getUserId').mockResolvedValueOnce(mocks.userId);
 
       const mockData = { username: 'test' };
@@ -62,7 +63,9 @@ describe('UserController', () => {
     });
 
     it('should throw an error for failed login (invalid username)', async () => {
-      jest.spyOn(userService, 'handleUserLogin').mockResolvedValueOnce(false);
+      jest
+        .spyOn(userService, 'handleUserLogin')
+        .mockRejectedValueOnce(new InvalidUsernameError());
 
       const mockData = { username: '12345' };
       const mockRequest = { session: {} } as CustomRequest;
@@ -70,7 +73,7 @@ describe('UserController', () => {
       await expect(
         userController.login(mockRequest as any, mockData),
       ).rejects.toEqual(
-        new HttpException('Failed to login user', HttpStatus.BAD_REQUEST),
+        new HttpException('Invalid username', HttpStatus.BAD_REQUEST),
       );
       expect(userService.handleUserLogin).toHaveBeenCalledWith(
         mockData.username,
@@ -78,7 +81,7 @@ describe('UserController', () => {
     });
 
     it('should throw an error for failed login (user not found)', async () => {
-      jest.spyOn(userService, 'handleUserLogin').mockResolvedValueOnce(true);
+      jest.spyOn(userService, 'handleUserLogin').mockResolvedValueOnce(void(0));
       jest
         .spyOn(userService, 'getUserId')
         .mockRejectedValueOnce(new UserNotFoundError('User not found'));
