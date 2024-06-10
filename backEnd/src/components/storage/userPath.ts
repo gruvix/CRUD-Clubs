@@ -14,7 +14,7 @@ export function getUserRootPath(userId: number) {
   const path = join(projectRoot, 'src', 'userData', userId.toString());
   return path;
 }
-export function getImageFromUserPath(userId: number, filename: string) {
+export function getUserImagePath(userId: number, filename: string) {
   const userRoot = getUserRootPath(userId);
   const imageFilePath = userRoot.concat('/').concat(filename);
   return imageFilePath;
