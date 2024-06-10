@@ -7,6 +7,7 @@ import User from '@comp/entities/user.entity';
 import TeamsService from './teams.service';
 import { createFolder } from '@comp/storage/dataStorage';
 import { getUserRootPath } from '@comp/storage/userPath';
+import InvalidUsernameError from '@comp/errors/InvalidUsernameError';
 
 @Injectable()
 export default class UserService {
@@ -46,18 +47,16 @@ export default class UserService {
     await createFolder(getUserRootPath(userId));
   }
 
-  async handleUserLogin(username: string): Promise<boolean> {
-    if (!isUsernameValid(username)) return false;
+  async handleUserLogin(username: string): Promise<void> {
+    if (!isUsernameValid(username)) throw new InvalidUsernameError();
     const user = await this.userRepository.findOneBy({ username });
     if (!user) {
       try {
         console.log('user not found, creating new user');
         await this.createNewUser(username);
-        return true;
       } catch (error) {
         throw error;
       }
     }
-    return true;
   }
 }
