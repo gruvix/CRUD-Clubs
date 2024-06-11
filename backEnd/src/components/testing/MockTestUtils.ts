@@ -12,13 +12,13 @@ export default class MockTestUtils {
   userRootPath: string = './path/to/user/root';
   imageFilePath: string = './path/to/user/root/image.jpg';
   newCrestUrl: string = 'i/am/an/url';
-  teamBodyMock: any = {
+  teamBody: any = {
     teamData: JSON.stringify({
       name: 'test',
       squad: [],
     }),
   };
-  userEntityMock: User = {
+  userEntity: User = {
     id: this.userId,
     username: this.username,
     password: this.password,

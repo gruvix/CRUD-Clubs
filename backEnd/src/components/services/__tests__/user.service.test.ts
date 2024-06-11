@@ -42,7 +42,7 @@ describe('UserService', () => {
     it('should return user id', async () => {
       jest
         .spyOn(mockRepository, 'findOneBy')
-        .mockResolvedValueOnce(mocks.userEntityMock);
+        .mockResolvedValueOnce(mocks.userEntity);
 
       await expect(userService.getUserId(mocks.username)).resolves.toEqual(
         mocks.userId,

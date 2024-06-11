@@ -37,13 +37,13 @@ describe('NewTeamController', () => {
       expect(
         await newTeamController.addTeam(
           mocks.userId,
-          mocks.teamBodyMock,
+          mocks.teamBody,
           mocks.crestFileName,
         ),
       ).toBe(NEW_TEAM_ID);
       expect(teamService.addTeam).toHaveBeenCalledWith(
         mocks.userId,
-        JSON.parse(mocks.teamBodyMock.teamData),
+        JSON.parse(mocks.teamBody.teamData),
         'image.jpg',
       );
     });
@@ -58,7 +58,7 @@ describe('NewTeamController', () => {
       await expect(
         newTeamController.addTeam(
           mocks.userId,
-          mocks.teamBodyMock,
+          mocks.teamBody,
           mocks.crestFileName,
         ),
       ).rejects.toThrow(
@@ -70,7 +70,7 @@ describe('NewTeamController', () => {
       await expect(
         newTeamController.addTeam(
           mocks.userId,
-          mocks.teamBodyMock,
+          mocks.teamBody,
           mocks.crestFileName,
         ),
       ).rejects.toThrow(
