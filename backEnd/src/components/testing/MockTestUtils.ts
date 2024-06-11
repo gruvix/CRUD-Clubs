@@ -9,7 +9,7 @@ export default class MockTestUtils {
   password: string = 'test';
   crestFileName: string = 'image.jpg';
   oldCrestFileName: string = 'iAmOld.jpg';
-  userRootPath: string = './path/to/user/root';
+  userRootPath: string = './fake/path/to/user/root';
   imageFilePath: string = './path/to/user/root/image.jpg';
   newCrestUrl: string = 'i/am/an/url';
   teamBody: any = {
@@ -39,4 +39,7 @@ export default class MockTestUtils {
     squad: [] as Player[],
     hasDefault: true,
   };
+  userRootPathFromId(userId: number): string {
+    return `${this.userRootPath}/${userId}`;
+  }
 }
