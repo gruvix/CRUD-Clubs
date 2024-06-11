@@ -1,5 +1,6 @@
 import Player from '@comp/entities/player.entity';
 import User from '@comp/entities/user.entity';
+import PlayerData from '@comp/interfaces/PlayerData.interface';
 import TeamDTO from '@comp/interfaces/TeamDTO.interface';
 
 export default class MockTestUtils {
@@ -18,13 +19,25 @@ export default class MockTestUtils {
       squad: [],
     }),
   };
+  playerData: PlayerData = {
+    id: 1,
+    name: 'test name',
+    position: 'test position',
+    nationality: 'test land',
+  }
+  playerDataWithoutId: PlayerData = {
+    id: undefined,
+    name: 'test name',
+    position: 'test position',
+    nationality: 'test land',
+  }
   userEntity: User = {
     id: this.userId,
     username: this.username,
     password: this.password,
     teams: [],
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    createdAt: undefined,
+    updatedAt: undefined,
   };
   TeamDTO: TeamDTO = {
     name: 'test',
