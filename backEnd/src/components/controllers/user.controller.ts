@@ -28,7 +28,7 @@ export default class UserController {
     @Body() data: { username: string },
   ) {
     try {
-      await this.userService.handleUserLogin(data.username);
+      await this.userService.findOrCreateUser(data.username);
       request.session.username = data.username;
       request.session.userId = await this.userService.getUserId(data.username);
       console.log(

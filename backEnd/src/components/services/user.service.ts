@@ -47,7 +47,7 @@ export default class UserService {
     await createFolder(getUserRootPath(userId));
   }
 
-  async handleUserLogin(username: string): Promise<void> {
+  async findOrCreateUser(username: string): Promise<void> {
     if (!isUsernameValid(username)) throw new InvalidUsernameError();
     const user = await this.userRepository.findOneBy({ username });
     if (!user) {

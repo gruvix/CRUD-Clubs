@@ -45,7 +45,7 @@ describe('UserController', () => {
   });
   describe('login', () => {
     it('should login the user on success', async () => {
-      jest.spyOn(userService, 'handleUserLogin').mockResolvedValueOnce(void 0);
+      jest.spyOn(userService, 'findOrCreateUser').mockResolvedValueOnce(void 0);
       jest.spyOn(userService, 'getUserId').mockResolvedValueOnce(mocks.userId);
 
       const mockData = { username: 'test' };
@@ -54,7 +54,7 @@ describe('UserController', () => {
       await expect(
         userController.login(mockRequest as any, mockData),
       ).resolves.toEqual(undefined);
-      expect(userService.handleUserLogin).toHaveBeenCalledWith(
+      expect(userService.findOrCreateUser).toHaveBeenCalledWith(
         mockData.username,
       );
       expect(userService.getUserId).toHaveBeenCalledWith(mockData.username);
@@ -64,7 +64,7 @@ describe('UserController', () => {
 
     it('should throw an error for failed login (invalid username)', async () => {
       jest
-        .spyOn(userService, 'handleUserLogin')
+        .spyOn(userService, 'findOrCreateUser')
         .mockRejectedValueOnce(new InvalidUsernameError());
 
       const mockData = { username: '12345' };
@@ -75,13 +75,13 @@ describe('UserController', () => {
       ).rejects.toEqual(
         new HttpException('Invalid username', HttpStatus.BAD_REQUEST),
       );
-      expect(userService.handleUserLogin).toHaveBeenCalledWith(
+      expect(userService.findOrCreateUser).toHaveBeenCalledWith(
         mockData.username,
       );
     });
 
     it('should throw an error for failed login (user not found)', async () => {
-      jest.spyOn(userService, 'handleUserLogin').mockResolvedValueOnce(void(0));
+      jest.spyOn(userService, 'findOrCreateUser').mockResolvedValueOnce(void(0));
       jest
         .spyOn(userService, 'getUserId')
         .mockRejectedValueOnce(new UserNotFoundError('User not found'));
@@ -94,7 +94,7 @@ describe('UserController', () => {
       ).rejects.toEqual(
         new HttpException('User not found', HttpStatus.BAD_REQUEST),
       );
-      expect(userService.handleUserLogin).toHaveBeenCalledWith(
+      expect(userService.findOrCreateUser).toHaveBeenCalledWith(
         mockData.username,
       );
     });
