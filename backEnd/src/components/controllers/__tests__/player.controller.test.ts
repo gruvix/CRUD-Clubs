@@ -30,13 +30,6 @@ describe('PlayerController', () => {
   });
 
   describe('addPlayer', () => {
-    const playerDataMock: PlayerData = {
-      id: undefined,
-      name: 'test name',
-      position: 'test position',
-      nationality: 'test land',
-    };
-
     it('should add a player to the database', async () => {
       jest.spyOn(playerService, 'addPlayer').mockResolvedValueOnce(void 0);
 
@@ -44,19 +37,19 @@ describe('PlayerController', () => {
         await playerController.addPlayer(
           mocks.userId,
           mocks.teamId,
-          playerDataMock,
+          mocks.playerDataWithoutId,
         ),
       ).toBeUndefined();
       expect(playerService.addPlayer).toHaveBeenCalledWith(
         mocks.teamId,
-        playerDataMock,
+        mocks.playerDataWithoutId,
       );
     });
 
     it('should handle errors', async () => {
       jest.spyOn(playerService, 'addPlayer').mockRejectedValueOnce(new Error());
       await expect(
-        playerController.addPlayer(mocks.userId, mocks.teamId, playerDataMock),
+        playerController.addPlayer(mocks.userId, mocks.teamId, mocks.playerDataWithoutId),
       ).rejects.toThrow(
         new HttpException(
           'Failed to add player',
@@ -65,19 +58,12 @@ describe('PlayerController', () => {
       );
       expect(playerService.addPlayer).toHaveBeenCalledWith(
         mocks.teamId,
-        playerDataMock,
+        mocks.playerDataWithoutId,
       );
     });
   });
 
   describe('updatePlayer', () => {
-    const playerDataMock: PlayerData = {
-      id: 1,
-      name: 'test name',
-      position: 'test position',
-      nationality: 'test land',
-    };
-
     it('should update a player', async () => {
       jest.spyOn(playerService, 'updatePlayer').mockResolvedValueOnce(void 0);
 
@@ -85,10 +71,10 @@ describe('PlayerController', () => {
         await playerController.updatePlayer(
           mocks.userId,
           mocks.teamId,
-          playerDataMock,
+          mocks.playerData,
         ),
       ).toBeUndefined();
-      expect(playerService.updatePlayer).toHaveBeenCalledWith(playerDataMock);
+      expect(playerService.updatePlayer).toHaveBeenCalledWith(mocks.playerData);
     });
 
     it('should handle errors', async () => {
@@ -99,7 +85,7 @@ describe('PlayerController', () => {
         playerController.updatePlayer(
           mocks.userId,
           mocks.teamId,
-          playerDataMock,
+          mocks.playerData,
         ),
       ).rejects.toThrow(
         new HttpException(
@@ -107,7 +93,7 @@ describe('PlayerController', () => {
           HttpStatus.INTERNAL_SERVER_ERROR,
         ),
       );
-      expect(playerService.updatePlayer).toHaveBeenCalledWith(playerDataMock);
+      expect(playerService.updatePlayer).toHaveBeenCalledWith(mocks.playerData);
     });
   });
 
