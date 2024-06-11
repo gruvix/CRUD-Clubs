@@ -8,7 +8,7 @@ import * as path from '@comp/storage/userPath';
 import Team from '@comp/entities/team.entity';
 import MockTestUtils from '@comp/testing/MockTestUtils';
 
-describe('CrestController', () => {
+describe('CrestService', () => {
   let teamService: TeamService;
   let crestService: CrestService;
   let crestStorageService: CrestStorageService;

@@ -9,7 +9,7 @@ import UserNotFoundError from '@comp/errors/UserNotFoundError';
 import mockRepository from '@comp/testing/mockTypeORMRepository';
 import * as TypeORM from '@nestjs/typeorm';
 
-describe('CrestController', () => {
+describe('UserService', () => {
   let userService: UserService;
 
   const mockGetRepositoryToken = jest

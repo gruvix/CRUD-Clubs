@@ -6,7 +6,7 @@ import * as path from '@comp/storage/userPath';
 import MockTestUtils from '@comp/testing/MockTestUtils';
 import PathTestUtils from '@comp/testing/PathTestUtils';
 
-describe('CrestController', () => {
+describe('CrestStorageService', () => {
   let crestStorageService: CrestStorageService;
 
   const mocks = new MockTestUtils();

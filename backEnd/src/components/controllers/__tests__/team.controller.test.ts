@@ -8,7 +8,7 @@ import Team from '@comp/entities/team.entity';
 import TeamData from '@comp/interfaces/TeamData.interface';
 import MockTestUtils from '@comp/testing/MockTestUtils';
 
-describe('TeamsController', () => {
+describe('TeamController', () => {
   let teamController: TeamController;
   let teamService: TeamService;
   let userService: UserService;
