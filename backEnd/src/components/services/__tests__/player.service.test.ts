@@ -76,4 +76,33 @@ describe('PlayerService', () => {
     });
   });
 
+  describe('updatePlayer', () => {
+    it('should update a player', async () => {
+      expect(
+        await playerService.updatePlayer(mocks.playerData),
+      ).toBeUndefined();
+      expect(mockRepository.execute).toHaveBeenCalled();
+    });
+
+    it('should handle errors', async () => {
+      mockRepository.execute.mockRejectedValueOnce(new Error());
+      await expect(
+        playerService.updatePlayer(mocks.playerData),
+      ).rejects.toThrow(
+        new HttpException(
+          'Server failed to update player',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        ),
+      );
+    });
+
+    it('should throw error when player id is missing', async () => {
+      await expect(
+        playerService.updatePlayer(mocks.playerDataWithoutId),
+      ).rejects.toThrow(
+        new HttpException('Missing player id', HttpStatus.BAD_REQUEST),
+      );
+    });
+  });
+
 });
