@@ -36,14 +36,14 @@ export default class TeamController {
       const teamDTO = this.teamService.transformTeamDataToDTO(team);
       return teamDTO;
     } catch (error) {
-      if (!(error instanceof HttpException)) {
+      if (error instanceof HttpException) {
+        throw error;
+      } else {
         throw new HttpException(
           'Failed to get team',
           HttpStatus.INTERNAL_SERVER_ERROR,
           error,
         );
-      } else {
-        throw error;
       }
     }
   }
@@ -58,14 +58,14 @@ export default class TeamController {
       console.log(`User ${userId} is updating team ${teamId}`);
       await this.teamService.updateTeam(teamId, data);
     } catch (error) {
-      if (!(error instanceof HttpException)) {
+      if (error instanceof HttpException) {
+        throw error;
+      } else {
         throw new HttpException(
           'Failed to update team',
           HttpStatus.INTERNAL_SERVER_ERROR,
           error,
         );
-      } else {
-        throw error;
       }
     }
   }
@@ -79,14 +79,14 @@ export default class TeamController {
       console.log(`User ${userId} is deleting team ${teamId}`);
       await this.teamService.deleteTeam(userId, teamId);
     } catch (error) {
-      if (!(error instanceof HttpException)) {
+      if (error instanceof HttpException) {
+        throw error;
+      } else {
         throw new HttpException(
           'Failed to delete team',
           HttpStatus.INTERNAL_SERVER_ERROR,
           error,
         );
-      } else {
-        throw error;
       }
     }
   }
@@ -100,14 +100,14 @@ export default class TeamController {
       console.log(`User ${userId} is resetting team ${teamId}`);
       await this.teamService.resetTeam(userId, teamId);
     } catch (error) {
-      if (!(error instanceof HttpException)) {
+      if (error instanceof HttpException) {
+        throw error;
+      } else {
         throw new HttpException(
           'Failed to reset team',
           HttpStatus.INTERNAL_SERVER_ERROR,
           error,
         );
-      } else {
-        throw error;
       }
     }
   }

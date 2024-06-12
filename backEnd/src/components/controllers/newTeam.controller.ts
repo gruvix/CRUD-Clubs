@@ -39,7 +39,7 @@ export default class NewTeamController {
       return newTeamId;
     } catch (error) {
       if (error instanceof HttpException) {
-        throw new HttpException(error.message, error.getStatus());
+        throw error;
       } else {
         throw new HttpException(
           'Failed to add team',

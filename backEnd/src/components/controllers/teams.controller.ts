@@ -35,10 +35,14 @@ export default class TeamsController {
       };
       return data;
     } catch (error) {
-      throw new HttpException(
-        'Failed to get teams',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      if (error instanceof HttpException) {
+        throw error;
+      } else {
+        throw new HttpException(
+          'Failed to get teams',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
     }
   }
 
@@ -48,10 +52,14 @@ export default class TeamsController {
     try {
       await this.teamsService.resetTeams(userId);
     } catch (error) {
-      throw new HttpException(
-        'Failed to reset teams',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      if (error instanceof HttpException) {
+        throw error;
+      } else {
+        throw new HttpException(
+          'Failed to reset teams',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
     }
   }
 }

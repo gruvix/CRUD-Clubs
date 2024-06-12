@@ -35,10 +35,14 @@ export default class PlayerController {
       return newId;
     } catch (error) {
       console.log(error);
-      throw new HttpException(
-        'Failed to add player',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      if (error instanceof HttpException) {
+        throw error;
+      } else {
+        throw new HttpException(
+          'Failed to add player',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
     }
   }
 
@@ -56,10 +60,14 @@ export default class PlayerController {
       await this.playerService.updatePlayer(playerData);
     } catch (error) {
       console.log(error);
-      throw new HttpException(
-        'Failed to update player',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      if (error instanceof HttpException) {
+        throw error;
+      } else {
+        throw new HttpException(
+          'Failed to update player',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
     }
   }
 
@@ -77,10 +85,14 @@ export default class PlayerController {
       await this.playerService.removePlayer(playerData.id);
     } catch (error) {
       console.log(error);
-      throw new HttpException(
-        'Failed to remove player',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      if (error instanceof HttpException) {
+        throw error;
+      } else {
+        throw new HttpException(
+          'Failed to remove player',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
     }
   }
 }

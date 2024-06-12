@@ -37,10 +37,14 @@ export default class CrestController {
     } catch (error) {
       if (error instanceof FileNotFoundError)
         throw new HttpException('Crest not found', HttpStatus.NOT_FOUND);
-      throw new HttpException(
-        'Failed to get crest',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      else if (error instanceof HttpException) {
+        throw error;
+      } else {
+        throw new HttpException(
+          'Failed to get crest',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
     }
   }
 
@@ -61,7 +65,7 @@ export default class CrestController {
       return JSON.stringify(newCrestUrl);
     } catch (error) {
       if (error instanceof HttpException) {
-        throw new HttpException(error.message, error.getStatus());
+        throw error;
       } else {
         throw new HttpException(
           'Failed to update crest',
