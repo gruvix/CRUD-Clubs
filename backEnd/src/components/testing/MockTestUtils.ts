@@ -19,6 +19,7 @@ export default class MockTestUtils {
       squad: [],
     }),
   };
+  playerId: number = 1;
   playerData: PlayerData = {
     id: 1,
     name: 'test name',
