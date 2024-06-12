@@ -35,4 +35,45 @@ describe('PlayerService', () => {
     playerService = module.get<PlayerService>(PlayerService);
   });
 
+  describe('addPlayer', () => {
+    it('should add player', async () => {
+      mockRepository.execute.mockResolvedValueOnce({ raw: mocks.playerId });
+      expect(
+        await playerService.addPlayer(mocks.teamId, mocks.playerDataWithoutId),
+      ).toEqual(mocks.playerId);
+      const playerDataWithTeamId = {
+        ...mocks.playerDataWithoutId,
+        team: mocks.teamId,
+      };
+      expect(mockRepository.values).toHaveBeenCalledWith(playerDataWithTeamId);
+      expect(mockRepository.execute).toHaveBeenCalled();
+    });
+
+    it('should remove id property from new player data', async () => {
+      mockRepository.execute.mockResolvedValueOnce({ raw: mocks.playerId });
+      expect(
+        await playerService.addPlayer(mocks.teamId, mocks.playerData),
+      ).toEqual(mocks.playerId);
+      const expectedPlayerData = {
+        ...mocks.playerDataWithoutId,
+        team: mocks.teamId,
+      };
+      delete expectedPlayerData.id;
+      expect(mockRepository.values).toHaveBeenCalledWith(expectedPlayerData);
+      expect(mockRepository.execute).toHaveBeenCalled();
+    });
+
+    it('should handle errors', async () => {
+      mockRepository.execute.mockRejectedValueOnce(new Error());
+      await expect(
+        playerService.addPlayer(mocks.teamId, mocks.playerDataWithoutId),
+      ).rejects.toThrow(
+        new HttpException(
+          'Server failed to add player',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        ),
+      );
+    });
+  });
+
 });
