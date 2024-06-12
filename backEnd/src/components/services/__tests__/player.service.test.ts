@@ -105,4 +105,31 @@ describe('PlayerService', () => {
     });
   });
 
+  describe('removePlayer', () => {
+    it('should delete a player', async () => {
+      expect(await playerService.removePlayer(mocks.playerId)).toBeUndefined();
+      expect(mockRepository.delete).toHaveBeenCalled();
+      expect(mockRepository.execute).toHaveBeenCalled();
+      expect(mockRepository.where).toHaveBeenCalledWith('id = :id', {
+        id: mocks.playerId,
+      });
+    });
+
+    it('should throw error when player id is missing', async () => {
+      await expect(playerService.removePlayer(NaN)).rejects.toThrow(
+        new HttpException('Missing player id', HttpStatus.BAD_REQUEST),
+      );
+    });
+
+    it('should handle errors', async () => {
+      mockRepository.execute.mockRejectedValueOnce(new Error());
+      await expect(playerService.removePlayer(mocks.playerId)).rejects.toThrow(
+        new HttpException(
+          'Server failed to remove player',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        ),
+      );
+    });
+  });
+
 });
