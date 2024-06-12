@@ -10,8 +10,6 @@ export default class PlayerService {
   constructor(
     @InjectRepository(Player)
     private readonly playerRepository: Repository<Player>,
-    @InjectRepository(Team)
-    private readonly teamRepository: Repository<Team>,
   ) {}
 
   async addPlayer(teamId: number, newPlayerData: PlayerData): Promise<number> {
@@ -56,7 +54,8 @@ export default class PlayerService {
     }
   }
   async removePlayer(playerId: number): Promise<void> {
-    if(!playerId) throw new HttpException('Missing player id', HttpStatus.BAD_REQUEST);
+    if (!playerId)
+      throw new HttpException('Missing player id', HttpStatus.BAD_REQUEST);
     try {
       await this.playerRepository
         .createQueryBuilder()
@@ -70,16 +69,6 @@ export default class PlayerService {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
-  }
-
-  async getSquad(teamId: number): Promise<Player[]> {
-    
-    return (
-      await this.teamRepository.findOne({
-        where: { id: teamId },
-        relations: ['squad'],
-      })
-    ).squad;
   }
 
   copyPlayersToTeam(team: Team, players: Player[]): void {

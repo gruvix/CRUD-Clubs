@@ -7,6 +7,7 @@ import User from '@comp/entities/user.entity';
 import PlayerService from './player.service';
 import TeamShortDTO from '@comp/interfaces/TeamShortDTO.interface';
 import CrestStorageService from '@comp/services/crestStorage.service';
+import TeamService from './team.service';
 
 @Injectable()
 export default class TeamsService {
@@ -17,6 +18,8 @@ export default class TeamsService {
     private readonly userRepository: Repository<User>,
     @Inject(PlayerService)
     private readonly playerService: PlayerService,
+    @Inject(TeamService)
+    private readonly teamService: TeamService,
     @Inject(CrestStorageService)
     private readonly crestStorage: CrestStorageService,
   ) {}
@@ -68,7 +71,7 @@ export default class TeamsService {
         defaultTeam: team.id,
       };
 
-      const players = await this.playerService.getSquad(team.id);
+      const players = (await this.teamService.getTeam(team.id, ['squad'], ['squad'])).squad;
       this.playerService.copyPlayersToTeam(newTeam, players);
 
       return newTeam;
