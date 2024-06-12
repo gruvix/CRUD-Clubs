@@ -27,7 +27,7 @@ export class PlayerGuard implements CanActivate {
         console.log(
           `User ${userId} tried to access team ${teamId}, but the ID is invalid`,
         );
-        throw new HttpException('Invalid team id', HttpStatus.BAD_REQUEST);
+        throw new HttpException('Invalid player id', HttpStatus.BAD_REQUEST);
       }
 
       if (!await this.playerExistsOnTeam(teamId, playerId)) {
