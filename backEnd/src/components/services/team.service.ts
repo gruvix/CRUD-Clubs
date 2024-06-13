@@ -66,6 +66,7 @@ export default class TeamService {
     }
   }
   transformTeamDataToDTO(teamData: TeamData): TeamDTO {
+    if(!teamData) throw new Error('No team data provided');
     const { id, defaultTeam, ...rest } = teamData;
     const teamDTO: TeamDTO = { ...rest, hasDefault: !!defaultTeam };
     return teamDTO;
