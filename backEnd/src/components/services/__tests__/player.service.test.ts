@@ -161,4 +161,29 @@ describe('PlayerService', () => {
     });
   });
 
+  describe('clearSquad', () => {
+    it('should clear a team squad from database', async () => {
+      expect(await playerService.clearSquad(mocks.teamId)).toBeUndefined();
+      expect(mockRepository.delete).toHaveBeenCalled();
+      expect(mockRepository.from).toHaveBeenCalledWith(Player);
+      expect(mockRepository.where).toHaveBeenCalledWith({ team: mocks.teamId });
+      expect(mockRepository.execute).toHaveBeenCalled();
+    });
+
+    it('should throw an error if team id is missing', async () => {
+      await expect(playerService.clearSquad(NaN)).rejects.toThrow(
+        new Error('No team id provided'),
+      );
+    });
+
+    it('should handle errors', async () => {
+      mockRepository.execute.mockRejectedValueOnce(new Error());
+      await expect(playerService.clearSquad(mocks.teamId)).rejects.toThrow(
+        new HttpException(
+          'Server failed to clear team\'s squad',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        ),
+      );
+    });
+  });
 });
