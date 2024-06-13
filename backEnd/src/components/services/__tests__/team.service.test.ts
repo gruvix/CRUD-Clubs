@@ -46,7 +46,7 @@ describe('TeamService', () => {
 
   describe('addTeam', () => {
     it('should add a new team with an empty squad', async () => {
-      const teamEntity = mocks.TeamEntityWithEmptySquad();
+      const teamEntity = mocks.teamEntityWithEmptySquad();
       const teamData = mocks.teamDataWithEmptySquad();
       jest
         .spyOn(userPath, 'generateCustomCrestUrl')
@@ -72,7 +72,7 @@ describe('TeamService', () => {
     });
 
     it('should add a new team with a non-empty squad', async () => {
-      const teamEntity = mocks.TeamEntityWithEmptySquad();
+      const teamEntity = mocks.teamEntityWithEmptySquad();
       const playersAmount = 5;
       teamEntity.squad = mocks.squadGenerator(mocks.teamId, playersAmount);
       const teamData = mocks.teamDataWithEmptySquad();
@@ -168,7 +168,7 @@ describe('TeamService', () => {
     it('Should return a team entity with full properties and relations', async () => {
       const playersAmount = 5;
       const teamEntity = {
-        ...mocks.TeamEntityWithEmptySquad(),
+        ...mocks.teamEntityWithEmptySquad(),
         squad: mocks.squadGenerator(mocks.teamId, playersAmount),
         user: mocks.userEntity,
       };
@@ -206,7 +206,7 @@ describe('TeamService', () => {
     });
 
     it('Should return a team object with all non-select false properties', async () => {
-      const teamEntity = mocks.TeamEntityWithEmptySquad();
+      const teamEntity = mocks.teamEntityWithEmptySquad();
       jest.spyOn(mockRepository, 'findOne').mockResolvedValueOnce(teamEntity);
       expect(await teamService.getTeam(mocks.teamId)).toEqual(teamEntity);
       expect(mockRepository.findOne).toHaveBeenCalledWith({

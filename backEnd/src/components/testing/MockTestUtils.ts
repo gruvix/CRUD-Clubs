@@ -77,7 +77,7 @@ export default class MockTestUtils {
       }),
     );
   }
-  TeamEntityWithEmptySquad(): Team {
+  teamEntityWithEmptySquad(): Team {
     return JSON.parse(
       JSON.stringify({
         id: this.teamId,
@@ -94,6 +94,28 @@ export default class MockTestUtils {
         hasCustomCrest: true,
         squad: [],
         defaultTeam: 1,
+        createdAt: undefined,
+        updatedAt: undefined,
+      }),
+    );
+  }
+  defaultTeamEntity(): Team {
+    return JSON.parse(
+      JSON.stringify({
+        id: this.teamId,
+        user: this.userId,
+        name: 'test',
+        area: 'test',
+        address: 'test',
+        phone: 'test',
+        website: 'test',
+        email: 'test',
+        venue: 'test',
+        crestUrl: 'test',
+        crestFileName: null,
+        hasCustomCrest: false,
+        squad: [],
+        defaultTeam: null,
         createdAt: undefined,
         updatedAt: undefined,
       }),

@@ -137,7 +137,7 @@ describe('PlayerService', () => {
   describe('copyPlayersToTeam', () => {
     let team: Team;
     beforeEach(() => {
-      team = mocks.TeamEntityWithEmptySquad()
+      team = mocks.teamEntityWithEmptySquad()
     })
 
     it('should copy a squad into a team, removing id properties', async () => {
