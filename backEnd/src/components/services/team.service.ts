@@ -66,7 +66,7 @@ export default class TeamService {
     }
   }
   transformTeamDataToDTO(teamData: TeamData): TeamDTO {
-    if(!teamData) throw new Error('No team data provided');
+    if (!teamData) throw new Error('No team data provided');
     const { id, defaultTeam, ...rest } = teamData;
     const teamDTO: TeamDTO = { ...rest, hasDefault: !!defaultTeam };
     return teamDTO;
@@ -89,8 +89,7 @@ export default class TeamService {
     selections?: string[],
   ): Promise<Team> {
     try {
-      if (selections && !selections.some((item) => item === 'id'))
-        selections.push('id');
+      if (selections && !selections.some((item) => item === 'id')) selections.push('id');
       //repository fails if id primary key isn't selected
       const selectObject = this.generateSelectionsFromStringArray(selections);
 
@@ -106,7 +105,6 @@ export default class TeamService {
       throw new HttpException(
         'Failed to get team',
         HttpStatus.INTERNAL_SERVER_ERROR,
-        error,
       );
     }
   }
@@ -148,9 +146,12 @@ export default class TeamService {
           };
 
           this.playerService.copyPlayersToTeam(team, defaultTeam.squad);
-          await transactionalEntityManager.save(Team, team);
+          await this.teamRepository.save(team);
           if (oldImageData.hasCustomCrest)
-            this.crestStorageService.deleteCrest(userId, oldImageData.crestFileName);
+            this.crestStorageService.deleteCrest(
+              userId,
+              oldImageData.crestFileName,
+            );
         },
       );
     } catch (error) {
@@ -192,10 +193,11 @@ export default class TeamService {
       await this.teamRepository.manager.transaction(
         async (transactionalEntityManager) => {
           await this.playerService.clearSquad(teamId);
-          const imageData = await this.getTeam(teamId, [], [
-            'crestFileName',
-            'hasCustomCrest',
-          ]);
+          const imageData = await this.getTeam(
+            teamId,
+            [],
+            ['crestFileName', 'hasCustomCrest'],
+          );
           await transactionalEntityManager
             .createQueryBuilder()
             .delete()
@@ -203,7 +205,10 @@ export default class TeamService {
             .where('id = :id', { id: teamId })
             .execute();
           if (imageData.hasCustomCrest)
-          this.crestStorageService.deleteCrest(userId, imageData.crestFileName);
+            this.crestStorageService.deleteCrest(
+              userId,
+              imageData.crestFileName,
+            );
         },
       );
     } catch (error) {
