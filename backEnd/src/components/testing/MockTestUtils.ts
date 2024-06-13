@@ -21,22 +21,23 @@ export default class MockTestUtils {
       squad: [],
     }),
   };
-  teamData: TeamData = {
-    id: this.teamId,
-    name: 'test',
-    area: 'test',
-    address: 'test',
-    phone: 'test',
-    website: 'test',
-    email: 'test',
-    venue: 'test',
-    crestUrl: 'test',
-    hasCustomCrest: true,
-    defaultTeam: null,
-    squad: [] as Player[],
-  };
-  teamEntity: Team = {
-    
+  teamDataWithEmptySquad(): TeamData {
+    return JSON.parse(
+      JSON.stringify({
+        id: this.teamId,
+        name: 'test',
+        area: 'test',
+        address: 'test',
+        phone: 'test',
+        website: 'test',
+        email: 'test',
+        venue: 'test',
+        crestUrl: 'test',
+        hasCustomCrest: true,
+        defaultTeam: null,
+        squad: [] as Player[],
+      }),
+    );
   }
   playerId: number = 1;
   playerData: PlayerData = {
