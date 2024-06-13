@@ -1,4 +1,5 @@
 import Player from '@comp/entities/player.entity';
+import Team from '@comp/entities/team.entity';
 import User from '@comp/entities/user.entity';
 import PlayerData from '@comp/interfaces/PlayerData.interface';
 import TeamDTO from '@comp/interfaces/TeamDTO.interface';
@@ -53,6 +54,28 @@ export default class MockTestUtils {
     squad: [] as Player[],
     hasDefault: true,
   };
+  TeamWithEmptySquad(): Team {
+    return JSON.parse(
+      JSON.stringify({
+        id: this.teamId,
+        user: this.userId,
+        name: 'test',
+        area: 'test',
+        address: 'test',
+        phone: 'test',
+        website: 'test',
+        email: 'test',
+        venue: 'test',
+        crestUrl: 'test',
+        crestFileName: 'test',
+        hasCustomCrest: true,
+        squad: [],
+        defaultTeam: 1,
+        createdAt: undefined,
+        updatedAt: undefined,
+      }),
+    );
+  }
   userRootPathFromId(userId: number): string {
     return `${this.userRootPath}/${userId}`;
   }
