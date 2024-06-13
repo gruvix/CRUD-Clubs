@@ -202,7 +202,7 @@ export default class TeamService {
             .where('id = :id', { id: teamId })
             .execute();
           if (imageData.hasCustomCrest)
-            this.crestStorageService.deleteCrest(
+            await this.crestStorageService.deleteCrest(
               userId,
               imageData.crestFileName,
             );
