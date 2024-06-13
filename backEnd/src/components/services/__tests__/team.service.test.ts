@@ -390,4 +390,81 @@ describe('TeamService', () => {
     });
   });
 
+  describe('deleteTeam', () => {
+    it('Should delete a team with a custom crest', async () => {
+      const crestDataTeam = {
+        id: mocks.teamId,
+        crestFileName: 'name',
+        hasCustomCrest: true,
+      } as Team;
+
+      jest
+        .spyOn(mockRepository.manager, 'transaction')
+        .mockImplementationOnce(async (callback) => {
+          const transactionalEntityManager = {};
+          return await callback(transactionalEntityManager);
+        });
+      jest.spyOn(playerService, 'clearSquad').mockResolvedValueOnce(void 0);
+      jest.spyOn(teamService, 'getTeam').mockResolvedValueOnce(crestDataTeam);
+      jest
+        .spyOn(crestStorageService, 'deleteCrest')
+        .mockResolvedValueOnce(void 0);
+
+      expect(await teamService.deleteTeam(mocks.userId, mocks.teamId)).toEqual(
+        void 0,
+      );
+      expect(playerService.clearSquad).toHaveBeenCalledWith(mocks.teamId);
+      expect(crestStorageService.deleteCrest).toHaveBeenCalledWith(
+        mocks.userId,
+        crestDataTeam.crestFileName,
+      );
+      expect(mockRepository.delete).toHaveBeenCalled();
+      expect(mockRepository.where);
+      expect(mockRepository.execute).toHaveBeenCalled();
+    });
+
+    it('Should delete a team without custom crest', async () => {
+      const crestDataTeam = {
+        id: mocks.teamId,
+        crestFileName: null,
+        hasCustomCrest: false,
+      } as Team;
+
+      jest
+        .spyOn(mockRepository.manager, 'transaction')
+        .mockImplementationOnce(async (callback) => {
+          const transactionalEntityManager = {};
+          return await callback(transactionalEntityManager);
+        });
+      jest.spyOn(playerService, 'clearSquad').mockResolvedValueOnce(void 0);
+      jest.spyOn(teamService, 'getTeam').mockResolvedValueOnce(crestDataTeam);
+      jest.spyOn(crestStorageService, 'deleteCrest');
+
+      expect(await teamService.deleteTeam(mocks.userId, mocks.teamId)).toEqual(
+        void 0,
+      );
+      expect(playerService.clearSquad).toHaveBeenCalledWith(mocks.teamId);
+      expect(crestStorageService.deleteCrest).not.toHaveBeenCalled();
+      expect(mockRepository.delete).toHaveBeenCalled();
+      expect(mockRepository.where);
+      expect(mockRepository.execute).toHaveBeenCalled();
+    });
+
+    it('Should handle errors', async () => {
+      jest
+        .spyOn(mockRepository.manager, 'transaction')
+        .mockImplementationOnce(async (callback) => {
+          throw new Error("i'm an error");
+        });
+
+      expect(
+        teamService.deleteTeam(mocks.userId, mocks.teamId),
+      ).rejects.toEqual(
+        new HttpException(
+          'Server failed to delete team',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        ),
+      );
+    });
+  });
 });
