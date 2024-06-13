@@ -72,7 +72,7 @@ export default class MockTestUtils {
     squad: [] as Player[],
     hasDefault: true,
   };
-  TeamWithEmptySquad(): Team {
+  TeamEntityWithEmptySquad(): Team {
     return JSON.parse(
       JSON.stringify({
         id: this.teamId,
