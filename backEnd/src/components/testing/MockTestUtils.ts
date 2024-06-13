@@ -3,6 +3,7 @@ import Team from '@comp/entities/team.entity';
 import User from '@comp/entities/user.entity';
 import PlayerData from '@comp/interfaces/PlayerData.interface';
 import TeamDTO from '@comp/interfaces/TeamDTO.interface';
+import TeamData from '@comp/interfaces/TeamData.interface';
 
 export default class MockTestUtils {
   userId: number = 1;
@@ -20,9 +21,26 @@ export default class MockTestUtils {
       squad: [],
     }),
   };
+  teamData: TeamData = {
+    id: this.teamId,
+    name: 'test',
+    area: 'test',
+    address: 'test',
+    phone: 'test',
+    website: 'test',
+    email: 'test',
+    venue: 'test',
+    crestUrl: 'test',
+    hasCustomCrest: true,
+    defaultTeam: null,
+    squad: [] as Player[],
+  };
+  teamEntity: Team = {
+    
+  }
   playerId: number = 1;
   playerData: PlayerData = {
-    id: 1,
+    id: this.playerId,
     name: 'test name',
     position: 'test position',
     nationality: 'test land',
