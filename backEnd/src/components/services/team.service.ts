@@ -195,7 +195,7 @@ export default class TeamService {
             [],
             ['crestFileName', 'hasCustomCrest'],
           );
-          await transactionalEntityManager
+          await this.teamRepository
             .createQueryBuilder()
             .delete()
             .from(Team)
