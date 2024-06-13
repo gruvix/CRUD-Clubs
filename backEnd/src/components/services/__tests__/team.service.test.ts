@@ -238,4 +238,130 @@ describe('TeamService', () => {
       );
     });
   });
+
+  describe('resetTeam', () => {
+    let teamWithCrestData: Team;
+    let defaultTeamData: Team;
+    let defaultTeam: Team;
+    let defaultTeamWithEmptySquadAndDefaultTeamId: Team;
+    beforeEach(() => {
+      teamWithCrestData = {
+        id: mocks.teamId,
+        crestFileName: 'name',
+        hasCustomCrest: true,
+      } as Team;
+      defaultTeamData = {
+        id: mocks.teamId,
+        defaultTeam: { id: mocks.teamId },
+      } as unknown as Team;
+      defaultTeam = mocks.defaultTeamEntity();
+      defaultTeamWithEmptySquadAndDefaultTeamId = {
+        ...defaultTeam,
+        squad: [],
+        defaultTeam: mocks.teamId,
+      };
+    });
+    it('should reset a team with a custom crest', async () => {
+      jest
+        .spyOn(mockRepository.manager, 'transaction')
+        .mockImplementationOnce(async (callback) => {
+          const transactionalEntityManager = {};
+          return await callback(transactionalEntityManager);
+        });
+
+      jest
+        .spyOn(teamService, 'getTeam')
+        .mockResolvedValueOnce(teamWithCrestData)
+        .mockResolvedValueOnce(defaultTeamData)
+        .mockResolvedValueOnce(defaultTeam);
+      jest.spyOn(playerService, 'clearSquad').mockResolvedValueOnce(void 0);
+      jest
+        .spyOn(playerService, 'copyPlayersToTeam')
+        .mockImplementationOnce((team, squad) => ({}));
+      jest.spyOn(mockRepository, 'save').mockResolvedValueOnce(void 0);
+      jest
+        .spyOn(crestStorageService, 'deleteCrest')
+        .mockResolvedValueOnce(void 0);
+
+      expect(await teamService.resetTeam(mocks.userId, mocks.teamId)).toEqual(
+        void 0,
+      );
+      expect(playerService.clearSquad).toHaveBeenCalledWith(mocks.teamId);
+      expect(playerService.copyPlayersToTeam).toHaveBeenCalledWith(
+        defaultTeamWithEmptySquadAndDefaultTeamId,
+        defaultTeam.squad,
+      );
+      expect(crestStorageService.deleteCrest).toHaveBeenCalledWith(
+        mocks.userId,
+        teamWithCrestData.crestFileName,
+      );
+    });
+
+    it('Should reset a team without a custom crest', async () => {
+      teamWithCrestData.hasCustomCrest = false;
+      jest
+        .spyOn(mockRepository.manager, 'transaction')
+        .mockImplementationOnce(async (callback) => {
+          const transactionalEntityManager = {};
+          return await callback(transactionalEntityManager);
+        });
+
+      jest
+        .spyOn(teamService, 'getTeam')
+        .mockResolvedValueOnce(teamWithCrestData)
+        .mockResolvedValueOnce(defaultTeamData)
+        .mockResolvedValueOnce(defaultTeam);
+      jest.spyOn(playerService, 'clearSquad').mockResolvedValueOnce(void 0);
+      jest
+        .spyOn(playerService, 'copyPlayersToTeam')
+        .mockImplementationOnce((team, squad) => ({}));
+      jest.spyOn(mockRepository, 'save').mockResolvedValueOnce(void 0);
+      jest.spyOn(crestStorageService, 'deleteCrest');
+
+      expect(await teamService.resetTeam(mocks.userId, mocks.teamId)).toEqual(
+        void 0,
+      );
+      expect(playerService.clearSquad).toHaveBeenCalledWith(mocks.teamId);
+      expect(playerService.copyPlayersToTeam).toHaveBeenCalledWith(
+        defaultTeamWithEmptySquadAndDefaultTeamId,
+        defaultTeam.squad,
+      );
+      expect(crestStorageService.deleteCrest).not.toHaveBeenCalled();
+    });
+
+    it('Should handle non-resettable team error', async () => {
+      jest
+        .spyOn(mockRepository.manager, 'transaction')
+        .mockImplementationOnce(async (callback) => {
+          const transactionalEntityManager = {};
+          return await callback(transactionalEntityManager);
+        });
+      jest
+        .spyOn(teamService, 'getTeam')
+        .mockResolvedValueOnce(teamWithCrestData)
+        .mockResolvedValueOnce({ defaultTeam: undefined } as Team);
+      jest.spyOn(playerService, 'clearSquad').mockResolvedValueOnce(void 0);
+
+      expect(teamService.resetTeam(mocks.userId, mocks.teamId)).rejects.toThrow(
+        new HttpException(
+          'Failed to reset team: team is not resettable',
+          HttpStatus.UNPROCESSABLE_ENTITY,
+        ),
+      );
+    });
+
+    it('Should handle other errors', async () => {
+      jest
+        .spyOn(teamService, 'getTeam')
+        .mockRejectedValueOnce(new Error("i'm an error"));
+      await expect(
+        teamService.resetTeam(mocks.userId, mocks.teamId),
+      ).rejects.toThrow(
+        new HttpException(
+          'Server failed to reset team',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        ),
+      );
+    });
+  });
 });
