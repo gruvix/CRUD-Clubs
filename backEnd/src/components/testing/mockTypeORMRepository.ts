@@ -14,6 +14,7 @@ const mockRepository = {
   set: jest.fn().mockReturnThis(),
   update: jest.fn().mockReturnThis(),
   where: jest.fn().mockReturnThis(),
+  save: jest.fn().mockReturnThis(),
   execute: jest.fn().mockReturnThis(),
 };
 
