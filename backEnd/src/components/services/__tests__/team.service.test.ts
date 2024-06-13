@@ -9,6 +9,7 @@ import PlayerService from '../player.service';
 import CrestStorageService from '../crestStorage.service';
 import TeamService from '../team.service';
 import { HttpException, HttpStatus } from '@nestjs/common';
+import Team from '@comp/entities/team.entity';
 
 describe('TeamService', () => {
   let playerService: PlayerService;
@@ -159,6 +160,81 @@ describe('TeamService', () => {
     it('Should throw an error when teamData is undefined', () => {
       expect(() => teamService.transformTeamDataToDTO(undefined)).toThrow(
         new Error('No team data provided'),
+      );
+    });
+  });
+
+  describe('getTeam', () => {
+    it('Should return a team entity with full properties and relations', async () => {
+      const playersAmount = 5;
+      const teamEntity = {
+        ...mocks.TeamEntityWithEmptySquad(),
+        squad: mocks.squadGenerator(mocks.teamId, playersAmount),
+        user: mocks.userEntity,
+      };
+      const selections = ['a', 'list', 'of', 'properties'];
+      const selectionsObject = {
+        a: true,
+        list: true,
+        of: true,
+        properties: true,
+      };
+      const relations = ['a', 'list', 'of', 'relations'];
+      jest.spyOn(mockRepository, 'findOne').mockResolvedValueOnce(teamEntity);
+      expect(
+        await teamService.getTeam(mocks.teamId, relations, selections),
+      ).toEqual(teamEntity);
+      expect(mockRepository.findOne).toHaveBeenCalledWith({
+        where: { id: mocks.teamId },
+        select: { ...selectionsObject, id: true },
+        relations: relations,
+      });
+    });
+
+    it('Should return a team object with only id', async () => {
+      const teamEntity = new Team();
+      teamEntity.id = mocks.teamId;
+      jest.spyOn(mockRepository, 'findOne').mockResolvedValueOnce(teamEntity);
+      expect(await teamService.getTeam(mocks.teamId, [], [])).toEqual(
+        teamEntity,
+      );
+      expect(mockRepository.findOne).toHaveBeenCalledWith({
+        where: { id: mocks.teamId },
+        select: { id: true },
+        relations: [],
+      });
+    });
+
+    it('Should return a team object with all non-select false properties', async () => {
+      const teamEntity = mocks.TeamEntityWithEmptySquad();
+      jest.spyOn(mockRepository, 'findOne').mockResolvedValueOnce(teamEntity);
+      expect(await teamService.getTeam(mocks.teamId)).toEqual(teamEntity);
+      expect(mockRepository.findOne).toHaveBeenCalledWith({
+        where: { id: mocks.teamId },
+        select: {},
+        relations: undefined,
+      });
+    });
+
+    it('Should throw an error when retrieved team is undefined', async () => {
+      jest.spyOn(mockRepository, 'findOne').mockResolvedValueOnce(undefined);
+      await expect(teamService.getTeam(mocks.teamId)).rejects.toEqual(
+        new HttpException(
+          'Failed to get team',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        ),
+      );
+    });
+
+    it('Should handle other errors', async () => {
+      jest
+        .spyOn(mockRepository, 'findOne')
+        .mockRejectedValueOnce(new Error("i'm an error"));
+      await expect(teamService.getTeam(mocks.teamId)).rejects.toEqual(
+        new HttpException(
+          'Failed to get team',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        ),
       );
     });
   });
