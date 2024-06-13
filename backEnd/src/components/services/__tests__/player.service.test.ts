@@ -6,6 +6,8 @@ import mockRepository from '@comp/testing/mockTypeORMRepository';
 import * as TypeORM from '@nestjs/typeorm';
 import PlayerService from '../player.service';
 import { HttpException, HttpStatus } from '@nestjs/common';
+import Team from '@comp/entities/team.entity';
+import Player from '@comp/entities/player.entity';
 
 describe('PlayerService', () => {
   let playerService: PlayerService;
@@ -129,6 +131,33 @@ describe('PlayerService', () => {
           HttpStatus.INTERNAL_SERVER_ERROR,
         ),
       );
+    });
+  });
+
+  describe('copyPlayersToTeam', () => {
+    let team: Team;
+    beforeEach(() => {
+      team = mocks.TeamWithEmptySquad()
+    })
+
+    it('should copy a squad into a team, removing id properties', async () => {
+      const playersAmount = 3;
+      expect(team.squad).toHaveLength(0);
+      expect(
+        playerService.copyPlayersToTeam(
+          team,
+          mocks.squadGenerator(mocks.teamId, playersAmount),
+        ),
+      ).toEqual(void 0);
+      expect(team.squad).toHaveLength(playersAmount);
+    });
+
+    it('should handle empty squad to be copied', async () => {
+
+      expect(playerService.copyPlayersToTeam(team, null)).toEqual(
+        void 0,
+      );
+      expect(team.squad).toHaveLength(0);
     });
   });
 
