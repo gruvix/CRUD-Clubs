@@ -114,7 +114,7 @@ export default class MockTestUtils {
         crestUrl: 'test',
         crestFileName: null,
         hasCustomCrest: false,
-        squad: [],
+        squad: this.squadGenerator(this.teamId, 5),
         defaultTeam: null,
         createdAt: undefined,
         updatedAt: undefined,
