@@ -130,4 +130,36 @@ describe('TeamService', () => {
       );
     });
   });
+
+  describe('transformTeamDataToDTO', () => {
+    it('should return a teamDTO with an empty squad', () => {
+      const teamData = { ...mocks.teamDataWithEmptySquad(), defaultTeam: 1 };
+      expect(teamService.transformTeamDataToDTO(teamData)).toEqual(
+        mocks.TeamDTO(),
+      );
+    });
+
+    it('should return a teamDTO with a non-empty squad', () => {
+      const playersAmount = 5;
+      const teamData = {
+        ...mocks.teamDataWithEmptySquad(),
+        defaultTeam: 1,
+        squad: mocks.squadGenerator(mocks.teamId, playersAmount),
+      };
+      const expectedTeamDTO = {
+        ...mocks.TeamDTO(),
+        squad: mocks.squadGenerator(mocks.teamId, playersAmount),
+      };
+      expect(teamService.transformTeamDataToDTO(teamData)).toEqual(
+        expectedTeamDTO,
+      );
+      expect(expectedTeamDTO.squad.length).toEqual(playersAmount);
+    });
+
+    it('Should throw an error when teamData is undefined', () => {
+      expect(() => teamService.transformTeamDataToDTO(undefined)).toThrow(
+        new Error('No team data provided'),
+      );
+    });
+  });
 });
