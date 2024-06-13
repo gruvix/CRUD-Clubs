@@ -26,13 +26,13 @@ export default class MockTestUtils {
     name: 'test name',
     position: 'test position',
     nationality: 'test land',
-  }
+  };
   playerDataWithoutId: PlayerData = {
     id: undefined,
     name: 'test name',
     position: 'test position',
     nationality: 'test land',
-  }
+  };
   userEntity: User = {
     id: this.userId,
     username: this.username,
@@ -75,6 +75,21 @@ export default class MockTestUtils {
         updatedAt: undefined,
       }),
     );
+  }
+  squadGenerator(teamId: number, playersAmount: number): Player[] {
+    let squad = [];
+    for (let i = 0; i < playersAmount; i++) {
+      squad.push({
+        id: i + 1,
+        team: teamId,
+        name: `test name ${i + 1}`,
+        position: `test position ${i + 1}`,
+        nationality: `test land ${i + 1}`,
+        createdAt: undefined,
+        updatedAt: undefined,
+      });
+    }
+    return squad;
   }
   userRootPathFromId(userId: number): string {
     return `${this.userRootPath}/${userId}`;
