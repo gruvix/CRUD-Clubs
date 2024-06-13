@@ -146,7 +146,7 @@ export default class TeamService {
           this.playerService.copyPlayersToTeam(team, defaultTeam.squad);
           await this.teamRepository.save(team);
           if (oldImageData.hasCustomCrest)
-            this.crestStorageService.deleteCrest(
+            await this.crestStorageService.deleteCrest(
               userId,
               oldImageData.crestFileName,
             );
