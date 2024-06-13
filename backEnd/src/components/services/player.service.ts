@@ -72,6 +72,7 @@ export default class PlayerService {
   }
 
   copyPlayersToTeam(team: Team, players: Player[]): void {
+    if(!players) return;
     for (const player of players) {
       player.team = team.id;
       delete player.id;
@@ -80,8 +81,8 @@ export default class PlayerService {
   }
 
   async clearSquad(teamId: number): Promise<void> {
+    if (!teamId) throw new Error('No team id provided');
     try {
-      if (!teamId) throw new Error('No team id provided');
       await this.playerRepository
         .createQueryBuilder()
         .delete()
@@ -91,7 +92,7 @@ export default class PlayerService {
     } catch (error) {
       console.log(error);
       throw new HttpException(
-        "server failed to clear team's squad",
+        "Server failed to clear team's squad",
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
