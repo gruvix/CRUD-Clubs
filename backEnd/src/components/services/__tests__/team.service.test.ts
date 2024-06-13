@@ -10,6 +10,7 @@ import CrestStorageService from '../crestStorage.service';
 import TeamService from '../team.service';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import Team from '@comp/entities/team.entity';
+import TeamData from '@comp/interfaces/TeamData.interface';
 
 describe('TeamService', () => {
   let playerService: PlayerService;
@@ -45,7 +46,7 @@ describe('TeamService', () => {
   });
 
   describe('addTeam', () => {
-    it('should add a new team with an empty squad', async () => {
+    it('Should add a new team with an empty squad', async () => {
       const teamEntity = mocks.teamEntityWithEmptySquad();
       const teamData = mocks.teamDataWithEmptySquad();
       jest
@@ -71,7 +72,7 @@ describe('TeamService', () => {
       expect(teamEntity.squad.length).toEqual(0);
     });
 
-    it('should add a new team with a non-empty squad', async () => {
+    it('Should add a new team with a non-empty squad', async () => {
       const teamEntity = mocks.teamEntityWithEmptySquad();
       const playersAmount = 5;
       teamEntity.squad = mocks.squadGenerator(mocks.teamId, playersAmount);
@@ -133,14 +134,14 @@ describe('TeamService', () => {
   });
 
   describe('transformTeamDataToDTO', () => {
-    it('should return a teamDTO with an empty squad', () => {
+    it('Should return a teamDTO with an empty squad', () => {
       const teamData = { ...mocks.teamDataWithEmptySquad(), defaultTeam: 1 };
       expect(teamService.transformTeamDataToDTO(teamData)).toEqual(
         mocks.TeamDTO(),
       );
     });
 
-    it('should return a teamDTO with a non-empty squad', () => {
+    it('Should return a teamDTO with a non-empty squad', () => {
       const playersAmount = 5;
       const teamData = {
         ...mocks.teamDataWithEmptySquad(),
@@ -261,7 +262,7 @@ describe('TeamService', () => {
         defaultTeam: mocks.teamId,
       };
     });
-    it('should reset a team with a custom crest', async () => {
+    it('Should reset a team with a custom crest', async () => {
       jest
         .spyOn(mockRepository.manager, 'transaction')
         .mockImplementationOnce(async (callback) => {
@@ -364,4 +365,29 @@ describe('TeamService', () => {
       );
     });
   });
+
+  describe('updateTeam', () => {
+    const newTeamData = { name: 'new name' } as TeamData;
+    it('Should update a team', async () => {
+      expect(await teamService.updateTeam(mocks.teamId, newTeamData)).toEqual(
+        void 0,
+      );
+      expect(mockRepository.set).toHaveBeenCalledWith(newTeamData);
+      expect(mockRepository.where).toHaveBeenCalledWith('id = :id', {
+        id: mocks.teamId,
+      });
+      expect(mockRepository.execute).toHaveBeenCalled();
+    });
+
+    it('Should handle errors', async () => {
+      jest.spyOn(mockRepository, 'execute').mockRejectedValueOnce(new Error());
+      expect(teamService.updateTeam(mocks.teamId, newTeamData)).rejects.toEqual(
+        new HttpException(
+          'Server failed to update team',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        ),
+      );
+    });
+  });
+
 });
