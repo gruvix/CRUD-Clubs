@@ -89,7 +89,8 @@ export default class TeamService {
     selections?: string[],
   ): Promise<Team> {
     try {
-      if (selections && !selections.some((item) => item === 'id')) selections.push('id');
+      if (selections && !selections.some((item) => item === 'id'))
+        selections.push('id');
       //repository fails if id primary key isn't selected
       const selectObject = this.generateSelectionsFromStringArray(selections);
 
@@ -111,10 +112,7 @@ export default class TeamService {
 
   private async getDefaultTeamId(teamId: number): Promise<number> {
     const defaultTeam = (
-      await this.teamRepository.findOne({
-        where: { id: teamId },
-        relations: ['defaultTeam'],
-      })
+      await this.getTeam(teamId, ['defaultTeam'], ['defaultTeam'])
     ).defaultTeam as unknown as DefaultTeam;
     //typescript above strongly believes defaultTeam is just a number
     if (!defaultTeam)
