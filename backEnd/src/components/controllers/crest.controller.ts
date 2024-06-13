@@ -18,11 +18,15 @@ import { TeamId } from '@comp/decorators/teamId.decorator';
 import { FileName } from '@comp/decorators/fileName.decorator';
 import { UploadedFileName } from '@comp/decorators/uploadedFileName.decorator';
 import FileNotFoundError from '@comp/errors/fileNotFoundError';
+import CrestStorageService from '@comp/services/crestStorage.service';
 
 @UseGuards(AuthGuard, TeamGuard)
 @Controller('user/customCrest')
 export default class CrestController {
-  constructor(private readonly crestService: CrestService) {}
+  constructor(
+    private readonly crestService: CrestService,
+    private readonly crestStorageService: CrestStorageService,
+  ) {}
 
   @Get(':teamId/:fileName')
   async getCrest(
@@ -32,7 +36,10 @@ export default class CrestController {
   ): Promise<StreamableFile> {
     try {
       console.log(`User ${userId} is requesting crest for team ${teamId}`);
-      const fileBuffer = await this.crestService.getCrest(userId, fileName);
+      const fileBuffer = await this.crestStorageService.getCrest(
+        userId,
+        fileName,
+      );
       return new StreamableFile(fileBuffer);
     } catch (error) {
       if (error instanceof FileNotFoundError)

@@ -12,9 +12,6 @@ export default class CrestService {
     @Inject(CrestStorageService)
     private readonly crestStorageService: CrestStorageService,
   ) {}
-  async getCrest(userId: number, fileName: string): Promise<Buffer> {
-    return await this.crestStorageService.getCrest(userId, fileName);
-  }
   async updateCrest(
     userId: number,
     teamId: number,

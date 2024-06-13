@@ -26,35 +26,6 @@ describe('CrestService', () => {
     crestStorageService = module.get<CrestStorageService>(CrestStorageService);
   });
 
-  describe('getCrest', () => {
-    it('should return a crest', async () => {
-      const fixtureImagePath =
-        './src/components/testing/__fixtures__/image.jpg';
-      const imageFile = await readFile(fixtureImagePath);
-      jest
-        .spyOn(crestStorageService, 'getCrest')
-        .mockResolvedValueOnce(imageFile);
-
-      expect(await crestService.getCrest(mocks.userId, mocks.crestFileName)).toEqual(
-        imageFile,
-      );
-      expect(crestStorageService.getCrest).toHaveBeenCalledWith(
-        mocks.userId,
-        mocks.crestFileName,
-      );
-    });
-
-    it('should handle errors', async () => {
-      jest
-        .spyOn(crestStorageService, 'getCrest')
-        .mockRejectedValueOnce(new Error("i'm an error"));
-
-      await expect(
-        crestService.getCrest(mocks.userId, mocks.crestFileName),
-      ).rejects.toThrow(new Error("i'm an error"));
-    });
-  });
-
   describe('updateCrest', () => {
     it('should update the image of the team', async () => {
       const newCrestUrl = 'i/am/a/url';

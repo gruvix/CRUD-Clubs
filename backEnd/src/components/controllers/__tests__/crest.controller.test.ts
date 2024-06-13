@@ -10,6 +10,7 @@ import { readFile } from 'fs/promises';
 import { TestSetupModule } from '@comp/testing/testSetup.module';
 import MockTestUtils from '@comp/testing/MockTestUtils';
 import PathTestUtils from '@comp/testing/PathTestUtils';
+import CrestStorageService from '@comp/services/crestStorage.service';
 
 describe('CrestController', () => {
   let crestController: CrestController;
@@ -18,6 +19,7 @@ describe('CrestController', () => {
   let teamsService: TeamsService;
   let playerService: PlayerService;
   let crestService: CrestService;
+  let crestStorageService: CrestStorageService;
 
   const mocks = new MockTestUtils();
   const paths = new PathTestUtils();
@@ -35,13 +37,14 @@ describe('CrestController', () => {
     playerService = module.get<PlayerService>(PlayerService);
     crestService = module.get<CrestService>(CrestService);
     crestController = module.get<CrestController>(CrestController);
+    crestStorageService = module.get<CrestStorageService>(CrestStorageService);
   });
 
   describe('getCrest', () => {
     it('should get the image of the team', async () => {
       const imageFile = await readFile(paths.fixtureImagePath);
 
-      jest.spyOn(crestService, 'getCrest').mockResolvedValueOnce(imageFile);
+      jest.spyOn(crestStorageService, 'getCrest').mockResolvedValueOnce(imageFile);
       expect(
         await crestController.getCrest(
           mocks.userId,
@@ -53,14 +56,14 @@ describe('CrestController', () => {
           length: imageFile.length,
         },
       });
-      expect(crestService.getCrest).toHaveBeenCalledWith(
+      expect(crestStorageService.getCrest).toHaveBeenCalledWith(
         mocks.userId,
         mocks.crestFileName,
       );
     });
 
     it('should handle errors', async () => {
-      jest.spyOn(crestService, 'getCrest').mockRejectedValueOnce(new Error());
+      jest.spyOn(crestStorageService, 'getCrest').mockRejectedValueOnce(new Error());
       await expect(
         crestController.getCrest(
           mocks.userId,
