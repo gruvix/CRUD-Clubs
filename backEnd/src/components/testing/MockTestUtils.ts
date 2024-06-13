@@ -60,19 +60,23 @@ export default class MockTestUtils {
     createdAt: undefined,
     updatedAt: undefined,
   };
-  TeamDTO: TeamDTO = {
-    name: 'test',
-    area: 'test',
-    address: 'test',
-    phone: 'test',
-    website: 'test',
-    email: 'test',
-    venue: 'test',
-    crestUrl: 'test',
-    hasCustomCrest: true,
-    squad: [] as Player[],
-    hasDefault: true,
-  };
+  TeamDTO(): TeamDTO {
+    return JSON.parse(
+      JSON.stringify({
+        name: 'test',
+        area: 'test',
+        address: 'test',
+        phone: 'test',
+        website: 'test',
+        email: 'test',
+        venue: 'test',
+        crestUrl: 'test',
+        hasCustomCrest: true,
+        squad: [] as Player[],
+        hasDefault: true,
+      }),
+    );
+  }
   TeamEntityWithEmptySquad(): Team {
     return JSON.parse(
       JSON.stringify({
