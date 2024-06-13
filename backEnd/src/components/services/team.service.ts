@@ -18,7 +18,7 @@ export default class TeamService {
     @Inject(PlayerService)
     private readonly playerService: PlayerService,
     @Inject(CrestStorageService)
-    private readonly crestStorage: CrestStorageService,
+    private readonly crestStorageService: CrestStorageService,
   ) {}
   async addTeam(
     userId: number,
@@ -150,7 +150,7 @@ export default class TeamService {
           this.playerService.copyPlayersToTeam(team, defaultTeam.squad);
           await transactionalEntityManager.save(Team, team);
           if (oldImageData.hasCustomCrest)
-            this.crestStorage.deleteCrest(userId, oldImageData.crestFileName);
+            this.crestStorageService.deleteCrest(userId, oldImageData.crestFileName);
         },
       );
     } catch (error) {
@@ -203,7 +203,7 @@ export default class TeamService {
             .where('id = :id', { id: teamId })
             .execute();
           if (imageData.hasCustomCrest)
-          this.crestStorage.deleteCrest(userId, imageData.crestFileName);
+          this.crestStorageService.deleteCrest(userId, imageData.crestFileName);
         },
       );
     } catch (error) {
