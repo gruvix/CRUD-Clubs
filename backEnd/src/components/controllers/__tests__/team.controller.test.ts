@@ -34,7 +34,7 @@ describe('TeamController', () => {
       jest.spyOn(teamService, 'getTeam').mockResolvedValueOnce(new Team());
       jest
         .spyOn(teamService, 'transformTeamDataToDTO')
-        .mockImplementationOnce(() => mocks.TeamDTO);
+        .mockImplementationOnce(() => mocks.TeamDTO());
       expect(await teamController.getTeam(mocks.userId, mocks.teamId)).toEqual(mocks.TeamDTO);
       expect(teamService.getTeam).toHaveBeenCalledWith(
         mocks.teamId,
