@@ -163,7 +163,6 @@ export default class TeamService {
       throw new HttpException(
         'Server failed to reset team',
         HttpStatus.INTERNAL_SERVER_ERROR,
-        error,
       );
     }
   }
