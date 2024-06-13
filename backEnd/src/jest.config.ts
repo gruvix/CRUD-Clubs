@@ -19,18 +19,20 @@ const config: Config = {
   clearMocks: true,
 
   // Indicates whether the coverage information should be collected while executing the test
-  // collectCoverage: false,
+  // collectCoverage: true,
 
   // An array of glob patterns indicating a set of files for which coverage information should be collected
-  // collectCoverageFrom: undefined,
+  // collectCoverageFrom: ['**/*.ts'],
 
   // The directory where Jest should output its coverage files
   // coverageDirectory: undefined,
 
   // An array of regexp pattern strings used to skip coverage collection
-  // coveragePathIgnorePatterns: [
-  //   "\\\\node_modules\\\\"
-  // ],
+  coveragePathIgnorePatterns: [
+    '\\\\node_modules\\\\',
+    '/testing/',
+    '/.*.test..*/',
+  ],
 
   // Indicates which provider should be used to instrument code for coverage
   // coverageProvider: "babel",
@@ -58,7 +60,7 @@ const config: Config = {
   // },
 
   // Force coverage collection from ignored files using an array of glob patterns
-  // forceCoverageMatch: [],
+  forceCoverageMatch: ['**/*.ts'],
 
   // A path to a module which exports an async function that is triggered once before all test suites
   // globalSetup: undefined,
@@ -95,7 +97,7 @@ const config: Config = {
   },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
-  modulePathIgnorePatterns: ["<rootDir>/dist/", "<rootDir>/node_modules/"],
+  modulePathIgnorePatterns: ['<rootDir>/dist/', '<rootDir>/node_modules/'],
 
   // Activates notifications for test results
   // notify: false,
@@ -128,9 +130,7 @@ const config: Config = {
   // rootDir: '..',
 
   // A list of paths to directories that Jest should use to search for files in
-  roots: [
-    "<rootDir>"
-  ],
+  roots: ['<rootDir>'],
 
   // Allows you to use a custom runner instead of Jest's default test runner
   // runner: "jest-runner",
@@ -166,7 +166,7 @@ const config: Config = {
   testPathIgnorePatterns: ['/node_modules/', '/dist/', '/coverage/'],
 
   // The regexp pattern or array of patterns that Jest uses to detect test files
-  testRegex: [".*\\.test\\.ts$"],
+  testRegex: ['.*\\.test\\.ts$'],
 
   // This option allows the use of a custom results processor
   // testResultsProcessor: undefined,
