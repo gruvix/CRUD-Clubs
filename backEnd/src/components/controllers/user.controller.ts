@@ -44,7 +44,6 @@ export default class UserController {
       throw new HttpException(
         'Failed to login user',
         HttpStatus.INTERNAL_SERVER_ERROR,
-        error,
       );
     }
   }

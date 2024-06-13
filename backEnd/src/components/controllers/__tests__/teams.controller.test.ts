@@ -25,6 +25,7 @@ describe('TeamsController', () => {
     userService = module.get<UserService>(UserService);
     teamsController = module.get<TeamsController>(TeamsController);
   });
+
   describe('getTeamsList', () => {
     it('should return an array of teams', async () => {
       const mockResult = [
@@ -66,6 +67,20 @@ describe('TeamsController', () => {
       expect(teamsService.getTeamsList).toHaveBeenCalledWith(mocks.userId);
     });
 
+    it('Should re-throw http exceptions', async () => {
+      jest
+        .spyOn(teamsService, 'getTeamsList')
+        .mockRejectedValueOnce(
+          new HttpException('Im a test error', HttpStatus.I_AM_A_TEAPOT),
+        );
+      await expect(
+        teamsController.getTeamsList(mocks.userId, mocks.username),
+      ).rejects.toThrow(
+        new HttpException('Im a test error', HttpStatus.I_AM_A_TEAPOT),
+      );
+      expect(teamsService.getTeamsList).toHaveBeenCalledWith(mocks.userId);
+    });
+
     it('should handle errors', async () => {
       jest
         .spyOn(teamsService, 'getTeamsList')
@@ -88,6 +103,17 @@ describe('TeamsController', () => {
 
       expect(await teamsController.resetTeams(mocks.userId)).toBeUndefined();
       expect(teamsService.resetTeams).toHaveBeenCalledWith(mocks.userId);
+    });
+
+    it('Should re-throw http exceptions', async () => {
+      jest
+        .spyOn(teamsService, 'resetTeams')
+        .mockRejectedValueOnce(
+          new HttpException('Im a test error', HttpStatus.I_AM_A_TEAPOT),
+        );
+      await expect(teamsController.resetTeams(mocks.userId)).rejects.toThrow(
+        new HttpException('Im a test error', HttpStatus.I_AM_A_TEAPOT),
+      );
     });
 
     it('should handle errors', async () => {

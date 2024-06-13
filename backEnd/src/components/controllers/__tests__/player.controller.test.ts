@@ -46,10 +46,31 @@ describe('PlayerController', () => {
       );
     });
 
+    it('Should re-throw http exceptions', async () => {
+      jest
+        .spyOn(playerService, 'addPlayer')
+        .mockRejectedValueOnce(
+          new HttpException('Im a test error', HttpStatus.I_AM_A_TEAPOT),
+        );
+      await expect(
+        playerController.addPlayer(
+          mocks.userId,
+          mocks.teamId,
+          mocks.playerDataWithoutId,
+        ),
+      ).rejects.toThrow(
+        new HttpException('Im a test error', HttpStatus.I_AM_A_TEAPOT),
+      );
+    });
+
     it('should handle errors', async () => {
       jest.spyOn(playerService, 'addPlayer').mockRejectedValueOnce(new Error());
       await expect(
-        playerController.addPlayer(mocks.userId, mocks.teamId, mocks.playerDataWithoutId),
+        playerController.addPlayer(
+          mocks.userId,
+          mocks.teamId,
+          mocks.playerDataWithoutId,
+        ),
       ).rejects.toThrow(
         new HttpException(
           'Failed to add player',
@@ -75,6 +96,23 @@ describe('PlayerController', () => {
         ),
       ).toBeUndefined();
       expect(playerService.updatePlayer).toHaveBeenCalledWith(mocks.playerData);
+    });
+
+    it('Should re-throw http exceptions', async () => {
+      jest
+        .spyOn(playerService, 'updatePlayer')
+        .mockRejectedValueOnce(
+          new HttpException('Im a test error', HttpStatus.I_AM_A_TEAPOT),
+        );
+      await expect(
+        playerController.updatePlayer(
+          mocks.userId,
+          mocks.teamId,
+          mocks.playerData,
+        ),
+      ).rejects.toThrow(
+        new HttpException('Im a test error', HttpStatus.I_AM_A_TEAPOT),
+      );
     });
 
     it('should handle errors', async () => {
@@ -104,6 +142,7 @@ describe('PlayerController', () => {
       position: 'test position',
       nationality: 'test land',
     };
+
     it('should delete a player', async () => {
       jest.spyOn(playerService, 'removePlayer').mockResolvedValueOnce(void 0);
       expect(
@@ -117,6 +156,24 @@ describe('PlayerController', () => {
         playerDataMock.id,
       );
     });
+
+    it('Should re-throw http exceptions', async () => {
+      jest
+        .spyOn(playerService, 'removePlayer')
+        .mockRejectedValueOnce(
+          new HttpException('Im a test error', HttpStatus.I_AM_A_TEAPOT),
+        );
+      await expect(
+        playerController.removePlayer(
+          mocks.userId,
+          mocks.teamId,
+          mocks.playerData,
+        ),
+      ).rejects.toThrow(
+        new HttpException('Im a test error', HttpStatus.I_AM_A_TEAPOT),
+      );
+    });
+
     it('should handle errors', async () => {
       jest
         .spyOn(playerService, 'removePlayer')

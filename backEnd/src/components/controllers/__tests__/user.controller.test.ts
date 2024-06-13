@@ -98,6 +98,18 @@ describe('UserController', () => {
         mockData.username,
       );
     });
+
+    it('should throw an error on login failure', async () => {
+      jest
+        .spyOn(userService, 'findOrCreateUser')
+        .mockRejectedValueOnce(new Error('im an error'));
+      const mockData = { username: 'test' };
+      const mockRequest = { session: {} } as CustomRequest;
+
+      await expect(userController.login(mockRequest as any, mockData)).rejects.toThrow(
+        new HttpException('Failed to login', HttpStatus.INTERNAL_SERVER_ERROR),
+      )
+    })
   });
 
   describe('logout', () => {

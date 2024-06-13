@@ -11,6 +11,7 @@ import { TestSetupModule } from '@comp/testing/testSetup.module';
 import MockTestUtils from '@comp/testing/MockTestUtils';
 import PathTestUtils from '@comp/testing/PathTestUtils';
 import CrestStorageService from '@comp/services/crestStorage.service';
+import FileNotFoundError from '@comp/errors/fileNotFoundError';
 
 describe('CrestController', () => {
   let crestController: CrestController;
@@ -44,7 +45,9 @@ describe('CrestController', () => {
     it('should get the image of the team', async () => {
       const imageFile = await readFile(paths.fixtureImagePath);
 
-      jest.spyOn(crestStorageService, 'getCrest').mockResolvedValueOnce(imageFile);
+      jest
+        .spyOn(crestStorageService, 'getCrest')
+        .mockResolvedValueOnce(imageFile);
       expect(
         await crestController.getCrest(
           mocks.userId,
@@ -62,8 +65,42 @@ describe('CrestController', () => {
       );
     });
 
-    it('should handle errors', async () => {
-      jest.spyOn(crestStorageService, 'getCrest').mockRejectedValueOnce(new Error());
+    it('Should throw a not found exception', async () => {
+      jest
+        .spyOn(crestStorageService, 'getCrest')
+        .mockRejectedValueOnce(new FileNotFoundError());
+      await expect(
+        crestController.getCrest(
+          mocks.userId,
+          mocks.teamId,
+          mocks.crestFileName,
+        ),
+      ).rejects.toThrow(
+        new HttpException('Crest not found', HttpStatus.NOT_FOUND),
+      );
+    });
+
+    it('Should re-throw http exceptions', async () => {
+      jest
+        .spyOn(crestStorageService, 'getCrest')
+        .mockRejectedValueOnce(
+          new HttpException('Im a test error', HttpStatus.I_AM_A_TEAPOT),
+        );
+      await expect(
+        crestController.getCrest(
+          mocks.userId,
+          mocks.teamId,
+          mocks.crestFileName,
+        ),
+      ).rejects.toThrow(
+        new HttpException('Im a test error', HttpStatus.I_AM_A_TEAPOT),
+      );
+    });
+
+    it('should handle other errors', async () => {
+      jest
+        .spyOn(crestStorageService, 'getCrest')
+        .mockRejectedValueOnce(new Error());
       await expect(
         crestController.getCrest(
           mocks.userId,
