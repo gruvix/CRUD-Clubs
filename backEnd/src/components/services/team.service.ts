@@ -46,7 +46,7 @@ export default class TeamService {
         async (transactionalEntityManager) => {
           const team = await transactionalEntityManager.save(Team, newTeam);
           newTeam.crestUrl = generateCustomCrestUrl(team.id, imageFileName);
-          await transactionalEntityManager
+          await this.teamRepository
             .createQueryBuilder()
             .update(Team)
             .set({ crestUrl: newTeam.crestUrl })
@@ -62,7 +62,6 @@ export default class TeamService {
       throw new HttpException(
         'Failed to add team',
         HttpStatus.INTERNAL_SERVER_ERROR,
-        error,
       );
     }
   }
