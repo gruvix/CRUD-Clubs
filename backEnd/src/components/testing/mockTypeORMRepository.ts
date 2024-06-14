@@ -15,6 +15,9 @@ const mockRepository = {
   update: jest.fn().mockReturnThis(),
   where: jest.fn().mockReturnThis(),
   save: jest.fn().mockReturnThis(),
+  leftJoinAndSelect: jest.fn().mockReturnThis(),
+  select: jest.fn().mockReturnThis(),
+  getMany: jest.fn().mockReturnThis(),
   execute: jest.fn().mockReturnThis(),
 };
 
