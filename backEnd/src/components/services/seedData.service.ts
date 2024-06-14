@@ -45,7 +45,7 @@ export default class SeedDataService implements OnModuleInit {
       await queryRunner.release();
     }
   }
-  createDefaultTeamsList(teams: Team[]): DefaultTeam[] {
+  private createDefaultTeamsList(teams: Team[]): DefaultTeam[] {
     return teams.map((team) => {
       const defaultTeam = new DefaultTeam();
       defaultTeam.id = team.id;
