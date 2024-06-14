@@ -12,6 +12,7 @@ import CrestStorageService from '../crestStorage.service';
 import TeamShortDTO from '@comp/interfaces/TeamShortDTO.interface';
 import TeamShort from '@comp/models/TeamShort';
 import Team from '@comp/entities/team.entity';
+import MockEntities from '@comp/testing/MockEntities';
 
 describe('TeamService', () => {
   let teamsService: TeamsService;
@@ -19,7 +20,8 @@ describe('TeamService', () => {
   let playerService: PlayerService;
   let crestStorageService: CrestStorageService;
 
-  const mocks = new MockTestUtils();
+  const mockUtils = new MockTestUtils();
+  const mockEntities = new MockEntities();
   const mockPaths = new PathTestUtils();
 
   const mockGetRepositoryToken = jest
@@ -50,30 +52,30 @@ describe('TeamService', () => {
   describe('getTeamsList', () => {
     it('Should return list of teams', async () => {
       const teamsAmount = 5;
-      let databaseTeamShorts = mocks.generateTeamArray<TeamShort>(
+      let databaseTeamShorts = mockUtils.generateTeamArray<TeamShort>(
         teamsAmount,
         'TeamShort',
       );
       let expectedTeamDTOs = databaseTeamShorts.map((team) => {
-        return mocks.transformTeamShortToDTO(team);
+        return mockUtils.transformTeamShortToDTO(team);
       });
 
       jest
         .spyOn(mockRepository, 'getMany')
         .mockResolvedValue(databaseTeamShorts);
 
-      const teamsList = await teamsService.getTeamsList(mocks.userId);
+      const teamsList = await teamsService.getTeamsList(mockUtils.userId);
       expect(teamsList).toEqual(expectedTeamDTOs);
       expect(teamsList.length).toBe(teamsAmount);
       expect(mockRepository.where).toHaveBeenCalledWith('team.user = :userId', {
-        userId: mocks.userId,
+        userId: mockUtils.userId,
       });
       expect(mockRepository.getMany).toHaveBeenCalled();
     });
 
     it('Should return an empty list of teams', async () => {
       jest.spyOn(mockRepository, 'getMany').mockResolvedValue([]);
-      const teamsList = await teamsService.getTeamsList(mocks.userId);
+      const teamsList = await teamsService.getTeamsList(mockUtils.userId);
       expect(teamsList).toEqual(expect.arrayContaining<TeamShortDTO>([]));
       expect(teamsList.length).toBe(0);
     });
@@ -88,18 +90,18 @@ describe('TeamService', () => {
       jest
         .spyOn(mockRepository, 'getMany')
         .mockRejectedValueOnce(new Error('Something went wrong'));
-      await expect(teamsService.getTeamsList(mocks.userId)).rejects.toThrow(
+      await expect(teamsService.getTeamsList(mockUtils.userId)).rejects.toThrow(
         new Error('Something went wrong'),
       );
     });
   });
 
   describe('copyTeamsToUser', () => {
-    const user = mocks.userEntity();
+    const user = mockUtils.userEntity();
     it('Should store the teams in the user object', async () => {
       const amount = 5;
-      const teams = mocks.generateTeamArray<Team>(amount, 'Team', false);
-      const squad = mocks.squadGenerator(mocks.teamId, amount);
+      const teams = mockUtils.generateTeamArray<Team>(amount, 'Team', false);
+      const squad = mockUtils.squadGenerator(mockUtils.teamId, amount);
       jest.spyOn(teamService, 'getTeam').mockResolvedValue({ squad } as Team);
       jest
         .spyOn(playerService, 'copyPlayersToTeam')
@@ -118,13 +120,124 @@ describe('TeamService', () => {
     });
 
     it('Should handle errors', async () => {
-      const teams = mocks.generateTeamArray<Team>(1, 'Team', false);
+      const teams = mockUtils.generateTeamArray<Team>(1, 'Team', false);
 
       jest
         .spyOn(teamService, 'getTeam')
         .mockRejectedValueOnce(new Error('Something went wrong'));
 
       expect(teamsService.copyTeamsToUser(user, teams)).rejects.toThrow(
+        new Error('Something went wrong'),
+      );
+    });
+  });
+
+  describe('resetTeams', () => {
+    const teamsAmount = 3;
+    it('Should reset all teams from user in database', async () => {
+      const defaultTeams = mockUtils.generateTeamArray<Team>(
+        teamsAmount,
+        'Team',
+        true,
+      );
+      const user = mockEntities.user();
+      const teams = mockUtils.generateTeamArray<Team>(
+        teamsAmount,
+        'Team',
+        false,
+      );
+
+      jest
+        .spyOn(mockRepository.manager, 'transaction')
+        .mockImplementationOnce(async (callback) => {
+          const transactionalEntityManager = {};
+          return await callback(transactionalEntityManager);
+        });
+
+      jest.spyOn(mockRepository, 'getMany').mockResolvedValueOnce(teams);
+      jest.spyOn(playerService, 'clearSquad').mockResolvedValue(void 0);
+      jest
+        .spyOn(teamsService, 'getDefaultTeams')
+        .mockResolvedValueOnce(defaultTeams);
+      jest.spyOn(mockRepository, 'findOne').mockResolvedValueOnce(user);
+      jest
+        .spyOn(teamsService, 'copyTeamsToUser')
+        .mockImplementationOnce(async (user, teams) => {
+          user.teams = teams;
+        });
+      jest.spyOn(mockRepository, 'save').mockResolvedValueOnce(void 0);
+      jest
+        .spyOn(crestStorageService, 'clearCrestFolder')
+        .mockResolvedValueOnce(void 0);
+
+      expect(await teamsService.resetTeams(mockUtils.userId)).toBeUndefined();
+      expect(playerService.clearSquad).toHaveBeenCalledTimes(teamsAmount);
+      expect(mockRepository.delete).toHaveBeenCalled();
+      expect(mockRepository.save).toHaveBeenCalledWith({
+        ...user,
+        teams: defaultTeams,
+      });
+      expect(crestStorageService.clearCrestFolder).toHaveBeenCalledWith(
+        mockUtils.userId,
+      );
+    });
+
+    it('Should reset a user with no teams', async () => {
+      const defaultTeams = mockUtils.generateTeamArray<Team>(
+        teamsAmount,
+        'Team',
+        true,
+      );
+      const user = mockEntities.user();
+
+      jest
+        .spyOn(mockRepository.manager, 'transaction')
+        .mockImplementationOnce(async (callback) => {
+          const transactionalEntityManager = {};
+          return await callback(transactionalEntityManager);
+        });
+
+      jest.spyOn(mockRepository, 'getMany').mockResolvedValueOnce([] as Team[]);
+      jest.spyOn(playerService, 'clearSquad');
+      jest
+        .spyOn(teamsService, 'getDefaultTeams')
+        .mockResolvedValueOnce(defaultTeams);
+      jest.spyOn(mockRepository, 'findOne').mockResolvedValueOnce(user);
+      jest
+        .spyOn(teamsService, 'copyTeamsToUser')
+        .mockImplementationOnce(async (user, teams) => {
+          user.teams = teams;
+        });
+      jest.spyOn(mockRepository, 'save').mockResolvedValueOnce(void 0);
+      jest
+        .spyOn(crestStorageService, 'clearCrestFolder')
+        .mockResolvedValueOnce(void 0);
+
+      expect(await teamsService.resetTeams(mockUtils.userId)).toBeUndefined();
+      expect(playerService.clearSquad).not.toHaveBeenCalled();
+      expect(mockRepository.delete).toHaveBeenCalled();
+      expect(mockRepository.save).toHaveBeenCalledWith({
+        ...user,
+        teams: defaultTeams,
+      });
+      expect(crestStorageService.clearCrestFolder).toHaveBeenCalledWith(
+        mockUtils.userId,
+      );
+    });
+
+    it('Should throw an error when userId is missing', async () => {
+      await expect(teamsService.resetTeams(null)).rejects.toThrow(
+        new Error('Missing userId parameter'),
+      );
+    })
+
+    it('Should handle errors', async () => {
+      jest
+        .spyOn(mockRepository.manager, 'transaction')
+        .mockImplementationOnce(async (callback) => {
+          throw new Error('Something went wrong');
+        });
+      await expect(teamsService.resetTeams(mockUtils.userId)).rejects.toThrow(
         new Error('Something went wrong'),
       );
     });
