@@ -69,9 +69,11 @@ describe('TeamService', () => {
 
     it('Should return an empty list of teams', async () => {
       jest.spyOn(mockRepository, 'getMany').mockResolvedValue([]);
-      expect(await teamsService.getTeamsList(mocks.userId)).toEqual(
+      const teamsList = await teamsService.getTeamsList(mocks.userId);
+      expect(teamsList).toEqual(
         expect.arrayContaining<TeamShortDTO>([]),
       );
+      expect(teamsList.length).toBe(0);
     });
 
     it('Should throw an error for missing user id', async () => {
