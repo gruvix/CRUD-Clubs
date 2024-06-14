@@ -8,6 +8,7 @@ import PlayerService from './player.service';
 import TeamShortDTO from '@comp/interfaces/TeamShortDTO.interface';
 import CrestStorageService from '@comp/services/crestStorage.service';
 import TeamService from './team.service';
+import DefaultTeam from '@comp/entities/defaultTeam.entity';
 
 @Injectable()
 export default class TeamsService {
@@ -48,11 +49,9 @@ export default class TeamsService {
         .leftJoinAndSelect('team.defaultTeam', 'dt')
         .where('team.user = :userId', { userId })
         .getMany();
-
       const teamsDTO = teamsData.map((team) =>
         this.transformTeamShortToDTO(team),
       );
-
       return teamsDTO;
     } catch (error) {
       console.log(error);
@@ -71,7 +70,9 @@ export default class TeamsService {
         defaultTeam: team.id,
       };
 
-      const players = (await this.teamService.getTeam(team.id, ['squad'], ['squad'])).squad;
+      const players = (
+        await this.teamService.getTeam(team.id, ['squad'], ['squad'])
+      ).squad;
       this.playerService.copyPlayersToTeam(newTeam, players);
 
       return newTeam;
