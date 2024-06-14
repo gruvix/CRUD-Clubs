@@ -9,6 +9,7 @@ import TeamShort from '@comp/models/TeamShort';
 export default class MockEntities {
   userId: number = 1;
   username: string = 'test';
+  password: string = 'test';
   teamId: number = 1;
   playerId: number = 1;
   squadGenerator(teamId: number, playersAmount: number): Player[] {
@@ -64,12 +65,13 @@ export default class MockEntities {
       }),
     );
   }
-  userWithId(): User {
+  
+  user(userId: number = this.userId): User {
     return JSON.parse(
       JSON.stringify({
-        id: this.userId,
+        id: userId,
         username: this.username,
-        password: 'test',
+        password: this.password,
         teams: [],
         createdAt: undefined,
         updatedAt: undefined,
