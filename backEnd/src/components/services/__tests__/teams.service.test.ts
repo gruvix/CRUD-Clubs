@@ -10,6 +10,7 @@ import PlayerService from '../player.service';
 import TeamService from '../team.service';
 import CrestStorageService from '../crestStorage.service';
 import TeamShortDTO from '@comp/interfaces/TeamShortDTO.interface';
+import TeamShort from '@comp/models/TeamShort';
 
 describe('TeamService', () => {
   let teamsService: TeamsService;
@@ -47,19 +48,19 @@ describe('TeamService', () => {
   });
   describe('getTeamsList', () => {
     it('Should return list of teams', async () => {
-      let databaseTeams = [];
-      for (let i = 1; i <= 3; i++) {
-        databaseTeams.push(mocks.nonDefaultTeamShort(i));
-      }
-      let expectedTeamDTOs = databaseTeams.map((team) => {
+      const teamsAmount = 5;
+      let databaseTeamShorts = mocks.generateTeamArray<TeamShort>(teamsAmount, 'TeamShort');
+      let expectedTeamDTOs = databaseTeamShorts.map((team) => {
         return mocks.transformTeamShortToDTO(team);
       });
 
-      jest.spyOn(mockRepository, 'getMany').mockResolvedValue(databaseTeams);
+      jest.spyOn(mockRepository, 'getMany').mockResolvedValue(databaseTeamShorts);
 
-      expect(await teamsService.getTeamsList(mocks.userId)).toEqual(
+      const teamsList = await teamsService.getTeamsList(mocks.userId)
+      expect(teamsList).toEqual(
         expectedTeamDTOs,
       );
+      expect(teamsList.length).toBe(teamsAmount);
       expect(mockRepository.where).toHaveBeenCalledWith('team.user = :userId', {
         userId: mocks.userId,
       });
