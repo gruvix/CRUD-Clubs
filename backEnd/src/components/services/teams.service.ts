@@ -21,7 +21,7 @@ export default class TeamsService {
     @Inject(TeamService)
     private readonly teamService: TeamService,
     @Inject(CrestStorageService)
-    private readonly crestStorage: CrestStorageService,
+    private readonly crestStorageService: CrestStorageService,
   ) {}
 
   private transformTeamShortToDTO(team: TeamShort): TeamShortDTO {
@@ -95,7 +95,7 @@ export default class TeamsService {
                 this.playerService.clearSquad(team.id);
               }),
             );
-          await transactionalEntityManager
+          await this.teamRepository
             .createQueryBuilder()
             .delete()
             .from(Team)
@@ -110,7 +110,7 @@ export default class TeamsService {
           this.userRepository.save(user);
         },
       );
-      this.crestStorage.clearCrestFolder(userId);
+      this.crestStorageService.clearCrestFolder(userId);
     } catch (error) {
       console.log(error);
       throw error;
