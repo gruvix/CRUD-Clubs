@@ -14,7 +14,7 @@ import TeamShort from '@comp/models/TeamShort';
 import Team from '@comp/entities/team.entity';
 import MockEntities from '@comp/testing/MockEntities';
 
-describe('TeamService', () => {
+describe('TeamsService', () => {
   let teamsService: TeamsService;
   let teamService: TeamService;
   let playerService: PlayerService;
@@ -229,7 +229,7 @@ describe('TeamService', () => {
       await expect(teamsService.resetTeams(null)).rejects.toThrow(
         new Error('Missing userId parameter'),
       );
-    })
+    });
 
     it('Should handle errors', async () => {
       jest
@@ -239,6 +239,31 @@ describe('TeamService', () => {
         });
       await expect(teamsService.resetTeams(mockUtils.userId)).rejects.toThrow(
         new Error('Something went wrong'),
+      );
+    });
+  });
+
+  describe('getDefaultTeams', () => {
+    it('Should return a list of default teams', async () => {
+      const teamsAmount = 3;
+      const defaultTeams = mockUtils.generateTeamArray<Team>(
+        teamsAmount,
+        'Team',
+        true,
+      );
+      const defaultUser = mockEntities.user();
+      defaultUser.teams = defaultTeams;
+
+      jest.spyOn(mockRepository, 'findOne').mockResolvedValueOnce(defaultUser);
+
+      expect(await teamsService.getDefaultTeams()).toEqual(defaultTeams);
+    });
+
+    it('Should throw an error indicating default user was not found', async () => {
+      jest.spyOn(mockRepository, 'findOne').mockResolvedValueOnce(null);
+      
+      await expect(teamsService.getDefaultTeams()).rejects.toThrow(
+        new Error('Default user not found'),
       );
     });
   });
