@@ -120,6 +120,7 @@ export default class TeamsService {
   async getDefaultTeams(): Promise<Team[]> {
     const defaultUser = await this.userRepository.findOne({
       where: { username: 'default' },
+      select: ['teams'],
       relations: ['teams'],
     });
     if (!defaultUser) {
