@@ -8,7 +8,6 @@ import PlayerService from './player.service';
 import TeamShortDTO from '@comp/interfaces/TeamShortDTO.interface';
 import CrestStorageService from '@comp/services/crestStorage.service';
 import TeamService from './team.service';
-import DefaultTeam from '@comp/entities/defaultTeam.entity';
 
 @Injectable()
 export default class TeamsService {
