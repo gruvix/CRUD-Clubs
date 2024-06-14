@@ -6,8 +6,10 @@ import TeamDTO from '@comp/interfaces/TeamDTO.interface';
 import TeamData from '@comp/interfaces/TeamData.interface';
 import TeamShortDTO from '@comp/interfaces/TeamShortDTO.interface';
 import TeamShort from '@comp/models/TeamShort';
+import MockEntities from './MockEntities';
 
 export default class MockTestUtils {
+  mockEntities = new MockEntities();
   userId: number = 1;
   username: string = 'test';
   teamId: number = 1;
@@ -151,6 +153,34 @@ export default class MockTestUtils {
     const { defaultTeam, ...rest } = team;
     const teamDTO: TeamShortDTO = { ...rest, hasDefault: !!defaultTeam };
     return teamDTO;
+  }
+
+  generateTeamArray<Type>(
+    amount: number,
+    teamType: string,
+    areDefault: boolean = true,
+    userId: number = this.userId,
+  ): Type[] {
+    let teams: Type[] = [];
+    for (let index = 1; index <= amount; index++) {
+      switch (teamType) {
+        case 'Team':
+          teams.push(this.mockEntities.team(index, userId, areDefault) as Type);
+          break;
+        case 'TeamShort':
+          teams.push(this.mockEntities.teamShort(index, areDefault) as Type);
+          break;
+        case 'TeamDTO':
+          teams.push(this.mockEntities.teamDTO(areDefault) as Type);
+          break;
+        case 'TeamData':
+          teams.push(this.mockEntities.teamData(index, areDefault) as Type);
+          break;
+        default:
+          throw new Error('Unsupported type provided');
+      }
+    }
+    return teams;
   }
   userRootPathFromId(userId: number): string {
     return `${this.userRootPath}/${userId}`;
