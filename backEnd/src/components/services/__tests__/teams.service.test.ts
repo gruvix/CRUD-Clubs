@@ -9,6 +9,7 @@ import TeamsService from '../teams.service';
 import PlayerService from '../player.service';
 import TeamService from '../team.service';
 import CrestStorageService from '../crestStorage.service';
+import TeamShortDTO from '@comp/interfaces/TeamShortDTO.interface';
 
 describe('TeamService', () => {
   let teamsService: TeamsService;
@@ -44,5 +45,47 @@ describe('TeamService', () => {
     playerService = module.get<PlayerService>(PlayerService);
     crestStorageService = module.get<CrestStorageService>(CrestStorageService);
   });
+  describe('getTeamsList', () => {
+    it('Should return list of teams', async () => {
+      let databaseTeams = [];
+      for (let i = 1; i <= 3; i++) {
+        databaseTeams.push(mocks.nonDefaultTeamShort(i));
+      }
+      let expectedTeamDTOs = databaseTeams.map((team) => {
+        return mocks.transformTeamShortToDTO(team);
+      });
 
+      jest.spyOn(mockRepository, 'getMany').mockResolvedValue(databaseTeams);
+
+      expect(await teamsService.getTeamsList(mocks.userId)).toEqual(
+        expectedTeamDTOs,
+      );
+      expect(mockRepository.where).toHaveBeenCalledWith('team.user = :userId', {
+        userId: mocks.userId,
+      });
+      expect(mockRepository.getMany).toHaveBeenCalled();
+    });
+
+    it('Should return an empty list of teams', async () => {
+      jest.spyOn(mockRepository, 'getMany').mockResolvedValue([]);
+      expect(await teamsService.getTeamsList(mocks.userId)).toEqual(
+        expect.arrayContaining<TeamShortDTO>([]),
+      );
+    });
+
+    it('Should throw an error for missing user id', async () => {
+      await expect(teamsService.getTeamsList(NaN)).rejects.toThrow(
+        new Error('Missing userId parameter'),
+      );
+    });
+
+    it('Should re-throw any other errors', async () => {
+      jest
+        .spyOn(mockRepository, 'getMany')
+        .mockRejectedValueOnce(new Error('Something went wrong'));
+      await expect(teamsService.getTeamsList(mocks.userId)).rejects.toThrow(
+        new Error('Something went wrong'),
+      );
+    })
+  });
 });
