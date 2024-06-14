@@ -107,7 +107,7 @@ describe('UserController', () => {
       const mockRequest = { session: {} } as CustomRequest;
 
       await expect(userController.login(mockRequest as any, mockData)).rejects.toThrow(
-        new HttpException('Failed to login', HttpStatus.INTERNAL_SERVER_ERROR),
+        new HttpException('Failed to login user', HttpStatus.INTERNAL_SERVER_ERROR),
       )
     })
   });
