@@ -4,6 +4,8 @@ import User from '@comp/entities/user.entity';
 import PlayerData from '@comp/interfaces/PlayerData.interface';
 import TeamDTO from '@comp/interfaces/TeamDTO.interface';
 import TeamData from '@comp/interfaces/TeamData.interface';
+import TeamShortDTO from '@comp/interfaces/TeamShortDTO.interface';
+import TeamShort from '@comp/models/TeamShort';
 
 export default class MockTestUtils {
   userId: number = 1;
@@ -135,6 +137,20 @@ export default class MockTestUtils {
       });
     }
     return squad;
+  }
+  nonDefaultTeamShort(teamId): TeamShort {
+    return new TeamShort({
+      id: teamId,
+      name: 'test',
+      crestUrl: 'test',
+      defaultTeam: null,
+      hasCustomCrest: true,
+    });
+  }
+  transformTeamShortToDTO(team: TeamShort): TeamShortDTO {
+    const { defaultTeam, ...rest } = team;
+    const teamDTO: TeamShortDTO = { ...rest, hasDefault: !!defaultTeam };
+    return teamDTO;
   }
   userRootPathFromId(userId: number): string {
     return `${this.userRootPath}/${userId}`;
