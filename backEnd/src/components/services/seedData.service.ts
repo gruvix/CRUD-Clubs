@@ -16,9 +16,9 @@ export default class SeedDataService implements OnModuleInit {
     private readonly dataSource: DataSource,
   ) {}
   async onModuleInit() {
-    const valueExists = await this.userRepository
-      .findOneBy({ username: 'default' })
-      .then();
+    const valueExists = await this.userRepository.findOneBy({
+      username: 'default',
+    });
     if (!valueExists) {
       await this.seedBaseTeams();
     }
