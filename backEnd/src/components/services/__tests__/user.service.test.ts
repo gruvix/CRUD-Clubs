@@ -49,7 +49,7 @@ describe('UserService', () => {
     it('should return user id', async () => {
       jest
         .spyOn(mockRepository, 'findOneBy')
-        .mockResolvedValueOnce(mocks.userEntity);
+        .mockResolvedValueOnce(mocks.userEntity());
 
       await expect(userService.getUserId(mocks.username)).resolves.toEqual(
         mocks.userId,
@@ -99,7 +99,7 @@ describe('UserService', () => {
         .spyOn(mockRepository.manager, 'transaction')
         .mockImplementationOnce(async (callback) => {
           const transactionalEntityManager = {
-            save: jest.fn(() => mocks.userEntity),
+            save: jest.fn(() => mocks.userEntity()),
           };
           return await callback(transactionalEntityManager);
         });
@@ -126,7 +126,7 @@ describe('UserService', () => {
       );
       expect(teamsService.getDefaultTeams).toHaveBeenCalled();
       expect(teamsService.copyTeamsToUser).toHaveBeenCalledWith(
-        mocks.userEntity,
+        mocks.userEntity(),
         [] as Team[],
       );
     });
