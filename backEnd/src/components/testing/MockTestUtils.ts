@@ -183,6 +183,14 @@ export default class MockTestUtils {
     }
     return teams;
   }
+  private createPlayerFromJSON(playerJSON: PlayerJSON): Player {
+    const newPlayer = new Player();
+    newPlayer.id = playerJSON.id;
+    newPlayer.name = playerJSON.name;
+    newPlayer.position = playerJSON.position || playerJSON.role;
+    newPlayer.nationality = playerJSON.nationality;
+    return newPlayer;
+  }
   createDefaultTeam(team: Team): DefaultTeam {
     const defaultTeam = new DefaultTeam();
     defaultTeam.id = team.id;
