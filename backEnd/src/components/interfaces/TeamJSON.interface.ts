@@ -9,6 +9,6 @@ interface TeamJSON {
     venue: string;
     crestUrl: string;
     squad: PlayerJSON[];
-    hasCustomCrest: boolean | null;
+    hasCustomCrest?: boolean | null;
     lastUpdated: Date;
   }
