@@ -183,6 +183,28 @@ export default class MockTestUtils {
     }
     return teams;
   }
+  createTeamFromJSON(teamJSON: TeamJSON): Team {
+    const newTeam = new Team();
+    newTeam.id = teamJSON.id;
+    newTeam.name = teamJSON.name;
+    newTeam.area = teamJSON.area.name;
+    newTeam.address = teamJSON.address;
+    newTeam.phone = teamJSON.phone;
+    newTeam.website = teamJSON.website;
+    newTeam.email = teamJSON.email;
+    newTeam.venue = teamJSON.venue;
+    newTeam.crestUrl = teamJSON.crestUrl;
+    newTeam.hasCustomCrest = teamJSON.hasCustomCrest || false;
+    newTeam.squad = [];
+    newTeam.updatedAt = teamJSON.lastUpdated;
+
+    const players: PlayerJSON[] = teamJSON.squad;
+    for (const player of players) {
+      const newPlayer = this.createPlayerFromJSON(player);
+      newTeam.squad.push(newPlayer);
+    }
+    return newTeam;
+  }
   private createPlayerFromJSON(playerJSON: PlayerJSON): Player {
     const newPlayer = new Player();
     newPlayer.id = playerJSON.id;
