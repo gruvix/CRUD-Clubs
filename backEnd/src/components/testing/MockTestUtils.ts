@@ -7,6 +7,7 @@ import TeamData from '@comp/interfaces/TeamData.interface';
 import TeamShortDTO from '@comp/interfaces/TeamShortDTO.interface';
 import TeamShort from '@comp/models/TeamShort';
 import MockEntities from './MockEntities';
+import DefaultTeam from '@comp/entities/defaultTeam.entity';
 
 export default class MockTestUtils {
   mockEntities = new MockEntities();
@@ -181,6 +182,12 @@ export default class MockTestUtils {
       }
     }
     return teams;
+  }
+  createDefaultTeam(team: Team): DefaultTeam {
+    const defaultTeam = new DefaultTeam();
+    defaultTeam.id = team.id;
+    defaultTeam.teams = [team];
+    return defaultTeam;
   }
   userRootPathFromId(userId: number): string {
     return `${this.userRootPath}/${userId}`;
