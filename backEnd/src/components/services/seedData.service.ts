@@ -66,7 +66,7 @@ export default class SeedDataService implements OnModuleInit {
 
     const teamsJSON = await readJSONFile(JSONFolderPath + '/teams.json');
     for (const teamId of Object.keys(teamsJSON)) {
-      const teamJSON = await readJSONFile(
+      const teamJSON: TeamJSON = await readJSONFile(
         JSONFolderPath + '/teams/' + teamId + '.json',
       );
       const newTeam = await this.createTeamFromJSON(teamJSON);
