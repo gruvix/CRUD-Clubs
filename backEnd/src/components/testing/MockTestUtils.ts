@@ -148,15 +148,7 @@ export default class MockTestUtils {
     }
     return squad;
   }
-  nonDefaultTeamShort(teamId): TeamShort {
-    return new TeamShort({
-      id: teamId,
-      name: 'test',
-      crestUrl: 'test',
-      defaultTeam: null,
-      hasCustomCrest: true,
-    });
-  }
+
   transformTeamShortToDTO(team: TeamShort): TeamShortDTO {
     const { defaultTeam, ...rest } = team;
     const teamDTO: TeamShortDTO = { ...rest, hasDefault: !!defaultTeam };
