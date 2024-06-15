@@ -62,6 +62,8 @@ describe('SeedDataService', () => {
       jest.spyOn(mockRepository, 'findOneBy').mockResolvedValueOnce(null);
       jest
         .spyOn(dataStorage, 'readJSONFile')
+
+
         .mockResolvedValueOnce(mockEntities.teamsJSON(teamsAmount))
         .mockImplementation(async (filePath) => {
           const match = filePath.match(/\/teams\/(\d+)\.json/);
@@ -160,11 +162,6 @@ describe('SeedDataService', () => {
     });
 
     it('Should throw an error when JSON teams amount is 0', async () => {
-      const squadLength = 2;
-      const teamsAmount = 5;
-      let defaultTeams: DefaultTeam[] = [];
-      let createdTeams: Team[] = [];
-
       jest.spyOn(mockRepository, 'findOneBy').mockResolvedValueOnce(null);
       jest
         .spyOn(dataStorage, 'readJSONFile')
