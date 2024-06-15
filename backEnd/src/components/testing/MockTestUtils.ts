@@ -107,11 +107,15 @@ export default class MockTestUtils {
       }),
     );
   }
-  defaultTeamEntity(): Team {
+  defaultTeamEntity(
+    teamId: number = this.teamId,
+    userId: number = this.userId,
+    squadAmount: number = 5,
+  ): Team {
     return JSON.parse(
       JSON.stringify({
-        id: this.teamId,
-        user: this.userId,
+        id: teamId,
+        user: userId,
         name: 'test',
         area: 'test',
         address: 'test',
@@ -122,7 +126,7 @@ export default class MockTestUtils {
         crestUrl: 'test',
         crestFileName: null,
         hasCustomCrest: false,
-        squad: this.squadGenerator(this.teamId, 5),
+        squad: this.squadGenerator(this.teamId, squadAmount),
         defaultTeam: null,
         createdAt: undefined,
         updatedAt: undefined,
