@@ -72,6 +72,9 @@ export default class SeedDataService implements OnModuleInit {
       const newTeam = await this.createTeamFromJSON(teamJSON);
       user.teams.push(newTeam);
     }
+    if (user.teams.length === 0) {
+      throw new Error('Default user has no teams');
+    }
     return user;
   }
 
