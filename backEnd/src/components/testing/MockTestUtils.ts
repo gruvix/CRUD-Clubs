@@ -56,14 +56,18 @@ export default class MockTestUtils {
     position: 'test position',
     nationality: 'test land',
   };
-  userEntity: User = {
-    id: this.userId,
-    username: this.username,
-    password: this.password,
-    teams: [],
-    createdAt: undefined,
-    updatedAt: undefined,
-  };
+  userEntity(userId: number = this.userId): User {
+    return JSON.parse(
+      JSON.stringify({
+        id: userId,
+        username: this.username,
+        password: this.password,
+        teams: [],
+        createdAt: undefined,
+        updatedAt: undefined,
+      }),
+    );
+  }
   TeamDTO(): TeamDTO {
     return JSON.parse(
       JSON.stringify({
