@@ -51,13 +51,11 @@ export default function Page({
       .then((data) => {
         setTeamData(data);
         setPageTitle(`CRUD Team ${teamId} - ${data.teamParameters.name}`);
+        setIsLoading(false);
+        setIsCrestLoading(false);
       })
       .catch((error: Error) => {
         errorHandler(error);
-      })
-      .finally(() => {
-        setIsLoading(false);
-        setIsCrestLoading(false);
       });
   };
   const handleImageUpdate = (image: File) => {
