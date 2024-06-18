@@ -88,19 +88,18 @@ export default class TeamService {
     relations?: string[],
     selections?: string[],
   ): Promise<Team> {
+    let team: Team = null;
     try {
       if (selections && !selections.some((item) => item === 'id'))
         selections.push('id');
       //repository fails if id primary key isn't selected
       const selectObject = this.generateSelectionsFromStringArray(selections);
 
-      const team = await this.teamRepository.findOne({
+      team = await this.teamRepository.findOne({
         where: { id: teamId },
         select: selectObject,
         relations: relations,
       });
-      if (!team) throw new Error('Team not found');
-      return team;
     } catch (error) {
       console.log(error);
       throw new HttpException(
@@ -108,6 +107,8 @@ export default class TeamService {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
+    if (!team) throw new HttpException('Team not found', HttpStatus.NOT_FOUND);
+    return team;
   }
 
   private async getDefaultTeamId(teamId: number): Promise<number> {
