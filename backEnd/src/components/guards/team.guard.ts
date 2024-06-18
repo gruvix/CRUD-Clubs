@@ -8,12 +8,13 @@ import {
 import isNonNegativeNumber from '@comp/validators/isNonNegativeNumber';
 import UserService from '@comp/services/user.service';
 import TeamService from '@comp/services/team.service';
+import User from '@comp/entities/user.entity';
 
 @Injectable()
 export class TeamGuard implements CanActivate {
   constructor(
     private readonly userService: UserService,
-private readonly teamService: TeamService
+    private readonly teamService: TeamService,
   ) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
@@ -27,9 +28,10 @@ private readonly teamService: TeamService
       );
       throw new HttpException('Invalid team id', HttpStatus.BAD_REQUEST);
     }
-
     const userId = await this.userService.getUserId(username);
-    if (!await this.teamExistsOnUser(userId, teamId)) {
+    try{
+      await this.teamExistsOnUser(userId, teamId)
+    } catch (error) {
       console.log(
         `User ${username} tried to access team ${teamId}, but there is no team related to userId ${userId}`,
       );
@@ -41,13 +43,14 @@ private readonly teamService: TeamService
   private async teamExistsOnUser(
     userId: number,
     teamId: number,
-  ): Promise<boolean> {
+  ): Promise<void> {
     try {
-      const team = await this.teamService.getTeam(teamId, [], []);
-      if (!team) {
-        return false;
+      const team = await this.teamService.getTeam(teamId, ['user'], ['user']);
+      const user = team.user as unknown as User
+      const teamUserId = user.id;
+      if (!team || teamUserId !== userId) {
+        throw new Error('Team not found on user');
       }
-      return true;
     } catch (error) {
       throw new Error('Failed to validate team: ' + error);
     }
