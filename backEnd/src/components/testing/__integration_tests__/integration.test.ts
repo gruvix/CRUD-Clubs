@@ -5,9 +5,19 @@ import mockRepository from '@comp/testing/mockTypeORMRepository';
 import * as TypeORM from '@nestjs/typeorm';
 import * as request from 'supertest';
 import { INestApplication } from '@nestjs/common';
+import MockEntities from '../MockEntities';
+import TeamService from '@comp/services/team.service';
+import TeamController from '@comp/controllers/team.controller';
+import UserController from '@comp/controllers/user.controller';
+import UserService from '@comp/services/user.service';
+import * as session from 'express-session';
+import { SessionModule as SessionModuleCore } from 'nestjs-session';
+import Team from '@comp/entities/team.entity';
 
-describe('UserService', () => {
+describe('Integration tests', () => {
   let app: INestApplication;
+  let teamService: TeamService;
+  let userService: UserService;
 
   const mockGetRepositoryToken = jest
     .fn()
@@ -17,7 +27,8 @@ describe('UserService', () => {
     .spyOn(TypeORM, 'getRepositoryToken')
     .mockImplementation(mockGetRepositoryToken);
 
-  const mocks = new MockTestUtils();
+  const mockUtils = new MockTestUtils();
+  const mockEntities = new MockEntities();
 
   jest.spyOn(console, 'log').mockImplementation(jest.fn());
 
@@ -31,7 +42,15 @@ describe('UserService', () => {
         },
       ],
     }).compile();
+
     app = module.createNestApplication();
+    app.use(
+      session({
+        secret: 'keyboard cat',
+        resave: false,
+        saveUninitialized: true,
+      }),
+    );
     await app.init();
   });
 });
