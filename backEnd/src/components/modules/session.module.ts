@@ -10,7 +10,6 @@ const store = new SqliteStore({
   path: process.env.SESSION_DB_PATH,
   ttl: 1000 * 60 * 60 * 24,
 });
-console.log(process.env.SESSION_DB_PATH)
 @Module({
   imports: [
     SessionModuleCore.forRoot({
