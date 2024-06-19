@@ -28,6 +28,7 @@ export default class UserController {
     @Body() data: { username: string },
   ) {
     try {
+      console.log(`User ${data.username} is logging in`);
       await this.userService.findOrCreateUser(data.username);
       request.session.username = data.username;
       request.session.userId = await this.userService.getUserId(data.username);
