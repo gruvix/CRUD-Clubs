@@ -38,6 +38,7 @@ export default class UserController {
       return;
     } catch (error) {
       console.log(error);
+      if (error instanceof HttpException) throw error;
       if (error instanceof UserNotFoundError)
         throw new HttpException('User not found', HttpStatus.BAD_REQUEST);
       if (error instanceof InvalidUsernameError)
