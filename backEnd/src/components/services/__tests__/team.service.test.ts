@@ -1,7 +1,6 @@
 import { Test } from '@nestjs/testing';
 import { TestSetupModule } from '@comp/testing/testSetup.module';
 import MockTestUtils from '@comp/testing/MockTestUtils';
-import PathTestUtils from '@comp/testing/PathTestUtils';
 import mockRepository from '@comp/testing/mockTypeORMRepository';
 import * as TypeORM from '@nestjs/typeorm';
 import * as userPath from '@comp/storage/userPath';
@@ -16,9 +15,7 @@ describe('TeamService', () => {
   let playerService: PlayerService;
   let teamService: TeamService;
   let crestStorageService: CrestStorageService;
-
   const mocks = new MockTestUtils();
-  const mockPaths = new PathTestUtils();
 
   const mockGetRepositoryToken = jest
     .fn()
@@ -241,20 +238,17 @@ describe('TeamService', () => {
   });
 
   describe('resetTeam', () => {
-    let teamWithCrestData: Team;
-    let defaultTeamData: Team;
+    let teamWithCrestAndDefaultData: Team;
     let defaultTeam: Team;
     let defaultTeamWithEmptySquadAndDefaultTeamId: Team;
     beforeEach(() => {
-      teamWithCrestData = {
+      teamWithCrestAndDefaultData = {
         id: mocks.teamId,
         crestFileName: 'name',
         hasCustomCrest: true,
-      } as Team;
-      defaultTeamData = {
-        id: mocks.teamId,
         defaultTeam: { id: mocks.teamId },
       } as unknown as Team;
+
       defaultTeam = mocks.defaultTeamEntity();
       defaultTeamWithEmptySquadAndDefaultTeamId = {
         ...defaultTeam,
@@ -272,8 +266,7 @@ describe('TeamService', () => {
 
       jest
         .spyOn(teamService, 'getTeam')
-        .mockResolvedValueOnce(teamWithCrestData)
-        .mockResolvedValueOnce(defaultTeamData)
+        .mockResolvedValueOnce(teamWithCrestAndDefaultData)
         .mockResolvedValueOnce(defaultTeam);
       jest.spyOn(playerService, 'clearSquad').mockResolvedValueOnce(void 0);
       jest
@@ -294,12 +287,12 @@ describe('TeamService', () => {
       );
       expect(crestStorageService.deleteCrest).toHaveBeenCalledWith(
         mocks.userId,
-        teamWithCrestData.crestFileName,
+        teamWithCrestAndDefaultData.crestFileName,
       );
     });
 
     it('Should reset a team without a custom crest', async () => {
-      teamWithCrestData.hasCustomCrest = false;
+      teamWithCrestAndDefaultData.hasCustomCrest = false;
       jest
         .spyOn(mockRepository.manager, 'transaction')
         .mockImplementationOnce(async (callback) => {
@@ -309,8 +302,7 @@ describe('TeamService', () => {
 
       jest
         .spyOn(teamService, 'getTeam')
-        .mockResolvedValueOnce(teamWithCrestData)
-        .mockResolvedValueOnce(defaultTeamData)
+        .mockResolvedValueOnce(teamWithCrestAndDefaultData)
         .mockResolvedValueOnce(defaultTeam);
       jest.spyOn(playerService, 'clearSquad').mockResolvedValueOnce(void 0);
       jest
@@ -331,6 +323,7 @@ describe('TeamService', () => {
     });
 
     it('Should handle non-resettable team error', async () => {
+      teamWithCrestAndDefaultData.defaultTeam = null;
       jest
         .spyOn(mockRepository.manager, 'transaction')
         .mockImplementationOnce(async (callback) => {
@@ -339,9 +332,8 @@ describe('TeamService', () => {
         });
       jest
         .spyOn(teamService, 'getTeam')
-        .mockResolvedValueOnce(teamWithCrestData)
-        .mockResolvedValueOnce({ defaultTeam: undefined } as Team);
-      jest.spyOn(playerService, 'clearSquad').mockResolvedValueOnce(void 0);
+        .mockResolvedValueOnce(teamWithCrestAndDefaultData);
+      jest.spyOn(playerService, 'clearSquad');
 
       expect(teamService.resetTeam(mocks.userId, mocks.teamId)).rejects.toThrow(
         new HttpException(
@@ -349,6 +341,7 @@ describe('TeamService', () => {
           HttpStatus.UNPROCESSABLE_ENTITY,
         ),
       );
+      expect(playerService.clearSquad).not.toHaveBeenCalled();
     });
 
     it('Should handle other errors', async () => {
