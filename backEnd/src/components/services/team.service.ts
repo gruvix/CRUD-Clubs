@@ -111,28 +111,20 @@ export default class TeamService {
     return team;
   }
 
-  private async getDefaultTeamId(teamId: number): Promise<number> {
-    const defaultTeam = (
-      await this.getTeam(teamId, ['defaultTeam'], ['defaultTeam'])
-    ).defaultTeam as unknown as DefaultTeam;
-    //typescript above strongly believes defaultTeam is just a number
-    if (!defaultTeam)
-      throw new TeamIsNotResettableError('Team has no default team');
-    return defaultTeam.id;
-  }
-
   async resetTeam(userId: number, teamId: number): Promise<void> {
     try {
-      const oldImageData = await this.getTeam(
-        teamId,
-        [],
-        ['crestFileName', 'hasCustomCrest'],
-      );
+      const teamRelations = ['defaultTeam'];
+      const teamSelections = ['crestFileName', 'hasCustomCrest', 'defaultTeam'];
+      const oldTeam = await this.getTeam(teamId, teamRelations, teamSelections);
+      if (!oldTeam.defaultTeam)
+      throw new TeamIsNotResettableError('Team has no default team');
+      const defaultTeamId = (oldTeam.defaultTeam as unknown as DefaultTeam).id;
+      //typescript above strongly believes defaultTeam is just a number
+
       await this.teamRepository.manager.transaction(
         async (transactionalEntityManager) => {
           await this.playerService.clearSquad(teamId);
 
-          const defaultTeamId = await this.getDefaultTeamId(teamId);
           const defaultTeam = await this.getTeam(defaultTeamId, ['squad']);
 
           let team = new Team();
@@ -146,10 +138,10 @@ export default class TeamService {
 
           this.playerService.copyPlayersToTeam(team, defaultTeam.squad);
           await this.teamRepository.save(team);
-          if (oldImageData.hasCustomCrest)
+          if (oldTeam.hasCustomCrest)
             await this.crestStorageService.deleteCrest(
               userId,
-              oldImageData.crestFileName,
+              oldTeam.crestFileName,
             );
         },
       );
