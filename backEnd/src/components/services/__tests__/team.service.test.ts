@@ -217,10 +217,7 @@ describe('TeamService', () => {
     it('Should throw an error when retrieved team is undefined', async () => {
       jest.spyOn(mockRepository, 'findOne').mockResolvedValueOnce(undefined);
       await expect(teamService.getTeam(mocks.teamId)).rejects.toEqual(
-        new HttpException(
-          'Failed to get team',
-          HttpStatus.INTERNAL_SERVER_ERROR,
-        ),
+        new HttpException('Team not found', HttpStatus.NOT_FOUND),
       );
     });
 
