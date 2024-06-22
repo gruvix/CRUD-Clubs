@@ -4,6 +4,7 @@ import { webAppPaths } from "@/paths";
 import APIAdapter from "@/components/adapters/APIAdapter";
 import { useRouter } from "next/navigation";
 import LoginSpiner from "@/components/shared/loginSpinner";
+import validateUsername from "@/components/shared/usernameValidation";
 export default function LoginButton({
   setLoginError,
   setLoginErrorMessage,
@@ -14,6 +15,7 @@ export default function LoginButton({
   const router = useRouter();
   const [username, setUsername] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(true);
+  const [inputClassName, setInputClassName] = React.useState("");
   const request = new APIAdapter();
 
   const handleLogin = async () => {
@@ -34,11 +36,17 @@ export default function LoginButton({
     setIsLoading(false);
   }, []);
 
+  useEffect(() => {
+    const error = validateUsername(username);
+    const inputClassString = error ? "text-pink-600 focus:text-pink-600 focus:border-pink-500 border-pink-500" : "";
+    setInputClassName(inputClassString);
+  }, [username]);
+
   return (
     <>
       <input
         type="text"
-        className="form-control"
+        className={"form-control " + inputClassName}
         id="username"
         placeholder="Username"
         onKeyDown={(e) => (e.key === "Enter" ? handleLogin() : null)}
