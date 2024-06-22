@@ -5,7 +5,6 @@ export default class TeamCard {
   name: string;
   crestUrl: string;
   hasDefault: boolean;
-  [key: string]: number | string | boolean;
   constructor(teamData: any) {
     this.id = teamData.id;
     this.name = teamData.name;
