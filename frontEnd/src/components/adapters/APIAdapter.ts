@@ -125,11 +125,11 @@ export default class APIAdapter {
     }
     const data = await response.json();
     const teamsData = {
-      teams: {} as TeamCard[],
+      teams: [] as TeamCard[],
       username: data.username as string,
     };
     Object.keys(data.teams).forEach((key) => {
-      teamsData.teams[Number(key)] = new TeamCard(data.teams[key]);
+      teamsData.teams.push(new TeamCard(data.teams[key]))
     });
     return teamsData;
   }

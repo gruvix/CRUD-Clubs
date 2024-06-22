@@ -23,15 +23,12 @@ export default function TeamsList(): React.ReactElement {
   const [shouldTeamShow, setShouldTeamShow] = React.useState<boolean[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [username, setUsername] = React.useState("");
-  const [teamCards, setTeamCards] = React.useState<TeamCard[]>(
-    {} as TeamCard[],
-  );
+  const [teamCards, setTeamCards] = React.useState<TeamCard[]>([]);
   const [modalCallback, setModalCallback] = React.useState(
     () => (): void => {},
   );
-  const [modalCancelCallback, setModalCancelCallback] = React.useState<Function>(
-    () => (): void => {},
-  )
+  const [modalCancelCallback, setModalCancelCallback] =
+    React.useState<Function>(() => (): void => {});
   const [modalText, setModalText] = React.useState("");
   const [asyncError, setAsyncError] = React.useState<Error>();
   const pageTitle = `CRUD ${username}'s teams`;
@@ -67,10 +64,14 @@ export default function TeamsList(): React.ReactElement {
         errorHandler(error);
       });
   };
-  const setUpDeleteTeamModal = (teamId: number | string, teamName: string, modalCancelCallback: Function) => {
+  const setUpDeleteTeamModal = (
+    teamId: number | string,
+    teamName: string,
+    modalCancelCallback: Function,
+  ) => {
     setModalCallback(() => deleteTeam(Number(teamId)));
     setModalText(`Are you sure you want to delete team ${teamName}?`);
-    setModalCancelCallback(modalCancelCallback)
+    setModalCancelCallback(modalCancelCallback);
   };
   const resetTeams = () => async () => {
     setIsLoading(true);
@@ -226,10 +227,10 @@ export default function TeamsList(): React.ReactElement {
                   style={{ marginTop: "10%", height: "20rem", width: "20rem" }}
                 />
               ) : (
-                Object.keys(teamCards).map((key: string, index) => (
+                teamCards.map((team: TeamCard, index: number) => (
                   <TeamCardComponent
-                    team={teamCards[Number(key)]}
-                    key={key}
+                    team={team}
+                    key={team.id}
                     deleteTeamCallback={setUpDeleteTeamModal}
                     visibility={shouldTeamShow[index]}
                     router={router}
