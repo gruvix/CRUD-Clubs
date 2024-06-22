@@ -59,7 +59,7 @@ export default function Login() {
               marginTop: "50px",
             }}
           >
-            Timothys Football Club CRUD
+            Timothy's Football Club CRUD
           </h1>
         </div>
       </div>
