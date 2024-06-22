@@ -58,7 +58,9 @@ export default function TeamsList(): React.ReactElement {
     request
       .deleteTeam(teamId)
       .then(() => {
-        updateTeamsData();
+        setTeamCards((prevCards) =>
+          prevCards.filter((team) => team.id !== teamId),
+        );
       })
       .catch((error) => {
         errorHandler(error);
