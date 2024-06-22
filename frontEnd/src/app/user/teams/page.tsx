@@ -48,11 +48,11 @@ export default function TeamsList(): React.ReactElement {
       .then((data: TeamsData) => {
         setUsername(data.username);
         setTeamCards(data.teams);
-        setIsLoading(false);
       })
       .catch((error) => {
         errorHandler(error);
-      });
+      })
+      .finally(() => setIsLoading(false));
   };
   const deleteTeam = (teamId: number) => async () => {
     request
@@ -81,11 +81,11 @@ export default function TeamsList(): React.ReactElement {
       .resetTeamsList()
       .then(() => {
         updateTeamsData();
-        setIsLoading(false);
       })
       .catch((error) => {
         errorHandler(error);
-      });
+      })
+      .finally(() => setIsLoading(false));
   };
   useEffect(() => {
     updateTeamsData();
