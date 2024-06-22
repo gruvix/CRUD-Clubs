@@ -191,7 +191,6 @@ export default function Page({
               <TeamDataTable
                 teamData={teamData.teamParameters}
                 teamId={Number(teamId)}
-                router={router}
               />
             </div>
           </div>
