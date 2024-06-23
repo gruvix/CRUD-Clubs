@@ -8,20 +8,31 @@ import LoadingSpinner from "@/components/shared/LoadingSpinner";
 interface TeamCardProps {
   team: TeamCardClass;
   visibility: boolean;
-  deleteTeamCallback: (teamId: string | number, teamName: string, modalCancelCallback: Function) => void;
+  isDisappearing: boolean;
+  deleteTeamCallback: (
+    teamId: string | number,
+    teamName: string,
+    modalCancelCallback: Function,
+  ) => void;
   router: AppRouterInstance;
 }
 
 export default function TeamCard({
   team,
   visibility,
+  isDisappearing,
   deleteTeamCallback,
   router,
 }: TeamCardProps) {
   const [isLoading, setIsLoading] = React.useState(false);
   return (
     <div
-      className="card card-container"
+      className={
+        "card card-container group " +
+        (isDisappearing
+          ? "transition duration-1000 ease-out scale-0 opacity-0"
+          : "")
+      }
       style={visibility ? { display: "flex" } : { display: "none" }}
     >
       <div className="card-header">
@@ -58,7 +69,11 @@ export default function TeamCard({
           data-bs-target="#confirmationModal"
           onClick={() => {
             setIsLoading(true);
-            deleteTeamCallback(team.id, team.name, () => () => setIsLoading(false));
+            deleteTeamCallback(
+              team.id,
+              team.name,
+              () => () => setIsLoading(false),
+            );
           }}
         >
           delete

@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { createContext, useEffect } from "react";
 import LogoutButton from "./LogoutButton";
 import { webAppPaths } from "@/paths";
 import TeamCardComponent from "./TeamCard";
@@ -31,8 +31,10 @@ export default function TeamsList(): React.ReactElement {
     React.useState<Function>(() => (): void => {});
   const [modalText, setModalText] = React.useState("");
   const [asyncError, setAsyncError] = React.useState<Error>();
+  const [disappearingTeam, setDisappearingTeam] = React.useState(NaN);
   const pageTitle = `CRUD ${username}'s teams`;
   const request = new APIAdapter();
+  const cardDisappearDelay = 1000;
 
   const errorHandler = (error: Error) => {
     if (error instanceof UnauthorizedError) {
@@ -58,9 +60,12 @@ export default function TeamsList(): React.ReactElement {
     request
       .deleteTeam(teamId)
       .then(() => {
-        setTeamCards((prevCards) =>
-          prevCards.filter((team) => team.id !== teamId),
-        );
+        setDisappearingTeam(teamId);
+        setTimeout(() => {
+          setTeamCards((prevCards) =>
+            prevCards.filter((team) => team.id !== teamId),
+          );
+        }, cardDisappearDelay);
       })
       .catch((error) => {
         errorHandler(error);
@@ -236,6 +241,7 @@ export default function TeamsList(): React.ReactElement {
                     deleteTeamCallback={setUpDeleteTeamModal}
                     visibility={shouldTeamShow[index]}
                     router={router}
+                    isDisappearing={disappearingTeam === team.id}
                   />
                 ))
               )}
