@@ -131,7 +131,7 @@ export default function TeamDataTable({
                 </button>
                 <button
                   type="button"
-                  className="btn btn-shadow btn-outline-success apply"
+                  className="btn btn-shadow btn-outline-success apply transition duration-300 ease-in-out hover:scale-125"
                   onClick={() => handleRowUpdate(key)}
                   style={{
                     display:
@@ -146,7 +146,7 @@ export default function TeamDataTable({
                 </button>
                 <button
                   type="button"
-                  className="btn btn-outline-secondary cancel"
+                  className="btn btn-outline-secondary cancel transition duration-300 ease-in-out hover:scale-125"
                   onClick={() => disableRowEditing()}
                   style={{
                     display:
