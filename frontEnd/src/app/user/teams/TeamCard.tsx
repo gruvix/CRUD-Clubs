@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import TeamCrest from "@/components/shared/TeamCrest";
 import { webAppPaths } from "../../../paths.js";
 import TeamCardClass from "@/components/adapters/TeamCard";
@@ -25,6 +25,26 @@ export default function TeamCard({
   router,
 }: TeamCardProps) {
   const [isLoading, setIsLoading] = React.useState(false);
+  const [nameSize, setNameSize] = React.useState("100%");
+
+  const calculateFontSize = (nameLength: number) => {
+    const baseSize = 135; // base font size percentage
+    const maxSize = 90; // minimum font size percentage
+    const minLength = 14; // length at which font size starts to decrease
+    const step = 7; // the rate at which the font size decreases per character above minLength
+
+    if (nameLength <= minLength) {
+      return `${baseSize}%`;
+    } else {
+      const newSize = baseSize - (nameLength - minLength) * step;
+      return `${Math.max(newSize, maxSize)}%`; // ensure font size doesn't go below maxSize
+    }
+  };
+
+  useEffect(() => {
+    setNameSize(calculateFontSize(team.name.length));
+  }, [team.name]);
+
   return (
     <div
       className={
@@ -36,7 +56,12 @@ export default function TeamCard({
       style={visibility ? { display: "flex" } : { display: "none" }}
     >
       <div className="card-header">
-        <h5 className="card-title team-card-title">{team.name}</h5>
+        <h5
+          className="card-title team-card-title text-nowrap overflow-x-clip"
+          style={{ fontSize: nameSize }}
+        >
+          {team.name}
+        </h5>
       </div>
       {isLoading? (
       <>
