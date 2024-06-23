@@ -141,7 +141,7 @@ export default function TeamsList(): React.ReactElement {
           <button
             type="button"
             id="add-team-button"
-            className="btn btn-shadow btn-outline-warning"
+            className="btn btn-shadow btn-outline-warning transition-transform duration-300 ease-in-out hover:scale-125"
             onClick={() => router.push(webAppPaths.addTeam)}
           >
             Add new team
@@ -151,7 +151,7 @@ export default function TeamsList(): React.ReactElement {
         <div className="col text-center">
           <div className="input-group mb-3">
             <button
-              className="btn btn-outline-secondary dropdown-toggle"
+              className=" group btn btn-outline-secondary dropdown-toggle transition-transform duration-300 ease-in-out hover:scale-y-[1.05] border-black "
               type="button"
               data-bs-toggle="dropdown"
               aria-expanded="false"
@@ -189,7 +189,7 @@ export default function TeamsList(): React.ReactElement {
             <input
               id="search-input"
               type="text"
-              className="form-control"
+              className="form-control bg-slate-400 focus:bg-slate-100 hover:bg-slate-100 border-black transition duration-300 ease-in-out hover:scale-[1.1] focus:scale-[1.1] hover:translate-x-[19px] focus:translate-x-[19px]"
               aria-label="Text input with dropdown button"
               value={searchPattern}
               placeholder="Search teams..."
@@ -202,7 +202,7 @@ export default function TeamsList(): React.ReactElement {
           <button
             type="button"
             id="reset-teams-button"
-            className="btn btn-shadow btn-outline-danger"
+            className="btn btn-shadow btn-outline-danger transition-transform duration-300 ease-in-out hover:scale-125"
             data-toggle="tooltip"
             data-placement="auto"
             title="Erase all teams and reload default teams"

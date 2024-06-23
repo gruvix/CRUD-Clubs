@@ -36,24 +36,24 @@ export default function TeamCard({
       ) : (
       <TeamCrest teamCrest={team.crestUrl} className="list-team-crest-image" />)}
       <div
-        className="card-body"
+        className=""
         style={{ alignSelf: "center" }}
         id={team.id.toString()}
       >
         <button
           type="button"
-          className="btn btn-outline-warning overlay-button-dark edit"
+          className="btn btn-outline-warning overlay-button-dark edit transition-transform duration-300 ease-in-out hover:scale-125"
           onClick={() => {
             setIsLoading(true);
             router.push(`${webAppPaths.team(team.id)}`);
           }}
-          style={{ marginRight: "10px" }}
+          style={{ marginRight: "10px", display: "inline" }}
         >
           edit
         </button>
         <button
           type="button"
-          className="btn btn-outline-danger overlay-button-dark delete"
+          className="btn btn-outline-danger overlay-button-dark delete transition-transform duration-300 ease-in-out hover:scale-125"
           data-bs-toggle="modal"
           data-bs-target="#confirmationModal"
           onClick={() => {

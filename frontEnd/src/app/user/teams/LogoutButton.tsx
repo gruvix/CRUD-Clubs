@@ -14,7 +14,7 @@ export default function LogoutButton({ style, text, router }: { style?: React.CS
     }
   };
   return (
-    <button type="button" style={style} className="btn btn-shadow btn-outline-warning" id="log-out-button" onClick={() => handleLogout()}>
+    <button type="button" style={style} className="btn btn-shadow btn-outline-warning transition-transform duration-300 ease-in-out hover:scale-125" id="log-out-button" onClick={() => handleLogout()}>
       {text}
     </button>
   );

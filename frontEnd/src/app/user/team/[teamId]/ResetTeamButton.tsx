@@ -18,7 +18,7 @@ export default function ResetTeamButton({ hasDefault, onClickCallback}: ResetTea
     if (hasDefault) {
       setTooltipMessage('Reset the team to its default values');
       setOnClickFunction(onClickCallback);
-      setButtonClassName('btn btn-shadow btn-outline-danger');
+      setButtonClassName('btn btn-shadow btn-outline-danger transition duration-300 ease-in-out hover:scale-125');
     } else {
       setTooltipMessage("This team doesn't have default values");
       setOnClickFunction(() => () => {});

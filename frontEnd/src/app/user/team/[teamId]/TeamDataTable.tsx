@@ -63,7 +63,7 @@ export default function TeamDataTable({
       <table className="table" id="team-table">
         <thead>
           {Object.keys(rowsTeamData).map((key: string) => (
-            <tr className="table-dark table-bordered" id={key} key={key}>
+            <tr className="table-dark table-bordered group" id={key} key={key}>
               <td
                 className="text-warning"
                 style={{ textTransform: "capitalize", paddingTop: "3.5%" }}
@@ -84,8 +84,10 @@ export default function TeamDataTable({
                 <>
                   <span
                     style={{
-                      display: editingRowKey === key ? "none" : "inline",
-                    }}
+                      display: editingRowKey === key ? "none" : "block",
+                      borderWidth: "0px"
+                    }} 
+                    className="text-normal"
                   >
                     {rowsTeamData[key]}
                   </span>
@@ -119,7 +121,7 @@ export default function TeamDataTable({
                 </button>
                 <button
                   type="button"
-                  className="btn btn-shadow btn-outline-warning edit"
+                  className="btn btn-shadow btn-outline-warning edit transition duration-300 ease-in-out group-hover:scale-125"
                   onClick={() => enableRowEditing(key)}
                   style={{
                     display: editingRowKey === "" ? "inline" : "none",

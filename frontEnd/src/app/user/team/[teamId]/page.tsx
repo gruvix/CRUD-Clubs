@@ -105,7 +105,7 @@ export default function Page({
         <div className="col-4">
           <button
             type="button"
-            className="btn btn-shadow btn-outline-warning"
+            className="btn btn-shadow btn-outline-warning transition duration-300 ease-in-out hover:scale-125"
             style={{ marginTop: "25px" }}
             onClick={() => router.push(webAppPaths.teams)}
             id="back-to-teams-button"
@@ -132,9 +132,10 @@ export default function Page({
                 />
                 <button
                   type="button"
-                  className="btn btn-shadow overlay-button btn-outline-warning position-absolute top-50 start-50 translate-middle"
+                  //className="btn btn-shadow overlay-button btn-outline-warning position-absolute top-50 start-50 translate-middle hover:scale-125"
+                  className="btn btn-outline-warning overlay-button btn-shadow hover:scale-125 absolute top-1/2 transition duration-300 ease-in-out"
                   id="upload-image-button"
-                  style={{ fontSize: "150%" }}
+                  style={{ fontSize: "150%", display: "inline" }}
                   onClick={() =>
                     document.getElementById("image-input")?.click()
                   }

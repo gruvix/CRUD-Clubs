@@ -139,7 +139,7 @@ export default function PlayersDataTable({
     <div style={{ height: "410px", overflow: "auto" }}>
       <table className="table" id="players-table">
         <thead>
-          <tr className="table-dark" id="add-player-row">
+          <tr className="table-dark group" id="add-player-row">
             <>
               {rowLoading === NEW_PLAYER_ROW_KEY ? (
                 <>
@@ -213,7 +213,7 @@ export default function PlayersDataTable({
                   >
                     <button
                       type="button"
-                      className="btn btn-shadow btn-outline-warning"
+                      className="btn btn-shadow btn-outline-warning transition duration-300 ease-in-out group-hover:scale-125 group-hover:translate-x-3"
                       id="add-player-button"
                       style={{
                         maxHeight: "40px",
@@ -229,7 +229,7 @@ export default function PlayersDataTable({
                     </button>
                     <button
                       type="button"
-                      className="btn btn-shadow btn-outline-success"
+                      className="btn btn-shadow btn-outline-success transition duration-300 ease-in-out hover:scale-125"
                       id="confirm-player-button"
                       style={{
                         maxHeight: "40px",
@@ -246,7 +246,7 @@ export default function PlayersDataTable({
                     </button>
                     <button
                       type="button"
-                      className="btn btn-shadow btn-outline-secondary"
+                      className="btn btn-shadow btn-outline-secondary transition duration-300 ease-in-out hover:scale-125"
                       id="cancel-player-button"
                       style={{
                         maxHeight: "40px",
@@ -270,7 +270,7 @@ export default function PlayersDataTable({
               {playerRows.map((player, index) => (
                 <>
                   <tr
-                    className="table-dark table-bordered"
+                    className="table-dark table-bordered group"
                     key={player.id}
                     data-id={player.id}
                   >
@@ -313,6 +313,7 @@ export default function PlayersDataTable({
                                 style={{
                                   display:
                                     editingRowKey === index ? "none" : "inline",
+                                  borderWidth: "0px",
                                 }}
                               >
                                 {player[parameter]}
@@ -354,10 +355,10 @@ export default function PlayersDataTable({
                         >
                           <button
                             type="button"
-                            className="btn btn-outline-warning edit"
+                            className="btn btn-outline-warning edit transition duration-300 ease-in-out group-hover:scale-125"
                             onClick={() => enableRowEditing(index)}
                             style={{
-                              marginRight: "10px",
+                              marginRight: "15px",
                               display:
                                 editingRowKey !== index ? "inline" : "none",
                             }}
@@ -366,7 +367,7 @@ export default function PlayersDataTable({
                           </button>
                           <button
                             type="button"
-                            className="btn btn-outline-danger remove"
+                            className="btn btn-outline-danger remove transition duration-300 ease-in-out group-hover:scale-125"
                             data-bs-toggle="modal"
                             data-bs-target="#confirmationModal"
                             style={{
@@ -379,19 +380,19 @@ export default function PlayersDataTable({
                           </button>
                           <button
                             type="button"
-                            className="btn btn-outline-success apply"
+                            className="btn btn-outline-success apply transition duration-300 ease-in-out hover:scale-125"
                             onClick={() => handleRowUpdate(index)}
                             style={{
                               display:
                                 editingRowKey === index ? "inline" : "none",
-                              marginRight: "10px",
+                              marginRight: "15px",
                             }}
                           >
                             apply
                           </button>
                           <button
                             type="button"
-                            className="btn btn-outline-secondary cancel"
+                            className="btn btn-outline-secondary cancel transition duration-300 ease-in-out hover:scale-125"
                             onClick={() => disableRowEditing()}
                             style={{
                               display:
