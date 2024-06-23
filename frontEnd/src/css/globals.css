@@ -78,7 +78,7 @@ td:first-child, th:first-child {
   padding: 5px 10px;
   transition: 0.3s;
   opacity: 0;
-  background-color: rgba(46, 40, 40, 0.548);
+  background-color: rgba(34, 32, 32, 0.863);
 }
 .overlay-button {
   float: left;
