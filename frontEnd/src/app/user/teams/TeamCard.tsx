@@ -63,16 +63,25 @@ export default function TeamCard({
           {team.name}
         </h5>
       </div>
-      {isLoading? (
-      <>
-        <LoadingSpinner
-          style={{ marginTop: "15%", marginLeft: "15%", height: "10rem", width: "10rem" }}
-        />
-      </>
+      {isLoading ? (
+        <>
+          <LoadingSpinner
+            style={{
+              marginTop: "15%",
+              marginLeft: "15%",
+              height: "10rem",
+              width: "10rem",
+            }}
+          />
+        </>
       ) : (
-      <TeamCrest teamCrest={team.crestUrl} className="list-team-crest-image" />)}
+        <TeamCrest
+          teamCrest={team.crestUrl}
+          className="list-team-crest-image mb-[10%] group-hover:mb-[38%] group-hover:scale-150 transition-all duration-300"
+        />
+      )}
       <div
-        className=""
+        className="absolute top-15 group-hover:translate-y-[525%] transition-transform duration-300"
         style={{ alignSelf: "center" }}
         id={team.id.toString()}
       >
