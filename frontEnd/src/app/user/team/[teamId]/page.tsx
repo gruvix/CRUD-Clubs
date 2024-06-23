@@ -132,7 +132,6 @@ export default function Page({
                 />
                 <button
                   type="button"
-                  //className="btn btn-shadow overlay-button btn-outline-warning position-absolute top-50 start-50 translate-middle hover:scale-125"
                   className="btn btn-outline-warning overlay-button btn-shadow hover:scale-125 absolute top-1/2 transition duration-300 ease-in-out"
                   id="upload-image-button"
                   style={{ fontSize: "150%", display: "inline" }}
