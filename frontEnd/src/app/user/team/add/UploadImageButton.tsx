@@ -6,7 +6,7 @@ export default function UploadImageButton({ teamCrest }: { teamCrest: File | nul
     return (
       <button
         type="button"
-        className="btn btn-shadow btn-outline-warning"
+        className="btn btn-shadow btn-outline-warning transition duration-300 ease-in-out hover:scale-125"
         id="upload-image-button"
         style={{ fontSize: '150%', marginBottom: '2%', display: teamCrest ? 'none' : 'block' }}
         onClick={() => { document.getElementById('upload-image-input')?.click(); }}
@@ -28,7 +28,7 @@ export default function UploadImageButton({ teamCrest }: { teamCrest: File | nul
 
       <button
         type="button"
-        className="btn btn-shadow btn-success"
+        className="btn btn-shadow btn-success transition duration-300 ease-in-out hover:scale-125"
         id="uploaded-image-button"
         style={{ fontSize: '150%', marginBottom: '2%' }}
         onClick={() => { document.getElementById('upload-image-input')?.click(); }}
@@ -47,7 +47,7 @@ export default function UploadImageButton({ teamCrest }: { teamCrest: File | nul
   return (
     <button
       type="button"
-      className="btn btn-shadow btn-danger"
+      className="btn btn-shadow btn-danger transition duration-300 ease-in-out hover:scale-125"
       id="invalid-image-button"
       style={{ fontSize: '150%', marginBottom: '2%' }}
       onClick={() => { document.getElementById('upload-image-input').click(); }}
