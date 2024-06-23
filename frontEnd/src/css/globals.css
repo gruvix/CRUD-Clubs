@@ -89,7 +89,6 @@ td:first-child, th:first-child {
   background-color: rgba(187, 179, 179, 0.938);
 }
 .team-card-title {
-  font-size: 135%;
   font-family: "Courier New", monospace;
   color: rgb(238, 210, 179);
   text-align: center;
