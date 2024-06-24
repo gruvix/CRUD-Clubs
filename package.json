@@ -10,7 +10,8 @@
     "jest": "cd backEnd && npm run jest",
     "jest:windows": "start cmd /k \"cd backEnd && npm run jest\"",
     "cypress": "cd frontEnd && npm run test",
-    "build": "concurrently \"cd backEnd && npm run build\" \"cd frontEnd && npm run build\""
+    "build": "concurrently \"cd backEnd && npm run build\" \"cd frontEnd && npm run build\"",
+    "start": "concurrently \"cd backEnd && npm run start\" \"cd frontEnd && npm run start\""
   },
   "repository": {
     "type": "git",
