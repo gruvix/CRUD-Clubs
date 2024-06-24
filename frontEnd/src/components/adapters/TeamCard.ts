@@ -1,4 +1,4 @@
-import { BASE_API_URL } from '../../paths';
+import { baseAPIUrl } from '../../paths';
 
 export default class TeamCard {
   id: number;
@@ -8,7 +8,7 @@ export default class TeamCard {
   constructor(teamData: any) {
     this.id = teamData.id;
     this.name = teamData.name;
-    this.crestUrl = teamData.hasCustomCrest ? `${BASE_API_URL}${teamData.crestUrl}` : teamData.crestUrl;
+    this.crestUrl = teamData.hasCustomCrest ? `${baseAPIUrl}${teamData.crestUrl}` : teamData.crestUrl;
     this.hasDefault = teamData.hasDefault;
   }
 }

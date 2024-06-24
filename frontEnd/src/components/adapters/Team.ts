@@ -1,4 +1,4 @@
-import { BASE_API_URL } from '../../paths';
+import { baseAPIUrl } from '../../paths';
 import Player from './Player';
 
 export default class Team {
@@ -22,7 +22,7 @@ export default class Team {
     this.other = {
       id: teamData.id,
       hasDefault: teamData.hasDefault,
-      crestUrl: teamData.hasCustomCrest ? `${BASE_API_URL}${teamData.crestUrl}` : teamData.crestUrl,
+      crestUrl: teamData.hasCustomCrest ? `${baseAPIUrl}${teamData.crestUrl}` : teamData.crestUrl,
       lastUpdated: teamData.lastUpdated,
     };
     this.teamParameters = {

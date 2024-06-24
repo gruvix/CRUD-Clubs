@@ -1,4 +1,4 @@
-import { BASE_API_URL, apiRequestPaths } from "../../paths";
+import { baseAPIUrl, apiRequestPaths } from "../../paths";
 import UnauthorizedError from "@/components/errors/UnauthorizedError";
 import validateUsername from "../shared/usernameValidation";
 import Player from "./Player";
@@ -305,7 +305,7 @@ export default class APIAdapter {
           throw new Error(`${response.status} - ${response.statusText}`);
       }
     }
-    const newCrestUrl = BASE_API_URL + (await response.json());
+    const newCrestUrl = baseAPIUrl + (await response.json());
     return newCrestUrl;
   }
 }
