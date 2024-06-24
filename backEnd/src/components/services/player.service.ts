@@ -1,25 +1,32 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import Player from 'src/components/models/Player';
-import TeamStorageAdapter from '../Adapters/teamStorage.adapter';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import Player from '@comp/entities/player.entity';
+import Team from '@comp/entities/team.entity';
+import PlayerData from '@comp/interfaces/PlayerData.interface';
 
-const storage = new TeamStorageAdapter();
 @Injectable()
 export default class PlayerService {
-  async addPlayer(
-    username: string,
-    teamId: number,
-    player: Player,
-  ): Promise<number | Error> {
-    let newId: number;
+  constructor(
+    @InjectRepository(Player)
+    private readonly playerRepository: Repository<Player>,
+  ) {}
+
+  async addPlayer(teamId: number, newPlayerData: PlayerData): Promise<number> {
     try {
-      newId = storage.findNextFreePlayerId(
-        (await storage.getTeam(username, teamId)).squad,
-      );
-      if (newId !== 0 && !newId) {
-        throw new Error('Failed to add player, unkown server error');
-      }
-      player.id = newId;
-      await storage.addPlayer(username, teamId, player);
+      const newPlayer = {
+        ...newPlayerData,
+        team: teamId,
+      };
+      delete newPlayer.id;
+      const insertResult = await this.playerRepository
+        .createQueryBuilder()
+        .insert()
+        .into(Player)
+        .values(newPlayer)
+        .execute();
+      const newPlayerId = insertResult.raw;
+      return newPlayerId;
     } catch (error) {
       console.log(error);
       throw new HttpException(
@@ -27,15 +34,17 @@ export default class PlayerService {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
-    return newId;
   }
-  async updatePlayer(
-    username: string,
-    teamId: number,
-    newData: Player,
-  ): Promise<void> {
+  async updatePlayer(newData: PlayerData): Promise<void> {
+    if (!newData.id)
+      throw new HttpException('Missing player id', HttpStatus.BAD_REQUEST);
     try {
-      await storage.updatePlayer(username, teamId, newData);
+      await this.playerRepository
+        .createQueryBuilder()
+        .update(Player)
+        .set(newData)
+        .where('id = :id', { id: newData.id })
+        .execute();
     } catch (error) {
       console.log(error);
       throw new HttpException(
@@ -44,17 +53,46 @@ export default class PlayerService {
       );
     }
   }
-  async removePlayer(
-    username: string,
-    teamId: number,
-    playerId: string | number,
-  ): Promise<void> {
+  async removePlayer(playerId: number): Promise<void> {
+    if (!playerId)
+      throw new HttpException('Missing player id', HttpStatus.BAD_REQUEST);
     try {
-      await storage.removePlayer(username, teamId, playerId);
+      await this.playerRepository
+        .createQueryBuilder()
+        .delete()
+        .where('id = :id', { id: playerId })
+        .execute();
     } catch (error) {
       console.log(error);
       throw new HttpException(
         'Server failed to remove player',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  copyPlayersToTeam(team: Team, players: Player[]): void {
+    if(!players) return;
+    for (const player of players) {
+      player.team = team.id;
+      delete player.id;
+      team.squad.push(player);
+    }
+  }
+
+  async clearSquad(teamId: number): Promise<void> {
+    if (!teamId) throw new Error('No team id provided');
+    try {
+      await this.playerRepository
+        .createQueryBuilder()
+        .delete()
+        .from(Player)
+        .where({ team: teamId })
+        .execute();
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(
+        "Server failed to clear team's squad",
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }

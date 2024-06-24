@@ -23,6 +23,7 @@ export default function Page({
   const router = useRouter();
   const { teamId } = params;
   const [isLoading, setIsLoading] = React.useState(true);
+  const [isCrestLoading, setIsCrestLoading] = React.useState(true);
   const [teamData, setTeamData] = React.useState({} as Team);
   const [modalCallback, setModalCallback] = React.useState(
     () => (): void => {},
@@ -44,12 +45,14 @@ export default function Page({
   };
   const updateLocalTeamData = async () => {
     setIsLoading(true);
+    setIsCrestLoading(true);
     request
       .getTeam(teamId)
       .then((data) => {
         setTeamData(data);
         setPageTitle(`CRUD Team ${teamId} - ${data.teamParameters.name}`);
         setIsLoading(false);
+        setIsCrestLoading(false);
       })
       .catch((error: Error) => {
         errorHandler(error);
@@ -59,6 +62,7 @@ export default function Page({
     if (!isImageTypeValid(image)) {
       alert("Error: invalid image type");
     } else {
+      setIsCrestLoading(true);
       request
         .updateTeamCrest(teamId, image)
         .then((newCrestUrl: string) => {
@@ -69,6 +73,9 @@ export default function Page({
         })
         .catch((error: Error) => {
           errorHandler(error);
+        })
+        .finally(() => {
+          setIsCrestLoading(false);
         });
     }
   };
@@ -98,7 +105,7 @@ export default function Page({
         <div className="col-4">
           <button
             type="button"
-            className="btn btn-shadow btn-outline-warning"
+            className="btn btn-shadow btn-outline-warning transition duration-300 ease-in-out hover:scale-125"
             style={{ marginTop: "25px" }}
             onClick={() => router.push(webAppPaths.teams)}
             id="back-to-teams-button"
@@ -106,7 +113,7 @@ export default function Page({
             Go back
           </button>
         </div>
-        {isLoading ? (
+        {isCrestLoading ? (
           <LoadingSpinner
             style={{
               marginLeft: "10rem",
@@ -125,9 +132,9 @@ export default function Page({
                 />
                 <button
                   type="button"
-                  className="btn btn-shadow overlay-button btn-outline-warning position-absolute top-50 start-50 translate-middle"
+                  className="btn btn-outline-warning overlay-button btn-shadow hover:scale-125 absolute top-1/2 transition duration-300 ease-in-out"
                   id="upload-image-button"
-                  style={{ fontSize: "150%" }}
+                  style={{ fontSize: "150%", display: "inline" }}
                   onClick={() =>
                     document.getElementById("image-input")?.click()
                   }
@@ -184,7 +191,6 @@ export default function Page({
               <TeamDataTable
                 teamData={teamData.teamParameters}
                 teamId={Number(teamId)}
-                router={router}
               />
             </div>
           </div>

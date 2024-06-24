@@ -65,6 +65,14 @@ export async function validateFile(filePath: string): Promise<boolean> {
     return false;
   }
 }
+export async function readFolder(folderPath: string): Promise<string[]> {
+  try {
+    const files = await fsPromises.readdir(folderPath);
+    return files;
+  } catch (err) {
+    throw err;
+  }
+}
 export async function createFolder(folderPath: string): Promise<void> {
   try {
     await fsPromises.access(folderPath);

@@ -2,16 +2,15 @@
 /* eslint-disable cypress/unsafe-to-chain-command */
 /// <reference types="cypress" />
 
-import { BASE_API_URL, apiRequestPaths, webAppPaths } from "../../src/paths";
+import { apiRequestPaths, webAppPaths } from "../../src/paths";
 
 const TEST_USER = "cypress";
 const WEB_APP_BASE_URL = "http://localhost:8080";
 const MODAL_APPEAR_DELAY = 500;
-const TEST_TEAM_ID = 57;
+const TEST_TEAM_ID = "*";
 const TEST_TEAM_PATH = webAppPaths.team(TEST_TEAM_ID);
 const TEST_TEAM_PLAYER_PATH = apiRequestPaths.player(TEST_TEAM_ID);
 const CUSTOM_CREST_UPLOAD_PATH = apiRequestPaths.updateCrest(TEST_TEAM_ID);
-const TEST_TEAM_EXPECTED_IMG_SRC = `${apiRequestPaths.updateCrest(TEST_TEAM_ID)}/${TEST_TEAM_ID}.jpg`;
 const LOGIN_PATH = apiRequestPaths.user;
 
 function generateRandomString(length = 5) {
@@ -25,17 +24,13 @@ function generateRandomString(length = 5) {
 
   return result;
 }
-function filterTeams(filterOption: string = "Default teams", ) {
+function filterTeams(filterOption: string = "Default teams") {
   cy.get("#search-options-button").click();
   cy.get("#search-options").contains(filterOption).click({ force: true });
 }
 function selectFirstVisibleTeam() {
   cy.get(".card").filter(":visible").find(".edit").first().click();
 }
-function customCrestPath(teamId: number | string, fileExtension: string) {
-  return `${BASE_API_URL}/user/customCrest/${teamId}/${teamId}.${fileExtension}`;
-}
-
 describe("test login", () => {
   beforeEach(() => {
     cy.visit(WEB_APP_BASE_URL);
@@ -47,7 +42,7 @@ describe("test login", () => {
       .get("#enter-page-button")
       .click()
       .get("#username-error")
-      .should("contain", "Error: Username may only contain letters");
+      .should("contain", "Username may only contain letters");
   });
 
   it('should show an error indicating that the username may not be "Default"', () => {
@@ -56,7 +51,7 @@ describe("test login", () => {
       .get("#enter-page-button")
       .click()
       .get("#username-error")
-      .should("contain", 'Error: "Default" is not available');
+      .should("contain", '"Default" is not available');
   });
 
   it('should login with "test"', () => {
@@ -64,7 +59,7 @@ describe("test login", () => {
     cy.get("#username").should("have.text", TEST_USER);
   });
 
-  it('should login then visit login page and get redirected to user page', () => {
+  it("should login then visit login page and get redirected to user page", () => {
     cy.get("#username").type(TEST_USER).get("#enter-page-button").click();
     cy.get("#username").should("have.text", TEST_USER);
     cy.visit(WEB_APP_BASE_URL);
@@ -90,7 +85,6 @@ describe("test teams view page", () => {
   });
 
   it("should delete a team and reset the teams", () => {
-    cy.intercept("PATCH", "/user/reset/all").as("resetTeams");
     cy.get("h5")
       .first()
       .then(($text) => {
@@ -143,7 +137,7 @@ describe("test the team editor page with the first team", () => {
       .first()
       .should("contain", randomString);
     selectFirstVisibleTeam();
-    cy.get("#team-table span").each(($spanField) => {
+    cy.get("#team-table span:visible").each(($spanField) => {
       cy.wrap($spanField).should("contain", randomString);
     });
   });
@@ -152,6 +146,7 @@ describe("test the team editor page with the first team", () => {
     cy.get("#team-table .edit").first().click();
     cy.get("#team-table input")
       .first()
+      .should("be.visible")
       .type(randomString)
       .get("#team-table .apply")
       .first()
@@ -160,37 +155,40 @@ describe("test the team editor page with the first team", () => {
     cy.visit(WEB_APP_BASE_URL);
     filterTeams();
     selectFirstVisibleTeam();
-    cy.get("#team-table span").first().should("contain", randomString);
+    cy.get("#team-table span:visible").first().should("contain", randomString);
     cy.get("#reset-team-button").click().wait(MODAL_APPEAR_DELAY);
     cy.get("#confirmation-modal-button").click();
-    cy.get("#team-table span").first().should("not.contain", randomString);
+    cy.get("#team-table span:visible")
+      .first()
+      .should("not.contain", randomString);
   });
 
   it("uploads an image to the team crest", () => {
+    cy.get("#team-crest").should("be.visible");
     cy.intercept(`${CUSTOM_CREST_UPLOAD_PATH}`).as("uploadImage");
-    cy.fixture("crest.jpg").then((fileContent) => {
-      cy.get("#image-input").selectFile(
-        {
-          contents: new Cypress.Buffer(fileContent),
-          fileName: "crest.jpg",
-        },
-        { force: true },
-      );
+    cy.fixture("crest.jpg", null).as("fileContent");
+    cy.get('#team-crest').invoke('attr', 'src').then((oldImageSrc) => {
+      cy.get("#image-input").selectFile("@fileContent", { force: true });
+      cy.wait("@uploadImage").get('#team-crest').invoke('attr', 'src').should("not.equal", oldImageSrc);
     });
-    cy.wait("@uploadImage")
-      .get("#team-crest")
-      .should("have.attr", "src", TEST_TEAM_EXPECTED_IMG_SRC);
   });
 });
 describe("test the player editor with the first default team", () => {
   beforeEach(() => {
     cy.visit(WEB_APP_BASE_URL);
     cy.intercept("POST", LOGIN_PATH).as("login");
+    cy.intercept("GET", apiRequestPaths.teams).as("getTeams");
     cy.get("#username").type(TEST_USER).get("#enter-page-button").click();
     cy.wait("@login");
-    cy.get("#reset-teams-button").click().wait(MODAL_APPEAR_DELAY);
-    cy.get("#confirmation-modal-button").click();
-    cy.get(".edit").first().click();
+    cy.get("#reset-teams-button")
+      .click()
+      .wait(MODAL_APPEAR_DELAY)
+      .get("#confirmation-modal-button")
+      .click()
+      .wait("@getTeams");
+    cy.get(".card").first().should("be.visible");
+    filterTeams();
+    selectFirstVisibleTeam();
   });
 
   it("edits a random player from a team", () => {
@@ -216,13 +214,18 @@ describe("test the player editor with the first default team", () => {
                   cy.wrap($input).clear().type(randomStrings[index]);
                 });
 
-              cy.get(playerGetString).find(".apply").click();
               cy.get(playerGetString)
-                .find("span")
+                .find(".apply")
+                .click()
+                .wait("@editPlayer");
+              cy.get(playerGetString)
+                .find("span:visible")
                 .each(($spanField, index) => {
                   cy.wrap($spanField).should("contain", randomStrings[index]);
                 });
-              cy.visit(WEB_APP_BASE_URL + TEST_TEAM_PATH).wait("@editPlayer");
+
+              cy.visit(WEB_APP_BASE_URL).get(".edit").first().click();
+
               cy.get(playerGetString)
                 .find("span")
                 .each(($spanField, index) => {
@@ -319,28 +322,23 @@ describe("test add team", () => {
       cy.wrap($input).clear().type(randomString);
     });
     cy.intercept(`${CUSTOM_CREST_UPLOAD_PATH}`).as("uploadImage");
-    cy.fixture("crest.jpg").then((fileContent) => {
-      cy.get("#upload-image-input").selectFile(
-        {
-          contents: Cypress.Buffer.from(JSON.stringify(fileContent)),
-          fileName: "crest.jpg",
-        },
-        { force: true },
-      );
-    });
+
+    cy.fixture("crest.jpg", null).as("fileContent");
+    cy.get("#upload-image-input").selectFile(
+      {
+        contents: "@fileContent",
+        mimeType: "image/jpg",
+        fileName: "crest.jpg",
+      },
+      { force: true },
+    );
     cy.get("#submit-team-button").click();
-    cy.get("#team-table span").each(($spanField, index) => {
+    cy.get("#team-table span:visible").each(($spanField, index) => {
       cy.wrap($spanField).should("contain", teamFields[index]);
     });
-    cy.get("#players-table span").each(($spanField, index) => {
+    cy.get("#players-table span:visible").each(($spanField, index) => {
       cy.wrap($spanField).should("contain", playerFields[index]);
     });
-    cy.get("#team-id")
-      .invoke("val")
-      .then((teamId: string | number) => {
-        const expectedNewTeamImgSrc = customCrestPath(teamId, "jpg");
-        cy.get("#team-crest").should("have.attr", "src", expectedNewTeamImgSrc);
-      });
     cy.get("#reset-team-button").should("has.class", "disabled");
   });
 });

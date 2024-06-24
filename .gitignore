@@ -131,3 +131,5 @@ backEnd/src/userData
 CRUD-clubs-hex.drawio
 .$CRUD-clubs-hex.drawio.dtmp
 .$CRUD-clubs-hex.drawio.bkp
+/.vscode
+user data.session.sql

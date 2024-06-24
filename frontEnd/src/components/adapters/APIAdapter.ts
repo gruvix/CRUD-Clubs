@@ -1,4 +1,4 @@
-import { BASE_API_URL, apiRequestPaths, webAppPaths } from "../../paths";
+import { BASE_API_URL, apiRequestPaths } from "../../paths";
 import UnauthorizedError from "@/components/errors/UnauthorizedError";
 import validateUsername from "../shared/usernameValidation";
 import Player from "./Player";
@@ -7,6 +7,7 @@ import TeamCard from "./TeamCard";
 import TeamNotFoundError from "../errors/TeamNotFoundError";
 import TeamNotResettableError from "../errors/TeamNotResettableError";
 import UnsupportedMediaTypeError from "../errors/UnsupportedMediaTypeError";
+import PlayerNotFoundError from "../errors/PlayerNotFoundError";
 
 export default class APIAdapter {
   async login(username: string) {
@@ -115,17 +116,20 @@ export default class APIAdapter {
       switch (response.status) {
         case 403:
           throw new UnauthorizedError();
+        case 409:
+          await this.logout();
+          throw new UnauthorizedError();
         default:
           throw new Error(`${response.status} - ${response.statusText}`);
       }
     }
     const data = await response.json();
     const teamsData = {
-      teams: {} as TeamCard[],
+      teams: [] as TeamCard[],
       username: data.username as string,
     };
     Object.keys(data.teams).forEach((key) => {
-      teamsData.teams[Number(key)] = new TeamCard(data.teams[key]);
+      teamsData.teams.push(new TeamCard(data.teams[key]))
     });
     return teamsData;
   }
@@ -197,7 +201,7 @@ export default class APIAdapter {
         case 403:
           throw new UnauthorizedError();
         case 404:
-          throw new TeamNotFoundError();
+          throw new PlayerNotFoundError();
         default:
           throw new Error(`${response.status} - ${response.statusText}`);
       }
@@ -231,13 +235,14 @@ export default class APIAdapter {
     return newId;
   }
   async removePlayer(teamId: number, playerId: number) {
+    const playerData = { id: playerId };
     const response = await fetch(apiRequestPaths.player(teamId), {
       method: "DELETE",
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ playerId }),
+      body: JSON.stringify(playerData),
     });
     if (!response.ok) {
       switch (response.status) {

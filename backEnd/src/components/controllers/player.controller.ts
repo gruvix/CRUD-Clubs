@@ -7,12 +7,16 @@ import {
   UseGuards,
   Post,
   Delete,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
-import CustomRequest from 'src/components/models/CustomRequest.interface';
-import Player from 'src/components/models/Player';
-import { AuthGuard } from 'src/components/guards/auth.guard';
-import { TeamGuard } from 'src/components/guards/team.guard';
-import PlayerService from 'src/components/services/player.service';
+import { AuthGuard } from '@comp/guards/auth.guard';
+import { TeamGuard } from '@comp/guards/team.guard';
+import { PlayerGuard } from '@comp/guards/player.guard';
+import PlayerService from '@comp/services/player.service';
+import { UserId } from '@comp/decorators/userId.decorator';
+import { TeamId } from '@comp/decorators/teamId.decorator';
+import PlayerData from '@comp/interfaces/PlayerData.interface';
 
 @UseGuards(AuthGuard, TeamGuard)
 @Controller('user/team/:teamId/player')
@@ -21,36 +25,74 @@ export default class PlayerController {
 
   @Post()
   async addPlayer(
-    @Req() req: CustomRequest,
-    @Param() params: any,
-    @Body() newPlayer: Player,
-  ) {
-    const { username } = req.session;
-    console.log(`User ${username} is adding player to team ${params.teamId}`);
-    const newId = await this.playerService.addPlayer(username, params.teamId, newPlayer);
-    return newId;
+    @UserId() userId: number,
+    @TeamId() teamId: number,
+    @Body() newPlayer: PlayerData,
+  ): Promise<number> {
+    try {
+      console.log(`User ${userId} is adding player to team ${teamId}`);
+      const newId = await this.playerService.addPlayer(teamId, newPlayer);
+      return newId;
+    } catch (error) {
+      console.log(error);
+      if (error instanceof HttpException) {
+        throw error;
+      } else {
+        throw new HttpException(
+          'Failed to add player',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
+    }
   }
 
+  @UseGuards(PlayerGuard)
   @Patch()
   async updatePlayer(
-    @Req() req: CustomRequest,
-    @Param() params: any,
-    @Body() playerData: Player,
-  ) {
-    const { username } = req.session;
-    console.log(`User ${username} is updating team ${params.teamId}'s player ${playerData.id}`);
-    await this.playerService.updatePlayer(username, params.teamId, playerData);
+    @UserId() userId: number,
+    @TeamId() teamId: number,
+    @Body() playerData: PlayerData,
+  ): Promise<void> {
+    try {
+      console.log(
+        `User ${userId} is updating team ${teamId}'s player ${playerData.id}`,
+      );
+      await this.playerService.updatePlayer(playerData);
+    } catch (error) {
+      console.log(error);
+      if (error instanceof HttpException) {
+        throw error;
+      } else {
+        throw new HttpException(
+          'Failed to update player',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
+    }
   }
 
+  @UseGuards(PlayerGuard)
   @Delete()
-  async deletePlayer(
-    @Req() req: CustomRequest,
-    @Param() params: any,
-    @Body() data: { playerId: number },
-  ) {
-    const { playerId } = data;
-    const { username } = req.session;
-    console.log(`User ${username} is deleting team ${params.teamId}'s player ${playerId}`);
-    await this.playerService.removePlayer(username, params.teamId, playerId);
+  async removePlayer(
+    @UserId() userId: number,
+    @TeamId() teamId: number,
+    @Body() playerData: PlayerData,
+  ): Promise<void> {
+    try {
+      console.log(
+        `User ${userId} is deleting team ${teamId}'s player ${playerData.id}`,
+      );
+      await this.playerService.removePlayer(playerData.id);
+    } catch (error) {
+      console.log(error);
+      if (error instanceof HttpException) {
+        throw error;
+      } else {
+        throw new HttpException(
+          'Failed to remove player',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
+    }
   }
 }

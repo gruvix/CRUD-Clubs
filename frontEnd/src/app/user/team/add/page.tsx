@@ -24,12 +24,11 @@ export default function Page() {
   const [playerInputs, setPlayerInputs] = React.useState<Player[]>([]);
   const [teamCrest, setTeamCrest] = React.useState<File | null>(null);
   const [canSubmitTeam, setCanSubmitTeam] = React.useState(false);
+  const [nameError, setNameError] = React.useState(false);
   const router = useRouter();
 
   const errorHandler = (error: Error) => {
-    if (
-      error instanceof UnsupportedMediaTypeError
-    ) {
+    if (error instanceof UnsupportedMediaTypeError) {
       alert(`${error}`);
     } else {
       setAsyncError(error);
@@ -46,9 +45,13 @@ export default function Page() {
     return nextSlot;
   }
   const checkTeamSubmitability = () => {
-    if (teamParameterInputs.name && isImageTypeValid(teamCrest)) {
-      setCanSubmitTeam(true);
+    if (teamParameterInputs.name) {
+      setNameError(false);
+      if (isImageTypeValid(teamCrest)) {
+        setCanSubmitTeam(true);
+      } else setCanSubmitTeam(false);
     } else {
+      setNameError(true);
       setCanSubmitTeam(false);
     }
   };
@@ -82,7 +85,7 @@ export default function Page() {
         <div className="col-4">
           <button
             type="button"
-            className="btn btn-shadow btn-outline-warning"
+            className="btn btn-shadow btn-outline-warning transition duration-300 ease-in-out hover:scale-125"
             style={{ marginTop: "25px" }}
             data-bs-toggle="modal"
             data-bs-target="#confirmationModal"
@@ -126,7 +129,10 @@ export default function Page() {
                           });
                         }}
                         type="text"
-                        className="form-control"
+                        className={
+                          "form-control " +
+                          (key === "name" && nameError ? " is-invalid" : "")
+                        }
                         value={
                           teamParameterInputs[key]
                             ? teamParameterInputs[key]
@@ -161,7 +167,7 @@ export default function Page() {
                     >
                       <button
                         type="button"
-                        className="btn btn-shadow btn-outline-warning"
+                        className="btn btn-shadow btn-outline-warning transition duration-300 ease-in-out hover:scale-[112%]"
                         id="add-player-button"
                         style={{ maxHeight: "40px", minWidth: "120px" }}
                         onClick={() => {
@@ -201,7 +207,7 @@ export default function Page() {
                       >
                         <button
                           type="button"
-                          className="btn btn-outline-danger remove"
+                          className="btn btn-outline-danger remove transition duration-300 ease-in-out hover:scale-125 hover:translate-x-[25%]"
                           onClick={() =>
                             setPlayerSlots(
                               playerSlots.filter((s) => s !== slot),
@@ -236,7 +242,7 @@ export default function Page() {
         <div className="d-flex justify-content-center img-container">
           <button
             type="button"
-            className="btn btn-shadow btn-outline-warning"
+            className="btn btn-shadow btn-outline-warning transition duration-300 ease-in-out hover:scale-125"
             disabled={!canSubmitTeam}
             id="submit-team-button"
             style={{ fontSize: "150%" }}

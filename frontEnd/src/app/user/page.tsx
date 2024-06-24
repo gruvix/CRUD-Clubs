@@ -5,10 +5,13 @@ import LoginButton from "./LoginButton";
 import APIAdapter from "@/components/adapters/APIAdapter";
 import { useRouter } from "next/navigation";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
-import loginErrorHandler from "./loginErrorHandler";
+import "@/css/globals.css";
 
 export default function Login() {
   const [isLoading, setIsLoading] = React.useState(true);
+  const [loginError, setLoginError] = React.useState(false);
+  const [loginErrorMessage, setLoginErrorMessage] =
+    React.useState("ERROR_MESSAGE");
   const router = useRouter();
   const checkLoginStatus = () => {
     const request = new APIAdapter();
@@ -19,21 +22,31 @@ export default function Login() {
       })
       .catch((error) => {
         setIsLoading(false);
-        loginErrorHandler(error as Error);
+        setLoginErrorMessage(error.message);
+        setLoginError(true);
+        setTimeout(() => {
+          setLoginError(false);
+        }, 1500);
       });
   };
-  checkLoginStatus();
+  
+  React.useEffect(() => {
+    checkLoginStatus();
+  }, []);
 
   return isLoading ? (
-    <><title>CRUD Login</title><LoadingSpinner
-      style={{
-        marginLeft: "44%",
-        marginTop: "20%",
-        width: "15rem",
-        height: "15rem",
-      }} /></>
+    <>
+      <title>CRUD Login</title>
+      <LoadingSpinner
+        style={{
+          marginLeft: "44%",
+          marginTop: "20%",
+          width: "15rem",
+          height: "15rem",
+        }}
+      />
+    </>
   ) : (
-
     <div className="container">
       <title>CRUD Login</title>
       <div className="row justify-content-center align-items-center">
@@ -46,7 +59,7 @@ export default function Login() {
               marginTop: "50px",
             }}
           >
-            Timothys Football Club CRUD
+            Timothy's Football Club CRUD
           </h1>
         </div>
       </div>
@@ -60,7 +73,7 @@ export default function Login() {
               position: "relative",
             }}
           >
-            <LoginButton />
+            <LoginButton setLoginError={setLoginError} setLoginErrorMessage={setLoginErrorMessage} />
           </div>
         </div>
       </div>
@@ -71,12 +84,15 @@ export default function Login() {
         <div className="col-md-3">
           <div className="input-group">
             <p
-              className="alert alert-danger"
+              className={
+                "alert alert-danger" +
+                (loginError ? " username-error-show" : " username-error-hide")
+              }
               role="alert"
               id="username-error"
-              style={{ opacity: "0" }}
+              style={loginError ? { opacity: "1" } : { opacity: "0" }}
             >
-              ERROR_MESSAGE
+              {loginErrorMessage}
             </p>
           </div>
         </div>

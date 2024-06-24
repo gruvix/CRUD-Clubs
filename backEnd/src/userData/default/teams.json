@@ -1,1 +1,182 @@
-{"57":{"name":"Arsenal FC","id":57,"crestUrl":"https://upload.wikimedia.org/wikipedia/en/5/53/Arsenal_FC.svg","hasCustomCrest":false,"isDefault":true,"hasDefault":true,"lastUpdated":"2020-05-14T02:41:34Z"},"58":{"name":"Aston Villa FC","id":58,"crestUrl":"https://upload.wikimedia.org/wikipedia/de/9/9f/Aston_Villa_logo.svg","hasCustomCrest":false,"isDefault":true,"hasDefault":true,"lastUpdated":"2020-05-14T02:41:36Z"},"61":{"name":"Chelsea FC","id":61,"crestUrl":"https://upload.wikimedia.org/wikipedia/en/c/cc/Chelsea_FC.svg","hasCustomCrest":false,"isDefault":true,"hasDefault":true,"lastUpdated":"2020-05-14T02:41:41Z"},"62":{"name":"Everton FC","id":62,"crestUrl":"https://upload.wikimedia.org/wikipedia/en/7/7c/Everton_FC_logo.svg","hasCustomCrest":false,"isDefault":true,"hasDefault":true,"lastUpdated":"2020-05-14T02:41:42Z"},"64":{"name":"Liverpool FC","id":64,"crestUrl":"https://upload.wikimedia.org/wikipedia/en/0/0c/Liverpool_FC.svg","hasCustomCrest":false,"isDefault":true,"hasDefault":true,"lastUpdated":"2020-05-14T02:41:46Z"},"65":{"name":"Manchester City FC","id":65,"crestUrl":"https://upload.wikimedia.org/wikipedia/en/e/eb/Manchester_City_FC_badge.svg","hasCustomCrest":false,"isDefault":true,"hasDefault":true,"lastUpdated":"2020-05-14T02:41:49Z"},"66":{"name":"Manchester United FC","id":66,"crestUrl":"https://upload.wikimedia.org/wikipedia/en/7/7a/Manchester_United_FC_crest.svg","hasCustomCrest":false,"isDefault":true,"hasDefault":true,"lastUpdated":"2020-05-14T02:41:51Z"},"67":{"name":"Newcastle United FC","id":67,"crestUrl":"https://upload.wikimedia.org/wikipedia/en/5/56/Newcastle_United_Logo.svg","hasCustomCrest":false,"isDefault":true,"hasDefault":true,"lastUpdated":"2020-05-14T02:41:53Z"},"68":{"name":"Norwich City FC","id":68,"crestUrl":"https://upload.wikimedia.org/wikipedia/en/thumb/1/17/Norwich_City_FC_logo.svg/800px-Norwich_City_FC_logo.svg.png","hasCustomCrest":false,"isDefault":true,"hasDefault":true,"lastUpdated":"2020-05-14T02:41:54Z"},"73":{"name":"Tottenham Hotspur FC","id":73,"crestUrl":"https://upload.wikimedia.org/wikipedia/en/b/b4/Tottenham_Hotspur.svg","hasCustomCrest":false,"isDefault":true,"hasDefault":true,"lastUpdated":"2020-05-14T02:42:01Z"},"76":{"name":"Wolverhampton Wanderers FC","id":76,"crestUrl":"https://upload.wikimedia.org/wikipedia/en/f/fc/Wolverhampton_Wanderers.svg","hasCustomCrest":false,"isDefault":true,"hasDefault":true,"lastUpdated":"2020-05-14T02:42:06Z"},"328":{"name":"Burnley FC","id":328,"crestUrl":"https://upload.wikimedia.org/wikipedia/en/thumb/6/6d/Burnley_FC_Logo.svg/800px-Burnley_FC_Logo.svg.png","hasCustomCrest":false,"isDefault":true,"hasDefault":true,"lastUpdated":"2020-05-14T02:42:11Z"},"338":{"name":"Leicester City FC","id":338,"crestUrl":"https://upload.wikimedia.org/wikipedia/en/2/2d/Leicester_City_crest.svg","hasCustomCrest":false,"isDefault":true,"hasDefault":true,"lastUpdated":"2020-05-14T02:42:16Z"},"340":{"name":"Southampton FC","id":340,"crestUrl":"https://upload.wikimedia.org/wikipedia/en/c/c9/FC_Southampton.svg","hasCustomCrest":false,"isDefault":true,"hasDefault":true,"lastUpdated":"2020-05-14T02:42:17Z"},"346":{"name":"Watford FC","id":346,"crestUrl":"https://upload.wikimedia.org/wikipedia/en/e/e2/Watford.svg","hasCustomCrest":false,"isDefault":true,"hasDefault":true,"lastUpdated":"2020-05-14T02:42:25Z"},"354":{"name":"Crystal Palace FC","id":354,"crestUrl":"https://upload.wikimedia.org/wikipedia/en/thumb/a/a2/Crystal_Palace_FC_logo_%282022%29.svg/800px-Crystal_Palace_FC_logo_%282022%29.svg.png","hasCustomCrest":false,"isDefault":true,"hasDefault":true,"lastUpdated":"2020-05-14T02:42:33Z"},"356":{"name":"Sheffield United FC","id":356,"crestUrl":"https://upload.wikimedia.org/wikipedia/en/9/9c/Sheffield_United_FC_logo.svg","hasCustomCrest":false,"isDefault":true,"hasDefault":true,"lastUpdated":"2020-05-14T02:42:36Z"},"397":{"name":"Brighton & Hove Albion FC","id":397,"crestUrl":"https://upload.wikimedia.org/wikipedia/en/f/fd/Brighton_%26_Hove_Albion_logo.svg","hasCustomCrest":false,"isDefault":true,"hasDefault":true,"lastUpdated":"2020-05-14T02:43:01Z"},"563":{"name":"West Ham United FC","id":563,"crestUrl":"https://upload.wikimedia.org/wikipedia/en/c/c2/West_Ham_United_FC_logo.svg","hasCustomCrest":false,"isDefault":true,"hasDefault":true,"lastUpdated":"2020-05-14T02:43:12Z"},"1044":{"name":"AFC Bournemouth","id":1044,"crestUrl":"https://upload.wikimedia.org/wikipedia/en/e/e5/AFC_Bournemouth_%282013%29.svg","hasCustomCrest":false,"isDefault":true,"hasDefault":true,"lastUpdated":"2020-05-14T02:43:14Z"}}
+{
+  "57": {
+    "name": "Arsenal FC",
+    "id": 57,
+    "crestUrl": "https://upload.wikimedia.org/wikipedia/en/5/53/Arsenal_FC.svg",
+    "hasCustomCrest": false,
+    "isDefault": true,
+    "hasDefault": true,
+    "lastUpdated": "2020-05-14T02:41:34Z"
+  },
+  "58": {
+    "name": "Aston Villa FC",
+    "id": 58,
+    "crestUrl": "https://upload.wikimedia.org/wikipedia/de/9/9f/Aston_Villa_logo.svg",
+    "hasCustomCrest": false,
+    "isDefault": true,
+    "hasDefault": true,
+    "lastUpdated": "2020-05-14T02:41:36Z"
+  },
+  "61": {
+    "name": "Chelsea FC",
+    "id": 61,
+    "crestUrl": "https://upload.wikimedia.org/wikipedia/en/c/cc/Chelsea_FC.svg",
+    "hasCustomCrest": false,
+    "isDefault": true,
+    "hasDefault": true,
+    "lastUpdated": "2020-05-14T02:41:41Z"
+  },
+  "62": {
+    "name": "Everton FC",
+    "id": 62,
+    "crestUrl": "https://upload.wikimedia.org/wikipedia/en/7/7c/Everton_FC_logo.svg",
+    "hasCustomCrest": false,
+    "isDefault": true,
+    "hasDefault": true,
+    "lastUpdated": "2020-05-14T02:41:42Z"
+  },
+  "64": {
+    "name": "Liverpool FC",
+    "id": 64,
+    "crestUrl": "https://upload.wikimedia.org/wikipedia/en/0/0c/Liverpool_FC.svg",
+    "hasCustomCrest": false,
+    "isDefault": true,
+    "hasDefault": true,
+    "lastUpdated": "2020-05-14T02:41:46Z"
+  },
+  "65": {
+    "name": "Manchester City FC",
+    "id": 65,
+    "crestUrl": "https://upload.wikimedia.org/wikipedia/en/e/eb/Manchester_City_FC_badge.svg",
+    "hasCustomCrest": false,
+    "isDefault": true,
+    "hasDefault": true,
+    "lastUpdated": "2020-05-14T02:41:49Z"
+  },
+  "66": {
+    "name": "Manchester United FC",
+    "id": 66,
+    "crestUrl": "https://upload.wikimedia.org/wikipedia/en/7/7a/Manchester_United_FC_crest.svg",
+    "hasCustomCrest": false,
+    "isDefault": true,
+    "hasDefault": true,
+    "lastUpdated": "2020-05-14T02:41:51Z"
+  },
+  "67": {
+    "name": "Newcastle United FC",
+    "id": 67,
+    "crestUrl": "https://upload.wikimedia.org/wikipedia/en/5/56/Newcastle_United_Logo.svg",
+    "hasCustomCrest": false,
+    "isDefault": true,
+    "hasDefault": true,
+    "lastUpdated": "2020-05-14T02:41:53Z"
+  },
+  "68": {
+    "name": "Norwich City FC",
+    "id": 68,
+    "crestUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/1/17/Norwich_City_FC_logo.svg/800px-Norwich_City_FC_logo.svg.png",
+    "hasCustomCrest": false,
+    "isDefault": true,
+    "hasDefault": true,
+    "lastUpdated": "2020-05-14T02:41:54Z"
+  },
+  "73": {
+    "name": "Tottenham Hotspur FC",
+    "id": 73,
+    "crestUrl": "https://upload.wikimedia.org/wikipedia/en/b/b4/Tottenham_Hotspur.svg",
+    "hasCustomCrest": false,
+    "isDefault": true,
+    "hasDefault": true,
+    "lastUpdated": "2020-05-14T02:42:01Z"
+  },
+  "76": {
+    "name": "Wolverhampton Wanderers FC",
+    "id": 76,
+    "crestUrl": "https://upload.wikimedia.org/wikipedia/en/f/fc/Wolverhampton_Wanderers.svg",
+    "hasCustomCrest": false,
+    "isDefault": true,
+    "hasDefault": true,
+    "lastUpdated": "2020-05-14T02:42:06Z"
+  },
+  "328": {
+    "name": "Burnley FC",
+    "id": 328,
+    "crestUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/6/6d/Burnley_FC_Logo.svg/800px-Burnley_FC_Logo.svg.png",
+    "hasCustomCrest": false,
+    "isDefault": true,
+    "hasDefault": true,
+    "lastUpdated": "2020-05-14T02:42:11Z"
+  },
+  "338": {
+    "name": "Leicester City FC",
+    "id": 338,
+    "crestUrl": "https://upload.wikimedia.org/wikipedia/en/2/2d/Leicester_City_crest.svg",
+    "hasCustomCrest": false,
+    "isDefault": true,
+    "hasDefault": true,
+    "lastUpdated": "2020-05-14T02:42:16Z"
+  },
+  "340": {
+    "name": "Southampton FC",
+    "id": 340,
+    "crestUrl": "https://upload.wikimedia.org/wikipedia/en/c/c9/FC_Southampton.svg",
+    "hasCustomCrest": false,
+    "isDefault": true,
+    "hasDefault": true,
+    "lastUpdated": "2020-05-14T02:42:17Z"
+  },
+  "346": {
+    "name": "Watford FC",
+    "id": 346,
+    "crestUrl": "https://upload.wikimedia.org/wikipedia/en/e/e2/Watford.svg",
+    "hasCustomCrest": false,
+    "isDefault": true,
+    "hasDefault": true,
+    "lastUpdated": "2020-05-14T02:42:25Z"
+  },
+  "354": {
+    "name": "Crystal Palace FC",
+    "id": 354,
+    "crestUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/a/a2/Crystal_Palace_FC_logo_%282022%29.svg/800px-Crystal_Palace_FC_logo_%282022%29.svg.png",
+    "hasCustomCrest": false,
+    "isDefault": true,
+    "hasDefault": true,
+    "lastUpdated": "2020-05-14T02:42:33Z"
+  },
+  "356": {
+    "name": "Sheffield United FC",
+    "id": 356,
+    "crestUrl": "https://upload.wikimedia.org/wikipedia/en/9/9c/Sheffield_United_FC_logo.svg",
+    "hasCustomCrest": false,
+    "isDefault": true,
+    "hasDefault": true,
+    "lastUpdated": "2020-05-14T02:42:36Z"
+  },
+  "397": {
+    "name": "Brighton & Hove Albion FC",
+    "id": 397,
+    "crestUrl": "https://upload.wikimedia.org/wikipedia/en/f/fd/Brighton_%26_Hove_Albion_logo.svg",
+    "hasCustomCrest": false,
+    "isDefault": true,
+    "hasDefault": true,
+    "lastUpdated": "2020-05-14T02:43:01Z"
+  },
+  "563": {
+    "name": "West Ham United FC",
+    "id": 563,
+    "crestUrl": "https://upload.wikimedia.org/wikipedia/en/c/c2/West_Ham_United_FC_logo.svg",
+    "hasCustomCrest": false,
+    "isDefault": true,
+    "hasDefault": true,
+    "lastUpdated": "2020-05-14T02:43:12Z"
+  },
+  "1044": {
+    "name": "AFC Bournemouth",
+    "id": 1044,
+    "crestUrl": "https://upload.wikimedia.org/wikipedia/en/e/e5/AFC_Bournemouth_%282013%29.svg",
+    "hasCustomCrest": false,
+    "isDefault": true,
+    "hasDefault": true,
+    "lastUpdated": "2020-05-14T02:43:14Z"
+  }
+}

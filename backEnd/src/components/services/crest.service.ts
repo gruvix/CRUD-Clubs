@@ -1,25 +1,44 @@
-import { Injectable } from '@nestjs/common';
-import CrestStorageAdapter from '../Adapters/crestStorage.adapter';
-import TeamStorageAdapter from '../Adapters/teamStorage.adapter';
-import { generateCustomCrestUrl } from '../storage/userPath';
-
-const crestStorage = new CrestStorageAdapter();
-const teamStorage = new TeamStorageAdapter();
+import { Inject, Injectable } from '@nestjs/common';
+import CrestStorageService from '@comp/services/crestStorage.service';
+import { generateCustomCrestUrl } from '@comp/storage/userPath';
+import TeamService from './team.service';
+import Team from '@comp/entities/team.entity';
 
 @Injectable()
 export default class CrestService {
+  constructor(
+    @Inject(TeamService)
+    private readonly teamService: TeamService,
+    @Inject(CrestStorageService)
+    private readonly crestStorageService: CrestStorageService,
+  ) {}
+  async updateCrest(
+    userId: number,
+    teamId: number,
+    newImageFileName: string,
+  ): Promise<string> {
+    try {
+      const oldCrestFileData = await this.teamService.getTeam(
+        teamId,
+        [],
+        ['crestFileName', 'hasCustomCrest'],
+      );
+      const crestUrl = generateCustomCrestUrl(teamId, newImageFileName);
+      let newData = new Team();
+      newData.id = teamId;
+      newData.crestUrl = crestUrl;
+      newData.crestFileName = newImageFileName;
+      newData.hasCustomCrest = true;
 
-    async getCrest(username: string, fileName: string): Promise<Buffer> {
-        return await crestStorage.getCrest(username, fileName);
+      await this.teamService.updateTeam(teamId, newData);
+      await this.crestStorageService.deleteCrest(
+        userId,
+        oldCrestFileData.crestFileName,
+      );
+      return crestUrl;
+    } catch (error) {
+      await this.crestStorageService.deleteCrest(userId, newImageFileName);
+      throw new Error(error);
     }
-    async updateCrest(username: string, teamId: number, filename: string): Promise<string> {
-        crestStorage.deleteOldCrest(username, teamId, filename);
-        const crestUrl = generateCustomCrestUrl(teamId, filename);
-        const newData = {
-            crestUrl,
-            hasCustomCrest: true,
-          };
-          await teamStorage.updateTeam(newData, username, teamId);
-        return crestUrl
-    }
+  }
 }

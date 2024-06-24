@@ -4,17 +4,17 @@ import {
   HttpException,
   HttpStatus,
   Put,
-  Req,
   UseGuards,
 } from '@nestjs/common';
-import CustomRequest from 'src/components/models/CustomRequest.interface';
-import { AuthGuard } from 'src/components/guards/auth.guard';
-import TeamsService from 'src/components/services/teams.service';
-import TeamListTeam from '../models/TeamListTeam';
+import { AuthGuard } from '@comp/guards/auth.guard';
+import TeamsService from '@comp/services/teams.service';
+import { UserId } from '@comp/decorators/userId.decorator';
+import { Username } from '@comp/decorators/username.decorator';
+import TeamShortDTO from '@comp/interfaces/TeamShortDTO.interface';
 
-interface TeamsData {
+interface TeamsListData {
   username: string;
-  teams: TeamListTeam[];
+  teams: TeamShortDTO[];
 }
 
 @UseGuards(AuthGuard)
@@ -23,35 +23,43 @@ export default class TeamsController {
   constructor(private readonly teamsService: TeamsService) {}
 
   @Get()
-  async getTeamsList(@Req() req: CustomRequest): Promise<TeamsData> {
-    const { username } = req.session;
-    console.log(`User ${username} requested teams list`);
+  async getTeamsList(
+    @UserId() userId: number,
+    @Username() username: string,
+  ): Promise<TeamsListData> {
+    console.log(`User ${userId} requested teams list`);
     try {
-      const data: TeamsData = {
+      const data: TeamsListData = {
         username, //Create custom endpoint to get username, remove username from other requests
-        teams: await this.teamsService.getTeamsData(username),
+        teams: await this.teamsService.getTeamsList(userId),
       };
       return data;
     } catch (error) {
-      if(error)
-      throw new HttpException(
-        'Failed to get teams',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      if (error instanceof HttpException) {
+        throw error;
+      } else {
+        throw new HttpException(
+          'Failed to get teams',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
     }
   }
 
   @Put()
-  async resetTeamsList(@Req() req: CustomRequest) {
-    const { username } = req.session;
-    console.log(`User ${username} requested teams list reset`);
+  async resetTeams(@UserId() userId: number) {
+    console.log(`User ${userId} requested teams list reset`);
     try {
-      await this.teamsService.resetTeamsList(username);
+      await this.teamsService.resetTeams(userId);
     } catch (error) {
-      throw new HttpException(
-        'Failed to reset teams',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      if (error instanceof HttpException) {
+        throw error;
+      } else {
+        throw new HttpException(
+          'Failed to reset teams',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
     }
   }
 }

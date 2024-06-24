@@ -1,20 +1,18 @@
 import {
   Controller,
-  Req,
   Body,
   UseGuards,
   Post,
   UseInterceptors,
-  UploadedFile,
   HttpException,
-  Res,
+  HttpStatus,
 } from '@nestjs/common';
-import CustomRequest from 'src/components/models/CustomRequest.interface';
-import { AuthGuard } from 'src/components/guards/auth.guard';
-import TeamService from 'src/components/services/team.service';
+import { AuthGuard } from '@comp/guards/auth.guard';
+import TeamService from '@comp/services/team.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import multerOptions from '../storage/multerConfig';
-import { Response } from 'express';
+import multerOptions from '@comp/storage/multerConfig';
+import { UserId } from '@comp/decorators/userId.decorator';
+import { UploadedFileName } from '@comp/decorators/uploadedFileName.decorator';
 
 @UseGuards(AuthGuard)
 @Controller('user/team')
@@ -24,29 +22,29 @@ export default class NewTeamController {
   @Post('add')
   @UseInterceptors(FileInterceptor('image', multerOptions))
   async addTeam(
-    @Req() req: CustomRequest,
+    @UserId() userId: number,
     @Body() body: { teamData: string },
-    @UploadedFile() image: Express.Multer.File,
-    @Res() res: Response,
-  ) {
-    const { username } = req.session;
+    @UploadedFileName() imageFileName: string,
+  ): Promise<number> {
     const parsedTeamData = JSON.parse(body.teamData);
     console.log(
-      `User ${username} is adding the new team "${parsedTeamData.name}"`,
+      `User ${userId} is adding the new team "${parsedTeamData.name}"`,
     );
     try {
       const newTeamId = await this.teamService.addTeam(
-        username,
+        userId,
         parsedTeamData,
-        image.filename,
-      )
-      res.status(201).send(newTeamId.toString());
+        imageFileName,
+      );
+      return newTeamId;
     } catch (error) {
       if (error instanceof HttpException) {
-        return res.status(error.getStatus()).send(error.message);
+        throw error;
       } else {
-        console.log(error.message);
-        return res.status(500).send(error.message);
+        throw new HttpException(
+          'Failed to add team',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
       }
     }
   }

@@ -1,12 +1,11 @@
 import React, { useEffect, useRef } from "react";
 import APIAdapter from "@/components/adapters/APIAdapter";
 import { TeamParameters } from "@/components/adapters/Team";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import LoginSpiner from "@/components/shared/loginSpinner";
 
 interface TeamDataTableProps {
   teamData: TeamParameters;
   teamId: number;
-  router: AppRouterInstance;
 }
 interface TeamDataRows {
   [key: string]: string | number;
@@ -14,11 +13,11 @@ interface TeamDataRows {
 export default function TeamDataTable({
   teamData,
   teamId,
-  router,
 }: TeamDataTableProps): React.ReactElement {
   const [rowsTeamData, setRowsTeamData] = React.useState<TeamDataRows>({});
-  const [editingRowKey, setEditingRowKey] = React.useState<string>('');
+  const [editingRowKey, setEditingRowKey] = React.useState<string>("");
   const [inputValue, setInputValue] = React.useState<TeamDataRows>({});
+  const [rowLoading, setRowLoading] = React.useState<string>("");
   const inputReferece = useRef(null);
   const requestAdapter = new APIAdapter();
 
@@ -27,25 +26,25 @@ export default function TeamDataTable({
     setInputValue({ ...inputValue, [key]: rowsTeamData[key] });
   };
   const disableRowEditing = () => {
-    setEditingRowKey('');
+    setEditingRowKey("");
   };
   const updateTeamRow = (key: string) => {
     const newState = { ...rowsTeamData, [key]: inputValue[key] };
     setRowsTeamData(newState);
   };
-  const handleRowUpdate = (key: string) => {
+  const handleRowUpdate = async (key: string) => {
+    setRowLoading(key);
+
     const updatedData = { [key]: [inputValue[key]] };
     try {
-      requestAdapter.updateTeam(teamId, updatedData).then((data) => {
-        if ("redirect" in data) {
-          router.push(data.redirect);
-        } else {
-          disableRowEditing();
-          updateTeamRow(key);
-        }
+      await requestAdapter.updateTeam(teamId, updatedData).then(() => {
+        disableRowEditing();
+        updateTeamRow(key);
       });
     } catch (error) {
       console.log(error);
+    } finally {
+      setRowLoading("");
     }
   };
   const handleInputFocus = (event: React.ChangeEvent<HTMLInputElement>) =>
@@ -64,52 +63,81 @@ export default function TeamDataTable({
       <table className="table" id="team-table">
         <thead>
           {Object.keys(rowsTeamData).map((key: string) => (
-            <tr className="table-dark table-bordered" id={key} key={key}>
+            <tr className="table-dark table-bordered group" id={key} key={key}>
               <td
                 className="text-warning"
                 style={{ textTransform: "capitalize", paddingTop: "3.5%" }}
               >
                 {key}
               </td>
-              <td>
-                <span
-                  style={{ display: editingRowKey === key ? "none" : "inline" }}
-                >
-                  {rowsTeamData[key]}
-                </span>
-                <input
-                  ref={editingRowKey === key ? inputReferece : null}
-                  onFocus={handleInputFocus}
-                  type="text"
-                  className="form-control"
-                  value={inputValue[key]? inputValue[key] : ""}
-                  style={{ display: editingRowKey === key ? "inline" : "none" }}
-                  id={`input-field-${key}`}
-                  onChange={(e) =>
-                    setInputValue({ ...inputValue, [key]: e.target.value })
-                  }
-                  onKeyDown={(e) =>
-                    e.key === "Enter" ? handleRowUpdate(key) : null
-                  }
+              <td style={{ position: "relative" }}>
+                <LoginSpiner
+                  style={{
+                    display: rowLoading === key ? "inline" : "none",
+                    left: "42%",
+                    bottom: "15%",
+                    width: "2rem",
+                    height: "2rem",
+                    zIndex: "100",
+                  }}
                 />
+                <>
+                  <span
+                    style={{
+                      display: editingRowKey === key ? "none" : "block",
+                      borderWidth: "0px"
+                    }} 
+                    className="text-normal"
+                  >
+                    {rowsTeamData[key]}
+                  </span>
+                  <input
+                    ref={editingRowKey === key ? inputReferece : null}
+                    onFocus={handleInputFocus}
+                    type="text"
+                    disabled={rowLoading === key ? true : false}
+                    className="form-control"
+                    value={inputValue[key] ? inputValue[key] : ""}
+                    style={{
+                      display: editingRowKey === key ? "inline" : "none",
+                    }}
+                    id={`input-field-${key}`}
+                    onChange={(e) =>
+                      setInputValue({ ...inputValue, [key]: e.target.value })
+                    }
+                    onKeyDown={(e) =>
+                      e.key === "Enter" ? handleRowUpdate(key) : null
+                    }
+                  />
+                </>
               </td>
               <td>
                 <button
+                  className="btn btn-outline-success disabled"
+                  disabled
+                  style={{ display: rowLoading === key ? "inline" : "none" }}
+                >
+                  Updating...
+                </button>
+                <button
                   type="button"
-                  className="btn btn-shadow btn-outline-warning edit"
+                  className="btn btn-shadow btn-outline-warning edit transition duration-300 ease-in-out group-hover:scale-125"
                   onClick={() => enableRowEditing(key)}
                   style={{
-                    display: editingRowKey === '' ? "inline" : "none",
+                    display: editingRowKey === "" ? "inline" : "none",
                   }}
                 >
                   edit
                 </button>
                 <button
                   type="button"
-                  className="btn btn-shadow btn-outline-success apply"
+                  className="btn btn-shadow btn-outline-success apply transition duration-300 ease-in-out hover:scale-125"
                   onClick={() => handleRowUpdate(key)}
                   style={{
-                    display: editingRowKey === key ? "inline" : "none",
+                    display:
+                      editingRowKey === key && rowLoading !== key
+                        ? "inline"
+                        : "none",
                     marginRight: "10px",
                   }}
                   id={`apply-button-${key}`}
@@ -118,9 +146,14 @@ export default function TeamDataTable({
                 </button>
                 <button
                   type="button"
-                  className="btn btn-outline-secondary cancel"
+                  className="btn btn-outline-secondary cancel transition duration-300 ease-in-out hover:scale-125"
                   onClick={() => disableRowEditing()}
-                  style={{ display: editingRowKey === key ? "inline" : "none" }}
+                  style={{
+                    display:
+                      editingRowKey === key && rowLoading !== key
+                        ? "inline"
+                        : "none",
+                  }}
                 >
                   cancel
                 </button>

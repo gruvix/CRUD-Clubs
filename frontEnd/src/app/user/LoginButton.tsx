@@ -1,14 +1,21 @@
-'use client';
+"use client";
 import React, { useEffect } from "react";
-import loginErrorHandler from "./loginErrorHandler";
 import { webAppPaths } from "@/paths";
 import APIAdapter from "@/components/adapters/APIAdapter";
 import { useRouter } from "next/navigation";
 import LoginSpiner from "@/components/shared/loginSpinner";
-export default function LoginButton() {
+import validateUsername from "@/components/shared/usernameValidation";
+export default function LoginButton({
+  setLoginError,
+  setLoginErrorMessage,
+}: {
+  setLoginError: any;
+  setLoginErrorMessage: any;
+}) {
   const router = useRouter();
   const [username, setUsername] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(true);
+  const [inputClassName, setInputClassName] = React.useState("");
   const request = new APIAdapter();
 
   const handleLogin = async () => {
@@ -16,8 +23,12 @@ export default function LoginButton() {
     try {
       await request.login(username);
       router.push(webAppPaths.teams);
-    } catch (error) {
-      loginErrorHandler(error as Error);
+    } catch (error: any) {
+      setLoginErrorMessage(error.message);
+      setLoginError(true);
+      setTimeout(() => {
+        setLoginError(false);
+      }, 1500);
     }
     setIsLoading(false);
   };
@@ -25,11 +36,18 @@ export default function LoginButton() {
     setIsLoading(false);
   }, []);
 
+  useEffect(() => {
+    let error = validateUsername(username);
+    error = username? error : ""
+    const inputClassString = error ? "text-pink-600 focus:text-pink-600 focus:border-pink-500 border-pink-500" : "";
+    setInputClassName(inputClassString);
+  }, [username]);
+
   return (
     <>
       <input
         type="text"
-        className="form-control"
+        className={"form-control " + inputClassName}
         id="username"
         placeholder="Username"
         onKeyDown={(e) => (e.key === "Enter" ? handleLogin() : null)}
@@ -39,6 +57,8 @@ export default function LoginButton() {
       {isLoading ? (
         <LoginSpiner
           style={{
+            left: "50%",
+            top: "7%",
             width: "2rem",
             height: "2rem",
           }}

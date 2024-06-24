@@ -23,20 +23,22 @@ export default function TeamsList(): React.ReactElement {
   const [shouldTeamShow, setShouldTeamShow] = React.useState<boolean[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [username, setUsername] = React.useState("");
-  const [teamCards, setTeamCards] = React.useState<TeamCard[]>(
-    {} as TeamCard[],
-  );
+  const [teamCards, setTeamCards] = React.useState<TeamCard[]>([]);
   const [modalCallback, setModalCallback] = React.useState(
     () => (): void => {},
   );
+  const [modalCancelCallback, setModalCancelCallback] =
+    React.useState<Function>(() => (): void => {});
   const [modalText, setModalText] = React.useState("");
   const [asyncError, setAsyncError] = React.useState<Error>();
-  const pageTitle = `CRUD ${username}'s teams`
+  const [disappearingTeam, setDisappearingTeam] = React.useState(NaN);
+  const pageTitle = `CRUD ${username}'s teams`;
   const request = new APIAdapter();
+  const cardDisappearDelay = 1000;
 
   const errorHandler = (error: Error) => {
     if (error instanceof UnauthorizedError) {
-      router.push(webAppPaths.user);
+      router.push(webAppPaths.home);
     } else {
       setAsyncError(error);
     }
@@ -48,27 +50,38 @@ export default function TeamsList(): React.ReactElement {
       .then((data: TeamsData) => {
         setUsername(data.username);
         setTeamCards(data.teams);
-        setIsLoading(false);
       })
       .catch((error) => {
         errorHandler(error);
-      });
+      })
+      .finally(() => setIsLoading(false));
   };
   const deleteTeam = (teamId: number) => async () => {
     request
       .deleteTeam(teamId)
       .then(() => {
-        updateTeamsData();
+        setDisappearingTeam(teamId);
+        setTimeout(() => {
+          setTeamCards((prevCards) =>
+            prevCards.filter((team) => team.id !== teamId),
+          );
+        }, cardDisappearDelay);
       })
       .catch((error) => {
         errorHandler(error);
       });
   };
-  const setUpDeleteTeamModal = (teamId: number | string, teamName: string) => {
+  const setUpDeleteTeamModal = (
+    teamId: number | string,
+    teamName: string,
+    modalCancelCallback: Function,
+  ) => {
     setModalCallback(() => deleteTeam(Number(teamId)));
     setModalText(`Are you sure you want to delete team ${teamName}?`);
+    setModalCancelCallback(modalCancelCallback);
   };
   const resetTeams = () => async () => {
+    setIsLoading(true);
     request
       .resetTeamsList()
       .then(() => {
@@ -76,14 +89,15 @@ export default function TeamsList(): React.ReactElement {
       })
       .catch((error) => {
         errorHandler(error);
-      });
+      })
+      .finally(() => setIsLoading(false));
   };
   useEffect(() => {
     updateTeamsData();
   }, []);
   useEffect(() => {
-    setShouldTeamShow(
-      Object.keys(teamCards).map((teamIndex) => {
+    const shouldTeamShowArray: boolean[] = Object.keys(teamCards).map(
+      (teamIndex) => {
         const team = teamCards[Number(teamIndex)];
         if (
           team.name
@@ -95,13 +109,16 @@ export default function TeamsList(): React.ReactElement {
             case "All teams":
               return true;
             case "Default teams":
-              return team.isDefault;
+              return team.hasDefault;
             case "Custom teams":
-              return !team.isDefault;
+              return !team.hasDefault;
+            default:
+              return true;
           }
         }
-      }),
-    );
+      },
+    ) as boolean[];
+    setShouldTeamShow(shouldTeamShowArray);
   }, [searchPattern, searchOption, teamCards]);
   useEffect(() => {
     if (asyncError) {
@@ -129,7 +146,7 @@ export default function TeamsList(): React.ReactElement {
           <button
             type="button"
             id="add-team-button"
-            className="btn btn-shadow btn-outline-warning"
+            className="btn btn-shadow btn-outline-warning transition-transform duration-300 ease-in-out hover:scale-125"
             onClick={() => router.push(webAppPaths.addTeam)}
           >
             Add new team
@@ -139,7 +156,7 @@ export default function TeamsList(): React.ReactElement {
         <div className="col text-center">
           <div className="input-group mb-3">
             <button
-              className="btn btn-outline-secondary dropdown-toggle"
+              className=" group btn btn-outline-secondary dropdown-toggle transition-transform duration-300 ease-in-out hover:scale-y-[1.05] border-black "
               type="button"
               data-bs-toggle="dropdown"
               aria-expanded="false"
@@ -177,7 +194,7 @@ export default function TeamsList(): React.ReactElement {
             <input
               id="search-input"
               type="text"
-              className="form-control"
+              className="form-control bg-slate-400 focus:bg-slate-100 hover:bg-slate-100 border-black transition duration-300 ease-in-out hover:scale-[1.1] focus:scale-[1.1] hover:translate-x-[19px] focus:translate-x-[19px]"
               aria-label="Text input with dropdown button"
               value={searchPattern}
               placeholder="Search teams..."
@@ -190,7 +207,7 @@ export default function TeamsList(): React.ReactElement {
           <button
             type="button"
             id="reset-teams-button"
-            className="btn btn-shadow btn-outline-danger"
+            className="btn btn-shadow btn-outline-danger transition-transform duration-300 ease-in-out hover:scale-125"
             data-toggle="tooltip"
             data-placement="auto"
             title="Erase all teams and reload default teams"
@@ -217,13 +234,14 @@ export default function TeamsList(): React.ReactElement {
                   style={{ marginTop: "10%", height: "20rem", width: "20rem" }}
                 />
               ) : (
-                Object.keys(teamCards).map((key: string, index) => (
+                teamCards.map((team: TeamCard, index: number) => (
                   <TeamCardComponent
-                    team={teamCards[Number(key)]}
-                    key={key}
+                    team={team}
+                    key={team.id}
                     deleteTeamCallback={setUpDeleteTeamModal}
                     visibility={shouldTeamShow[index]}
                     router={router}
+                    isDisappearing={disappearingTeam === team.id}
                   />
                 ))
               )}
@@ -234,6 +252,7 @@ export default function TeamsList(): React.ReactElement {
       <ConfirmationModal
         callback={modalCallback}
         confirmationText={modalText}
+        cancelCallback={modalCancelCallback}
       />
     </div>
   );

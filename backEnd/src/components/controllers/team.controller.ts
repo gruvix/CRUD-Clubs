@@ -2,19 +2,20 @@ import {
   Controller,
   Patch,
   Get,
-  Req,
-  Param,
   Body,
   UseGuards,
   Delete,
   Put,
+  HttpStatus,
+  HttpException,
 } from '@nestjs/common';
-import CustomRequest from 'src/components/models/CustomRequest.interface';
-import TeamData from 'src/components/models/TeamData.interface';
-import TeamExtended from 'src/components/models/TeamExtended';
-import { AuthGuard } from 'src/components/guards/auth.guard';
-import { TeamGuard } from 'src/components/guards/team.guard';
-import TeamService from 'src/components/services/team.service';
+import { AuthGuard } from '@comp/guards/auth.guard';
+import { TeamGuard } from '@comp/guards/team.guard';
+import TeamService from '@comp/services/team.service';
+import { UserId } from '@comp/decorators/userId.decorator';
+import { TeamId } from '@comp/decorators/teamId.decorator';
+import TeamData from '@comp/interfaces/TeamData.interface';
+import TeamDTO from '@comp/interfaces/TeamDTO.interface';
 
 @UseGuards(AuthGuard, TeamGuard)
 @Controller('user/team/:teamId')
@@ -23,46 +24,91 @@ export default class TeamController {
 
   @Get()
   async getTeam(
-    @Req() req: CustomRequest,
-    @Param() params: any,
-  ): Promise<TeamExtended> {
-    const { username } = req.session;
-    const { teamId } = params;
-    console.log(`User ${username} requested team ${teamId}`);
-    return await this.teamService.getTeamData(username, teamId);
+    @UserId() userId: number,
+    @TeamId() teamId: number,
+  ): Promise<TeamDTO> {
+    try {
+      console.log(`User ${userId} requested team ${teamId}`);
+      const team = await this.teamService.getTeam(teamId, [
+        'squad',
+        'defaultTeam',
+      ]);
+      const teamDTO = this.teamService.transformTeamDataToDTO(team);
+      return teamDTO;
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      } else {
+        throw new HttpException(
+          'Failed to get team',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+          error,
+        );
+      }
+    }
   }
 
   @Patch()
   async updateTeam(
-    @Req() req: CustomRequest,
-    @Param() params: any,
+    @UserId() userId: number,
+    @TeamId() teamId: number,
     @Body() data: TeamData,
   ): Promise<void> {
-    const { username } = req.session;
-    const { teamId } = params;
-    console.log(`User ${username} is updating team ${teamId}`);
-    await this.teamService.updateTeamData(username, teamId, data);
+    try {
+      console.log(`User ${userId} is updating team ${teamId}`);
+      await this.teamService.updateTeam(teamId, data);
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      } else {
+        throw new HttpException(
+          'Failed to update team',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+          error,
+        );
+      }
+    }
   }
 
   @Delete()
   async deleteTeam(
-    @Req() req: CustomRequest,
-    @Param() params: any,
+    @UserId() userId: number,
+    @TeamId() teamId: number,
   ): Promise<void> {
-    const { username } = req.session;
-    const { teamId } = params;
-    console.log(`User ${username} is deleting team ${teamId}`);
-    await this.teamService.deleteTeam(username, teamId);
+    try {
+      console.log(`User ${userId} is deleting team ${teamId}`);
+      await this.teamService.deleteTeam(userId, teamId);
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      } else {
+        throw new HttpException(
+          'Failed to delete team',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+          error,
+        );
+      }
+    }
   }
 
   @Put()
   async resetTeam(
-    @Req() req: CustomRequest,
-    @Param() params: any,
+    @UserId() userId: number,
+    @TeamId() teamId: number,
   ): Promise<void> {
-    const { username } = req.session;
-    const { teamId } = params;
-    console.log(`User ${username} is resetting team ${teamId}`);
-    await this.teamService.resetTeam(username, teamId);
+    try {
+      console.log(`User ${userId} is resetting team ${teamId}`);
+      await this.teamService.resetTeam(userId, teamId);
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      } else {
+        throw new HttpException(
+          'Failed to reset team',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+          error,
+        );
+      }
+    }
   }
 }
