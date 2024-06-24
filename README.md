@@ -68,6 +68,26 @@ See the diagram below for a visual representation of the application structure:
 
 -Install dependencies `npm run installApp`
 
+-Add environment variables:
+
+create file .env in backend root folder, and add the next variables, adjust as necessary
+
+`SECRET_KEY="THISISASECRETKEY"`
+
+`DB_USERNAME="username"`
+
+`DB_PASSWORD="password"`
+
+`DB_PATH="./src/userData/userData.db"`
+
+`SESSION_DB_PATH='./src/userData/sessions.db'`
+
+`BASE_USER_FOLDER_PATH="./src/userData/default"`
+
+`CLIENT_BASE_URL="http://localhost:8080"`
+
+`PRODUCTION="false"`
+
 -Run the server in development mode:
 
 
