@@ -18,7 +18,7 @@ export default function TeamDataTable({
   const [editingRowKey, setEditingRowKey] = React.useState<string>("");
   const [inputValue, setInputValue] = React.useState<TeamDataRows>({});
   const [rowLoading, setRowLoading] = React.useState<string>("");
-  const inputReferece = useRef(null);
+  const inputReferece = useRef<HTMLInputElement>(null);
   const requestAdapter = new APIAdapter();
 
   const enableRowEditing = (key: string) => {

@@ -27,7 +27,7 @@ export default function PlayersDataTable({
   const [editingRowKey, setEditingRowKey] = React.useState<number>(NaN);
   const [newPlayerRow, setNewPlayerRow] = React.useState({} as Player);
   const [rowLoading, setRowLoading] = React.useState<number>(NaN);
-  const inputReferece = useRef(null);
+  const inputReferece = useRef<HTMLInputElement>(null);
   const requestAdapter = new APIAdapter();
   const updateInputValue = (
     event: React.ChangeEvent<HTMLInputElement>,
