@@ -12,7 +12,7 @@ import "@/css/globals.css";
 import UnsupportedMediaTypeError from "@/components/errors/UnsupportedMediaTypeError";
 
 export default function Page() {
-  const [playerSlots, setPlayerSlots] = React.useState([]);
+  const [playerSlots, setPlayerSlots] = React.useState<number[]>([]);
   const [modalCallback, setModalCallback] = React.useState(
     () => (): void => {},
   );
