@@ -50,7 +50,7 @@ export default function UploadImageButton({ teamCrest }: { teamCrest: File | nul
       className="btn btn-shadow btn-danger transition duration-300 ease-in-out hover:scale-125"
       id="invalid-image-button"
       style={{ fontSize: '150%', marginBottom: '2%' }}
-      onClick={() => { document.getElementById('upload-image-input').click(); }}
+      onClick={() => { document.getElementById('upload-image-input')?.click(); }}
     >
       <div style={{ display: 'block' }}>
         <div>
