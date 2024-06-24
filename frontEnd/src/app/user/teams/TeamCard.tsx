@@ -77,7 +77,7 @@ export default function TeamCard({
       ) : (
         <TeamCrest
           teamCrest={team.crestUrl}
-          className="list-team-crest-image mb-[10%] group-hover:mb-[38%] group-hover:scale-150 transition-all duration-300"
+          className="list-team-crest-image mb-[10%] group-hover:mb-[38%] group-hover:scale-150"
         />
       )}
       <div
