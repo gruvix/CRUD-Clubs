@@ -1,5 +1,5 @@
 "use client";
-import React, { createContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import LogoutButton from "./LogoutButton";
 import { webAppPaths } from "@/paths";
 import TeamCardComponent from "./TeamCard";
