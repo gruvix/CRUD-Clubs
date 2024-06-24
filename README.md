@@ -7,7 +7,7 @@
 This project serves as a playground for exploring full-stack web development concepts. It began
 with a basic Express/Handlebars structure and evolved to incorporate React, NestJS, NextJS, and
 TypeScript for a comprehensive frontend and backend experience as well as Cypress and Jest
-for robust testing.
+for robust testing. It also includes SQlite and TypeORM for database management and storing data
 
 ## Expanded Description of Key Features: <a name="team-management"></a>
 
@@ -35,11 +35,14 @@ for robust testing.
     - NextJs w/React
     - Bootstrap
     - TypeScript
+    - TailWindCss
 
     BackEnd:
     - NestJs w/Express
     - session-file-store
     - TypeScript
+    - TypeORM
+    - SQLite
 
     Tests:
     - Cypress
@@ -123,32 +126,18 @@ For test runs see [Tests](#tests)
 
 There's a disabled test for removing all players from a team, but it lacks any assertions
 
-### Jest - Unit Testing
+### Jest - Unit and Integration Testing
 
 -Run jest (currently only for backend) `npm run jest`
 
 If on Windows, you can run it on a separate console `npm run jest:windows`
 
-Currently jest tests cover only most essential files from the backend, future development could include increasing jest tests coverage
-
 ## Known Limitations
-
-### Inefficient Team Updates
-
-    Currently, updating teams involves multiple filesystem read/write operations, which can
-    impact performance, especially for large datasets. Future improvements could explore a
-    database-driven approach for more efficient data management.
 
 ### Limited Security
 
     The app lacks mechanisms to prevent unauthorized access or data manipulation since
     password protection is not implemented, making accounts vulnerable to unauthorized access.
-
-### Simple File Storage Solution
-
-    The application currently uses file-based JSON storage. Future development plans could
-    include exploring database integration (e.g., SQLite, MongoDB) to enhance scalability,
-    performance, and data management capabilities.
 
 ## Credits
 
