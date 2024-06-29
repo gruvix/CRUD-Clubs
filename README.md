@@ -64,52 +64,70 @@ See the diagram below for a visual representation of the application structure:
 
 ## How to use
 
--Have [Node.js](https://nodejs.org/en) installed
+### Prerequisites:
 
--Install dependencies `npm run installApp`
-
--Add environment variables:
-
-create file .env in backend root folder, and add the next variables, adjust as necessary
-
-`SECRET_KEY="THISISASECRETKEY"`
-
-`DB_USERNAME="username"`
-
-`DB_PASSWORD="password"`
-
-`DB_PATH="./src/userData/userData.db"`
-
-`SESSION_DB_PATH='./src/userData/sessions.db'`
-
-`BASE_USER_FOLDER_PATH="./src/userData/default"`
-
-`CLIENT_BASE_URL="http://localhost:8080"`
-
-`PRODUCTION="false"`
-
--Run the server in development mode:
+-Ensure you have [Node.js](https://nodejs.org/en) (or yarn) installed on your machine
 
 
-Run on windows:
+### Installation:
+
+-Clone the project repository
+
+-Navigate to the project root directory and  run the following command to install all the necessary
+
+project dependencies `npm run installApp`
+
+
+### Environment Variables:
+
+-Create a .env file in the backend folder, add the following variables and adjust them to your needs:
+
+`SECRET_KEY="THISISASECRETKEY"` # Replace with a strong secret key
+
+`DB_USERNAME="username"` # Replace with your database username
+
+`DB_PASSWORD="password"` # Replace with your database password, if any
+
+`DB_PATH="./src/userData/userData.db"` # Path to your user database file
+
+`SESSION_DB_PATH='./src/userData/sessions.db'` # Path to your sessions database file
+
+`BASE_USER_FOLDER_PATH="./src/userData/default"` # Path to default user data json files
+
+`CLIENT_BASE_URL="http://localhost:8080"` # Base URL to your frontend application
+
+`PRODUCTION="false"` # Set to `true` for production deployment
+
+there is an environment configuration in the frontend root folder, next.config.js, modify if neccesary
+
+`BASE_API_URL: "http://localhost:3000"`
+
+### Create Database Files:
+
+-There should exist sessions.db and userData.db on their corresponding paths (SESSION_DB_PATH & DB_PATH),
+if they do not, create them.
+
+
+### Run the server in development mode:
+
+Onn windows:
 
 `npm run dev:windows`
 
 2 windows will popup - one for NextJs and the other one for NestJs
 
-Run on any:
+On any:
 
-`npm run dev`
+`npm run dev` # this will run both back and front ends with concurrently, on the same console
 
-
-
-The front-end server will run on port 8080 and the back-end server will run on port 3000.
+The front-end server will run by default on port 8080 and the back-end server on port 3000.
 
 -Access from a web browser to `localhost:8080`
 
 -Login with any username
 
 -Do stuff, see [Team and Player Management](#team-management)
+
 
 ### Running front and back end server separately
 
@@ -124,7 +142,6 @@ Back:
 `cd backend`
 
 `npm run dev`
-
 
 
 For test runs see [Tests](#tests)
