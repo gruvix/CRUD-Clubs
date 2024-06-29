@@ -134,3 +134,5 @@ CRUD-clubs-hex.drawio
 /.vscode
 user data.session.sql
 .$app_hex.png.dtmp
+backEnd/src/userData/sessions.db
+backEnd/src/userData/userData.db
