@@ -110,7 +110,7 @@ if they do not, create them.
 
 ### Run the server in development mode:
 
-Onn windows:
+On windows:
 
 `npm run dev:windows`
 
@@ -175,6 +175,12 @@ If on Windows, you can run it on a separate console `npm run jest:windows`
 
     The app lacks mechanisms to prevent unauthorized access or data manipulation since
     password protection is not implemented, making accounts vulnerable to unauthorized access.
+
+### Missing frontend test coverage
+
+    The current state of the project's frontend has limitations in its testing strategy,
+    lacking unit, component and integration tests, so there's less assurance that the codebase
+    functions as intended, leading to a potenial lack of confidence in the overall quality.
 
 ## Credits
 
