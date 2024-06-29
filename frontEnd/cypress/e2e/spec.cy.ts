@@ -6,12 +6,14 @@ import { apiRequestPaths, webAppPaths } from "../../src/paths";
 
 const TEST_USER = "cypress";
 const WEB_APP_BASE_URL = "http://localhost:8080";
+const BASE_API_URL = "http://localhost:3000";
 const MODAL_APPEAR_DELAY = 500;
 const TEST_TEAM_ID = "*";
-const TEST_TEAM_PATH = webAppPaths.team(TEST_TEAM_ID);
-const TEST_TEAM_PLAYER_PATH = apiRequestPaths.player(TEST_TEAM_ID);
-const CUSTOM_CREST_UPLOAD_PATH = apiRequestPaths.updateCrest(TEST_TEAM_ID);
-const LOGIN_PATH = apiRequestPaths.user;
+const TEST_TEAM_PATH = webAppPaths.team(TEST_TEAM_ID).replace('undefined', BASE_API_URL);
+const TEST_TEAM_PLAYER_PATH = apiRequestPaths.player(TEST_TEAM_ID).replace('undefined', BASE_API_URL);
+const CUSTOM_CREST_UPLOAD_PATH = apiRequestPaths.updateCrest(TEST_TEAM_ID).replace('undefined', BASE_API_URL);
+const GET_TEAMS_PATH = apiRequestPaths.teams.replace('undefined', BASE_API_URL);
+const LOGIN_PATH = apiRequestPaths.user.replace('undefined', BASE_API_URL);
 
 function generateRandomString(length = 5) {
   const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
@@ -33,6 +35,7 @@ function selectFirstVisibleTeam() {
 }
 describe("test login", () => {
   beforeEach(() => {
+    cy.intercept("POST", LOGIN_PATH).as("login");
     cy.visit(WEB_APP_BASE_URL);
   });
 
@@ -56,11 +59,13 @@ describe("test login", () => {
 
   it('should login with "test"', () => {
     cy.get("#username").type(TEST_USER).get("#enter-page-button").click();
+    cy.wait("@login");
     cy.get("#username").should("have.text", TEST_USER);
   });
 
   it("should login then visit login page and get redirected to user page", () => {
     cy.get("#username").type(TEST_USER).get("#enter-page-button").click();
+    cy.wait("@login");
     cy.get("#username").should("have.text", TEST_USER);
     cy.visit(WEB_APP_BASE_URL);
     cy.get("#username").should("have.text", TEST_USER);
@@ -105,7 +110,7 @@ describe("test the team editor page with the first team", () => {
     cy.intercept("PATCH", TEST_TEAM_PATH).as("updateTeam");
     cy.visit(WEB_APP_BASE_URL);
     cy.intercept("POST", LOGIN_PATH).as("login");
-    cy.intercept("GET", apiRequestPaths.teams).as("teams");
+    cy.intercept("GET", GET_TEAMS_PATH).as("teams");
     cy.get("#username").type(TEST_USER).get("#enter-page-button").click();
     cy.wait("@login");
     cy.wait("@teams");
@@ -121,6 +126,7 @@ describe("test the team editor page with the first team", () => {
         .parent()
         .parent()
         .find("input")
+        .focus()
         .clear()
         .type(randomString)
         .get("#team-table .apply")
@@ -147,6 +153,8 @@ describe("test the team editor page with the first team", () => {
     cy.get("#team-table input")
       .first()
       .should("be.visible")
+      .focus()
+      .clear()
       .type(randomString)
       .get("#team-table .apply")
       .first()
@@ -177,7 +185,7 @@ describe("test the player editor with the first default team", () => {
   beforeEach(() => {
     cy.visit(WEB_APP_BASE_URL);
     cy.intercept("POST", LOGIN_PATH).as("login");
-    cy.intercept("GET", apiRequestPaths.teams).as("getTeams");
+    cy.intercept("GET", GET_TEAMS_PATH).as("getTeams");
     cy.get("#username").type(TEST_USER).get("#enter-page-button").click();
     cy.wait("@login");
     cy.get("#reset-teams-button")
@@ -211,7 +219,7 @@ describe("test the player editor with the first default team", () => {
                 .each(($input, index) => {
                   const randomString = generateRandomString();
                   randomStrings.push(randomString);
-                  cy.wrap($input).clear().type(randomStrings[index]);
+                  cy.wrap($input).focus().clear().type(randomStrings[index]);
                 });
 
               cy.get(playerGetString)
@@ -244,7 +252,7 @@ describe("test the player editor with the first default team", () => {
       .each(($input, index) => {
         const randomString = generateRandomString();
         randomStrings.push(randomString);
-        cy.wrap($input).clear().type(randomStrings[index]);
+        cy.wrap($input).focus().clear().type(randomStrings[index]);
       });
     cy.get("#confirm-player-button").click().wait("@addPlayer");
     cy.get("#players-table tr")
@@ -312,14 +320,14 @@ describe("test add team", () => {
     cy.get("#team-table input").each(($input) => {
       const randomString = generateRandomString();
       teamFields.push(randomString);
-      cy.wrap($input).clear().type(randomString);
+      cy.wrap($input).focus().clear().type(randomString);
     });
     const playerFields = [] as string[];
     cy.get("#add-player-button").click().click().click();
     cy.get("#players-table input").each(($input) => {
       const randomString = generateRandomString();
       playerFields.push(randomString);
-      cy.wrap($input).clear().type(randomString);
+      cy.wrap($input).focus().clear().type(randomString);
     });
     cy.intercept(`${CUSTOM_CREST_UPLOAD_PATH}`).as("uploadImage");
 
