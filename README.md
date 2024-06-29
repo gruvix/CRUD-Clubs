@@ -98,7 +98,8 @@ project dependencies `npm run installApp`
 
 `PRODUCTION="false"` # Set to `true` for production deployment
 
-there is an environment configuration in the frontend root folder, next.config.js, modify if neccesary
+-There is an environment configuration in the frontend root folder, next.config.js, it should contain the
+following environment variables, modify as necessary
 
 `BASE_API_URL: "http://localhost:3000"`
 
