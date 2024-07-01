@@ -39,7 +39,7 @@ for robust testing. It also includes SQlite and TypeORM for database management 
 
     BackEnd:
     - NestJs w/Express
-    - session-file-store
+    - express-session-sqlite
     - TypeScript
     - TypeORM
     - SQLite
