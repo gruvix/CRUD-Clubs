@@ -88,6 +88,8 @@ project dependencies `npm run installApp`
 
 `DB_PASSWORD="password"` # Replace with your database password, if any
 
+`DB_LOGGING="true"` # Set to false to disable database operations logging
+
 `DB_PATH="./src/userData/userData.db"` # Path to your user database file
 
 `SESSION_DB_PATH='./src/userData/sessions.db'` # Path to your sessions database file

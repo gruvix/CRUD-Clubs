@@ -15,7 +15,7 @@ import 'dotenv/config';
       database: process.env.DB_PATH,
       synchronize: process.env.PRODUCTION === 'false' ? true : false,
       autoLoadEntities: true,
-      logging: true,
+      logging: process.env.DB_LOGGING === 'false' ? false : true,
     }),
     UserModule,
     FootballModule,
