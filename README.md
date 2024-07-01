@@ -183,6 +183,11 @@ If on Windows, you can run it on a separate console `npm run jest:windows`
     lacking unit, component and integration tests, so there's less assurance that the codebase
     functions as intended, leading to a potenial lack of confidence in the overall quality.
 
+## Known Bugs
+
+-Adding a player with an empty input field will throw an error, this can be solved by permitting empty
+fields on database input or by limitating user to add players only with full data
+
 ## Credits
 
 [Javascript Course Argentina Programa](https://argentinaprograma.com/)
