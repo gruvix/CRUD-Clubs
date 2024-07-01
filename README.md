@@ -188,6 +188,37 @@ If on Windows, you can run it on a separate console `npm run jest:windows`
 -Adding a player with an empty input field will throw an error, this can be solved by permitting empty
 fields on database input or by limitating user to add players only with full data
 
+## Future implementations
+
+-"Not logged in" page
+
+-User Password
+
+-Credits Page
+
+-Persistent titles bar on players data table
+
+-Other ways to empty team earch bar (ESC key)
+
+-Generate full crest URL in backend instead of frontend
+
+-Combine and clean mock test utils
+
+-Add loading spinner to team creation
+
+-Add "creating user" message on new user login
+
+-Add cypress test for team not found situation
+
+-Get redirected to a page with the warning "not logged in" when not logged in instead of log in page
+
+-Add frontend teams data cache system to reduce data transported
+
+-Add feature to upload images by link instead of file
+
+-When image is not found, return an image indicating "Image not found" instead of throwing error
+
+
 ## Credits
 
 [Javascript Course Argentina Programa](https://argentinaprograma.com/)
